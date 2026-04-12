@@ -37,6 +37,24 @@ android {
         versionName = flutter.versionName
         multiDexEnabled = true
     }
+    signingConfigs {
+        create("release") {
+            keyAlias = keystoreProperties.getProperty("keyAlias")
+            keyPassword = keystoreProperties.getProperty("keyPassword")
+            val storeFileProp = keystoreProperties.getProperty("storeFile")
+            storeFile = if (storeFileProp != null) file(storeFileProp) else null
+            storePassword = keystoreProperties.getProperty("storePassword")
+        }
+    }
+
+
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = false
+            isShrinkResources = false
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
 
 
 }

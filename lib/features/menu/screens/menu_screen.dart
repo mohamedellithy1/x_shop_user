@@ -755,6 +755,52 @@ class _MenuScreenState extends State<MenuScreen> {
                               }),
 
                           const SizedBox(height: Dimensions.paddingSizeLarge),
+
+                          if (isLoggedIn)
+                            InkWell(
+                              onTap: () {
+                                Get.dialog(
+                                  ConfirmationDialogWidget(
+                                    icon: XmarketImages.logOut,
+                                    description
+                                    : 'are_you_sure_to_logout'.tr,
+                                    isLogOut: true,
+                                    onYesPressed: () async {
+                                      Get.find<MarketAuthController>()
+                                          .clearSharedData();
+                                      Get.find<MarketProfileController>()
+                                          .setForceFullyUserEmpty();
+                                      Get.offAllNamed(RouteHelper.initial);
+                                    },
+                                  ),
+                                  useSafeArea: false,
+                                );
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: Dimensions.paddingSizeSmall),
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(2),
+                                        decoration: const BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.red),
+                                        child: Icon(
+                                            Icons.power_settings_new_sharp,
+                                            size: 14,
+                                            color: Theme.of(context).cardColor),
+                                      ),
+                                      const SizedBox(
+                                          width:
+                                              Dimensions.paddingSizeExtraSmall),
+                                      Text('logout'.tr, style: robotoMedium),
+                                    ]),
+                              ),
+                            ),
+
+                          const SizedBox(height: Dimensions.paddingSizeLarge),
                         ]),
                       ),
                     );
