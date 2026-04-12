@@ -60,10 +60,12 @@ class CategoryRepository implements CategoryRepositoryInterface {
       case DataSourceEnum.local:
         String? cacheResponseData =
             await LocalClient.organize(DataSourceEnum.local, cacheId, null, null);
-        categoryList = [];
-        jsonDecode(cacheResponseData!).forEach((category) {
-          categoryList!.add(CategoryModel.fromJson(category));
-        });
+        if(cacheResponseData != null) {
+          categoryList = [];
+          jsonDecode(cacheResponseData).forEach((category) {
+            categoryList!.add(CategoryModel.fromJson(category));
+          });
+        }
           }
     return categoryList;
   }
@@ -86,12 +88,14 @@ class CategoryRepository implements CategoryRepositoryInterface {
         }
       case DataSourceEnum.local:
         String? cacheResponseData =
-        await LocalClient.organize(DataSourceEnum.local, cacheId, null, null);
-        subCategoryList = [];
-        subCategoryList.add(CategoryModel(id: int.parse(parentID!), name: 'all'.tr));
-        jsonDecode(cacheResponseData!).forEach((category) {
-          subCategoryList!.add(CategoryModel.fromJson(category));
-        });
+            await LocalClient.organize(DataSourceEnum.local, cacheId, null, null);
+        if(cacheResponseData != null) {
+          subCategoryList = [];
+          subCategoryList.add(CategoryModel(id: int.parse(parentID!), name: 'all'.tr));
+          jsonDecode(cacheResponseData).forEach((category) {
+            subCategoryList!.add(CategoryModel.fromJson(category));
+          });
+        }
           }
     return subCategoryList;
   }
@@ -114,7 +118,9 @@ class CategoryRepository implements CategoryRepositoryInterface {
       case DataSourceEnum.local:
         String? cacheResponseData =
         await LocalClient.organize(DataSourceEnum.local, cacheId, null, null);
-        productModel = ProductModel.fromJson(jsonDecode(cacheResponseData!));
+        if(cacheResponseData != null) {
+          productModel = ProductModel.fromJson(jsonDecode(cacheResponseData));
+        }
           }
     return productModel;
   }
@@ -136,7 +142,9 @@ class CategoryRepository implements CategoryRepositoryInterface {
       case DataSourceEnum.local:
         String? cacheResponseData =
         await LocalClient.organize(DataSourceEnum.local, cacheId, null, null);
-        restaurantModel = RestaurantModel.fromJson(jsonDecode(cacheResponseData!));
+        if(cacheResponseData != null) {
+          restaurantModel = RestaurantModel.fromJson(jsonDecode(cacheResponseData));
+        }
           }
     return restaurantModel;
   }

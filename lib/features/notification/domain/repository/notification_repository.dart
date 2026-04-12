@@ -78,10 +78,12 @@ class NotificationRepository implements NotificationRepositoryInterface {
         }
       case DataSourceEnum.local:
         String? cacheResponseData = await LocalClient.organize(DataSourceEnum.local, cacheId, null, null);
-        notificationList = [];
-        jsonDecode(cacheResponseData!).forEach((notification) {
-          notificationList!.add(NotificationModel.fromJson(notification));
-        });
+        if(cacheResponseData != null) {
+          notificationList = [];
+          jsonDecode(cacheResponseData).forEach((notification) {
+            notificationList!.add(NotificationModel.fromJson(notification));
+          });
+        }
           }
     return notificationList;
   }

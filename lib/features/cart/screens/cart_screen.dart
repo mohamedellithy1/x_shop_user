@@ -4,6 +4,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stackfood_multivendor/theme/dark_theme.dart';
+import 'package:stackfood_multivendor/theme/light_theme.dart';
+
 import 'package:stackfood_multivendor/common/widgets/custom_app_bar_widget.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_ink_well_widget.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_loader_widget.dart';
@@ -45,8 +48,8 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   final ScrollController scrollController = ScrollController();
   
-  ThemeData get darkTheme => ThemeData.dark();
-  final ThemeData lightTheme = ThemeData.light();
+  ThemeData get darkTheme => dark;
+  final ThemeData lightTheme = light;
 
   @override
   void initState() {

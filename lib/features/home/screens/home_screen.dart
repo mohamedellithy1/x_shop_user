@@ -272,10 +272,10 @@ class _XMarketHomeScreenState extends State<XMarketHomeScreen> {
           builder: (splashController) {
             final configModel = splashController.configModel;
             return GetBuilder<LocalizationController>(
-                id: 'xmarket',
+                tag: 'xmarket',
                 builder: (localizationController) {
                   return GetBuilder<MarketThemeController>(
-                    init: Get.find<MarketThemeController>(tag: 'xmarket'),
+                    tag: 'xmarket',
                     builder: (marketThemeController) {
                       return Theme(
                         data: marketThemeController.darkTheme

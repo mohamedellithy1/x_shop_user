@@ -12,6 +12,9 @@ import 'package:stackfood_multivendor/common/widgets/menu_drawer_widget.dart';
 import 'package:stackfood_multivendor/common/widgets/not_logged_in_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stackfood_multivendor/theme/dark_theme.dart';
+import 'package:stackfood_multivendor/theme/light_theme.dart';
+
 import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
 
 class FavouriteScreen extends StatefulWidget {
@@ -22,8 +25,8 @@ class FavouriteScreen extends StatefulWidget {
 }
 
 class FavouriteScreenState extends State<FavouriteScreen> {
-  final ThemeData darkTheme = ThemeData.dark();
-  final ThemeData lightTheme = ThemeData.light();
+  final ThemeData darkTheme = dark;
+  final ThemeData lightTheme = light;
 
   @override
   void initState() {

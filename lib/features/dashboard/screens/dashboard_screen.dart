@@ -1,5 +1,8 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:stackfood_multivendor/theme/dark_theme.dart';
+import 'package:stackfood_multivendor/theme/light_theme.dart';
+
 import 'package:flutter/services.dart';
 import 'package:stackfood_multivendor/features/cart/screens/cart_screen.dart';
 import 'package:stackfood_multivendor/features/checkout/widgets/congratulation_dialogue.dart';
@@ -27,8 +30,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
 
-final ThemeData darkTheme = ThemeData.dark();
-final ThemeData lightTheme = ThemeData.light();
+final ThemeData darkTheme = dark;
+final ThemeData lightTheme = light;
 
 class DashboardScreen extends StatefulWidget {
   final int pageIndex;

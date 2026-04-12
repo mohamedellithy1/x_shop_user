@@ -31,10 +31,12 @@ class AddressRepo implements AddressRepoInterface<AddressModel> {
         }
       case DataSourceEnum.local:
         String? cacheResponseData = await LocalClient.organize(DataSourceEnum.local, cacheId, null, null);
-        addressList = [];
-        jsonDecode(cacheResponseData!).forEach((address) {
-          addressList!.add(AddressModel.fromJson(address));
-        });
+        if(cacheResponseData != null) {
+          addressList = [];
+          jsonDecode(cacheResponseData).forEach((address) {
+            addressList!.add(AddressModel.fromJson(address));
+          });
+        }
           }
     return addressList;
   }

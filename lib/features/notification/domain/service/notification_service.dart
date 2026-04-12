@@ -14,9 +14,11 @@ class NotificationService implements NotificationServiceInterface {
     notificationList?.sort((a, b) {
       return DateConverter.isoStringToLocalDate(a.updatedAt!).compareTo(DateConverter.isoStringToLocalDate(b.updatedAt!));
     });
-    Iterable iterable = notificationList!.reversed;
-    notificationList = iterable.toList() as List<NotificationModel>?;
-      return notificationList;
+    if(notificationList != null) {
+      Iterable iterable = notificationList.reversed;
+      notificationList = iterable.toList() as List<NotificationModel>?;
+    }
+    return notificationList;
   }
 
   @override

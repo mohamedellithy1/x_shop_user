@@ -41,8 +41,10 @@ class ReviewRepository implements ReviewRepositoryInterface {
 
       case DataSourceEnum.local:
         String? cacheResponseData = await LocalClient.organize(DataSourceEnum.local, cacheId, null, null);
-        reviewedProductList = [];
-        reviewedProductList.addAll(ProductModel.fromJson(jsonDecode(cacheResponseData!)).products!);
+        if(cacheResponseData != null) {
+          reviewedProductList = [];
+          reviewedProductList.addAll(ProductModel.fromJson(jsonDecode(cacheResponseData)).products!);
+        }
           }
     return reviewedProductList;
   }
