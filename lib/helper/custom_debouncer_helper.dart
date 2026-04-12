@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-class CustomDebounceHelper{
+class CustomDebounceHelper {
   final int milliseconds;
   CustomDebounceHelper({required this.milliseconds});
 
@@ -13,4 +13,10 @@ class CustomDebounceHelper{
     _timer = Timer(Duration(milliseconds: milliseconds), action);
   }
 
+  void cancel() {
+    if (_timer != null) {
+      _timer!.cancel();
+      _timer = null;
+    }
+  }
 }

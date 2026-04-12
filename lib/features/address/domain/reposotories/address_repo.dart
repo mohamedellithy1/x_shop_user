@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:get/get.dart';
 import 'package:stackfood_multivendor/api/api_client.dart';
 import 'package:stackfood_multivendor/api/local_client.dart';
 import 'package:stackfood_multivendor/common/enums/data_source_enum.dart';
@@ -7,7 +8,6 @@ import 'package:stackfood_multivendor/common/models/response_model.dart';
 import 'package:stackfood_multivendor/features/address/domain/models/address_model.dart';
 import 'package:stackfood_multivendor/features/address/domain/reposotories/address_repo_interface.dart';
 import 'package:stackfood_multivendor/util/app_constants.dart';
-import 'package:get/get.dart';
 
 class AddressRepo implements AddressRepoInterface<AddressModel> {
   final ApiClient apiClient;
@@ -31,13 +31,11 @@ class AddressRepo implements AddressRepoInterface<AddressModel> {
         }
       case DataSourceEnum.local:
         String? cacheResponseData = await LocalClient.organize(DataSourceEnum.local, cacheId, null, null);
-        if (cacheResponseData != null) {
-          addressList = [];
-          jsonDecode(cacheResponseData).forEach((address) {
-            addressList!.add(AddressModel.fromJson(address));
-          });
-        }
-    }
+        addressList = [];
+        jsonDecode(cacheResponseData!).forEach((address) {
+          addressList!.add(AddressModel.fromJson(address));
+        });
+          }
     return addressList;
   }
 

@@ -47,11 +47,9 @@ class ProductRepository implements ProductRepositoryInterface {
         }
       case DataSourceEnum.local:
         String? cacheResponseData = await LocalClient.organize(DataSourceEnum.local, cacheId, null, null);
-        if (cacheResponseData != null) {
-          popularProductList = [];
-          popularProductList.addAll(ProductModel.fromJson(jsonDecode(cacheResponseData)).products!);
-        }
-    }
+        popularProductList = [];
+        popularProductList.addAll(ProductModel.fromJson(jsonDecode(cacheResponseData!)).products!);
+          }
     return popularProductList;
   }
 

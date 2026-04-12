@@ -1,6 +1,7 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
 
@@ -41,18 +42,22 @@ class CustomDropdownButton extends StatefulWidget {
 }
 
 class _CustomDropdownButtonState extends State<CustomDropdownButton> {
-
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: widget.backgroundColor ?? Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(widget.borderRadius ?? Dimensions.radiusDefault),
+        color: widget.backgroundColor ??
+            (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+                ? const Color(0xFF1b1b1b)
+                : Theme.of(context).cardColor),
+        borderRadius: BorderRadius.circular(
+            widget.borderRadius ?? Dimensions.radiusDefault),
       ),
       child: DropdownButtonFormField2<String>(
         isExpanded: true,
         decoration: InputDecoration(
-          contentPadding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeSmall),
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeSmall),
           focusedBorder: _border(),
           enabledBorder: _border(),
           disabledBorder: _border(),
@@ -61,29 +66,47 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
         ),
         hint: Text(
           widget.hintText ?? 'select_an_option'.tr,
-          style: robotoRegular.copyWith(color: Theme.of(context).disabledColor, fontSize: Dimensions.fontSizeDefault),
+          style: robotoRegular.copyWith(
+              color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+                  ? Colors.white70
+                  : Colors.black,
+              fontSize: Dimensions.fontSizeDefault),
         ),
         value: widget.selectedValue,
-        items: (widget.dropdownMenuItems ?? widget.items?.map((item) => DropdownMenuItem<String>(
-          value: item,
-          child: Text(
-            item.tr, style: robotoRegular.copyWith(color: Theme.of(context).textTheme.bodyLarge?.color, fontSize: Dimensions.fontSizeDefault),
-          ),
-        )).toList()) ?? [
-          DropdownMenuItem<String>(
-            value: null,
-            child: Text(
-              'no_data_available'.tr,
-              style: robotoRegular.copyWith(color: Theme.of(context).disabledColor, fontSize: Dimensions.fontSizeDefault),
-            ),
-          )
-        ],
-        validator: widget.validator ?? (value) {
-          if (value == null) {
-            return 'please_select_an_option'.tr;
-          }
-          return null;
-        },
+        items: (widget.dropdownMenuItems ??
+                widget.items
+                    ?.map((item) => DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(
+                            item.tr,
+                            style: robotoRegular.copyWith(
+                                color: Get.find<MarketThemeController>(
+                                            tag: 'xmarket')
+                                        .darkTheme
+                                    ? Colors.white70
+                                    : Colors.black,
+                                fontSize: Dimensions.fontSizeDefault),
+                          ),
+                        ))
+                    .toList()) ??
+            [
+              DropdownMenuItem<String>(
+                value: null,
+                child: Text(
+                  'no_data_available'.tr,
+                  style: robotoRegular.copyWith(
+                      color: Theme.of(context).disabledColor,
+                      fontSize: Dimensions.fontSizeDefault),
+                ),
+              )
+            ],
+        validator: widget.validator ??
+            (value) {
+              if (value == null) {
+                return 'please_select_an_option'.tr;
+              }
+              return null;
+            },
         onChanged: widget.onChanged,
         onSaved: widget.onSaved,
         selectedItemBuilder: widget.selectedItemBuilder,
@@ -91,7 +114,8 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
           padding: EdgeInsets.only(right: 8),
         ),
         iconStyleData: IconStyleData(
-          icon: Icon(Icons.keyboard_arrow_down, color: Theme.of(context).disabledColor),
+          icon: Icon(Icons.keyboard_arrow_down,
+              color: Theme.of(context).disabledColor),
         ),
         dropdownStyleData: DropdownStyleData(
           maxHeight: 300,
@@ -108,8 +132,13 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
 
   OutlineInputBorder _border() {
     return OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius ?? Dimensions.radiusDefault)),
-      borderSide: BorderSide(width: 1, color: widget.isBorder ? Theme.of(context).disabledColor.withValues(alpha: 0.2) : Colors.transparent),
+      borderRadius: BorderRadius.all(
+          Radius.circular(widget.borderRadius ?? Dimensions.radiusDefault)),
+      borderSide: BorderSide(
+          width: 1,
+          color: widget.isBorder
+              ? Theme.of(context).disabledColor.withValues(alpha: 0.2)
+              : Colors.transparent),
     );
   }
 }

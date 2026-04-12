@@ -1,22 +1,22 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'package:stackfood_multivendor/common/models/response_model.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
+import 'package:stackfood_multivendor/features/auth/domain/models/signup_body_model.dart';
+import 'package:stackfood_multivendor/features/auth/domain/models/social_log_in_body_model.dart';
+import 'package:stackfood_multivendor/features/auth/domain/services/auth_service_interface.dart';
 import 'package:stackfood_multivendor/features/cart/controllers/cart_controller.dart';
 import 'package:stackfood_multivendor/features/profile/controllers/profile_controller.dart';
 import 'package:stackfood_multivendor/features/profile/domain/models/update_user_model.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
-import 'package:stackfood_multivendor/features/auth/domain/models/signup_body_model.dart';
-import 'package:stackfood_multivendor/features/auth/domain/models/social_log_in_body_model.dart';
-import 'package:stackfood_multivendor/features/auth/domain/services/auth_service_interface.dart';
-import 'package:get/get.dart';
 import 'package:stackfood_multivendor/features/verification/screens/verification_screen.dart';
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 import 'package:stackfood_multivendor/helper/route_helper.dart';
 
-class AuthController extends GetxController implements GetxService {
+class MarketAuthController extends GetxController implements GetxService {
   final AuthServiceInterface authServiceInterface;
-  AuthController({required this.authServiceInterface}) {
+  MarketAuthController({required this.authServiceInterface}) {
     _notification = authServiceInterface.isNotificationActive();
   }
 
@@ -90,8 +90,8 @@ class AuthController extends GetxController implements GetxService {
     if(responseModel.isSuccess && responseModel.authResponseModel != null && responseModel.authResponseModel!.isPhoneVerified!
         && responseModel.authResponseModel!.isEmailVerified! && responseModel.authResponseModel!.isPersonalInfo!
         && responseModel.authResponseModel!.isExistUser == null) {
-      Get.find<ProfileController>().getUserInfo();
-      Get.find<CartController>().getCartDataOnline();
+      Get.find<MarketProfileController>().getUserInfo();
+      Get.find<MarketCartController>().getCartDataOnline();
     }
   }
 
@@ -122,7 +122,7 @@ class AuthController extends GetxController implements GetxService {
   }
 
   void initCountryCode({String? countryCode}){
-    countryDialCode = countryCode ?? CountryCode.fromCountryCode(Get.find<SplashController>().configModel!.country ?? "BD").dialCode ?? "+880";
+    countryDialCode = countryCode ?? CountryCode.fromCountryCode(Get.find<MarketSplashController>(tag: 'xmarket').configModel!.country ?? "BD").dialCode ?? "+880";
   }
 
   void saveUserNumberAndPassword({required String number, required String password, required String countryCode, required String otpPoneNumber}) {
@@ -176,7 +176,7 @@ class AuthController extends GetxController implements GetxService {
   Future<ResponseModel> loginWithSocialMedia(SocialLogInBodyModel socialLogInBody) async {
     _isLoading = true;
     update();
-    ResponseModel responseModel = await authServiceInterface.loginWithSocialMedia(socialLogInBody, isCustomerVerificationOn: Get.find<SplashController>().configModel!.customerVerification!);
+    ResponseModel responseModel = await authServiceInterface.loginWithSocialMedia(socialLogInBody, isCustomerVerificationOn: Get.find<MarketSplashController>(tag: 'xmarket').configModel!.customerVerification!);
     _getUserAndCartData(responseModel);
     _isLoading = false;
     update();
@@ -199,9 +199,9 @@ class AuthController extends GetxController implements GetxService {
     return authServiceInterface.isGuestLoggedIn() && !authServiceInterface.isLoggedIn();
   }
 
-  Future<void> socialLogout() async {
-    await authServiceInterface.socialLogout();
-  }
+  // Future<void> socialLogout() async {
+  //   await authServiceInterface.socialLogout();
+  // }
 
   Future<bool> clearSharedData({bool removeToken = true}) async {
     return await authServiceInterface.clearSharedData(removeToken: removeToken);
@@ -243,7 +243,7 @@ class AuthController extends GetxController implements GetxService {
         if(e.code == 'invalid-phone-number') {
           showCustomSnackBar('please_submit_a_valid_phone_number'.tr);
         }else{
-          showCustomSnackBar(e.message?.replaceAll('_', ' '));
+          showCustomSnackBar(e.message?.replaceAll('_', ' ') ?? '');
         }
 
       },

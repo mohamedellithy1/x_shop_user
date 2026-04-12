@@ -38,13 +38,13 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
   void initState() {
     super.initState();
     Get.find<HomeController>().setCurrentIndex(0, false);
-    _configModel = Get.find<SplashController>().configModel;
+    _configModel = Get.find<MarketSplashController>(tag: 'xmarket').configModel;
   }
 
   @override
   Widget build(BuildContext context) {
 
-    bool isLogin = Get.find<AuthController>().isLoggedIn();
+    bool isLogin = Get.find<MarketAuthController>().isLoggedIn();
 
     return CustomScrollView(
       controller: widget.scrollController,
@@ -72,7 +72,7 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
 
                 const BadWeatherWidget(),
 
-                const TodayTrendsViewWidget(),
+                // const TodayTrendsViewWidget(),
 
                 isLogin ? const OrderAgainViewWidget() : const SizedBox(),
 
@@ -86,7 +86,7 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
 
                 const PopularFoodNearbyViewWidget(),
 
-                isLogin ? const PopularRestaurantsViewWidget(isRecentlyViewed: true) : const SizedBox(),
+                /*isLogin ? const PopularRestaurantsViewWidget(isRecentlyViewed: true) : const SizedBox(),*/
 
                 const WebLocationAndReferBannerViewWidget(),
 
@@ -114,10 +114,7 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
           children: [
             const SizedBox(height: Dimensions.paddingSizeLarge),
 
-            FooterViewWidget(
-              minHeight: 0.3,
-              child: AllRestaurantsWidget(scrollController: widget.scrollController),
-            ),
+            AllRestaurantsWidget(scrollController: widget.scrollController),
           ],
         ))),
 

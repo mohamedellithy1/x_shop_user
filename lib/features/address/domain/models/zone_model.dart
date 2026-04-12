@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:stackfood_multivendor/features/location/domain/models/zone_response_model.dart';
 
+
 class ZoneModel {
   List<int>? zoneIds;
   List<ZoneData>? zoneData;
@@ -10,9 +11,26 @@ class ZoneModel {
 
   ZoneModel.fromJson(Map<String, dynamic> json) {
     zoneIds = [];
-    jsonDecode(json['zone_id']).forEach((v) {
-      zoneIds!.add(v);
-    });
+    try {
+      if (json['zone_id'] != null) {
+        // Handle both string (JSON) and list formats
+        if (json['zone_id'] is String) {
+          dynamic decoded = jsonDecode(json['zone_id']);
+          if (decoded is List) {
+            for (var v in decoded) {
+              zoneIds!.add(v is int ? v : int.tryParse(v.toString()) ?? 0);
+            }
+          }
+        } else if (json['zone_id'] is List) {
+          json['zone_id'].forEach((v) {
+            zoneIds!.add(v is int ? v : int.tryParse(v.toString()) ?? 0);
+          });
+        }
+      }
+    } catch (e) {
+      // If parsing fails, zoneIds remains empty
+      zoneIds = [];
+    }
     if (json['zone_data'] != null) {
       zoneData = <ZoneData>[];
       json['zone_data'].forEach((v) {

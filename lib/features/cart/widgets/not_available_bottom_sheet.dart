@@ -1,10 +1,10 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_button_widget.dart';
 import 'package:stackfood_multivendor/features/cart/controllers/cart_controller.dart';
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_button_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class NotAvailableBottomSheet extends StatefulWidget {
   const NotAvailableBottomSheet({super.key});
@@ -43,7 +43,7 @@ class _NotAvailableBottomSheetState extends State<NotAvailableBottomSheet> {
             )
           ]),
 
-          GetBuilder<CartController>(
+          GetBuilder<MarketCartController>(
             builder: (cartController) {
               return ListView.builder(
                 shrinkWrap: true,
@@ -80,7 +80,7 @@ class _NotAvailableBottomSheetState extends State<NotAvailableBottomSheet> {
             child: CustomButtonWidget(
               buttonText: 'apply'.tr,
               onPressed: selectIndex == -1 ? null : () {
-                Get.find<CartController>().setAvailableIndex(selectIndex);
+                Get.find<MarketCartController>().setAvailableIndex(selectIndex);
                 Get.back();
               },
             ),

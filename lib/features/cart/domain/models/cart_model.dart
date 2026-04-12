@@ -1,3 +1,4 @@
+
 import 'package:stackfood_multivendor/common/models/product_model.dart';
 
 class CartModel {
@@ -13,6 +14,7 @@ class CartModel {
   Product? _product;
   int? _quantityLimit;
   List<List<int?>>? _variationsStock;
+  double? _requestedWeight;
 
   CartModel(
       int? id,
@@ -26,7 +28,8 @@ class CartModel {
       Product? product,
       List<List<bool?>> variations,
       int? quantityLimit,
-      List<List<int?>> variationsStock) {
+      List<List<int?>> variationsStock,
+      {double? requestedWeight}) {
     _id = id;
     _price = price;
     _discountedPrice = discountedPrice;
@@ -39,6 +42,7 @@ class CartModel {
     _variations = variations;
     _quantityLimit = quantityLimit;
     _variationsStock = variationsStock;
+    _requestedWeight = requestedWeight;
   }
 
   int? get id => _id;
@@ -56,6 +60,8 @@ class CartModel {
   List<List<bool?>>? get variations => _variations;
   int? get quantityLimit => _quantityLimit;
   List<List<int?>>? get variationsStock => _variationsStock;
+  double? get requestedWeight => _requestedWeight;
+  set requestedWeight(double? weight) => _requestedWeight = weight;
 
   CartModel.fromJson(Map<String, dynamic> json) {
     _id = json['cart_id'];
@@ -81,24 +87,27 @@ class CartModel {
     }
     if (json['variations'] != null) {
       _variations = [];
-      for(int index=0; index<json['variations'].length; index++) {
+      for (int index = 0; index < json['variations'].length; index++) {
         _variations!.add([]);
-        for(int i=0; i<json['variations'][index].length; i++) {
+        for (int i = 0; i < json['variations'][index].length; i++) {
           _variations![index].add(json['variations'][index][i]);
         }
       }
     }
-    if(json['quantity_limit'] != null) {
+    if (json['quantity_limit'] != null) {
       _quantityLimit = int.parse(json['quantity_limit']);
     }
     if (json['variations_stock'] != null) {
       _variationsStock = [];
-      for(int index=0; index<json['variations_stock'].length; index++) {
+      for (int index = 0; index < json['variations_stock'].length; index++) {
         _variationsStock!.add([]);
-        for(int i=0; i<json['variations_stock'][index].length; i++) {
+        for (int i = 0; i < json['variations_stock'][index].length; i++) {
           _variationsStock![index].add(json['variations_stock'][index][i]);
         }
       }
+    }
+    if (json['requested_weight'] != null) {
+      _requestedWeight = double.tryParse(json['requested_weight'].toString());
     }
   }
 
@@ -118,6 +127,9 @@ class CartModel {
     data['product'] = _product!.toJson();
     data['variations'] = _variations;
     data['quantity_limit'] = _quantityLimit?.toString();
+    if (_requestedWeight != null) {
+      data['requested_weight'] = _requestedWeight;
+    }
     return data;
   }
 }

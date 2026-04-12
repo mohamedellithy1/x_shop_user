@@ -1,14 +1,14 @@
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_button_widget.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
 import 'package:stackfood_multivendor/features/auth/controllers/restaurant_registration_controller.dart';
 import 'package:stackfood_multivendor/features/auth/widgets/min_max_time_picker_widget.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_button_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 
 class CustomTimePickerWidget extends StatelessWidget {
@@ -23,6 +23,7 @@ class CustomTimePickerWidget extends StatelessWidget {
     List<String> unit = ['minute', 'hours', 'days'];
 
     return Dialog(
+      backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Dimensions.radiusExtraLarge)),
       insetPadding: const EdgeInsets.all(30),
       clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -36,14 +37,14 @@ class CustomTimePickerWidget extends StatelessWidget {
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text('estimated_delivery_time'.tr , style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge)),
+                    Text('estimated_delivery_time'.tr , style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge , color:Colors.black)),
                     const SizedBox(height: Dimensions.paddingSizeSmall),
 
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall),
                       child: Text(
                         'this_item_will_be_shown_in_the_user_app_website'.tr,
-                        style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge,color: Theme.of(context).disabledColor),
+                        style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge,color: Colors.black),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -54,7 +55,7 @@ class CustomTimePickerWidget extends StatelessWidget {
                         width: 70,
                         child: Text(
                           'minimum'.tr,
-                          style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge,color: Theme.of(context).disabledColor),
+                          style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge,color: Colors.black),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -64,7 +65,7 @@ class CustomTimePickerWidget extends StatelessWidget {
                         width: 70,
                         child: Text(
                           'maximum'.tr,
-                          style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge,color: Theme.of(context).disabledColor),
+                          style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge,color: Colors.black),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -72,7 +73,7 @@ class CustomTimePickerWidget extends StatelessWidget {
                         width: 70,
                         child: Text(
                           'unit'.tr,
-                          style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge,color: Theme.of(context).disabledColor),
+                          style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge,color: Colors.black),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -109,6 +110,7 @@ class CustomTimePickerWidget extends StatelessWidget {
                     ),
 
                     CustomButtonWidget(
+                      color:Colors.orange,
                       width: 200,
                       buttonText: 'save'.tr,
                       onPressed: (){

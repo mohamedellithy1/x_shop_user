@@ -3,9 +3,9 @@ import 'package:stackfood_multivendor/features/notification/domain/models/notifi
 import 'package:stackfood_multivendor/features/notification/domain/service/notification_service_interface.dart';
 import 'package:get/get.dart';
 
-class NotificationController extends GetxController implements GetxService {
+class MarketNotificationController extends GetxController implements GetxService {
   final NotificationServiceInterface notificationServiceInterface;
-  NotificationController({required this.notificationServiceInterface});
+  MarketNotificationController({required this.notificationServiceInterface});
 
   List<NotificationModel>? _notificationList;
   List<NotificationModel>? get notificationList => _notificationList;

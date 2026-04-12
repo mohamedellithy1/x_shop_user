@@ -3,16 +3,16 @@ import 'package:stackfood_multivendor/features/profile/controllers/profile_contr
 import 'package:stackfood_multivendor/features/profile/domain/models/userinfo_model.dart';
 import 'package:get/get.dart';
 
-class ReferAndEarnController extends GetxController implements GetxService {
+class MarketReferAndEarnController extends GetxController implements GetxService {
 
   UserInfoModel? _userInfoModel;
   UserInfoModel? get userInfoModel => _userInfoModel;
 
   Future<void> getUserInfo() async {
-    if(Get.find<AuthController>().isLoggedIn() && Get.find<ProfileController>().userInfoModel == null) {
-      await Get.find<ProfileController>().getUserInfo();
+    if(Get.find<MarketAuthController>().isLoggedIn() && Get.find<MarketProfileController>().userInfoModel == null) {
+      await Get.find<MarketProfileController>().getUserInfo();
     }
-    _userInfoModel = Get.find<ProfileController>().userInfoModel;
+    _userInfoModel = Get.find<MarketProfileController>().userInfoModel;
     update();
   }
 

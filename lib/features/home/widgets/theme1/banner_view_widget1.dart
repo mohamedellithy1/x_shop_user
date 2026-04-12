@@ -24,11 +24,11 @@ class BannerViewWidget1 extends StatelessWidget {
       List<String?>? bannerList = homeController.bannerImageList;
       List<dynamic>? bannerDataList = homeController.bannerDataList;
 
-      return (bannerList != null && bannerList.isEmpty) ? const SizedBox() : Container(
+      return (bannerList!.isEmpty) ? const SizedBox() : Container(
         width: MediaQuery.of(context).size.width,
         height: GetPlatform.isDesktop ? 500 : MediaQuery.of(context).size.width * 0.45,
         padding: const EdgeInsets.only(top: Dimensions.paddingSizeDefault),
-        child: bannerList != null ? Column(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(
@@ -43,26 +43,26 @@ class BannerViewWidget1 extends StatelessWidget {
                     homeController.setCurrentIndex(index, true);
                   },
                 ),
-                itemCount: bannerList.isEmpty ? 1 : bannerList.length,
+                itemCount: bannerList!.isEmpty ? 1 : bannerList.length,
                 itemBuilder: (context, index, _) {
                   return InkWell(
                     onTap: () {
-                      if(bannerDataList?[index] is Product) {
-                        Product? product = bannerDataList?[index];
+                      if(bannerDataList![index] is Product) {
+                        Product? product = bannerDataList[index];
                         ResponsiveHelper.isMobile(context) ? showModalBottomSheet(
                           context: context, isScrollControlled: true, backgroundColor: Colors.transparent,
                           builder: (con) => ProductBottomSheetWidget(product: product),
                         ) : showDialog(context: context, builder: (con) => Dialog(
                             child: ProductBottomSheetWidget(product: product)),
                         );
-                      }else if(bannerDataList?[index] is Restaurant) {
-                        Restaurant restaurant = bannerDataList?[index];
+                      }else if(bannerDataList[index] is Restaurant) {
+                        Restaurant restaurant = bannerDataList[index];
                         Get.toNamed(
                           RouteHelper.getRestaurantRoute(restaurant.id, slug: restaurant.slug ?? ''),
                           arguments: RestaurantScreen(restaurant: restaurant),
                         );
-                      }else if(bannerDataList?[index] is BasicCampaignModel) {
-                        BasicCampaignModel campaign = bannerDataList?[index];
+                      }else if(bannerDataList[index] is BasicCampaignModel) {
+                        BasicCampaignModel campaign = bannerDataList[index];
                         Get.toNamed(RouteHelper.getBasicCampaignRoute(campaign));
                       }
                     },
@@ -74,7 +74,7 @@ class BannerViewWidget1 extends StatelessWidget {
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                        child: GetBuilder<SplashController>(builder: (splashController) {
+                        child: GetBuilder<MarketSplashController>(tag: 'xmarket', builder: (splashController) {
                           return CustomImageWidget(
                             image: '${bannerList[index]}',
                             fit: BoxFit.cover,
@@ -102,13 +102,6 @@ class BannerViewWidget1 extends StatelessWidget {
             ),
 
           ],
-        ) : Shimmer(
-          duration: const Duration(seconds: 2),
-          enabled: bannerList == null,
-          child: Container(margin: const EdgeInsets.symmetric(horizontal: 10), decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-            color: Colors.grey[300],
-          )),
         ),
       );
     });

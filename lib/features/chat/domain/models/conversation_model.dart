@@ -1,3 +1,4 @@
+
 import 'package:stackfood_multivendor/features/chat/domain/models/message_model.dart';
 
 class ConversationsModel {

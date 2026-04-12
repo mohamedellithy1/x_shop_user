@@ -12,10 +12,12 @@ import 'package:get/get.dart';
 class CuisineRestaurantScreen extends StatefulWidget {
   final int cuisineId;
   final String? name;
-  const CuisineRestaurantScreen({super.key, required this.cuisineId, required this.name});
+  const CuisineRestaurantScreen(
+      {super.key, required this.cuisineId, required this.name});
 
   @override
-  State<CuisineRestaurantScreen> createState() => _CuisineRestaurantScreenState();
+  State<CuisineRestaurantScreen> createState() =>
+      _CuisineRestaurantScreenState();
 }
 
 class _CuisineRestaurantScreenState extends State<CuisineRestaurantScreen> {
@@ -25,37 +27,55 @@ class _CuisineRestaurantScreenState extends State<CuisineRestaurantScreen> {
   void initState() {
     super.initState();
     Get.find<CuisineController>().initialize();
-    Get.find<CuisineController>().getCuisineRestaurantList(widget.cuisineId, 1, false);
+    Get.find<CuisineController>()
+        .getCuisineRestaurantList(widget.cuisineId, 1, false);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-      appBar: CustomAppBarWidget(title: '${widget.name!} ${'cuisine'.tr}'),
-      endDrawer: const MenuDrawerWidget(), endDrawerEnableOpenDragGesture: false,
-
+      backgroundColor: Colors.white,
+      appBar: CustomAppBarWidget(title: widget.name!),
+      endDrawer: const MenuDrawerWidget(),
+      endDrawerEnableOpenDragGesture: false,
       body: SingleChildScrollView(
         controller: _scrollController,
-        child: FooterViewWidget(
-          child: Center(
+        child: Center(
             child: SizedBox(
               width: Dimensions.webMaxWidth,
-              child: GetBuilder<CuisineController>(builder: (cuisineController) {
-                if(cuisineController.cuisineRestaurantsModel != null){}
+              child:
+                  GetBuilder<CuisineController>(builder: (cuisineController) {
+                if (cuisineController.cuisineRestaurantsModel != null) {}
                 return PaginatedListViewWidget(
                   scrollController: _scrollController,
-                  totalSize: cuisineController.cuisineRestaurantsModel?.totalSize,
-                  offset: cuisineController.cuisineRestaurantsModel != null ? int.parse(cuisineController.cuisineRestaurantsModel!.offset!) : null,
-                  onPaginate: (int? offset) async => await cuisineController.getCuisineRestaurantList(widget.cuisineId, offset!, false),
+                  totalSize:
+                      cuisineController.cuisineRestaurantsModel?.totalSize,
+                  offset: cuisineController.cuisineRestaurantsModel != null
+                      ? int.parse(
+                          cuisineController.cuisineRestaurantsModel!.offset!)
+                      : null,
+                  onPaginate: (int? offset) async =>
+                      await cuisineController.getCuisineRestaurantList(
+                          widget.cuisineId, offset!, false),
                   productView: ProductViewWidget(
-                    isRestaurant: true, products: null,
-                    restaurants: cuisineController.cuisineRestaurantsModel?.restaurants,
+                    isRestaurant: true,
+                    products: null,
+                    restaurants:
+                        cuisineController.cuisineRestaurantsModel?.restaurants,
+                    useGridCard: true,
                     padding: EdgeInsets.only(
-                      left: ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeExtraSmall : Dimensions.paddingSizeSmall,
-                      right: ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeExtraSmall : Dimensions.paddingSizeSmall,
-                      top: ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeExtraSmall : Dimensions.paddingSizeDefault,
-                      bottom: ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeExtraSmall : 0,
+                      left: ResponsiveHelper.isDesktop(context)
+                          ? Dimensions.paddingSizeExtraSmall
+                          : Dimensions.paddingSizeSmall,
+                      right: ResponsiveHelper.isDesktop(context)
+                          ? Dimensions.paddingSizeExtraSmall
+                          : Dimensions.paddingSizeSmall,
+                      top: ResponsiveHelper.isDesktop(context)
+                          ? Dimensions.paddingSizeExtraSmall
+                          : Dimensions.paddingSizeDefault,
+                      bottom: ResponsiveHelper.isDesktop(context)
+                          ? Dimensions.paddingSizeExtraSmall
+                          : 0,
                     ),
                   ),
                 );
@@ -63,7 +83,7 @@ class _CuisineRestaurantScreenState extends State<CuisineRestaurantScreen> {
             ),
           ),
         ),
-      ),
+      
     );
   }
 }

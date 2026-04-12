@@ -70,6 +70,14 @@ class CustomDropdownState<T> extends State<CustomDropdown<T?>>
   }
 
   @override
+  void didUpdateWidget(CustomDropdown<T?> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.items.length <= _currentIndex) {
+      _currentIndex = -1;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     var style = widget.dropdownButtonStyle;
     // link the overlay to the button
@@ -83,11 +91,14 @@ class CustomDropdownState<T> extends State<CustomDropdown<T?>>
           child: Padding(
             padding: const EdgeInsets.all(5),
             child: Row(
-              mainAxisAlignment: style.mainAxisAlignment ?? MainAxisAlignment.center,
-              textDirection: widget.leadingIcon ? TextDirection.rtl : TextDirection.ltr,
+              mainAxisAlignment:
+                  style.mainAxisAlignment ?? MainAxisAlignment.center,
+              textDirection:
+                  widget.leadingIcon ? TextDirection.rtl : TextDirection.ltr,
               mainAxisSize: MainAxisSize.max,
               children: [
-                if (_currentIndex == -1) ...[
+                if (_currentIndex == -1 ||
+                    _currentIndex >= widget.items.length) ...[
                   Expanded(child: widget.child),
                 ] else ...[
                   Expanded(child: widget.items[_currentIndex]),
@@ -95,7 +106,8 @@ class CustomDropdownState<T> extends State<CustomDropdown<T?>>
                 if (!widget.hideIcon)
                   RotationTransition(
                     turns: _rotateAnimation,
-                    child: widget.icon ?? Icon(Icons.expand_more, color: widget.iconColor),
+                    child: widget.icon ??
+                        Icon(Icons.expand_more, color: widget.iconColor),
                   ),
               ],
             ),

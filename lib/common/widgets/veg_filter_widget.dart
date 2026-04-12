@@ -1,10 +1,10 @@
-import 'package:stackfood_multivendor/features/language/controllers/localization_controller.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
-import 'package:stackfood_multivendor/features/product/controllers/product_controller.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/util/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stackfood_multivendor/features/product/controllers/product_controller.dart';
+import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
+import 'package:stackfood_multivendor/localization/localization_controller.dart';
+import 'package:stackfood_multivendor/util/dimensions.dart';
+import 'package:stackfood_multivendor/util/styles.dart';
 
 class VegFilterWidget extends StatelessWidget {
   final String? type;
@@ -16,10 +16,10 @@ class VegFilterWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool ltr = Get.find<LocalizationController>().isLtr;
+    final bool ltr = Get.find<LocalizationController>(tag: 'xmarket').isLtr;
     List<PopupMenuEntry> entryList = _generateProductTypeList(Get.find<ProductController>().productTypeList, context);
 
-    return Get.find<SplashController>().configModel!.toggleVegNonVeg! ? Padding(
+    return Get.find<MarketSplashController>(tag: 'xmarket').configModel!.toggleVegNonVeg! ? Padding(
       padding: fromAppBar ? EdgeInsets.zero : EdgeInsets.only(left: ltr ? Dimensions.paddingSizeSmall : 0, right: ltr ? 0 : Dimensions.paddingSizeSmall),
       child: PopupMenuButton<dynamic>(
         offset: const Offset(-20, 20),

@@ -44,6 +44,7 @@ class ConfigModel {
   bool? customerWalletStatus;
   int? dmTipsStatus;
   bool? refEarningStatus;
+  bool? walletStatus;
   double? refEarningExchangeRate;
   int? theme;
   BusinessPlan? businessPlan;
@@ -97,6 +98,7 @@ class ConfigModel {
   AdminFreeDelivery? adminFreeDelivery;
   bool? isSmsActive;
   bool? isMailActive;
+  bool? xShop;
 
   ConfigModel({
     this.businessName,
@@ -115,6 +117,7 @@ class ConfigModel {
     this.appUrlAndroid,
     this.appUrlIos,
     this.customerVerification,
+    this.walletStatus,
     this.orderDeliveryVerification,
     this.currencySymbolDirection,
     this.appMinimumVersionAndroid,
@@ -197,6 +200,7 @@ class ConfigModel {
     this.adminFreeDelivery,
     this.isSmsActive,
     this.isMailActive,
+    this.xShop,
   });
 
   ConfigModel.fromJson(Map<String, dynamic> json) {
@@ -212,14 +216,20 @@ class ConfigModel {
     privacyPolicy = json['privacy_policy'];
     aboutUs = json['about_us'];
     country = json['country'];
-    defaultLocation = json['default_location'] != null ? DefaultLocation.fromJson(json['default_location']) : null;
+    defaultLocation = json['default_location'] != null
+        ? DefaultLocation.fromJson(json['default_location'])
+        : null;
     appUrlAndroid = json['app_url_android'];
     appUrlIos = json['app_url_ios'];
     customerVerification = json['customer_verification'];
     orderDeliveryVerification = json['order_delivery_verification'];
     currencySymbolDirection = json['currency_symbol_direction'];
-    appMinimumVersionAndroid = json['app_minimum_version_android'] != null ? json['app_minimum_version_android'].toDouble() : 0.0;
-    appMinimumVersionIos = json['app_minimum_version_ios'] != null ? json['app_minimum_version_ios'].toDouble() : 0.0;
+    appMinimumVersionAndroid = json['app_minimum_version_android'] != null
+        ? json['app_minimum_version_android'].toDouble()
+        : 0.0;
+    appMinimumVersionIos = json['app_minimum_version_ios'] != null
+        ? json['app_minimum_version_ios'].toDouble()
+        : 0.0;
     demo = json['demo'];
     maintenanceMode = json['maintenance_mode'];
     popularFood = json['popular_food'];
@@ -246,25 +256,37 @@ class ConfigModel {
         appleLogin!.add(SocialLogin.fromJson(v));
       });
     }
-    scheduleOrderSlotDuration = json['schedule_order_slot_duration'] == 0 ? 30 : json['schedule_order_slot_duration'];
+    scheduleOrderSlotDuration = json['schedule_order_slot_duration'] == 0
+        ? 30
+        : json['schedule_order_slot_duration'];
     digitAfterDecimalPoint = json['digit_after_decimal_point'];
     loyaltyPointExchangeRate = json['loyalty_point_exchange_rate'];
-    loyaltyPointItemPurchasePoint = json['loyalty_point_item_purchase_point'].toDouble();
-    loyaltyPointStatus = json['loyalty_point_status'] == 1;
+    loyaltyPointItemPurchasePoint =
+        json['loyalty_point_item_purchase_point'].toDouble();
+    loyaltyPointStatus = json['loyalty_point_status'] == 1 ||
+        json['loyalty_point_status'] == true;
     minimumPointToTransfer = json['minimum_point_to_transfer'];
-    customerWalletStatus = json['customer_wallet_status'] == 1;
+    customerWalletStatus = json['customer_wallet_status'] == 1 ||
+        json['customer_wallet_status'] == true;
     dmTipsStatus = json['dm_tips_status'];
-    refEarningStatus = json['ref_earning_status'] == 1;
+    refEarningStatus =
+        json['ref_earning_status'] == 1 || json['ref_earning_status'] == true;
     refEarningExchangeRate = json['ref_earning_exchange_rate'].toDouble();
     theme = json['theme'];
-    businessPlan = json['business_plan'] != null ? BusinessPlan.fromJson(json['business_plan']) : null;
+    businessPlan = json['business_plan'] != null
+        ? BusinessPlan.fromJson(json['business_plan'])
+        : null;
     adminCommission = json['admin_commission'].toDouble();
     refundStatus = json['refund_active_status'];
-    refundPolicyStatus = json['refund_policy_status'] == 1;
+    refundPolicyStatus = json['refund_policy_status'] == 1 ||
+        json['refund_policy_status'] == true;
+    walletStatus = json['wallet_status'] == 1 || json['wallet_status'] == true;
     refundPolicyData = json['refund_policy_data'];
-    cancellationPolicyStatus = json['cancellation_policy_status'] == 1;
+    cancellationPolicyStatus = json['cancellation_policy_status'] == 1 ||
+        json['cancellation_policy_status'] == true;
     cancellationPolicyData = json['cancellation_policy_data'];
-    shippingPolicyStatus = json['shipping_policy_status'] == 1;
+    shippingPolicyStatus = json['shipping_policy_status'] == 1 ||
+        json['shipping_policy_status'] == true;
     shippingPolicyData = json['shipping_policy_data'];
     freeTrialPeriodStatus = json['free_trial_period_status'];
     freeTrialPeriodDay = json['free_trial_period_data'];
@@ -277,7 +299,8 @@ class ConfigModel {
     }
     takeAway = json['take_away'];
     homeDelivery = json['home_delivery'];
-    dineIn = json['dine_in_order_option'] == 1;
+    dineIn = json['dine_in_order_option'] == 1 ||
+        json['dine_in_order_option'] == true;
     repeatOrderOption = json['repeat_order_option'];
     if (json['social_media'] != null) {
       socialMedia = <SocialMedia>[];
@@ -286,43 +309,73 @@ class ConfigModel {
       });
     }
     footerText = json['footer_text'];
-    landingPageLinks = json['landing_page_links'] != null ? LandingPageLinks.fromJson(json['landing_page_links']) : null;
+    landingPageLinks = json['landing_page_links'] != null
+        ? LandingPageLinks.fromJson(json['landing_page_links'])
+        : null;
     if (json['active_payment_method_list'] != null) {
       activePaymentMethodList = <PaymentBody>[];
       json['active_payment_method_list'].forEach((v) {
         activePaymentMethodList!.add(PaymentBody.fromJson(v));
       });
     }
-    digitalPaymentInfo = json['digital_payment_info'] != null ? DigitalPaymentInfo.fromJson(json['digital_payment_info']) : null;
-    addFundStatus = json['add_fund_status'] == 1;
-    partialPaymentStatus = json['partial_payment_status'] == 1;
+    digitalPaymentInfo = json['digital_payment_info'] != null
+        ? DigitalPaymentInfo.fromJson(json['digital_payment_info'])
+        : null;
+    addFundStatus =
+        json['add_fund_status'] == 1 || json['add_fund_status'] == true;
+    partialPaymentStatus = json['partial_payment_status'] == 1 ||
+        json['partial_payment_status'] == true;
     partialPaymentMethod = json['partial_payment_method'];
-    additionalChargeStatus = json['additional_charge_status'] == 1;
+    additionalChargeStatus = json['additional_charge_status'] == 1 ||
+        json['additional_charge_status'] == true;
     additionalChargeName = json['additional_charge_name'];
     additionCharge = json['additional_charge']?.toDouble() ?? 0;
-    bannerData = json['banner_data'] != null && json['banner_data'] != 'null' ? BannerData.fromJson(json['banner_data']) : null;
-    offlinePaymentStatus = json['offline_payment_status'] == 1;
+    bannerData = json['banner_data'] != null && json['banner_data'] != 'null'
+        ? BannerData.fromJson(json['banner_data'])
+        : null;
+    offlinePaymentStatus = json['offline_payment_status'] == 1 ||
+        json['offline_payment_status'] == true;
     instantOrder = json['instant_order'];
     customerDateOrderStatus = json['customer_date_order_sratus'];
     customerOrderDate = json['customer_order_date'];
-    restaurantAdditionalJoinUsPageData = json['restaurant_additional_join_us_page_data'] != null ? RestaurantAdditionalJoinUsPageData.fromJson(json['restaurant_additional_join_us_page_data']) : null;
-    deliverymanAdditionalJoinUsPageData = json['deliveryman_additional_join_us_page_data'] != null ? DeliverymanAdditionalJoinUsPageData.fromJson(json['deliveryman_additional_join_us_page_data']) : null;
-    guestCheckoutStatus = json['guest_checkout_status'] == 1;
+    restaurantAdditionalJoinUsPageData =
+        json['restaurant_additional_join_us_page_data'] != null
+            ? RestaurantAdditionalJoinUsPageData.fromJson(
+                json['restaurant_additional_join_us_page_data'])
+            : null;
+    deliverymanAdditionalJoinUsPageData =
+        json['deliveryman_additional_join_us_page_data'] != null
+            ? DeliverymanAdditionalJoinUsPageData.fromJson(
+                json['deliveryman_additional_join_us_page_data'])
+            : null;
+    guestCheckoutStatus = json['guest_checkout_status'] == 1 ||
+        json['guest_checkout_status'] == true;
     favIconFullUrl = json['fav_icon_full_url'];
     extraPackagingChargeStatus = json['extra_packaging_charge'];
-    countryPickerStatus = json['country_picker_status'] == 1;
-    maintenanceModeData = json['maintenance_mode_data'] != null ? MaintenanceModeData.fromJson(json['maintenance_mode_data']) : null;
-    centralizeLoginSetup = json['centralize_login'] != null ? CentralizeLoginSetup.fromJson(json['centralize_login']) : null;
-    firebaseOtpVerification = json['firebase_otp_verification'] == 1;
+    countryPickerStatus = json['country_picker_status'] == 1 ||
+        json['country_picker_status'] == true;
+    maintenanceModeData = json['maintenance_mode_data'] != null
+        ? MaintenanceModeData.fromJson(json['maintenance_mode_data'])
+        : null;
+    centralizeLoginSetup = json['centralize_login'] != null
+        ? CentralizeLoginSetup.fromJson(json['centralize_login'])
+        : null;
+    firebaseOtpVerification = json['firebase_otp_verification'] == 1 ||
+        json['firebase_otp_verification'] == true;
     subscriptionFreeTrialDays = json['subscription_free_trial_days'];
-    subscriptionFreeTrialStatus = json['subscription_free_trial_status'] == 1 ? true : false;
+    subscriptionFreeTrialStatus = json['subscription_free_trial_status'] == 1 ||
+        json['subscription_free_trial_status'] == true;
     subscriptionBusinessModel = json['subscription_business_model'];
     commissionBusinessModel = json['commission_business_model'];
     subscriptionFreeTrialType = json['subscription_free_trial_type'];
-    dineInOrderOption = json['dine_in_order_option'] == 1;
-    adminFreeDelivery = json['admin_free_delivery'] != null ? AdminFreeDelivery.fromJson(json['admin_free_delivery']) : null;
+    dineInOrderOption = json['dine_in_order_option'] == 1 ||
+        json['dine_in_order_option'] == true;
+    adminFreeDelivery = json['admin_free_delivery'] != null
+        ? AdminFreeDelivery.fromJson(json['admin_free_delivery'])
+        : null;
     isSmsActive = json['is_sms_active'];
     isMailActive = json['is_mail_active'];
+    xShop = json['x_shop'] == 1 || json['x_shop'] == true;
   }
 
   Map<String, dynamic> toJson() {
@@ -397,7 +450,8 @@ class ConfigModel {
       data['landing_page_links'] = landingPageLinks!.toJson();
     }
     if (activePaymentMethodList != null) {
-      data['active_payment_method_list'] = activePaymentMethodList!.map((v) => v.toJson()).toList();
+      data['active_payment_method_list'] =
+          activePaymentMethodList!.map((v) => v.toJson()).toList();
     }
     if (digitalPaymentInfo != null) {
       data['digital_payment_info'] = digitalPaymentInfo!.toJson();
@@ -413,10 +467,12 @@ class ConfigModel {
     data['customer_date_order_sratus'] = customerDateOrderStatus;
     data['customer_order_date'] = customerOrderDate;
     if (restaurantAdditionalJoinUsPageData != null) {
-      data['restaurant_additional_join_us_page_data'] = restaurantAdditionalJoinUsPageData!.toJson();
+      data['restaurant_additional_join_us_page_data'] =
+          restaurantAdditionalJoinUsPageData!.toJson();
     }
     if (deliverymanAdditionalJoinUsPageData != null) {
-      data['deliveryman_additional_join_us_page_data'] = deliverymanAdditionalJoinUsPageData!.toJson();
+      data['deliveryman_additional_join_us_page_data'] =
+          deliverymanAdditionalJoinUsPageData!.toJson();
     }
     data['guest_checkout_status'] = guestCheckoutStatus;
     data['fav_icon_full_url'] = favIconFullUrl;
@@ -437,6 +493,7 @@ class ConfigModel {
     }
     data['is_sms_active'] = isSmsActive;
     data['is_mail_active'] = isMailActive;
+    data['x_shop'] = xShop;
     return data;
   }
 }
@@ -607,7 +664,10 @@ class DigitalPaymentInfo {
   bool? pluginPaymentGateways;
   bool? defaultPaymentGateways;
 
-  DigitalPaymentInfo({this.digitalPayment, this.pluginPaymentGateways, this.defaultPaymentGateways});
+  DigitalPaymentInfo(
+      {this.digitalPayment,
+      this.pluginPaymentGateways,
+      this.defaultPaymentGateways});
 
   DigitalPaymentInfo.fromJson(Map<String, dynamic> json) {
     digitalPayment = json['digital_payment'];
@@ -697,7 +757,13 @@ class DataModel {
   String? placeholderData;
   int? isRequired;
 
-  DataModel({this.fieldType, this.inputData, this.checkData, this.mediaData, this.placeholderData, this.isRequired});
+  DataModel(
+      {this.fieldType,
+      this.inputData,
+      this.checkData,
+      this.mediaData,
+      this.placeholderData,
+      this.isRequired});
 
   DataModel.fromJson(Map<String, dynamic> json) {
     fieldType = json['field_type'];
@@ -708,7 +774,9 @@ class DataModel {
       checkData = [];
       json['check_data'].forEach((e) => checkData!.add(e));
     }
-    mediaData = json['media_data'] != null ? MediaData.fromJson(json['media_data']) : null;
+    mediaData = json['media_data'] != null
+        ? MediaData.fromJson(json['media_data'])
+        : null;
     placeholderData = json['placeholder_data'];
     isRequired = json['is_required'];
   }
@@ -770,8 +838,12 @@ class MaintenanceModeData {
 
   MaintenanceModeData.fromJson(Map<String, dynamic> json) {
     maintenanceSystemSetup = json['maintenance_system_setup'].cast<String>();
-    maintenanceDurationSetup = json['maintenance_duration_setup'] != null ? MaintenanceDurationSetup.fromJson(json['maintenance_duration_setup']) : null;
-    maintenanceMessageSetup = json['maintenance_message_setup'] != null ? MaintenanceMessageSetup.fromJson(json['maintenance_message_setup']) : null;
+    maintenanceDurationSetup = json['maintenance_duration_setup'] != null
+        ? MaintenanceDurationSetup.fromJson(json['maintenance_duration_setup'])
+        : null;
+    maintenanceMessageSetup = json['maintenance_message_setup'] != null
+        ? MaintenanceMessageSetup.fromJson(json['maintenance_message_setup'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -819,7 +891,11 @@ class MaintenanceMessageSetup {
   String? maintenanceMessage;
   String? messageBody;
 
-  MaintenanceMessageSetup({this.businessNumber, this.businessEmail, this.maintenanceMessage, this.messageBody});
+  MaintenanceMessageSetup(
+      {this.businessNumber,
+      this.businessEmail,
+      this.maintenanceMessage,
+      this.messageBody});
 
   MaintenanceMessageSetup.fromJson(Map<String, dynamic> json) {
     businessNumber = json['business_number'];
@@ -890,13 +966,21 @@ class AdminFreeDelivery {
   double? freeDeliveryOver;
   double? freeDeliveryDistance;
 
-  AdminFreeDelivery({this.status, this.type, this.freeDeliveryOver, this.freeDeliveryDistance});
+  AdminFreeDelivery(
+      {this.status,
+      this.type,
+      this.freeDeliveryOver,
+      this.freeDeliveryDistance});
 
   AdminFreeDelivery.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     type = json['type'];
-    freeDeliveryOver = json['free_delivery_over'] != null ? json['free_delivery_over']?.toDouble() : 0.0;
-    freeDeliveryDistance = json['free_delivery_distance'] != null ? json['free_delivery_distance']?.toDouble() : 0.0;
+    freeDeliveryOver = json['free_delivery_over'] != null
+        ? json['free_delivery_over']?.toDouble()
+        : 0.0;
+    freeDeliveryDistance = json['free_delivery_distance'] != null
+        ? json['free_delivery_distance']?.toDouble()
+        : 0.0;
   }
 
   Map<String, dynamic> toJson() {

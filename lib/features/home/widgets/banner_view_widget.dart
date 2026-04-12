@@ -72,7 +72,7 @@ class BannerViewWidget extends StatelessWidget {
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(Dimensions.radiusMedium),
-                      child: GetBuilder<SplashController>(builder: (splashController) {
+                      child: GetBuilder<MarketSplashController>(tag: 'xmarket', builder: (splashController) {
                         return CustomImageWidget(
                           image: '${homeController.bannerImageList![index]}',
                           fit: BoxFit.cover,

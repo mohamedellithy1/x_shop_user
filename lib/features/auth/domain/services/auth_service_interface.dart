@@ -1,3 +1,4 @@
+
 import 'package:stackfood_multivendor/common/models/response_model.dart';
 import 'package:stackfood_multivendor/features/auth/domain/models/signup_body_model.dart';
 import 'package:stackfood_multivendor/features/auth/domain/models/social_log_in_body_model.dart';
@@ -18,7 +19,7 @@ abstract class AuthServiceInterface{
   bool isLoggedIn();
   String getGuestId();
   bool isGuestLoggedIn();
-  Future<void> socialLogout();
+  // Future<void> socialLogout();
   Future<bool> clearSharedData({bool removeToken = true});
   Future<bool> setNotificationActive(bool isActive);
   bool isNotificationActive();

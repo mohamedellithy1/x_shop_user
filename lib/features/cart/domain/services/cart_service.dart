@@ -1,13 +1,13 @@
 import 'package:get/get_connect/http/src/response/response.dart';
+import 'package:get/get_utils/get_utils.dart';
 import 'package:stackfood_multivendor/common/models/online_cart_model.dart';
 import 'package:stackfood_multivendor/common/models/product_model.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
-import 'package:stackfood_multivendor/features/checkout/domain/models/place_order_body_model.dart';
 import 'package:stackfood_multivendor/features/cart/domain/models/cart_model.dart';
 import 'package:stackfood_multivendor/features/cart/domain/repositories/cart_repository_interface.dart';
 import 'package:stackfood_multivendor/features/cart/domain/services/cart_service_interface.dart';
+import 'package:stackfood_multivendor/features/checkout/domain/models/place_order_body_model.dart';
 import 'package:stackfood_multivendor/helper/price_converter.dart';
-import 'package:get/get_utils/get_utils.dart';
 
 class CartService implements CartServiceInterface {
   final CartRepositoryInterface cartRepositoryInterface;
@@ -64,6 +64,7 @@ class CartService implements CartServiceInterface {
         CartModel(
           cart.id, price, discountedPrice, discountAmount, quantity, addOnIdList,
           addOnsList, false, cart.product, selectedFoodVariations, quantityLimit, variationsStock,
+          requestedWeight: cart.requestedWeight,
         ),
       );
     }
@@ -232,11 +233,15 @@ class CartService implements CartServiceInterface {
   @override
   double calculateVariationWithoutDiscountPrice(CartModel cartModel, double price, double? discount, String? discountType) {
     double variationWithoutDiscountPrice = price;
+    double multiplier = (cartModel.product!.isWeightBased ?? false)
+        ? ((cartModel.requestedWeight != null && cartModel.requestedWeight! > 0) ? cartModel.requestedWeight! : (cartModel.quantity ?? 1).toDouble())
+        : cartModel.quantity!.toDouble();
+
     if(cartModel.product!.variations!.isNotEmpty) {
       for(int index = 0; index< cartModel.product!.variations!.length; index++) {
         for(int i=0; i<cartModel.product!.variations![index].variationValues!.length; i++) {
           if(cartModel.variations![index][i]!) {
-            variationWithoutDiscountPrice += (PriceConverter.convertWithDiscount(cartModel.product!.variations![index].variationValues![i].optionPrice!, discount, discountType, isVariation: true)! * cartModel.quantity!);
+            variationWithoutDiscountPrice += (PriceConverter.convertWithDiscount(cartModel.product!.variations![index].variationValues![i].optionPrice!, discount, discountType, isVariation: true)! * multiplier);
           }
         }
       }
@@ -249,11 +254,15 @@ class CartService implements CartServiceInterface {
   @override
   double calculateVariationPrice(CartModel cartModel, double price) {
     double variationPrice = price;
+    double multiplier = (cartModel.product!.isWeightBased ?? false)
+        ? ((cartModel.requestedWeight != null && cartModel.requestedWeight! > 0) ? cartModel.requestedWeight! : (cartModel.quantity ?? 1).toDouble())
+        : cartModel.quantity!.toDouble();
+
     if(cartModel.product!.variations!.isNotEmpty) {
       for(int index = 0; index< cartModel.product!.variations!.length; index++) {
         for(int i=0; i<cartModel.product!.variations![index].variationValues!.length; i++) {
           if(cartModel.variations![index][i]!) {
-            variationPrice += (cartModel.product!.variations![index].variationValues![i].optionPrice! * cartModel.quantity!);
+            variationPrice += (cartModel.product!.variations![index].variationValues![i].optionPrice! * multiplier);
           }
         }
       }

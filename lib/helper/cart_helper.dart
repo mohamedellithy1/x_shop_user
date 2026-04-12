@@ -90,6 +90,7 @@ class CartHelper {
         CartModel(
           cart.id, price, discountedPrice, discountAmount, quantity,
           addOnIdList, addOnsList, false, cart.product, selectedFoodVariations, quantityLimit, variationsStock,
+          requestedWeight: cart.requestedWeight,
         ),
       );
 

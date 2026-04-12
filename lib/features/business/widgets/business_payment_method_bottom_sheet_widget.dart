@@ -1,12 +1,12 @@
-import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_button_widget.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_image_widget.dart';
 import 'package:stackfood_multivendor/features/business/controllers/business_controller.dart';
+import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_button_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_image_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class BusinessPaymentMethodBottomSheetWidget extends StatefulWidget {
   const BusinessPaymentMethodBottomSheetWidget({super.key});
@@ -73,17 +73,17 @@ class _PaymentMethodBottomSheetState extends State<BusinessPaymentMethodBottomSh
                     const SizedBox(height: Dimensions.paddingSizeLarge),
 
                     ListView.builder(
-                        itemCount: Get.find<SplashController>().configModel!.activePaymentMethodList!.length,
+                        itemCount: Get.find<MarketSplashController>(tag: 'xmarket').configModel!.activePaymentMethodList!.length,
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         padding: EdgeInsets.zero,
                         itemBuilder: (context, index){
-                          bool isSelected = businessController.paymentIndex == 1 && Get.find<SplashController>().configModel!.activePaymentMethodList![index].getWay! == businessController.digitalPaymentName;
+                          bool isSelected = businessController.paymentIndex == 1 && Get.find<MarketSplashController>(tag: 'xmarket').configModel!.activePaymentMethodList![index].getWay! == businessController.digitalPaymentName;
 
                           return InkWell(
                             onTap: (){
                               businessController.setPaymentIndex(1);
-                              businessController.changeDigitalPaymentName(Get.find<SplashController>().configModel!.activePaymentMethodList![index].getWay!);
+                              businessController.changeDigitalPaymentName(Get.find<MarketSplashController>(tag: 'xmarket').configModel!.activePaymentMethodList![index].getWay!);
                             },
                             child: Container(
                               decoration: BoxDecoration(
@@ -106,12 +106,12 @@ class _PaymentMethodBottomSheetState extends State<BusinessPaymentMethodBottomSh
 
                                 CustomImageWidget(
                                   height: 20, fit: BoxFit.contain,
-                                  image: '${Get.find<SplashController>().configModel!.activePaymentMethodList![index].getWayImageFullUrl}',
+                                  image: '${Get.find<MarketSplashController>(tag: 'xmarket').configModel!.activePaymentMethodList![index].getWayImageFullUrl}',
                                 ),
                                 const SizedBox(width: Dimensions.paddingSizeSmall),
 
                                 Text(
-                                  Get.find<SplashController>().configModel!.activePaymentMethodList![index].getWayTitle!,
+                                  Get.find<MarketSplashController>(tag: 'xmarket').configModel!.activePaymentMethodList![index].getWayTitle!,
                                   style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault),
                                 ),
                               ]),

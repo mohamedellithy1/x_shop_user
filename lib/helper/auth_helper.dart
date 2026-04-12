@@ -4,14 +4,14 @@ import 'package:get/get.dart';
 class AuthHelper {
 
   static bool isGuestLoggedIn() {
-    return Get.find<AuthController>().isGuestLoggedIn();
+    return Get.find<MarketAuthController>().isGuestLoggedIn();
   }
 
   static String getGuestId() {
-    return Get.find<AuthController>().getGuestId();
+    return Get.find<MarketAuthController>().getGuestId();
   }
 
   static bool isLoggedIn() {
-    return Get.find<AuthController>().isLoggedIn();
+    return Get.find<MarketAuthController>().isLoggedIn();
   }
 }

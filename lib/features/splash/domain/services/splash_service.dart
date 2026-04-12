@@ -68,7 +68,7 @@ class SplashService implements SplashServiceInterface {
     bool isSuccess = false;
     Response response = await splashRepositoryInterface.subscribeEmail(email);
     if (response.statusCode == 200) {
-      showCustomSnackBar('subscribed_successfully'.tr, isError: false);
+      showCustomSnackBar('subscribed_successfully'.tr);
       isSuccess = true;
     }
     return isSuccess;

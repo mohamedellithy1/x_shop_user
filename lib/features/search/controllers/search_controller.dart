@@ -3,6 +3,7 @@ import 'package:stackfood_multivendor/common/models/product_model.dart';
 import 'package:stackfood_multivendor/common/models/restaurant_model.dart';
 import 'package:stackfood_multivendor/features/search/domain/models/search_suggestion_model.dart';
 import 'package:stackfood_multivendor/features/search/domain/services/search_service_interface.dart';
+import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
 import 'package:get/get.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter/material.dart';
@@ -237,7 +238,8 @@ class SearchController extends GetxController implements GetxService {
 
   void getSuggestedFoods() async {
     _suggestedFoodList = null;
-    _suggestedFoodList = await searchServiceInterface.getSuggestedFoods();
+    final list = await searchServiceInterface.getSuggestedFoods();
+    _suggestedFoodList = Get.find<MarketSplashController>(tag: 'xmarket').filterXMarketProducts(list);
     update();
   }
 
@@ -317,15 +319,15 @@ class SearchController extends GetxController implements GetxService {
               _searchRestList = [];
               _allRestList = [];
             }
-            _searchRestList!.addAll(RestaurantModel.fromJson(response.body).restaurants!);
-            _allRestList!.addAll(RestaurantModel.fromJson(response.body).restaurants!);
+            _searchRestList!.addAll(Get.find<MarketSplashController>(tag: 'xmarket').filterXMarketRestaurants(RestaurantModel.fromJson(response.body).restaurants!));
+            _allRestList!.addAll(Get.find<MarketSplashController>(tag: 'xmarket').filterXMarketRestaurants(RestaurantModel.fromJson(response.body).restaurants!));
             totalSize = RestaurantModel.fromJson(response.body).totalSize;
             pageOffset = RestaurantModel.fromJson(response.body).offset;
           } else {
             if(offset == 1) {
               _searchProductList = [];
             }
-            _searchProductList!.addAll(ProductModel.fromJson(response.body).products!);
+            _searchProductList!.addAll(Get.find<MarketSplashController>(tag: 'xmarket').filterXMarketProducts(ProductModel.fromJson(response.body).products!));
             totalSize = ProductModel.fromJson(response.body).totalSize;
             pageOffset = ProductModel.fromJson(response.body).offset;
             if(_lowerValue == 0 || _upperValue == 0) {

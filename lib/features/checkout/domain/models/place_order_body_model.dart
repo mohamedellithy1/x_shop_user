@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:stackfood_multivendor/common/models/product_model.dart';
 
+
 class PlaceOrderBodyModel {
   List<OnlineCart>? _cart;
   double? _couponDiscountAmount;
@@ -77,7 +78,7 @@ class PlaceOrderBodyModel {
     String? deliveryInstruction,
     int? partialPayment,
     int? guestId,
-    int?isBuyNow,
+    int? isBuyNow,
     String? guestEmail,
     double? extraPackagingAmount,
     double? bringChangeAmount,
@@ -193,16 +194,16 @@ class PlaceOrderBodyModel {
     _subscriptionType = json['subscription_type'];
     if (json['subscription_days'] != null) {
       _subscriptionDays = [];
-        if(json['subscription_days'] is String){
-          jsonDecode(json['subscription_days']).forEach((v) {
-            _subscriptionDays!.add(SubscriptionDays.fromJson(v));
-          });
+      if (json['subscription_days'] is String) {
+        jsonDecode(json['subscription_days']).forEach((v) {
+          _subscriptionDays!.add(SubscriptionDays.fromJson(v));
+        });
       } else {
-      json['subscription_days'].forEach((v) {
-        _subscriptionDays!.add(SubscriptionDays.fromJson(v));
-      });
-    }
+        json['subscription_days'].forEach((v) {
+          _subscriptionDays!.add(SubscriptionDays.fromJson(v));
+        });
       }
+    }
     _subscriptionQuantity = json['subscription_quantity'];
     _subscriptionStartAt = json['subscription_start_at'];
     _subscriptionEndAt = json['subscription_end_at'];
@@ -210,11 +211,17 @@ class PlaceOrderBodyModel {
     _unavailableItemNote = json['unavailable_item_note'];
     _deliveryInstruction = json['delivery_instruction'];
     _partialPayment = int.parse(json['partial_payment'].toString());
-    _guestId = json['guest_id'] != null ? int.parse(json['guest_id'].toString()) : null;
+    _guestId = json['guest_id'] != null
+        ? int.parse(json['guest_id'].toString())
+        : null;
     _isBuyNow = int.parse(json['is_buy_now'].toString());
     _guestEmail = json['contact_person_email'];
-    _extraPackagingAmount = json['extra_packaging_amount'] != null ? double.parse(json['extra_packaging_amount'].toString()) : null;
-    _bringChangeAmount = json['bring_change_amount'] != null ? double.parse(json['bring_change_amount'].toString()) : null;
+    _extraPackagingAmount = json['extra_packaging_amount'] != null
+        ? double.parse(json['extra_packaging_amount'].toString())
+        : null;
+    _bringChangeAmount = json['bring_change_amount'] != null
+        ? double.parse(json['bring_change_amount'].toString())
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -247,26 +254,27 @@ class PlaceOrderBodyModel {
     data['subscription_order'] = _subscriptionOrder;
     data['subscription_type'] = _subscriptionType;
     if (_subscriptionDays != null) {
-      data['subscription_days'] = jsonEncode(_subscriptionDays!.map((v) => v.toJson()).toList());
+      data['subscription_days'] =
+          jsonEncode(_subscriptionDays!.map((v) => v.toJson()).toList());
     }
     data['subscription_quantity'] = _subscriptionQuantity;
     data['subscription_start_at'] = _subscriptionStartAt;
     data['subscription_end_at'] = _subscriptionEndAt;
     data['unavailable_item_note'] = _unavailableItemNote!;
     data['delivery_instruction'] = _deliveryInstruction!;
-    if(_cutlery != null){
+    if (_cutlery != null) {
       data['cutlery'] = _cutlery.toString();
     }
     data['partial_payment'] = _partialPayment.toString();
-    if(_guestId != 0) {
+    if (_guestId != 0) {
       data['guest_id'] = _guestId.toString();
     }
     data['is_buy_now'] = _isBuyNow.toString();
-    if(_guestEmail != null) {
+    if (_guestEmail != null) {
       data['contact_person_email'] = _guestEmail!;
     }
     data['extra_packaging_amount'] = _extraPackagingAmount.toString();
-    if(_bringChangeAmount != null) {
+    if (_bringChangeAmount != null) {
       data['bring_change_amount'] = _bringChangeAmount.toString();
     }
     return data;
@@ -287,13 +295,13 @@ class Cart {
   Cart(
       int? foodId,
       int? itemCampaignId,
-        String price,
-        String variant,
-        List<OrderVariation> variation,
-        int? quantity,
-        List<int?> addOnIds,
-        List<AddOns>? addOns,
-        List<int?> addOnQtys) {
+      String price,
+      String variant,
+      List<OrderVariation> variation,
+      int? quantity,
+      List<int?> addOnIds,
+      List<AddOns>? addOns,
+      List<int?> addOnQtys) {
     _foodId = foodId;
     _itemCampaignId = itemCampaignId;
     _price = price;
@@ -364,7 +372,9 @@ class OrderVariation {
 
   OrderVariation.fromJson(Map<String, dynamic> json) {
     name = json['name'];
-    values = json['values'] != null ? OrderVariationValue.fromJson(json['values']) : null;
+    values = json['values'] != null
+        ? OrderVariationValue.fromJson(json['values'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -435,23 +445,23 @@ class OnlineCart {
   String? _model;
   String? _itemType;
   List<int?>? _variationOptionIds;
+  double? _requestedWeight;
 
   OnlineCart(
-      int? cartId,
-      int? itemId,
-      int? itemCampaignId,
-      String price,
-      List<OrderVariation>? variations,
-      int? quantity,
-      List<int?> addOnIds,
-      List<AddOns>? addOns,
-      List<int?> addOnQtys,
-      String model,
-      {
-        String? itemType,
-        List<int?>? variationOptionIds,
-      }
-      ) {
+    int? cartId,
+    int? itemId,
+    int? itemCampaignId,
+    String price,
+    List<OrderVariation>? variations,
+    int? quantity,
+    List<int?> addOnIds,
+    List<AddOns>? addOns,
+    List<int?> addOnQtys,
+    String model, {
+    String? itemType,
+    List<int?>? variationOptionIds,
+    double? requestedWeight,
+  }) {
     _cartId = cartId;
     _itemId = itemId;
     _itemCampaignId = itemCampaignId;
@@ -464,6 +474,7 @@ class OnlineCart {
     _model = model;
     _itemType = itemType;
     _variationOptionIds = variationOptionIds;
+    _requestedWeight = requestedWeight;
   }
 
   int? get cartId => _cartId;
@@ -478,6 +489,7 @@ class OnlineCart {
   String? get model => _model;
   String? get itemType => _itemType;
   List<int?>? get variationOptionIds => _variationOptionIds;
+  double? get requestedWeight => _requestedWeight;
 
   OnlineCart.fromJson(Map<String, dynamic> json) {
     _cartId = json['cart_id'];
@@ -500,10 +512,13 @@ class OnlineCart {
     }
     _addOnQtys = json['add_on_qtys'].cast<int>();
     _model = json['model'];
-    if(json['item_type'] != null && json['item_type'] != 'null') {
+    if (json['item_type'] != null && json['item_type'] != 'null') {
       _itemType = json['item_type'];
     }
-    _variationOptionIds = json['variation_options'].cast<int>();
+    _variationOptionIds = json['variation_options']?.cast<int>();
+    if (json['requested_weight'] != null) {
+      _requestedWeight = double.tryParse(json['requested_weight'].toString());
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -512,7 +527,7 @@ class OnlineCart {
     data['cart_id'] = _cartId;
     data['item_campaign_id'] = _itemCampaignId;
     data['price'] = _price;
-    if(_variations != null) {
+    if (_variations != null) {
       data['variations'] = _variations!.map((v) => v.toJson()).toList();
     }
     data['quantity'] = _quantity;
@@ -522,10 +537,13 @@ class OnlineCart {
     }
     data['add_on_qtys'] = _addOnQtys;
     data['model'] = _model;
-    if(_itemType != null) {
+    if (_itemType != null) {
       data['item_type'] = _itemType;
     }
     data['variation_options'] = _variationOptionIds;
+    if (_requestedWeight != null) {
+      data['requested_weight'] = _requestedWeight;
+    }
     return data;
   }
 }

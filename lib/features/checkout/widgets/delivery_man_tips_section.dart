@@ -1,18 +1,19 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:just_the_tooltip/just_the_tooltip.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_text_field_widget.dart';
+import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
 import 'package:stackfood_multivendor/features/checkout/controllers/checkout_controller.dart';
 import 'package:stackfood_multivendor/features/checkout/widgets/tips_widget.dart';
 import 'package:stackfood_multivendor/features/profile/controllers/profile_controller.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
-import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
+import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
 import 'package:stackfood_multivendor/helper/price_converter.dart';
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 import 'package:stackfood_multivendor/util/app_constants.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_text_field_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:just_the_tooltip/just_the_tooltip.dart';
 class DeliveryManTipsSection extends StatefulWidget {
   final bool takeAway;
   final JustTheController tooltipController3;
@@ -36,18 +37,18 @@ class _DeliveryManTipsSectionState extends State<DeliveryManTipsSection> {
 
     return Column(
       children: [
-        (!widget.checkoutController.subscriptionOrder && !widget.takeAway && !isDineIn && Get.find<SplashController>().configModel!.dmTipsStatus == 1) ? Container(
+        (!widget.checkoutController.subscriptionOrder && !widget.takeAway && !isDineIn && Get.find<MarketSplashController>(tag: 'xmarket').configModel!.dmTipsStatus == 1) ? Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
+            color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF1b1b1b) : Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-            boxShadow: [BoxShadow(color: Colors.grey.withValues(alpha: 0.1), spreadRadius: 1, blurRadius: 10, offset: const Offset(0, 1))],
+            boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.1), spreadRadius: 1, blurRadius: 10, offset: const Offset(0, 1))],
           ),
           margin: EdgeInsets.symmetric(horizontal: isDesktop ? 0 : Dimensions.fontSizeDefault),
           padding: EdgeInsets.all(isDesktop ? Dimensions.paddingSizeLarge : Dimensions.paddingSizeSmall),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
 
             Row(children: [
-              Text('delivery_man_tips'.tr, style: robotoMedium),
+              Text('delivery_man_tips'.tr, style: robotoMedium.copyWith(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black)),
 
               JustTheTooltip(
                 backgroundColor: Colors.black87,
@@ -67,23 +68,23 @@ class _DeliveryManTipsSectionState extends State<DeliveryManTipsSection> {
 
               const Expanded(child: SizedBox()),
 
-              (widget.checkoutController.selectedTips == AppConstants.tips.length-1) ? const SizedBox() : SizedBox(
-                width: ResponsiveHelper.isDesktop(context) ? 150 : 130,
-                child: ListTile(
-                  onTap: () => widget.checkoutController.toggleDmTipSave(),
-                  trailing: Checkbox(
-                    visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                    activeColor: Theme.of(context).primaryColor,
-                    value: widget.checkoutController.isDmTipSave,
-                    onChanged: (bool? isChecked) => widget.checkoutController.toggleDmTipSave(),
-                  ),
-                  title: Text('save_for_later'.tr, style: robotoMedium.copyWith(color: isDesktop ? Theme.of(context).textTheme.bodyMedium!.color! : Theme.of(context).primaryColor)),
-                  contentPadding: EdgeInsets.zero,
-                  visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
-                  dense: true,
-                  horizontalTitleGap: 0,
-                ),
-              ),
+              // (widget.checkoutController.selectedTips == AppConstants.tips.length-1) ? const SizedBox() : SizedBox(
+              //   width: ResponsiveHelper.isDesktop(context) ? 150 : 130,
+              //   child: ListTile(
+              //     onTap: () => widget.checkoutController.toggleDmTipSave(),
+              //     trailing: Checkbox(
+              //       visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+              //       activeColor: Theme.of(context).primaryColor,
+              //       value: widget.checkoutController.isDmTipSave,
+              //       onChanged: (bool? isChecked) => widget.checkoutController.toggleDmTipSave(),
+              //     ),
+              //     title: Text('save_for_later'.tr, style: robotoMedium.copyWith(color: isDesktop ? Theme.of(context).textTheme.bodyMedium!.color! : Theme.of(context).primaryColor)),
+              //     contentPadding: EdgeInsets.zero,
+              //     visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
+              //     dense: true,
+              //     horizontalTitleGap: 0,
+              //   ),
+              // ),
 
             ]),
             const SizedBox(height: Dimensions.paddingSizeSmall),
@@ -134,15 +135,15 @@ class _DeliveryManTipsSectionState extends State<DeliveryManTipsSection> {
                     if(value.isNotEmpty){
                       try{
                         if(double.parse(value) >= 0){
-                          if(Get.find<AuthController>().isLoggedIn()) {
+                          if(Get.find<MarketAuthController>().isLoggedIn()) {
                             total = total - widget.checkoutController.tips;
                             await widget.checkoutController.addTips(double.parse(value));
                             total = total + widget.checkoutController.tips;
                             widget.onTotalChange(total);
-                            if(Get.find<ProfileController>().userInfoModel!.walletBalance! < total && widget.checkoutController.paymentMethodIndex == 1){
+                            if(Get.find<MarketProfileController>().userInfoModel!.walletBalance! < total && widget.checkoutController.paymentMethodIndex == 1){
                               widget.checkoutController.checkBalanceStatus(total);
                               canCheckSmall = true;
-                            } else if(Get.find<ProfileController>().userInfoModel!.walletBalance! > total && canCheckSmall && widget.checkoutController.isPartialPay){
+                            } else if(Get.find<MarketProfileController>().userInfoModel!.walletBalance! > total && canCheckSmall && widget.checkoutController.isPartialPay){
                               widget.checkoutController.checkBalanceStatus(total);
                             }
                           } else {
@@ -167,15 +168,15 @@ class _DeliveryManTipsSectionState extends State<DeliveryManTipsSection> {
                     if(value.isNotEmpty){
                       try{
                         if(double.parse(value) >= 0){
-                          if(Get.find<AuthController>().isLoggedIn()) {
+                          if(Get.find<MarketAuthController>().isLoggedIn()) {
                             total = total - widget.checkoutController.tips;
                             await widget.checkoutController.addTips(double.parse(value));
                             total = total + widget.checkoutController.tips;
                             widget.onTotalChange(total);
-                            if(Get.find<ProfileController>().userInfoModel!.walletBalance! < total && widget.checkoutController.paymentMethodIndex == 1){
+                            if(Get.find<MarketProfileController>().userInfoModel!.walletBalance! < total && widget.checkoutController.paymentMethodIndex == 1){
                               widget.checkoutController.checkBalanceStatus(total);
                               canCheckSmall = true;
-                            } else if(Get.find<ProfileController>().userInfoModel!.walletBalance! > total && canCheckSmall && widget.checkoutController.isPartialPay){
+                            } else if(Get.find<MarketProfileController>().userInfoModel!.walletBalance! > total && canCheckSmall && widget.checkoutController.isPartialPay){
                               widget.checkoutController.checkBalanceStatus(total);
                             }
                           } else {
@@ -219,7 +220,7 @@ class _DeliveryManTipsSectionState extends State<DeliveryManTipsSection> {
           ]),
         ) : const SizedBox.shrink(),
 
-        SizedBox(height: (!widget.takeAway && !isDineIn && Get.find<SplashController>().configModel!.dmTipsStatus == 1)
+        SizedBox(height: (!widget.takeAway && !isDineIn && Get.find<MarketSplashController>(tag: 'xmarket').configModel!.dmTipsStatus == 1)
             ? Dimensions.paddingSizeSmall : 0),
       ],
     );

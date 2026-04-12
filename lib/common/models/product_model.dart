@@ -8,18 +8,29 @@ class ProductModel {
   int? offset;
   List<Product>? products;
 
-  ProductModel({this.totalSize, this.minPrice, this.maxPrice, this.limit, this.offset, this.products});
+  ProductModel(
+      {this.totalSize,
+      this.minPrice,
+      this.maxPrice,
+      this.limit,
+      this.offset,
+      this.products});
 
   ProductModel.fromJson(Map<String, dynamic> json) {
     totalSize = json['total_size'];
     minPrice = json['min_price']?.toDouble();
     maxPrice = json['max_price']?.toDouble();
     limit = json['limit'].toString();
-    offset = (json['offset'] != null && json['offset'].toString().trim().isNotEmpty) ? int.parse(json['offset'].toString()) : null;
+    offset =
+        (json['offset'] != null && json['offset'].toString().trim().isNotEmpty)
+            ? int.parse(json['offset'].toString())
+            : null;
     if (json['products'] != null) {
       products = [];
       json['products'].forEach((v) {
-        if (v['variations'] == null || v['variations'].isEmpty || v['variations'][0]['values'] != null) {
+        if (v['variations'] == null ||
+            v['variations'].isEmpty ||
+            v['variations'][0]['values'] != null) {
           products!.add(Product.fromJson(v));
         }
       });
@@ -67,6 +78,11 @@ class Product {
   int? cartQuantityLimit;
   bool? isRestaurantHalalActive;
   bool? isHalalFood;
+  bool? isWeightBased;
+  String? weightUnit;
+  double? minWeight;
+  double? maxWeight;
+  double? weightStep;
   String? stockType;
   int? itemStock;
   List<String>? nutritionsName;
@@ -103,6 +119,11 @@ class Product {
     this.cartQuantityLimit,
     this.isRestaurantHalalActive,
     this.isHalalFood,
+    this.isWeightBased,
+    this.weightUnit,
+    this.minWeight,
+    this.maxWeight,
+    this.weightStep,
     this.stockType,
     this.itemStock,
     this.nutritionsName,
@@ -127,7 +148,9 @@ class Product {
     }
     if (json['variations'] != null) {
       variations = [];
-      if(json['variations'] != null && json['variations'].length > 0 && json['variations'][0] != '[') {
+      if (json['variations'] != null &&
+          json['variations'].length > 0 &&
+          json['variations'][0] != '[') {
         json['variations'].forEach((v) {
           variations!.add(Variation.fromJson(v));
         });
@@ -168,11 +191,20 @@ class Product {
     cartQuantityLimit = json['maximum_cart_quantity'];
     isRestaurantHalalActive = json['halal_tag_status'] == 1;
     isHalalFood = json['is_halal'] == 1;
+    isWeightBased = json['is_weight_based'] == true || json['is_weight_based'] == 1;
+    weightUnit = json['weight_unit'];
+    minWeight = json['min_weight']?.toDouble();
+    maxWeight = json['max_weight']?.toDouble();
+    weightStep = json['weight_step']?.toDouble();
+    debugPrint(
+        'Product isWeightBased: $isWeightBased for product: $name id $id, Weight Unit: $weightUnit');
     stockType = json['stock_type'];
     itemStock = int.tryParse(json['item_stock'].toString());
     nutritionsName = json['nutritions_name']?.cast<String>();
     allergiesName = json['allergies_name']?.cast<String>();
-    foodSeoData = json['food_seo_data'] != null ? FoodSeoData.fromJson(json['food_seo_data']) : null;
+    foodSeoData = json['food_seo_data'] != null
+        ? FoodSeoData.fromJson(json['food_seo_data'])
+        : null;
     reviewCount = json['review_count'];
     if (json['reviews'] != null) {
       reviews = <Reviews>[];
@@ -196,7 +228,6 @@ class Product {
         });
       } else if (json['ratings'] is List) {
         ratings = List<int>.filled(5, 0);
-
       }
     }
   }
@@ -237,6 +268,11 @@ class Product {
     data['maximum_cart_quantity'] = cartQuantityLimit;
     data['halal_tag_status'] = isRestaurantHalalActive;
     data['is_halal'] = isHalalFood;
+    data['is_weight_based'] = isWeightBased;
+    data['weight_unit'] = weightUnit;
+    data['min_weight'] = minWeight;
+    data['max_weight'] = maxWeight;
+    data['weight_step'] = weightStep;
     data['stock_type'] = stockType;
     data['item_stock'] = itemStock;
     data['nutritions_name'] = nutritionsName;
@@ -277,7 +313,13 @@ class Variation {
   bool? required;
   List<VariationValue>? variationValues;
 
-  Variation({this.name, this.multiSelect, this.min, this.max, this.required, this.variationValues});
+  Variation(
+      {this.name,
+      this.multiSelect,
+      this.min,
+      this.max,
+      this.required,
+      this.variationValues});
 
   Variation.fromJson(Map<String, dynamic> json) {
     if (json['max'] != null) {
@@ -317,7 +359,13 @@ class VariationValue {
   int? currentStock;
   int? optionId;
 
-  VariationValue({this.level, this.optionPrice, this.isSelected, this.stockType, this.currentStock, this.optionId});
+  VariationValue(
+      {this.level,
+      this.optionPrice,
+      this.isSelected,
+      this.stockType,
+      this.currentStock,
+      this.optionId});
 
   VariationValue.fromJson(Map<String, dynamic> json) {
     level = json['label'];
@@ -360,7 +408,9 @@ class AddOns {
     name = json['name'];
     price = json['price'].toDouble();
     stockType = json['stock_type'];
-    addonStock = json['addon_stock'] != null ? int.parse(json['addon_stock'].toString()) : null;
+    addonStock = json['addon_stock'] != null
+        ? int.parse(json['addon_stock'].toString())
+        : null;
   }
 
   Map<String, dynamic> toJson() {

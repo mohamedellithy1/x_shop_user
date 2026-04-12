@@ -28,18 +28,8 @@ class ProfileService implements ProfileServiceInterface {
 
   @override
   Future<XFile?> pickImageFromGallery() async {
-    XFile? pickedFile;
     XFile? pickLogo = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if(pickLogo != null) {
-      await pickLogo.length().then((value) {
-        if(value > 1000000) {
-          showCustomSnackBar('please_upload_lower_size_file'.tr);
-        }else {
-          pickedFile = pickLogo;
-        }
-      });
-    }
-    return pickedFile;
+    return pickLogo;
   }
 
   @override

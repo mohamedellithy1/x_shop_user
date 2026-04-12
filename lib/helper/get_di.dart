@@ -34,7 +34,6 @@ import 'package:stackfood_multivendor/features/home/domain/repositories/home_rep
 import 'package:stackfood_multivendor/features/home/domain/repositories/home_repository_interface.dart';
 import 'package:stackfood_multivendor/features/home/domain/services/home_service.dart';
 import 'package:stackfood_multivendor/features/home/domain/services/home_service_interface.dart';
-import 'package:stackfood_multivendor/features/language/controllers/localization_controller.dart';
 import 'package:stackfood_multivendor/features/order/controllers/order_controller.dart';
 import 'package:stackfood_multivendor/features/order/domain/repositories/order_repository.dart';
 import 'package:stackfood_multivendor/features/order/domain/repositories/order_repository_interface.dart';
@@ -83,7 +82,7 @@ import 'package:stackfood_multivendor/features/search/domain/services/search_ser
 import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
 import 'package:stackfood_multivendor/api/api_client.dart';
-import 'package:stackfood_multivendor/features/address/controllers/address_controller.dart';
+import 'package:stackfood_multivendor/features/address/controllers/market_address_controller.dart';
 import 'package:stackfood_multivendor/features/address/domain/reposotories/address_repo.dart';
 import 'package:stackfood_multivendor/features/address/domain/reposotories/address_repo_interface.dart';
 import 'package:stackfood_multivendor/features/address/domain/services/address_service.dart';
@@ -168,200 +167,338 @@ import 'package:stackfood_multivendor/features/wallet/domain/repositories/wallet
 import 'package:stackfood_multivendor/features/wallet/domain/repositories/wallet_repository_interface.dart';
 import 'package:stackfood_multivendor/features/wallet/domain/services/wallet_service.dart';
 import 'package:stackfood_multivendor/features/wallet/domain/services/wallet_service_interface.dart';
+import 'package:stackfood_multivendor/localization/localization_controller.dart';
 import 'package:stackfood_multivendor/util/app_constants.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
+import 'package:stackfood_multivendor/core/realtime/reverb_service.dart';
+import 'package:stackfood_multivendor/core/realtime/delivery_realtime_service.dart';
 
 Future<Map<String, Map<String, String>>> init() async {
   /// Core
   final sharedPreferences = await SharedPreferences.getInstance();
   Get.lazyPut(() => sharedPreferences);
-  Get.lazyPut(() => ApiClient(appBaseUrl: AppConstants.baseUrl, sharedPreferences: Get.find()));
+  // Use tag to differentiate xmarket ApiClient from xride ApiClient
+  Get.lazyPut(
+      () => ApiClient(
+          appBaseUrl: AppConstants.baseUrl, sharedPreferences: Get.find()),
+      tag: 'xmarket');
 
   ///Interfaces
-  LocationRepoInterface locationRepoInterface = LocationRepo(apiClient: Get.find());
-  Get.lazyPut(() => locationRepoInterface);
-  LocationServiceInterface locationServiceInterface = LocationService(locationRepoInterface: Get.find());
-  Get.lazyPut(() => locationServiceInterface);
-  AddressRepoInterface addressRepoInterface = AddressRepo(apiClient: Get.find());
-  Get.lazyPut(() => addressRepoInterface);
-  AddressServiceInterface addressServiceInterface = AddressService(addressRepoInterface: Get.find());
-  Get.lazyPut(() => addressServiceInterface);
-  DashboardRepoInterface dashboardRepoInterface = DashboardRepo(sharedPreferences: Get.find());
-  Get.lazyPut(() => dashboardRepoInterface);
-  DashboardServiceInterface dashboardServiceInterface = DashboardService(dashboardRepoInterface: Get.find());
-  Get.lazyPut(() => dashboardServiceInterface);
-  BusinessRepoInterface businessRepoInterface = BusinessRepo(apiClient: Get.find());
-  Get.lazyPut(() => businessRepoInterface);
-  BusinessServiceInterface businessServiceInterface = BusinessService(businessRepoInterface: Get.find());
-  Get.lazyPut(() => businessServiceInterface);
-  AuthRepoInterface authRepoInterface = AuthRepo(apiClient: Get.find(), sharedPreferences: Get.find());
-  Get.lazyPut(() => authRepoInterface);
-  AuthServiceInterface authServiceInterface = AuthService(authRepoInterface: Get.find());
-  Get.lazyPut(() => authServiceInterface);
-  DeliverymanRegistrationRepoInterface deliverymanRegistrationRepoInterface = DeliverymanRegistrationRepo(apiClient: Get.find());
-  Get.lazyPut(() => deliverymanRegistrationRepoInterface);
-  DeliverymanRegistrationServiceInterface deliverymanRegistrationServiceInterface = DeliverymanRegistrationService(deliverymanRegistrationRepoInterface: Get.find());
-  Get.lazyPut(() => deliverymanRegistrationServiceInterface);
-  RestaurantRegistrationRepoInterface restaurantRegistrationRepoInterface = RestaurantRegistrationRepo(apiClient: Get.find());
-  Get.lazyPut(() => restaurantRegistrationRepoInterface);
-  RestaurantRegistrationServiceInterface restaurantRegistrationServiceInterface = RestaurantRegistrationService(restaurantRegistrationRepoInterface: Get.find());
-  Get.lazyPut(() => restaurantRegistrationServiceInterface);
-  VerificationRepoInterface verificationRepoInterface = VerificationRepo(sharedPreferences: Get.find(),apiClient: Get.find());
-  Get.lazyPut(() => verificationRepoInterface);
-  VerificationServiceInterface verificationServiceInterface = VerificationService(verificationRepoInterface: Get.find(), authRepoInterface: Get.find());
-  Get.lazyPut(() => verificationServiceInterface);
-  CategoryRepositoryInterface categoryRepositoryInterface = CategoryRepository(apiClient: Get.find());
-  Get.lazyPut(() => categoryRepositoryInterface);
-  CategoryServiceInterface categoryServiceInterface = CategoryService(categoryRepositoryInterface: Get.find());
-  Get.lazyPut(() => categoryServiceInterface);
-  CouponRepositoryInterface couponRepositoryInterface = CouponRepository(apiClient: Get.find());
-  Get.lazyPut(() => couponRepositoryInterface);
-  CouponServiceInterface couponServiceInterface = CouponService(couponRepositoryInterface: Get.find());
-  Get.lazyPut(() => couponServiceInterface);
-  ChatRepositoryInterface chatRepositoryInterface = ChatRepository(apiClient: Get.find());
-  Get.lazyPut(() => chatRepositoryInterface);
-  ChatServiceInterface chatServiceInterface = ChatService(chatRepositoryInterface: Get.find());
-  Get.lazyPut(() => chatServiceInterface);
-  CuisineRepositoryInterface cuisineRepositoryInterface = CuisineRepository(apiClient: Get.find());
-  Get.lazyPut(() => cuisineRepositoryInterface);
-  CuisineServiceInterface cuisineServiceInterface = CuisineService(cuisineRepositoryInterface: Get.find());
-  Get.lazyPut(() => cuisineServiceInterface);
-  FavouriteRepositoryInterface favouriteRepositoryInterface = FavouriteRepository(apiClient: Get.find());
-  Get.lazyPut(() => favouriteRepositoryInterface);
-  FavouriteServiceInterface favouriteServiceInterface = FavouriteService(favouriteRepositoryInterface: Get.find());
-  Get.lazyPut(() => favouriteServiceInterface);
-  ProductRepositoryInterface productRepositoryInterface = ProductRepository(apiClient: Get.find());
-  Get.lazyPut(() => productRepositoryInterface);
-  ProductServiceInterface productServiceInterface = ProductService(productRepositoryInterface: Get.find());
-  Get.lazyPut(() => productServiceInterface);
-  ReviewRepositoryInterface reviewRepositoryInterface = ReviewRepository(apiClient: Get.find());
-  Get.lazyPut(() => reviewRepositoryInterface);
-  ReviewServiceInterface reviewServiceInterface = ReviewService(reviewRepositoryInterface: Get.find());
-  Get.lazyPut(() => reviewServiceInterface);
-  InterestRepositoryInterface interestRepositoryInterface = InterestRepository(apiClient: Get.find());
-  Get.lazyPut(() => interestRepositoryInterface);
-  InterestServiceInterface interestServiceInterface = InterestService(interestRepositoryInterface: Get.find());
-  Get.lazyPut(() => interestServiceInterface);
-  WalletRepositoryInterface walletRepositoryInterface = WalletRepository(apiClient: Get.find(), sharedPreferences: Get.find());
-  Get.lazyPut(() => walletRepositoryInterface);
-  WalletServiceInterface walletServiceInterface = WalletService(walletRepositoryInterface: Get.find());
-  Get.lazyPut(() => walletServiceInterface);
-  LoyaltyRepositoryInterface loyaltyRepositoryInterface = LoyaltyRepository(apiClient: Get.find(), sharedPreferences: Get.find());
-  Get.lazyPut(() => loyaltyRepositoryInterface);
-  LoyaltyServiceInterface loyaltyServiceInterface = LoyaltyService(loyaltyRepositoryInterface: Get.find());
-  Get.lazyPut(() => loyaltyServiceInterface);
-  SplashRepositoryInterface splashRepositoryInterface = SplashRepository(apiClient: Get.find(), sharedPreferences: Get.find());
-  Get.lazyPut(() => splashRepositoryInterface);
-  SplashServiceInterface splashServiceInterface = SplashService(splashRepositoryInterface: Get.find());
-  Get.lazyPut(() => splashServiceInterface);
-  HtmlRepositoryInterface htmlRepositoryInterface = HtmlRepository(apiClient: Get.find());
-  Get.lazyPut(() => htmlRepositoryInterface);
-  HtmlServiceInterface htmlServiceInterface = HtmlService(htmlRepositoryInterface: Get.find());
-  Get.lazyPut(() => htmlServiceInterface);
-  LanguageRepositoryInterface languageRepositoryInterface = LanguageRepository(apiClient: Get.find(), sharedPreferences: Get.find());
-  Get.lazyPut(() => languageRepositoryInterface);
-  LanguageServiceInterface languageServiceInterface = LanguageService(languageRepositoryInterface: Get.find());
-  Get.lazyPut(() => languageServiceInterface);
-  NotificationRepositoryInterface notificationRepositoryInterface = NotificationRepository(apiClient: Get.find(), sharedPreferences: Get.find());
-  Get.lazyPut(() => notificationRepositoryInterface);
-  NotificationServiceInterface notificationServiceInterface = NotificationService(notificationRepositoryInterface: Get.find());
-  Get.lazyPut(() => notificationServiceInterface);
-  OnboardRepositoryInterface onboardRepositoryInterface = OnboardRepository();
-  Get.lazyPut(() => onboardRepositoryInterface);
-  OnboardServiceInterface onboardServiceInterface = OnboardService(onboardRepositoryInterface: Get.find());
-  Get.lazyPut(() => onboardServiceInterface);
-  SearchRepositoryInterface searchRepositoryInterface = SearchRepository(apiClient: Get.find(), sharedPreferences: Get.find());
-  Get.lazyPut(() => searchRepositoryInterface);
-  SearchServiceInterface searchServiceInterface = SearchService(searchRepositoryInterface: Get.find());
-  Get.lazyPut(() => searchServiceInterface);
-  ProfileRepositoryInterface profileRepositoryInterface = ProfileRepository(apiClient: Get.find());
-  Get.lazyPut(() => profileRepositoryInterface);
-  ProfileServiceInterface profileServiceInterface = ProfileService(profileRepositoryInterface: Get.find());
-  Get.lazyPut(() => profileServiceInterface);
-  RestaurantRepositoryInterface restaurantRepositoryInterface = RestaurantRepository(apiClient: Get.find(), sharedPreferences: Get.find());
-  Get.lazyPut(() => restaurantRepositoryInterface);
-  RestaurantServiceInterface restaurantServiceInterface = RestaurantService(restaurantRepositoryInterface: Get.find());
-  Get.lazyPut(() => restaurantServiceInterface);
-  CheckoutRepositoryInterface checkoutRepositoryInterface = CheckoutRepository(apiClient: Get.find(), sharedPreferences: Get.find());
-  Get.lazyPut(() => checkoutRepositoryInterface);
-  CheckoutServiceInterface checkoutServiceInterface = CheckoutService(checkoutRepositoryInterface: Get.find());
-  Get.lazyPut(() => checkoutServiceInterface);
-  CartRepositoryInterface cartRepositoryInterface = CartRepository(apiClient: Get.find(), sharedPreferences: Get.find());
-  Get.lazyPut(() => cartRepositoryInterface);
-  CartServiceInterface cartServiceInterface = CartService(cartRepositoryInterface: Get.find());
-  Get.lazyPut(() => cartServiceInterface);
-  OrderRepositoryInterface orderRepositoryInterface = OrderRepository(apiClient: Get.find());
-  Get.lazyPut(() => orderRepositoryInterface);
-  OrderServiceInterface orderServiceInterface = OrderService(orderRepositoryInterface: Get.find());
-  Get.lazyPut(() => orderServiceInterface);
-  HomeRepositoryInterface homeRepositoryInterface = HomeRepository(apiClient: Get.find());
-  Get.lazyPut(() => homeRepositoryInterface);
-  HomeServiceInterface homeServiceInterface = HomeService(homeRepositoryInterface: Get.find());
-  Get.lazyPut(() => homeServiceInterface);
-  CampaignRepositoryInterface campaignRepositoryInterface = CampaignRepository(apiClient: Get.find());
-  Get.lazyPut(() => campaignRepositoryInterface);
-  CampaignServiceInterface campaignServiceInterface = CampaignService(campaignRepositoryInterface: Get.find());
-  Get.lazyPut(() => campaignServiceInterface);
-  AdvertisementRepositoryInterface advertisementRepositoryInterface = AdvertisementRepository(apiClient: Get.find());
-  Get.lazyPut(() => advertisementRepositoryInterface);
-  AdvertisementServiceInterface advertisementServiceInterface = AdvertisementService(advertisementRepositoryInterface: Get.find());
-  Get.lazyPut(() => advertisementServiceInterface);
-  DineInRepositoryInterface dineInRepositoryInterface = DineInRepository(apiClient: Get.find());
-  Get.lazyPut(() => dineInRepositoryInterface);
-  DineInServiceInterface dineInServiceInterface = DineInService(dineInRepositoryInterface: Get.find());
-  Get.lazyPut(() => dineInServiceInterface);
+  LocationRepoInterface locationRepoInterface =
+      LocationRepo(apiClient: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => locationRepoInterface, tag: 'xmarket');
+  LocationServiceInterface locationServiceInterface =
+      LocationService(locationRepoInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => locationServiceInterface, tag: 'xmarket');
+  AddressRepoInterface addressRepoInterface =
+      AddressRepo(apiClient: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => addressRepoInterface, tag: 'xmarket');
+  AddressServiceInterface addressServiceInterface =
+      AddressService(addressRepoInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => addressServiceInterface, tag: 'xmarket');
+  DashboardRepoInterface dashboardRepoInterface =
+      DashboardRepo(sharedPreferences: Get.find());
+  Get.lazyPut(() => dashboardRepoInterface, tag: 'xmarket');
+  DashboardServiceInterface dashboardServiceInterface =
+      DashboardService(dashboardRepoInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => dashboardServiceInterface, tag: 'xmarket');
+  BusinessRepoInterface businessRepoInterface =
+      BusinessRepo(apiClient: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => businessRepoInterface, tag: 'xmarket');
+  BusinessServiceInterface businessServiceInterface =
+      BusinessService(businessRepoInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => businessServiceInterface, tag: 'xmarket');
+  AuthRepoInterface authRepoInterface = AuthRepo(
+      apiClient: Get.find(tag: 'xmarket'), sharedPreferences: Get.find());
+  Get.lazyPut(() => authRepoInterface, tag: 'xmarket');
+  AuthServiceInterface authServiceInterface =
+      AuthService(authRepoInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => authServiceInterface, tag: 'xmarket');
+  DeliverymanRegistrationRepoInterface deliverymanRegistrationRepoInterface =
+      DeliverymanRegistrationRepo(apiClient: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => deliverymanRegistrationRepoInterface, tag: 'xmarket');
+  DeliverymanRegistrationServiceInterface
+      deliverymanRegistrationServiceInterface = DeliverymanRegistrationService(
+          deliverymanRegistrationRepoInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => deliverymanRegistrationServiceInterface, tag: 'xmarket');
+  RestaurantRegistrationRepoInterface restaurantRegistrationRepoInterface =
+      RestaurantRegistrationRepo(apiClient: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => restaurantRegistrationRepoInterface, tag: 'xmarket');
+  RestaurantRegistrationServiceInterface
+      restaurantRegistrationServiceInterface = RestaurantRegistrationService(
+          restaurantRegistrationRepoInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => restaurantRegistrationServiceInterface, tag: 'xmarket');
+  VerificationRepoInterface verificationRepoInterface = VerificationRepo(
+      sharedPreferences: Get.find(), apiClient: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => verificationRepoInterface, tag: 'xmarket');
+  VerificationServiceInterface verificationServiceInterface =
+      VerificationService(
+          verificationRepoInterface: Get.find(tag: 'xmarket'),
+          authRepoInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => verificationServiceInterface, tag: 'xmarket');
+  CategoryRepositoryInterface categoryRepositoryInterface =
+      CategoryRepository(apiClient: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => categoryRepositoryInterface, tag: 'xmarket');
+  CategoryServiceInterface categoryServiceInterface =
+      CategoryService(categoryRepositoryInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => categoryServiceInterface, tag: 'xmarket');
+  CouponRepositoryInterface couponRepositoryInterface =
+      CouponRepository(apiClient: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => couponRepositoryInterface, tag: 'xmarket');
+  CouponServiceInterface couponServiceInterface =
+      CouponService(couponRepositoryInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => couponServiceInterface, tag: 'xmarket');
+  ChatRepositoryInterface chatRepositoryInterface =
+      ChatRepository(apiClient: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => chatRepositoryInterface, tag: 'xmarket');
+  ChatServiceInterface chatServiceInterface =
+      ChatService(chatRepositoryInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => chatServiceInterface, tag: 'xmarket');
+  CuisineRepositoryInterface cuisineRepositoryInterface =
+      CuisineRepository(apiClient: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => cuisineRepositoryInterface, tag: 'xmarket');
+  CuisineServiceInterface cuisineServiceInterface =
+      CuisineService(cuisineRepositoryInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => cuisineServiceInterface, tag: 'xmarket');
+  FavouriteRepositoryInterface favouriteRepositoryInterface =
+      FavouriteRepository(apiClient: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => favouriteRepositoryInterface, tag: 'xmarket');
+  FavouriteServiceInterface favouriteServiceInterface =
+      FavouriteService(favouriteRepositoryInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => favouriteServiceInterface, tag: 'xmarket');
+  ProductRepositoryInterface productRepositoryInterface =
+      ProductRepository(apiClient: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => productRepositoryInterface, tag: 'xmarket');
+  ProductServiceInterface productServiceInterface =
+      ProductService(productRepositoryInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => productServiceInterface, tag: 'xmarket');
+  ReviewRepositoryInterface reviewRepositoryInterface =
+      ReviewRepository(apiClient: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => reviewRepositoryInterface, tag: 'xmarket');
+  ReviewServiceInterface reviewServiceInterface =
+      ReviewService(reviewRepositoryInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => reviewServiceInterface, tag: 'xmarket');
+  InterestRepositoryInterface interestRepositoryInterface =
+      InterestRepository(apiClient: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => interestRepositoryInterface, tag: 'xmarket');
+  InterestServiceInterface interestServiceInterface =
+      InterestService(interestRepositoryInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => interestServiceInterface, tag: 'xmarket');
+  WalletRepositoryInterface walletRepositoryInterface = WalletRepository(
+      apiClient: Get.find(tag: 'xmarket'), sharedPreferences: Get.find());
+  Get.lazyPut(() => walletRepositoryInterface, tag: 'xmarket');
+  WalletServiceInterface walletServiceInterface =
+      WalletService(walletRepositoryInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => walletServiceInterface, tag: 'xmarket');
+  LoyaltyRepositoryInterface loyaltyRepositoryInterface = LoyaltyRepository(
+      apiClient: Get.find(tag: 'xmarket'), sharedPreferences: Get.find());
+  Get.lazyPut(() => loyaltyRepositoryInterface, tag: 'xmarket');
+  LoyaltyServiceInterface loyaltyServiceInterface =
+      LoyaltyService(loyaltyRepositoryInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => loyaltyServiceInterface, tag: 'xmarket');
+  // Register SplashRepositoryInterface first
+  final splashRepositoryInterface = SplashRepository(
+      apiClient: Get.find<ApiClient>(tag: 'xmarket'),
+      sharedPreferences: Get.find<SharedPreferences>());
+  Get.put<SplashRepositoryInterface>(splashRepositoryInterface, tag: 'xmarket');
 
+  // Register SplashServiceInterface after repository
+  final splashServiceInterface = SplashService(
+      splashRepositoryInterface:
+          Get.find<SplashRepositoryInterface>(tag: 'xmarket'));
+  Get.put<SplashServiceInterface>(splashServiceInterface, tag: 'xmarket');
+  HtmlRepositoryInterface htmlRepositoryInterface =
+      HtmlRepository(apiClient: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => htmlRepositoryInterface, tag: 'xmarket');
+  HtmlServiceInterface htmlServiceInterface =
+      HtmlService(htmlRepositoryInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => htmlServiceInterface, tag: 'xmarket');
+  LanguageRepositoryInterface languageRepositoryInterface = LanguageRepository(
+      apiClient: Get.find(tag: 'xmarket'), sharedPreferences: Get.find());
+  Get.lazyPut(() => languageRepositoryInterface, tag: 'xmarket');
+  LanguageServiceInterface languageServiceInterface =
+      LanguageService(languageRepositoryInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => languageServiceInterface, tag: 'xmarket');
+  NotificationRepositoryInterface notificationRepositoryInterface =
+      NotificationRepository(
+          apiClient: Get.find(tag: 'xmarket'), sharedPreferences: Get.find());
+  Get.lazyPut(() => notificationRepositoryInterface, tag: 'xmarket');
+  NotificationServiceInterface notificationServiceInterface =
+      NotificationService(
+          notificationRepositoryInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => notificationServiceInterface, tag: 'xmarket');
+  OnboardRepositoryInterface onboardRepositoryInterface = OnboardRepository();
+  Get.lazyPut(() => onboardRepositoryInterface, tag: 'xmarket');
+  OnboardServiceInterface onboardServiceInterface =
+      OnboardService(onboardRepositoryInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => onboardServiceInterface, tag: 'xmarket');
+  SearchRepositoryInterface searchRepositoryInterface = SearchRepository(
+      apiClient: Get.find(tag: 'xmarket'), sharedPreferences: Get.find());
+  Get.lazyPut(() => searchRepositoryInterface, tag: 'xmarket');
+  SearchServiceInterface searchServiceInterface =
+      SearchService(searchRepositoryInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => searchServiceInterface, tag: 'xmarket');
+  ProfileRepositoryInterface profileRepositoryInterface =
+      ProfileRepository(apiClient: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => profileRepositoryInterface, tag: 'xmarket');
+  ProfileServiceInterface profileServiceInterface =
+      ProfileService(profileRepositoryInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => profileServiceInterface, tag: 'xmarket');
+  RestaurantRepositoryInterface restaurantRepositoryInterface =
+      RestaurantRepository(
+          apiClient: Get.find(tag: 'xmarket'), sharedPreferences: Get.find());
+  Get.lazyPut(() => restaurantRepositoryInterface, tag: 'xmarket');
+  RestaurantServiceInterface restaurantServiceInterface = RestaurantService(
+      restaurantRepositoryInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => restaurantServiceInterface, tag: 'xmarket');
+  CheckoutRepositoryInterface checkoutRepositoryInterface = CheckoutRepository(
+      apiClient: Get.find(tag: 'xmarket'), sharedPreferences: Get.find());
+  Get.lazyPut(() => checkoutRepositoryInterface, tag: 'xmarket');
+  CheckoutServiceInterface checkoutServiceInterface =
+      CheckoutService(checkoutRepositoryInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => checkoutServiceInterface, tag: 'xmarket');
+  CartRepositoryInterface cartRepositoryInterface = CartRepository(
+      apiClient: Get.find(tag: 'xmarket'), sharedPreferences: Get.find());
+  Get.lazyPut(() => cartRepositoryInterface, tag: 'xmarket');
+  CartServiceInterface cartServiceInterface =
+      CartService(cartRepositoryInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => cartServiceInterface, tag: 'xmarket');
+  OrderRepositoryInterface orderRepositoryInterface =
+      OrderRepository(apiClient: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => orderRepositoryInterface, tag: 'xmarket');
+  OrderServiceInterface orderServiceInterface =
+      OrderService(orderRepositoryInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => orderServiceInterface, tag: 'xmarket');
+  HomeRepositoryInterface homeRepositoryInterface =
+      HomeRepository(apiClient: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => homeRepositoryInterface, tag: 'xmarket');
+  HomeServiceInterface homeServiceInterface =
+      HomeService(homeRepositoryInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => homeServiceInterface, tag: 'xmarket');
+  CampaignRepositoryInterface campaignRepositoryInterface =
+      CampaignRepository(apiClient: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => campaignRepositoryInterface, tag: 'xmarket');
+  CampaignServiceInterface campaignServiceInterface =
+      CampaignService(campaignRepositoryInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => campaignServiceInterface, tag: 'xmarket');
+  AdvertisementRepositoryInterface advertisementRepositoryInterface =
+      AdvertisementRepository(apiClient: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => advertisementRepositoryInterface, tag: 'xmarket');
+  AdvertisementServiceInterface advertisementServiceInterface =
+      AdvertisementService(
+          advertisementRepositoryInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => advertisementServiceInterface, tag: 'xmarket');
+  DineInRepositoryInterface dineInRepositoryInterface =
+      DineInRepository(apiClient: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => dineInRepositoryInterface, tag: 'xmarket');
+  DineInServiceInterface dineInServiceInterface =
+      DineInService(dineInRepositoryInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => dineInServiceInterface, tag: 'xmarket');
 
   /// Controller
-  Get.lazyPut(() => ThemeController(splashServiceInterface: Get.find()));
-  Get.lazyPut(() => SplashController(splashServiceInterface: Get.find()));
-  Get.lazyPut(() => LocalizationController(languageServiceInterface: Get.find()));
-  Get.lazyPut(() => OnBoardingController(onboardServiceInterface: Get.find()));
-  Get.lazyPut(() => AuthController(authServiceInterface: Get.find()));
-  Get.lazyPut(() => AddressController(addressServiceInterface: Get.find()));
-  Get.lazyPut(() => LocationController(locationServiceInterface: Get.find()));
-  Get.lazyPut(() => DashboardController(dashboardServiceInterface: Get.find()));
-  Get.lazyPut(() => BusinessController(businessServiceInterface: Get.find()));
-  Get.lazyPut(() => DeliverymanRegistrationController(deliverymanRegistrationServiceInterface: Get.find()));
-  Get.lazyPut(() => RestaurantRegistrationController(restaurantRegistrationServiceInterface: Get.find()));
-  Get.lazyPut(() => VerificationController(verificationServiceInterface: Get.find()));
-  Get.lazyPut(() => CategoryController(categoryServiceInterface: Get.find()));
-  Get.lazyPut(() => ChatController(chatServiceInterface: Get.find()));
-  Get.lazyPut(() => CuisineController(cuisineServiceInterface: Get.find()));
-  Get.lazyPut(() => FavouriteController(favouriteServiceInterface: Get.find()));
-  Get.lazyPut(() => ProductController(productServiceInterface: Get.find()));
-  Get.lazyPut(() => ReviewController(reviewServiceInterface: Get.find()));
-  Get.lazyPut(() => InterestController(interestServiceInterface: Get.find()));
-  Get.lazyPut(() => WalletController(walletServiceInterface: Get.find()));
-  Get.lazyPut(() => LoyaltyController(loyaltyServiceInterface: Get.find()));
-  Get.lazyPut(() => HtmlController(htmlServiceInterface: Get.find()));
-  Get.lazyPut(() => NotificationController(notificationServiceInterface: Get.find()));
-  Get.lazyPut(() => ProfileController(profileServiceInterface: Get.find()));
-  Get.lazyPut(() => HomeController(homeServiceInterface: Get.find()));
-  Get.lazyPut(() => CartController(cartServiceInterface: Get.find()));
-  Get.lazyPut(() => RestaurantController(restaurantServiceInterface: Get.find()));
-  Get.lazyPut(() => ReferAndEarnController());
-  Get.lazyPut(() => SearchController(searchServiceInterface: Get.find()));
-  Get.lazyPut(() => CouponController(couponServiceInterface: Get.find()));
-  Get.lazyPut(() => OrderController(orderServiceInterface: Get.find()));
-  Get.lazyPut(() => CampaignController(campaignServiceInterface: Get.find()));
-  Get.lazyPut(() => CheckoutController(checkoutServiceInterface: Get.find()));
-  Get.lazyPut(() => AdvertisementController(advertisementServiceInterface: Get.find()));
-  Get.lazyPut(() => DineInController(dineInServiceInterface: Get.find()));
-
+  Get.lazyPut(
+      () => MarketThemeController(
+          splashServiceInterface:
+              Get.find<SplashServiceInterface>(tag: 'xmarket')),
+      tag: 'xmarket');
+  Get.lazyPut(
+      () => MarketSplashController(
+          splashServiceInterface:
+              Get.find<SplashServiceInterface>(tag: 'xmarket')),
+      tag: 'xmarket');
+  Get.lazyPut(() => LocalizationController(sharedPreferences: Get.find()),
+      tag: 'xmarket');
+  Get.lazyPut(() =>
+      OnBoardingController(onboardServiceInterface: Get.find(tag: 'xmarket')));
+  Get.lazyPut(() =>
+      MarketAuthController(authServiceInterface: Get.find(tag: 'xmarket')));
+  Get.lazyPut(
+      () => MarketAddressController(
+          addressServiceInterface: Get.find(tag: 'xmarket')),
+      tag: 'xmarket');
+  Get.lazyPut(() => MarketLocationController(
+      locationServiceInterface: Get.find(tag: 'xmarket')));
+  Get.lazyPut(() =>
+      DashboardController(dashboardServiceInterface: Get.find(tag: 'xmarket')));
+  Get.lazyPut(() =>
+      BusinessController(businessServiceInterface: Get.find(tag: 'xmarket')));
+  Get.lazyPut(() => DeliverymanRegistrationController(
+      deliverymanRegistrationServiceInterface: Get.find(tag: 'xmarket')));
+  Get.lazyPut(() => RestaurantRegistrationController(
+      restaurantRegistrationServiceInterface: Get.find(tag: 'xmarket')));
+  Get.lazyPut(() => VerificationController(
+      verificationServiceInterface: Get.find(tag: 'xmarket')));
+  Get.lazyPut(() => MarketCategoryController(
+      categoryServiceInterface: Get.find(tag: 'xmarket')));
+  Get.lazyPut(
+      () => ChatController(chatServiceInterface: Get.find(tag: 'xmarket')));
+  Get.lazyPut(() =>
+      CuisineController(cuisineServiceInterface: Get.find(tag: 'xmarket')));
+  Get.lazyPut(() =>
+      FavouriteController(favouriteServiceInterface: Get.find(tag: 'xmarket')));
+  Get.lazyPut(() =>
+      ProductController(productServiceInterface: Get.find(tag: 'xmarket')));
+  Get.lazyPut(
+      () => ReviewController(reviewServiceInterface: Get.find(tag: 'xmarket')));
+  Get.lazyPut(() =>
+      InterestController(interestServiceInterface: Get.find(tag: 'xmarket')));
+  Get.lazyPut(() =>
+      MarketWalletController(walletServiceInterface: Get.find(tag: 'xmarket')));
+  Get.lazyPut(() =>
+      LoyaltyController(loyaltyServiceInterface: Get.find(tag: 'xmarket')));
+  Get.lazyPut(
+      () => HtmlController(htmlServiceInterface: Get.find(tag: 'xmarket')));
+  Get.lazyPut(() => MarketNotificationController(
+      notificationServiceInterface: Get.find(tag: 'xmarket')));
+  Get.lazyPut(() => MarketProfileController(
+      profileServiceInterface: Get.find(tag: 'xmarket')));
+  Get.lazyPut(
+      () => HomeController(homeServiceInterface: Get.find(tag: 'xmarket')));
+  Get.lazyPut(() =>
+      MarketCartController(cartServiceInterface: Get.find(tag: 'xmarket')));
+  Get.lazyPut(() => RestaurantController(
+      restaurantServiceInterface: Get.find(tag: 'xmarket')));
+  Get.lazyPut(() => MarketReferAndEarnController());
+  Get.lazyPut(
+      () => SearchController(searchServiceInterface: Get.find(tag: 'xmarket')));
+  Get.lazyPut(() =>
+      MarketCouponController(couponServiceInterface: Get.find(tag: 'xmarket')));
+  Get.lazyPut(
+      () => OrderController(orderServiceInterface: Get.find(tag: 'xmarket')));
+  Get.lazyPut(() =>
+      CampaignController(campaignServiceInterface: Get.find(tag: 'xmarket')));
+  Get.lazyPut(() =>
+      CheckoutController(checkoutServiceInterface: Get.find(tag: 'xmarket')));
+  Get.lazyPut(() => AdvertisementController(
+      advertisementServiceInterface: Get.find(tag: 'xmarket')));
+  Get.lazyPut(
+      () => DineInController(dineInServiceInterface: Get.find(tag: 'xmarket')));
+  Get.lazyPut(() => ReverbService());
+  Get.lazyPut(() => UserRealtimeService());
 
   /// Retrieving localized data
+  /// Note: Language files are already loaded by xride DI, so we return empty map
+  /// to avoid conflicts and missing file errors
   Map<String, Map<String, String>> languages = {};
-  for(LanguageModel languageModel in AppConstants.languages) {
-    String jsonStringValues =  await rootBundle.loadString('assets/language/${languageModel.languageCode}.json');
-    Map<String, dynamic> mappedJson = jsonDecode(jsonStringValues);
-    Map<String, String> json = {};
-    mappedJson.forEach((key, value) {
-      json[key] = value.toString();
-    });
-    languages['${languageModel.languageCode}_${languageModel.countryCode}'] = json;
+  // Try to load language files safely, skip if file doesn't exist
+  for (LanguageModel languageModel in AppConstants.languages) {
+    try {
+      String jsonStringValues = await rootBundle
+          .loadString('assets/language/${languageModel.languageCode}.json');
+      Map<String, dynamic> mappedJson = jsonDecode(jsonStringValues);
+      Map<String, String> json = {};
+      mappedJson.forEach((key, value) {
+        json[key] = value.toString();
+      });
+      languages['${languageModel.languageCode}_${languageModel.countryCode}'] =
+          json;
+    } catch (e) {
+      // Skip languages that don't have files
+      // Languages are already loaded by xride DI
+      continue;
+    }
   }
   return languages;
 }

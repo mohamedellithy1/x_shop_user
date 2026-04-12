@@ -1,9 +1,9 @@
 import 'package:stackfood_multivendor/features/home/widgets/arrow_icon_button_widget.dart';
 import 'package:stackfood_multivendor/features/home/widgets/item_card_widget.dart';
-import 'package:stackfood_multivendor/features/language/controllers/localization_controller.dart';
 import 'package:stackfood_multivendor/features/review/controllers/review_controller.dart';
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 import 'package:stackfood_multivendor/helper/route_helper.dart';
+import 'package:stackfood_multivendor/localization/localization_controller.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
 
@@ -49,7 +49,7 @@ class BestReviewItemViewWidget extends StatelessWidget {
                       physics: const BouncingScrollPhysics(),
                       itemBuilder: (context, index) {
                         return Padding(
-                          padding: EdgeInsets.only(left: (ResponsiveHelper.isDesktop(context) && index == 0 && Get.find<LocalizationController>().isLtr) ? 0 : Dimensions.paddingSizeDefault),
+                          padding: EdgeInsets.only(left: (ResponsiveHelper.isDesktop(context) && index == 0 && Get.find<LocalizationController>(tag: 'xmarket').isLtr) ? 0 : Dimensions.paddingSizeDefault),
                           child: ItemCardWidget(
                             isBestItem: true,
                             product: reviewController.reviewedProductList![index],

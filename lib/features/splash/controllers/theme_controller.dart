@@ -2,9 +2,9 @@ import 'package:stackfood_multivendor/features/splash/domain/services/splash_ser
 import 'package:get/get.dart';
 import 'package:flutter/services.dart';
 
-class ThemeController extends GetxController implements GetxService {
+class MarketThemeController extends GetxController implements GetxService {
   final SplashServiceInterface splashServiceInterface;
-  ThemeController({required this.splashServiceInterface}) {
+  MarketThemeController({required this.splashServiceInterface}) {
     _loadCurrentTheme();
   }
 

@@ -109,19 +109,19 @@ class CuisineWidget extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeExtraSmall),
                     margin: const EdgeInsets.only(right: Dimensions.paddingSizeSmall),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
                     ),
                     child: Row(children: [
                       Text(
                         cuisineController.cuisineModel!.cuisines![cuisineController.selectedCuisines![index]].name!,
-                        style: robotoRegular.copyWith(color: Theme.of(context).cardColor),
+                        style: robotoRegular.copyWith(color: Colors.black),
                       ),
                       InkWell(
                         onTap: () => cuisineController.removeCuisine(index),
                         child: Padding(
                           padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
-                          child: Icon(Icons.close, size: 15, color: Theme.of(context).cardColor),
+                          child: Icon(Icons.close, size: 15, color: Colors.black),
                         ),
                       ),
                     ]),

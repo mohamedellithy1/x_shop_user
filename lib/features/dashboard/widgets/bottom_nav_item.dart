@@ -7,7 +7,12 @@ class BottomNavItem extends StatelessWidget {
   final Function? onTap;
   final bool isSelected;
   final String title;
-  const BottomNavItem({super.key, required this.iconData, this.onTap, this.isSelected = false, required this.title});
+  const BottomNavItem(
+      {super.key,
+      required this.iconData,
+      this.onTap,
+      this.isSelected = false,
+      required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +23,13 @@ class BottomNavItem extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(iconData, color: isSelected ? Theme.of(context).primaryColor : Colors.grey, size: 25),
-
-            Text(title, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: isSelected ? Theme.of(context).primaryColor : Colors.grey)),
+            Icon(iconData,
+                color: isSelected ? Colors.white : Colors.white70, size: 25),
+            Text(title,
+                style: robotoMedium.copyWith(
+                    fontSize: Dimensions.fontSizeSmall,
+                    color: isSelected ? Colors.white : Colors.white70,
+                    fontWeight: FontWeight.bold)),
           ],
         ),
       ),

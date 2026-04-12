@@ -45,7 +45,7 @@ class CuisineRepository implements CuisineRepositoryInterface {
         if(cacheResponseData != null) {
           cuisineModel = CuisineModel.fromJson(jsonDecode(cacheResponseData));
         }
-    }
+          }
 
     return cuisineModel;
   }

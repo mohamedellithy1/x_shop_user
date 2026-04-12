@@ -1,9 +1,9 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class CookiesViewWidget extends StatelessWidget {
   const CookiesViewWidget({super.key});
@@ -25,7 +25,7 @@ class CookiesViewWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
             child: Text(
-              Get.find<SplashController>().configModel!.cookiesText ?? 'This is dummy cookies text',
+              Get.find<MarketSplashController>(tag: 'xmarket').configModel!.cookiesText ?? 'This is dummy cookies text',
               style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall,color: Colors.white70),
               maxLines: 10, textAlign: TextAlign.justify, overflow: TextOverflow.ellipsis,
             ),
@@ -40,8 +40,8 @@ class CookiesViewWidget extends StatelessWidget {
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
               onPressed: (){
-                Get.find<SplashController>().saveCookiesData(false);
-                Get.find<SplashController>().cookiesStatusChange(Get.find<SplashController>().configModel!.cookiesText ?? 'This is dummy cookies text');
+                Get.find<MarketSplashController>(tag: 'xmarket').saveCookiesData(false);
+                Get.find<MarketSplashController>(tag: 'xmarket').cookiesStatusChange(Get.find<MarketSplashController>(tag: 'xmarket').configModel!.cookiesText ?? 'This is dummy cookies text');
               }, child:  Text(
               'no_thanks'.tr,
               style: robotoRegular.copyWith(color: Colors.white70,fontSize: Dimensions.fontSizeSmall),
@@ -58,8 +58,8 @@ class CookiesViewWidget extends StatelessWidget {
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
               onPressed: (){
-                Get.find<SplashController>().saveCookiesData(true);
-                Get.find<SplashController>().cookiesStatusChange(Get.find<SplashController>().configModel!.cookiesText ?? "This is dummy cookies text");
+                Get.find<MarketSplashController>(tag: 'xmarket').saveCookiesData(true);
+                Get.find<MarketSplashController>(tag: 'xmarket').cookiesStatusChange(Get.find<MarketSplashController>(tag: 'xmarket').configModel!.cookiesText ?? "This is dummy cookies text");
               },
               child:  Padding(padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault,vertical: 5),
                 child: Center(

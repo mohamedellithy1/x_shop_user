@@ -5,7 +5,6 @@ import 'package:drift/drift.dart' as drift;
 import 'package:stackfood_multivendor/common/enums/data_source_enum.dart';
 import 'package:stackfood_multivendor/data_source/cache_response.dart';
 import 'package:stackfood_multivendor/helper/db_helper.dart';
-
 class LocalClient {
 
   static Future<String?> organize(DataSourceEnum source, String cacheId, String? responseBody, Map<String, String>? header) async {

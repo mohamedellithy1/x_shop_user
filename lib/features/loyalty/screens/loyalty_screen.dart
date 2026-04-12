@@ -16,6 +16,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
+import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
 
 class LoyaltyScreen extends StatefulWidget {
   const LoyaltyScreen({super.key});
@@ -31,129 +32,224 @@ class _LoyaltyScreenState extends State<LoyaltyScreen> {
   @override
   void initState() {
     super.initState();
-
     _initCall();
-
   }
 
-  void _initCall(){
-    if(Get.find<AuthController>().isLoggedIn()){
-
-      Get.find<ProfileController>().getUserInfo();
-
+  void _initCall() {
+    if (Get.find<MarketAuthController>().isLoggedIn()) {
+      Get.find<MarketProfileController>().getUserInfo();
       Get.find<LoyaltyController>().getLoyaltyTransactionList('1', false);
-
       Get.find<LoyaltyController>().setOffset(1);
 
       scrollController.addListener(() {
-        if (scrollController.position.pixels == scrollController.position.maxScrollExtent
-            && Get.find<LoyaltyController>().transactionList != null
-            && !Get.find<LoyaltyController>().isLoading) {
-          int pageSize = (Get.find<LoyaltyController>().popularPageSize! / 10).ceil();
+        if (scrollController.position.pixels ==
+                scrollController.position.maxScrollExtent &&
+            Get.find<LoyaltyController>().transactionList != null &&
+            !Get.find<LoyaltyController>().isLoading) {
+          int pageSize =
+              (Get.find<LoyaltyController>().popularPageSize! / 10).ceil();
           if (Get.find<LoyaltyController>().offset < pageSize) {
-            Get.find<LoyaltyController>().setOffset(Get.find<LoyaltyController>().offset + 1);
+            Get.find<LoyaltyController>()
+                .setOffset(Get.find<LoyaltyController>().offset + 1);
             if (kDebugMode) {
               print('end of the page');
             }
             Get.find<LoyaltyController>().showBottomLoader();
-            Get.find<LoyaltyController>().getLoyaltyTransactionList(Get.find<LoyaltyController>().offset.toString(), false);
+            Get.find<LoyaltyController>().getLoyaltyTransactionList(
+                Get.find<LoyaltyController>().offset.toString(), false);
           }
         }
       });
     }
   }
+
   @override
   void dispose() {
     super.dispose();
-
     scrollController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    bool isLoggedIn = Get.find<AuthController>().isLoggedIn();
+    bool isLoggedIn = Get.find<MarketAuthController>().isLoggedIn();
 
     return Scaffold(
-      backgroundColor: Theme.of(context).cardColor,
-      appBar: CustomAppBarWidget(title: 'loyalty_points'.tr, isBackButtonExist: true),
-      endDrawer: const MenuDrawerWidget(), endDrawerEnableOpenDragGesture: false,
+      backgroundColor: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+          ? const Color(0xFF141313)
+          : Theme.of(context).cardColor,
+      appBar: CustomAppBarWidget(
+        title: 'my_points'.tr,
+        isBackButtonExist: true,
+      ),
+      endDrawer: const MenuDrawerWidget(),
+      endDrawerEnableOpenDragGesture: false,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: isLoggedIn && !ResponsiveHelper.isDesktop(context) ? FloatingActionButton.extended(
-        extendedPadding: const EdgeInsets.symmetric(horizontal: 50),
-        backgroundColor: Theme.of(context).primaryColor,
-        label: Text( 'convert_to_wallet_money'.tr, style: robotoBold.copyWith(color: Colors.white, fontSize: Dimensions.fontSizeLarge)),
-        onPressed: (){
-          Get.dialog(
-            Dialog(backgroundColor: Colors.transparent, child: LoyaltyBottomSheetWidget(
-              amount: Get.find<ProfileController>().userInfoModel!.loyaltyPoint == null ? '0' : Get.find<ProfileController>().userInfoModel!.loyaltyPoint.toString(),
-            )),
-          );
-        },
-      ) : null,
-      body: GetBuilder<ProfileController>(builder: (profileController) {
-        return isLoggedIn ? profileController.userInfoModel != null ? SafeArea(
-          child: RefreshIndicator(
-            onRefresh: () async{
-              Get.find<LoyaltyController>().getLoyaltyTransactionList('1', true);
-              profileController.getUserInfo();
-            },
-            child: SingleChildScrollView(
-              controller: scrollController,
-              child: Column(
-                children: [
-                  WebScreenTitleWidget(title: 'loyalty_points'.tr),
+      floatingActionButton: isLoggedIn && !ResponsiveHelper.isDesktop(context)
+          ? FloatingActionButton.extended(
+              extendedPadding: const EdgeInsets.symmetric(horizontal: 50),
+              backgroundColor: Theme.of(context).primaryColor,
+              label: Text(
+                'convert_to_wallet_money'.tr,
+                style: robotoBold.copyWith(
+                  color: Colors.white,
+                  fontSize: Dimensions.fontSizeLarge,
+                ),
+              ),
+              onPressed: () {
+                Get.dialog(
+                  Dialog(
+                    backgroundColor: Colors.transparent,
+                    child: LoyaltyBottomSheetWidget(
+                      amount: Get.find<MarketProfileController>()
+                                  .userInfoModel!
+                                  .loyaltyPoint ==
+                              null
+                          ? '0'
+                          : Get.find<MarketProfileController>()
+                              .userInfoModel!
+                              .loyaltyPoint
+                              .toString(),
+                    ),
+                  ),
+                );
+              },
+            )
+          : null,
+      body: GetBuilder<MarketProfileController>(builder: (profileController) {
+        return isLoggedIn
+            ? profileController.userInfoModel != null
+                ? SafeArea(
+                    child: RefreshIndicator(
+                      color: Colors.orange,
+                      onRefresh: () async {
+                        Get.find<LoyaltyController>()
+                            .getLoyaltyTransactionList('1', true);
+                        profileController.getUserInfo();
+                      },
+                      child: SingleChildScrollView(
+                        controller: scrollController,
+                        child: Column(
+                          children: [
+                            WebScreenTitleWidget(title: 'loyalty_points'.tr),
+                            SizedBox(
+                              width: Dimensions.webMaxWidth,
+                              child: ResponsiveHelper.isDesktop(context)
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: Dimensions.paddingSizeDefault),
+                                      child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                                flex: 4,
+                                                child: Container(
+                                                  decoration: ResponsiveHelper
+                                                          .isDesktop(context)
+                                                      ? BoxDecoration(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .cardColor,
+                                                          borderRadius: BorderRadius
+                                                              .circular(Dimensions
+                                                                  .radiusSmall),
+                                                          boxShadow: [
+                                                            BoxShadow(
+                                                                color: Colors
+                                                                    .grey
+                                                                    .withValues(
+                                                                        alpha:
+                                                                            0.1),
+                                                                spreadRadius: 1,
+                                                                blurRadius: 10,
+                                                                offset:
+                                                                    const Offset(
+                                                                        0, 1))
+                                                          ],
+                                                        )
+                                                      : null,
+                                                  padding: const EdgeInsets.all(
+                                                      Dimensions
+                                                          .paddingSizeLarge),
+                                                  child: LoyaltyCardWidget(
+                                                      tooltipController:
+                                                          tooltipController),
+                                                )),
+                                            const SizedBox(
+                                                width: Dimensions
+                                                    .paddingSizeDefault),
+                                            Expanded(
+                                                flex: 6,
+                                                child: Container(
+                                                  decoration: ResponsiveHelper
+                                                          .isDesktop(context)
+                                                      ? BoxDecoration(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .cardColor,
+                                                          borderRadius: BorderRadius
+                                                              .circular(Dimensions
+                                                                  .radiusSmall),
+                                                          boxShadow: [
+                                                            BoxShadow(
+                                                                color: Colors
+                                                                    .grey
+                                                                    .withValues(
+                                                                        alpha:
+                                                                            0.1),
+                                                                spreadRadius: 1,
+                                                                blurRadius: 10,
+                                                                offset:
+                                                                    const Offset(
+                                                                        0, 1))
+                                                          ],
+                                                        )
+                                                      : null,
+                                                  padding: const EdgeInsets.all(
+                                                      Dimensions
+                                                          .paddingSizeLarge),
+                                                  child:
+                                                      const LoyaltyHistoryWidget(),
+                                                )),
+                                          ]),
+                                    )
+                                  : Column(children: [
+                                      // Loyalty Card
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal:
+                                                Dimensions.paddingSizeLarge),
+                                        child: LoyaltyCardWidget(
+                                            tooltipController:
+                                                tooltipController),
+                                      ),
 
-                  FooterViewWidget(
-                    child: SizedBox(width: Dimensions.webMaxWidth,
-                      child: ResponsiveHelper.isDesktop(context) ? Padding(
-                        padding: const EdgeInsets.only(top: Dimensions.paddingSizeDefault),
-                        child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                      const SizedBox(
+                                          height:
+                                              Dimensions.paddingSizeDefault),
 
-                          Expanded(flex: 4, child: Container(
-                            decoration: ResponsiveHelper.isDesktop(context) ? BoxDecoration(
-                              color: Theme.of(context).cardColor,
-                              borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                              boxShadow: [BoxShadow(color: Colors.grey.withValues(alpha: 0.1), spreadRadius: 1, blurRadius: 10, offset: const Offset(0, 1))],
-                            ) : null,
-                            padding: const EdgeInsets.all(Dimensions.paddingSizeLarge),
-                            child: LoyaltyCardWidget(tooltipController: tooltipController),
-                          )),
-                          const SizedBox(width: Dimensions.paddingSizeDefault),
+                                      // History Section
+                                      const Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal:
+                                                Dimensions.paddingSizeLarge),
+                                        child: LoyaltyHistoryWidget(),
+                                      ),
 
-                          Expanded(flex: 6, child: Container(
-                            decoration: ResponsiveHelper.isDesktop(context) ? BoxDecoration(
-                              color: Theme.of(context).cardColor,
-                              borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                              boxShadow: [BoxShadow(color: Colors.grey.withValues(alpha: 0.1), spreadRadius: 1, blurRadius: 10, offset: const Offset(0, 1))],
-                            ) : null,
-                            padding: const EdgeInsets.all(Dimensions.paddingSizeLarge),
-                            child: const LoyaltyHistoryWidget(),
-                          )),
-
-                        ]),
-                      ) : Column(children: [
-
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeLarge),
-                          child: LoyaltyCardWidget(tooltipController: tooltipController),
+                                      // Bottom spacing for FAB
+                                      const SizedBox(height: 80),
+                                    ]),
+                            ),
+                          ],
                         ),
-
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeLarge),
-                          child: LoyaltyHistoryWidget(),
-                        ),
-
-                      ]),
+                      ),
                     ),
                   )
-                ],
-              ),
-            ),
-          ),
-        ) : const Center(child: CircularProgressIndicator()) : NotLoggedInScreen(callBack: (value){
-          _initCall();
-          setState(() {});
-        });
+                : const Center(child: CircularProgressIndicator())
+            : NotLoggedInScreen(callBack: (value) {
+                _initCall();
+                setState(() {});
+              });
       }),
     );
   }

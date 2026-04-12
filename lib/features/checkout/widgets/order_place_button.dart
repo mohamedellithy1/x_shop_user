@@ -1,17 +1,22 @@
+import 'package:flutter/material.dart';
 import 'package:stackfood_multivendor/common/enums/order_type.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
+import 'package:stackfood_multivendor/features/address/domain/models/address_model.dart';
+import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
 import 'package:stackfood_multivendor/features/cart/controllers/cart_controller.dart';
+import 'package:stackfood_multivendor/features/checkout/domain/models/place_order_body_model.dart'
+    as place_order_model;
+import 'package:get/get.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_button_widget.dart';
+import 'package:stackfood_multivendor/features/cart/domain/models/cart_model.dart';
 import 'package:stackfood_multivendor/features/checkout/controllers/checkout_controller.dart';
-import 'package:stackfood_multivendor/features/checkout/domain/models/place_order_body_model.dart';
-import 'package:stackfood_multivendor/features/checkout/domain/models/place_order_body_model.dart' as place_order_model;
 import 'package:stackfood_multivendor/features/checkout/domain/models/pricing_view_model.dart';
 import 'package:stackfood_multivendor/features/checkout/widgets/payment_method_bottom_sheet.dart';
 import 'package:stackfood_multivendor/features/coupon/controllers/coupon_controller.dart';
+import 'package:stackfood_multivendor/features/location/controllers/location_controller.dart';
 import 'package:stackfood_multivendor/features/profile/controllers/profile_controller.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
-import 'package:stackfood_multivendor/features/address/domain/models/address_model.dart';
-import 'package:stackfood_multivendor/features/cart/domain/models/cart_model.dart';
-import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
-import 'package:stackfood_multivendor/features/location/controllers/location_controller.dart';
+import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
 import 'package:stackfood_multivendor/helper/address_helper.dart';
 import 'package:stackfood_multivendor/helper/date_converter.dart';
 import 'package:stackfood_multivendor/helper/price_converter.dart';
@@ -19,14 +24,10 @@ import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 import 'package:stackfood_multivendor/helper/route_helper.dart';
 import 'package:stackfood_multivendor/util/app_constants.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_button_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class OrderPlaceButton extends StatelessWidget {
   final CheckoutController checkoutController;
-  final LocationController locationController;
+  final MarketLocationController locationController;
   final bool todayClosed;
   final bool tomorrowClosed;
   final double orderAmount;
@@ -42,7 +43,7 @@ class OrderPlaceButton extends StatelessWidget {
   final bool isOfflinePaymentActive;
   final bool isWalletActive;
   final bool fromCart;
-  final CouponController couponController;
+  final MarketCouponController couponController;
   final double subTotal;
   final bool taxIncluded;
   final double taxPercent;
@@ -55,15 +56,37 @@ class OrderPlaceButton extends StatelessWidget {
   final TextEditingController guestHouseController;
   final TextEditingController guestFloorController;
 
-  const OrderPlaceButton({
-    super.key, required this.checkoutController, required this.locationController,
-    required this.todayClosed, required this.tomorrowClosed, required this.orderAmount, this.deliveryCharge,
-    required this.tax, this.discount, required this.total, this.maxCodOrderAmount, required this.subscriptionQty,
-    required this.cartList, required this.isCashOnDeliveryActive, required this.isDigitalPaymentActive,
-    required this.isWalletActive, required this.fromCart, required this.guestNameController, required this.guestNumberController,
-    required this.isOfflinePaymentActive, required this.couponController, required this.subTotal,
-    required this.taxIncluded, required this.taxPercent, required this.guestEmailController, required this.extraPackagingAmount,
-    required this.guestAddressController, required this.guestStreetNumberController, required this.guestHouseController, required this.guestFloorController});
+  const OrderPlaceButton(
+      {super.key,
+      required this.checkoutController,
+      required this.locationController,
+      required this.todayClosed,
+      required this.tomorrowClosed,
+      required this.orderAmount,
+      this.deliveryCharge,
+      required this.tax,
+      this.discount,
+      required this.total,
+      this.maxCodOrderAmount,
+      required this.subscriptionQty,
+      required this.cartList,
+      required this.isCashOnDeliveryActive,
+      required this.isDigitalPaymentActive,
+      required this.isWalletActive,
+      required this.fromCart,
+      required this.guestNameController,
+      required this.guestNumberController,
+      required this.isOfflinePaymentActive,
+      required this.couponController,
+      required this.subTotal,
+      required this.taxIncluded,
+      required this.taxPercent,
+      required this.guestEmailController,
+      required this.extraPackagingAmount,
+      required this.guestAddressController,
+      required this.guestStreetNumberController,
+      required this.guestHouseController,
+      required this.guestFloorController});
 
   @override
   Widget build(BuildContext context) {
@@ -71,70 +94,110 @@ class OrderPlaceButton extends StatelessWidget {
       width: Dimensions.webMaxWidth,
       alignment: Alignment.center,
       padding: const EdgeInsets.all(Dimensions.paddingSizeLarge),
+      decoration: BoxDecoration(
+        color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF141313) : Theme.of(context).cardColor,
+        boxShadow: [
+          BoxShadow(
+              color: Colors.black.withValues(alpha: 0.1),
+              spreadRadius: 1,
+              blurRadius: 10,
+              offset: const Offset(0, -1))
+        ],
+      ),
       child: SafeArea(
         child: CustomButtonWidget(
             buttonText: 'place_order'.tr,
             radius: Dimensions.radiusDefault,
             isLoading: checkoutController.isLoading,
-            onPressed: checkoutController.isDistanceLoading ? null : () {
-          DateTime scheduleStartDate = _processScheduleStartDate();
-          DateTime scheduleEndDate = _processScheduleEndDate();
-          bool isAvailable = _checkAvailability(scheduleStartDate, scheduleEndDate);
-          bool isGuestLogIn = Get.find<AuthController>().isGuestLoggedIn();
-          bool datePicked = _isDatePicked();
+            onPressed: checkoutController.isDistanceLoading
+                ? null
+                : () {
+                    DateTime scheduleStartDate = _processScheduleStartDate();
+                    DateTime scheduleEndDate = _processScheduleEndDate();
+                    bool isAvailable =
+                        _checkAvailability(scheduleStartDate, scheduleEndDate);
+                    bool isGuestLogIn =
+                        Get.find<MarketAuthController>().isGuestLoggedIn();
+                    bool datePicked = _isDatePicked();
 
-          if(checkoutController.isDmTipSave && checkoutController.selectedTips != AppConstants.tips.length - 1) {
-            checkoutController.saveDmTipIndex(checkoutController.selectedTips.toString());
-          }
-          if(!checkoutController.isDmTipSave){
-            checkoutController.saveDmTipIndex('0');
-          }
+                    if (checkoutController.isDmTipSave &&
+                        checkoutController.selectedTips !=
+                            AppConstants.tips.length - 1) {
+                      checkoutController.saveDmTipIndex(
+                          checkoutController.selectedTips.toString());
+                    }
+                    if (!checkoutController.isDmTipSave) {
+                      checkoutController.saveDmTipIndex('0');
+                    }
 
-          if(_showsWarningMessage(context, isGuestLogIn, datePicked, isAvailable)){
-            debugPrint('Warning shows');
-          } else {
+                    if (_showsWarningMessage(
+                        context, isGuestLogIn, datePicked, isAvailable)) {
+                      debugPrint('Warning shows');
+                    } else {
+                      AddressModel? finalAddress =
+                          _processFinalAddress(isGuestLogIn);
+                      List<place_order_model.OnlineCart> carts =
+                          cartList != null ? _generateOnlineCartList() : [];
+                      List<place_order_model.SubscriptionDays> days =
+                          _generateSubscriptionDays();
+                      place_order_model.PlaceOrderBodyModel placeOrderBody =
+                          _preparePlaceOrderModel(carts, scheduleStartDate,
+                              finalAddress, isGuestLogIn, days);
 
-            AddressModel? finalAddress = _processFinalAddress(isGuestLogIn);
-            List<place_order_model.OnlineCart> carts = cartList != null ? _generateOnlineCartList() : [];
-            List<place_order_model.SubscriptionDays> days = _generateSubscriptionDays();
-            PlaceOrderBodyModel placeOrderBody = _preparePlaceOrderModel(carts, scheduleStartDate, finalAddress, isGuestLogIn, days);
+                      if (checkoutController.paymentMethodIndex == 3) {
+                        Map<String, dynamic> data = {
+                          "restaurant_id": placeOrderBody.restaurantId,
+                          "order_type": placeOrderBody.orderType,
+                          "schedule_at": placeOrderBody.scheduleAt,
+                          "subscription_order":
+                              placeOrderBody.subscriptionOrder,
+                        };
 
-            if(checkoutController.paymentMethodIndex == 3){
-
-              Map<String, dynamic> data = {
-                "restaurant_id": placeOrderBody.restaurantId,
-                "order_type": placeOrderBody.orderType,
-                "schedule_at": placeOrderBody.scheduleAt,
-                "subscription_order": placeOrderBody.subscriptionOrder,
-              };
-
-              checkoutController.checkRestaurantValidation(data: data).then((response) {
-                if(response) {
-                  Get.toNamed(RouteHelper.getOfflinePaymentScreen(placeOrderBody: placeOrderBody, zoneId: checkoutController.restaurant!.zoneId!, total: total, maxCodOrderAmount: maxCodOrderAmount,
-                    fromCart: fromCart, isCodActive: isCashOnDeliveryActive,
-                    pricingView: PricingViewModel(
-                      subTotal: subTotal, subscriptionQty: subscriptionQty, discount: discount!, taxIncluded: taxIncluded,
-                      tax: tax, deliveryCharge: deliveryCharge!, total: total, taxPercent: taxPercent,
-                    ),
-                  ));
-                }else{
-                  showCustomSnackBar('restaurant_is_closed_now'.tr);
-                }
-              });
-            }else{
-              checkoutController.placeOrder(placeOrderBody, checkoutController.restaurant!.zoneId!, total, maxCodOrderAmount, fromCart, isCashOnDeliveryActive);
-            }
-
-          }
-        }),
+                        checkoutController
+                            .checkRestaurantValidation(data: data)
+                            .then((response) {
+                          if (response) {
+                            Get.toNamed(RouteHelper.getOfflinePaymentScreen(
+                              placeOrderBody: placeOrderBody,
+                              zoneId: checkoutController.restaurant!.zoneId!,
+                              total: total,
+                              maxCodOrderAmount: maxCodOrderAmount,
+                              fromCart: fromCart,
+                              isCodActive: isCashOnDeliveryActive,
+                              pricingView: PricingViewModel(
+                                subTotal: subTotal,
+                                subscriptionQty: subscriptionQty,
+                                discount: discount!,
+                                taxIncluded: taxIncluded,
+                                tax: tax,
+                                deliveryCharge: deliveryCharge!,
+                                total: total,
+                                taxPercent: taxPercent,
+                              ),
+                            ));
+                          } else {
+                            showCustomSnackBar('restaurant_is_closed_now'.tr);
+                          }
+                        });
+                      } else {
+                        checkoutController.placeOrder(
+                            placeOrderBody,
+                            checkoutController.restaurant!.zoneId!,
+                            total,
+                            maxCodOrderAmount,
+                            fromCart,
+                            isCashOnDeliveryActive);
+                      }
+                    }
+                  }),
       ),
     );
   }
 
   bool _isDatePicked() {
     bool datePicked = false;
-    for(DateTime? time in checkoutController.selectedDays) {
-      if(time != null) {
+    for (DateTime? time in checkoutController.selectedDays) {
+      if (time != null) {
         datePicked = true;
         break;
       }
@@ -144,15 +207,23 @@ class OrderPlaceButton extends StatelessWidget {
 
   DateTime _processScheduleStartDate() {
     DateTime scheduleStartDate = DateTime.now();
-    if(checkoutController.timeSlots != null && checkoutController.timeSlots!.isNotEmpty) {
-      DateTime date = checkoutController.selectedDateSlot == 0 ? DateTime.now()
-          : checkoutController.selectedDateSlot == 1 ? DateTime.now().add(const Duration(days: 1)) : checkoutController.selectedCustomDate?? DateTime.now();
-      DateTime startTime = checkoutController.timeSlots![checkoutController.selectedTimeSlot!].startTime!;
+    if (checkoutController.timeSlots != null &&
+        checkoutController.timeSlots!.isNotEmpty) {
+      DateTime date = checkoutController.selectedDateSlot == 0
+          ? DateTime.now()
+          : checkoutController.selectedDateSlot == 1
+              ? DateTime.now().add(const Duration(days: 1))
+              : checkoutController.selectedCustomDate ?? DateTime.now();
+      DateTime startTime = checkoutController
+          .timeSlots![checkoutController.selectedTimeSlot!].startTime!;
 
-      if(checkoutController.orderType == 'dine_in') {
-        scheduleStartDate = checkoutController.orderPlaceDineInDateTime ?? DateTime.now();
+      if (checkoutController.orderType == 'dine_in' ||
+          checkoutController.orderType == 'take_away') {
+        scheduleStartDate =
+            checkoutController.orderPlaceDineInDateTime ?? DateTime.now();
       } else {
-        scheduleStartDate = DateTime(date.year, date.month, date.day, startTime.hour, startTime.minute + 1);
+        scheduleStartDate = DateTime(date.year, date.month, date.day,
+            startTime.hour, startTime.minute + 1);
       }
     }
     return scheduleStartDate;
@@ -160,33 +231,51 @@ class OrderPlaceButton extends StatelessWidget {
 
   DateTime _processScheduleEndDate() {
     DateTime scheduleEndDate = DateTime.now();
-    if(checkoutController.timeSlots != null && checkoutController.timeSlots!.isNotEmpty) {
-      DateTime date = checkoutController.selectedDateSlot == 0 ? DateTime.now()
-          : checkoutController.selectedDateSlot == 1 ? DateTime.now().add(const Duration(days: 1)) : checkoutController.selectedCustomDate?? DateTime.now();
-      DateTime endTime = checkoutController.timeSlots![checkoutController.selectedTimeSlot!].endTime!;
-      if(checkoutController.orderType == 'dine_in') {
-        scheduleEndDate = checkoutController.orderPlaceDineInDateTime?.add(const Duration(minutes: 1)) ?? DateTime.now().add(const Duration(minutes: 1));
+    if (checkoutController.timeSlots != null &&
+        checkoutController.timeSlots!.isNotEmpty) {
+      DateTime date = checkoutController.selectedDateSlot == 0
+          ? DateTime.now()
+          : checkoutController.selectedDateSlot == 1
+              ? DateTime.now().add(const Duration(days: 1))
+              : checkoutController.selectedCustomDate ?? DateTime.now();
+      DateTime endTime = checkoutController
+          .timeSlots![checkoutController.selectedTimeSlot!].endTime!;
+      if (checkoutController.orderType == 'dine_in' ||
+          checkoutController.orderType == 'take_away') {
+        scheduleEndDate = checkoutController.orderPlaceDineInDateTime
+                ?.add(const Duration(minutes: 1)) ??
+            DateTime.now().add(const Duration(minutes: 1));
       } else {
-        scheduleEndDate = DateTime(date.year, date.month, date.day, endTime.hour, endTime.minute + 1);
+        scheduleEndDate = DateTime(
+            date.year, date.month, date.day, endTime.hour, endTime.minute + 1);
       }
     }
     return scheduleEndDate;
   }
 
-  bool _checkAvailability(DateTime scheduleStartDate, DateTime scheduleEndDate) {
+  bool _checkAvailability(
+      DateTime scheduleStartDate, DateTime scheduleEndDate) {
     bool isAvailable = true;
-    if(checkoutController.timeSlots == null || checkoutController.timeSlots!.isEmpty) {
+    if (checkoutController.timeSlots == null ||
+        checkoutController.timeSlots!.isEmpty) {
       isAvailable = false;
     } else {
-      if(cartList != null) {
+      if (cartList != null) {
         for (CartModel cart in cartList!) {
           if (!DateConverter.isAvailable(
-            cart.product!.availableTimeStarts, cart.product!.availableTimeEnds,
-            time: checkoutController.restaurant!.scheduleOrder! ? scheduleStartDate : null,
-          ) && !DateConverter.isAvailable(
-            cart.product!.availableTimeStarts, cart.product!.availableTimeEnds,
-            time: checkoutController.restaurant!.scheduleOrder! ? scheduleEndDate : null,
-          )) {
+                cart.product!.availableTimeStarts,
+                cart.product!.availableTimeEnds,
+                time: checkoutController.restaurant!.scheduleOrder!
+                    ? scheduleStartDate
+                    : null,
+              ) &&
+              !DateConverter.isAvailable(
+                cart.product!.availableTimeStarts,
+                cart.product!.availableTimeEnds,
+                time: checkoutController.restaurant!.scheduleOrder!
+                    ? scheduleEndDate
+                    : null,
+              )) {
             isAvailable = false;
             break;
           }
@@ -196,80 +285,125 @@ class OrderPlaceButton extends StatelessWidget {
     return isAvailable;
   }
 
-  bool _showsWarningMessage(BuildContext context, bool isGuestLogIn, bool datePicked, bool isAvailable) {
-    if(checkoutController.orderType == OrderType.dine_in.name && checkoutController.selectedDineInDate == null) {
+  bool _showsWarningMessage(BuildContext context, bool isGuestLogIn,
+      bool datePicked, bool isAvailable) {
+    if ((checkoutController.orderType == OrderType.dine_in.name ||
+            checkoutController.orderType == 'take_away') &&
+        checkoutController.selectedDineInDate == null) {
       showCustomSnackBar('please_select_your_dine_in_date'.tr);
       return true;
-    } else if(checkoutController.orderType == OrderType.dine_in.name && checkoutController.estimateDineInTime == null){
+    } else if ((checkoutController.orderType == OrderType.dine_in.name ||
+            checkoutController.orderType == 'take_away') &&
+        checkoutController.estimateDineInTime == null) {
       showCustomSnackBar('please_select_your_dine_in_time'.tr);
       return true;
-    } else if(isGuestLogIn && guestNameController.text.isEmpty){
+    } else if (isGuestLogIn && guestNameController.text.isEmpty) {
       showCustomSnackBar('please_enter_contact_person_name'.tr);
       return true;
-    } else if(isGuestLogIn && guestNumberController.text.isEmpty){
+    } else if (isGuestLogIn && guestNumberController.text.isEmpty) {
       showCustomSnackBar('please_enter_contact_person_number'.tr);
       return true;
-    }  else if((isGuestLogIn && checkoutController.orderType == OrderType.delivery.name) && guestAddressController.text.isEmpty){
+    } else if ((isGuestLogIn && checkoutController.orderType == OrderType.delivery.name) &&
+        guestAddressController.text.isEmpty) {
       showCustomSnackBar('please_setup_your_delivery_address_first'.tr);
       return true;
-    } else if(!isCashOnDeliveryActive && !isDigitalPaymentActive && !isWalletActive) {
+    } else if (!isCashOnDeliveryActive &&
+        !isDigitalPaymentActive &&
+        !isWalletActive) {
       showCustomSnackBar('no_payment_method_is_enabled'.tr);
       return true;
-    }else if(!Get.find<SplashController>().configModel!.instantOrder! && !checkoutController.restaurant!.instantOrder! && checkoutController.restaurant!.scheduleOrder! && (checkoutController.preferableTime.isEmpty || checkoutController.preferableTime == 'Not Available')) {
+    } else if (!Get.find<MarketSplashController>(tag: 'xmarket').configModel!.instantOrder! &&
+        !checkoutController.restaurant!.instantOrder! &&
+        checkoutController.restaurant!.scheduleOrder! &&
+        checkoutController.orderType != 'dine_in' && checkoutController.orderType != 'take_away' &&
+        (checkoutController.preferableTime.isEmpty ||
+            checkoutController.preferableTime == 'Not Available')) {
       showCustomSnackBar('please_select_order_preference_time'.tr);
       return true;
-    } else if(checkoutController.paymentMethodIndex == -1) {
-      if(ResponsiveHelper.isDesktop(context)){
-        Get.dialog(Dialog(backgroundColor: Colors.transparent, child: PaymentMethodBottomSheet(
-          isCashOnDeliveryActive: isCashOnDeliveryActive, isDigitalPaymentActive: isDigitalPaymentActive,
-          isWalletActive: isWalletActive, totalPrice: total, isOfflinePaymentActive: isOfflinePaymentActive,
-        )));
-      }else{
+    } else if (checkoutController.paymentMethodIndex == -1) {
+      if (ResponsiveHelper.isDesktop(context)) {
+        Get.dialog(Dialog(
+            backgroundColor: Colors.transparent,
+            child: PaymentMethodBottomSheet(
+              isCashOnDeliveryActive: isCashOnDeliveryActive,
+              isDigitalPaymentActive: isDigitalPaymentActive,
+              isWalletActive: isWalletActive,
+              totalPrice: total,
+              isOfflinePaymentActive: isOfflinePaymentActive,
+            )));
+      } else {
         Get.bottomSheet(
           PaymentMethodBottomSheet(
-            isCashOnDeliveryActive: isCashOnDeliveryActive, isDigitalPaymentActive: isDigitalPaymentActive,
-            isWalletActive: isWalletActive, totalPrice: total, isOfflinePaymentActive: isOfflinePaymentActive,
+            isCashOnDeliveryActive: isCashOnDeliveryActive,
+            isDigitalPaymentActive: isDigitalPaymentActive,
+            isWalletActive: isWalletActive,
+            totalPrice: total,
+            isOfflinePaymentActive: isOfflinePaymentActive,
           ),
-          backgroundColor: Colors.transparent, isScrollControlled: true, useRootNavigator: true,
+          backgroundColor: Colors.transparent,
+          isScrollControlled: true,
+          useRootNavigator: true,
         );
       }
       return true;
-    }else if(orderAmount < checkoutController.restaurant!.minimumOrder!) {
-      showCustomSnackBar('${'minimum_order_amount_is'.tr} ${checkoutController.restaurant!.minimumOrder}');
+    } else if (orderAmount < checkoutController.restaurant!.minimumOrder!) {
+      showCustomSnackBar(
+          '${'minimum_order_amount_is'.tr} ${checkoutController.restaurant!.minimumOrder}');
       return true;
-    }else if(checkoutController.subscriptionOrder && (!Get.find<SplashController>().configModel!.homeDelivery! || !checkoutController.restaurant!.delivery!)){
+    } else if (checkoutController.subscriptionOrder &&
+        (!Get.find<MarketSplashController>(tag: 'xmarket').configModel!.homeDelivery! ||
+            !checkoutController.restaurant!.delivery!)) {
       showCustomSnackBar('home_delivery_is_disable_for_subscription'.tr);
       return true;
-    }else if(checkoutController.subscriptionOrder && checkoutController.subscriptionRange == null) {
+    } else if (checkoutController.subscriptionOrder &&
+        checkoutController.subscriptionRange == null) {
       showCustomSnackBar('select_a_date_range_for_subscription'.tr);
       return true;
-    }else if(checkoutController.subscriptionOrder && !datePicked && checkoutController.subscriptionType == 'daily') {
+    } else if (checkoutController.subscriptionOrder &&
+        !datePicked &&
+        checkoutController.subscriptionType == 'daily') {
       showCustomSnackBar('choose_time'.tr);
       return true;
-    }else if(checkoutController.subscriptionOrder && !datePicked) {
+    } else if (checkoutController.subscriptionOrder && !datePicked) {
       showCustomSnackBar('select_at_least_one_day_for_subscription'.tr);
       return true;
-    }else if(((checkoutController.selectedDateSlot == 0 && todayClosed) || (checkoutController.selectedDateSlot == 1 && tomorrowClosed) || (checkoutController.selectedDateSlot == 2 && checkoutController.customDateRestaurantClose)) && checkoutController.orderType != 'dine_in') {
+    } else if (((checkoutController.selectedDateSlot == 0 && todayClosed) ||
+            (checkoutController.selectedDateSlot == 1 && tomorrowClosed) ||
+            (checkoutController.selectedDateSlot == 2 &&
+                checkoutController.customDateRestaurantClose)) &&
+        checkoutController.orderType != 'dine_in') {
       showCustomSnackBar('restaurant_is_closed'.tr);
       return true;
-    }else if(checkoutController.paymentMethodIndex == 0 && Get.find<SplashController>().configModel!.cashOnDelivery! && maxCodOrderAmount != null && (total > maxCodOrderAmount!)){
-      showCustomSnackBar('${'you_cant_order_more_then'.tr} ${PriceConverter.convertPrice(maxCodOrderAmount)} ${'in_cash_on_delivery'.tr}');
+    } else if (checkoutController.paymentMethodIndex == 0 &&
+        Get.find<MarketSplashController>(tag: 'xmarket')
+            .configModel!
+            .cashOnDelivery! &&
+        maxCodOrderAmount != null &&
+        (total > maxCodOrderAmount!)) {
+      showCustomSnackBar(
+          '${'you_cant_order_more_then'.tr} ${PriceConverter.convertPrice(maxCodOrderAmount)} ${'in_cash_on_delivery'.tr}');
       return true;
-    } else if (checkoutController.timeSlots == null || checkoutController.timeSlots!.isEmpty) {
-      if(checkoutController.restaurant!.scheduleOrder! && !checkoutController.subscriptionOrder) {
+    } else if (checkoutController.timeSlots == null ||
+        checkoutController.timeSlots!.isEmpty) {
+      if (checkoutController.restaurant!.scheduleOrder! &&
+          !checkoutController.subscriptionOrder) {
         showCustomSnackBar('select_a_time'.tr);
-      }else {
+      } else {
         showCustomSnackBar('restaurant_is_closed'.tr);
       }
       return true;
-    }else if (!isAvailable && !checkoutController.subscriptionOrder) {
-      showCustomSnackBar('one_or_more_products_are_not_available_for_this_selected_time'.tr);
+    } else if (!isAvailable && !checkoutController.subscriptionOrder) {
+      showCustomSnackBar(
+          'one_or_more_products_are_not_available_for_this_selected_time'.tr);
       return true;
-    }else if (checkoutController.orderType != 'take_away' && checkoutController.distance == -1 && deliveryCharge == -1) {
+    } else if (checkoutController.orderType != 'take_away' &&
+        checkoutController.distance == -1 &&
+        deliveryCharge == -1) {
       showCustomSnackBar('delivery_fee_not_set_yet'.tr);
       return true;
-    } else if(checkoutController.paymentMethodIndex == 1 && Get.find<ProfileController>().userInfoModel
-        != null && Get.find<ProfileController>().userInfoModel!.walletBalance! < total) {
+    } else if (checkoutController.paymentMethodIndex == 1 &&
+        Get.find<MarketProfileController>().userInfoModel != null &&
+        Get.find<MarketProfileController>().userInfoModel!.walletBalance! < total) {
       showCustomSnackBar('you_do_not_have_sufficient_balance_in_wallet'.tr);
       return true;
     } else {
@@ -280,21 +414,34 @@ class OrderPlaceButton extends StatelessWidget {
   AddressModel? _processFinalAddress(bool isGuestLogIn) {
     AddressModel? finalAddress;
 
-    if(!isGuestLogIn){
+    if (!isGuestLogIn) {
       finalAddress = checkoutController.address;
-
-    }else if(isGuestLogIn && checkoutController.orderType == OrderType.take_away.name || checkoutController.orderType == OrderType.dine_in.name) {
-      String number = checkoutController.countryDialCode! + guestNumberController.text;
-      finalAddress = AddressModel(contactPersonName: guestNameController.text, contactPersonNumber: number,
-        address: AddressHelper.getAddressFromSharedPref()!.address!, latitude: AddressHelper.getAddressFromSharedPref()!.latitude,
-        longitude: AddressHelper.getAddressFromSharedPref()!.longitude, zoneId: AddressHelper.getAddressFromSharedPref()!.zoneId,
+    } else if (isGuestLogIn &&
+            checkoutController.orderType == OrderType.take_away.name ||
+        checkoutController.orderType == OrderType.dine_in.name) {
+      String number =
+          checkoutController.countryDialCode! + guestNumberController.text;
+      finalAddress = AddressModel(
+        contactPersonName: guestNameController.text,
+        contactPersonNumber: number,
+        address: AddressHelper.getAddressFromSharedPref()!.address!,
+        latitude: AddressHelper.getAddressFromSharedPref()!.latitude,
+        longitude: AddressHelper.getAddressFromSharedPref()!.longitude,
+        zoneId: AddressHelper.getAddressFromSharedPref()!.zoneId,
         email: guestEmailController.text,
       );
-    }else if(isGuestLogIn && checkoutController.orderType == OrderType.delivery.name){
-      String number = checkoutController.countryDialCode! + guestNumberController.text;
-      finalAddress = AddressModel(contactPersonName: guestNameController.text, contactPersonNumber: number,
-        address: guestAddressController.text, email: guestEmailController.text,
-        road: guestStreetNumberController.text, house: guestHouseController.text, floor: guestFloorController.text,
+    } else if (isGuestLogIn &&
+        checkoutController.orderType == OrderType.delivery.name) {
+      String number =
+          checkoutController.countryDialCode! + guestNumberController.text;
+      finalAddress = AddressModel(
+        contactPersonName: guestNameController.text,
+        contactPersonNumber: number,
+        address: guestAddressController.text,
+        email: guestEmailController.text,
+        road: guestStreetNumberController.text,
+        house: guestHouseController.text,
+        floor: guestFloorController.text,
         addressType: AddressHelper.getAddressFromSharedPref()!.addressType,
         latitude: locationController.position.latitude.toString(),
         longitude: locationController.position.longitude.toString(),
@@ -302,8 +449,9 @@ class OrderPlaceButton extends StatelessWidget {
       );
     }
 
-    if(!isGuestLogIn && finalAddress!.contactPersonNumber == 'null'){
-      finalAddress.contactPersonNumber = Get.find<ProfileController>().userInfoModel!.phone;
+    if (!isGuestLogIn && finalAddress!.contactPersonNumber == 'null') {
+      finalAddress.contactPersonNumber =
+          Get.find<MarketProfileController>().userInfoModel!.phone;
     }
     return finalAddress;
   }
@@ -320,15 +468,22 @@ class OrderPlaceButton extends StatelessWidget {
         addOnIdList.add(addOn.id);
         addOnQtyList.add(addOn.quantity);
       }
-      if(cart.product!.variations != null){
-        for(int i=0; i<cart.product!.variations!.length; i++) {
-          if(cart.variations![i].contains(true)) {
-            variations.add(place_order_model.OrderVariation(name: cart.product!.variations![i].name, values: place_order_model.OrderVariationValue(label: [])));
-            for(int j=0; j<cart.product!.variations![i].variationValues!.length; j++) {
-              if(cart.variations![i][j]!) {
-                variations[variations.length-1].values!.label!.add(cart.product!.variations![i].variationValues![j].level);
-                if(cart.product!.variations![i].variationValues![j].optionId != null) {
-                  optionIds.add(cart.product!.variations![i].variationValues![j].optionId);
+      if (cart.product!.variations != null) {
+        for (int i = 0; i < cart.product!.variations!.length; i++) {
+          if (cart.variations![i].contains(true)) {
+            variations.add(place_order_model.OrderVariation(
+                name: cart.product!.variations![i].name,
+                values: place_order_model.OrderVariationValue(label: [])));
+            for (int j = 0;
+                j < cart.product!.variations![i].variationValues!.length;
+                j++) {
+              if (cart.variations![i][j]!) {
+                variations[variations.length - 1].values!.label!.add(
+                    cart.product!.variations![i].variationValues![j].level);
+                if (cart.product!.variations![i].variationValues![j].optionId !=
+                    null) {
+                  optionIds.add(cart
+                      .product!.variations![i].variationValues![j].optionId);
                 }
               }
             }
@@ -336,9 +491,19 @@ class OrderPlaceButton extends StatelessWidget {
         }
       }
       carts.add(place_order_model.OnlineCart(
-        cart.id, cart.product!.id, cart.isCampaign! ? cart.product!.id : null,
-        cart.discountedPrice.toString(), variations,
-        cart.quantity, addOnIdList, cart.addOns, addOnQtyList, 'Food', variationOptionIds: optionIds, itemType: !fromCart ? "AppModelsItemCampaign" : null,
+        cart.id,
+        cart.product!.id,
+        cart.isCampaign! ? cart.product!.id : null,
+        cart.discountedPrice.toString(),
+        variations,
+        cart.quantity,
+        addOnIdList,
+        cart.addOns,
+        addOnQtyList,
+        'Food',
+        variationOptionIds: optionIds,
+        itemType: !fromCart ? "AppModelsItemCampaign" : null,
+        requestedWeight: cart.requestedWeight,
       ));
     }
     return carts;
@@ -346,53 +511,120 @@ class OrderPlaceButton extends StatelessWidget {
 
   List<place_order_model.SubscriptionDays> _generateSubscriptionDays() {
     List<place_order_model.SubscriptionDays> days = [];
-    for(int index=0; index<checkoutController.selectedDays.length; index++) {
-      if(checkoutController.selectedDays[index] != null) {
+    for (int index = 0;
+        index < checkoutController.selectedDays.length;
+        index++) {
+      if (checkoutController.selectedDays[index] != null) {
         days.add(place_order_model.SubscriptionDays(
-          day: checkoutController.subscriptionType == 'weekly' ? (index == 6 ? 0 : (index + 1)).toString()
-              : checkoutController.subscriptionType == 'monthly' ? (index + 1).toString() : index.toString(),
-          time: DateConverter.dateToTime(checkoutController.selectedDays[index]!),
+          day: checkoutController.subscriptionType == 'weekly'
+              ? (index == 6 ? 0 : (index + 1)).toString()
+              : checkoutController.subscriptionType == 'monthly'
+                  ? (index + 1).toString()
+                  : index.toString(),
+          time:
+              DateConverter.dateToTime(checkoutController.selectedDays[index]!),
         ));
       }
     }
     return days;
   }
 
-  PlaceOrderBodyModel _preparePlaceOrderModel(List<place_order_model.OnlineCart> carts, DateTime scheduleStartDate, AddressModel? finalAddress, bool isGuestLogIn,
+  place_order_model.PlaceOrderBodyModel _preparePlaceOrderModel(
+      List<place_order_model.OnlineCart> carts,
+      DateTime scheduleStartDate,
+      AddressModel? finalAddress,
+      bool isGuestLogIn,
       List<place_order_model.SubscriptionDays> days) {
-    return PlaceOrderBodyModel(
-      cart: carts, couponDiscountAmount: Get.find<CouponController>().discount, distance: checkoutController.distance,
-      couponDiscountTitle: Get.find<CouponController>().discount! > 0 ? Get.find<CouponController>().coupon!.title : null,
-      scheduleAt: checkoutController.orderType == 'dine_in' ? checkoutController.orderPlaceDineInDateTime.toString()
-          : !checkoutController.restaurant!.scheduleOrder! ? null : (checkoutController.selectedDateSlot == 0
-          && checkoutController.selectedTimeSlot == 0) ? null : DateConverter.dateToDateAndTime(scheduleStartDate),
-      orderAmount: total, orderNote: checkoutController.noteController.text, orderType: checkoutController.orderType,
-      paymentMethod: checkoutController.paymentMethodIndex == 0 ? 'cash_on_delivery'
-          : checkoutController.paymentMethodIndex == 1 ? 'wallet'
-          : checkoutController.paymentMethodIndex == 2 ? 'digital_payment' : 'offline_payment',
-      couponCode: (Get.find<CouponController>().discount! > 0 || (Get.find<CouponController>().coupon != null
-          && Get.find<CouponController>().freeDelivery)) ? Get.find<CouponController>().coupon!.code : null,
+    return place_order_model.PlaceOrderBodyModel(
+      cart: carts,
+      couponDiscountAmount: Get.find<MarketCouponController>().discount,
+      distance: checkoutController.distance,
+      couponDiscountTitle: Get.find<MarketCouponController>().discount! > 0
+          ? Get.find<MarketCouponController>().coupon!.title
+          : null,
+      scheduleAt: (checkoutController.orderType == 'dine_in' ||
+              checkoutController.orderType == 'take_away')
+          ? DateConverter.dateToDateAndTime(scheduleStartDate)
+          : !checkoutController.restaurant!.scheduleOrder!
+              ? null
+              : (checkoutController.selectedDateSlot == 0 &&
+                      checkoutController.selectedTimeSlot == 0)
+                  ? null
+                  : DateConverter.dateToDateAndTime(scheduleStartDate),
+      orderAmount: total,
+      orderNote: checkoutController.noteController.text,
+      orderType: checkoutController.orderType,
+      paymentMethod: checkoutController.paymentMethodIndex == 0
+          ? 'cash_on_delivery'
+          : checkoutController.paymentMethodIndex == 1
+              ? 'wallet'
+              : checkoutController.paymentMethodIndex == 2
+                  ? 'digital_payment'
+                  : 'offline_payment',
+      couponCode: (Get.find<MarketCouponController>().discount! > 0 ||
+              (Get.find<MarketCouponController>().coupon != null &&
+                  Get.find<MarketCouponController>().freeDelivery))
+          ? Get.find<MarketCouponController>().coupon!.code
+          : null,
       restaurantId: cartList?[0].product?.restaurantId,
-      address: finalAddress!.address, latitude: finalAddress.latitude, longitude: finalAddress.longitude, addressType: finalAddress.addressType,
-      contactPersonName: finalAddress.contactPersonName ?? '${Get.find<ProfileController>().userInfoModel!.fName} '
-          '${Get.find<ProfileController>().userInfoModel!.lName}',
-      contactPersonNumber: finalAddress.contactPersonNumber ?? Get.find<ProfileController>().userInfoModel!.phone,
-      discountAmount: discount, taxAmount: tax, cutlery: Get.find<CartController>().addCutlery ? 1 : 0,
-      road: isGuestLogIn ? finalAddress.road??'' : checkoutController.streetNumberController.text.trim(),
-      house: isGuestLogIn ? finalAddress.house??'' : checkoutController.houseController.text.trim(),
-      floor: isGuestLogIn ? finalAddress.floor??'' : checkoutController.floorController.text.trim(),
-      dmTips: (checkoutController.orderType == 'take_away' || checkoutController.subscriptionOrder || checkoutController.selectedTips == 0) ? '0' : checkoutController.tips.toString(),
+      address: finalAddress!.address,
+      latitude: finalAddress.latitude,
+      longitude: finalAddress.longitude,
+      addressType: finalAddress.addressType,
+      contactPersonName: finalAddress.contactPersonName ??
+          '${Get.find<MarketProfileController>().userInfoModel!.fName} '
+              '${Get.find<MarketProfileController>().userInfoModel!.lName}',
+      contactPersonNumber: finalAddress.contactPersonNumber ??
+          Get.find<MarketProfileController>().userInfoModel!.phone,
+      discountAmount: discount,
+      taxAmount: tax,
+      cutlery: Get.find<MarketCartController>().addCutlery ? 1 : 0,
+      road: isGuestLogIn
+          ? finalAddress.road ?? ''
+          : checkoutController.streetNumberController.text.trim(),
+      house: isGuestLogIn
+          ? finalAddress.house ?? ''
+          : checkoutController.houseController.text.trim(),
+      floor: isGuestLogIn
+          ? finalAddress.floor ?? ''
+          : checkoutController.floorController.text.trim(),
+      dmTips: (checkoutController.orderType == 'take_away' ||
+              checkoutController.subscriptionOrder ||
+              checkoutController.selectedTips == 0)
+          ? '0'
+          : checkoutController.tips.toString(),
       subscriptionOrder: checkoutController.subscriptionOrder ? '1' : '0',
-      subscriptionType: checkoutController.subscriptionType, subscriptionQuantity: subscriptionQty.toString(),
+      subscriptionType: checkoutController.subscriptionType,
+      subscriptionQuantity: subscriptionQty.toString(),
       subscriptionDays: days,
-      subscriptionStartAt: checkoutController.subscriptionOrder ? DateConverter.dateToDateAndTime(checkoutController.subscriptionRange!.start) : '',
-      subscriptionEndAt: checkoutController.subscriptionOrder ? DateConverter.dateToDateAndTime(checkoutController.subscriptionRange!.end) : '',
-      unavailableItemNote: Get.find<CartController>().notAvailableIndex != -1 ? Get.find<CartController>().notAvailableList[Get.find<CartController>().notAvailableIndex] : '',
-      deliveryInstruction: checkoutController.selectedInstruction != -1 ? AppConstants.deliveryInstructionList[checkoutController.selectedInstruction] : '',
-      partialPayment: checkoutController.isPartialPay ? 1 : 0, guestId: isGuestLogIn ? int.parse(Get.find<AuthController>().getGuestId()) : 0,
-      isBuyNow: fromCart ? 0 : 1, guestEmail: isGuestLogIn ? finalAddress.email : null,
-      extraPackagingAmount: extraPackagingAmount, bringChangeAmount: checkoutController.paymentMethodIndex == 0 && checkoutController.exchangeAmount > 0 ? checkoutController.exchangeAmount : null,
+      subscriptionStartAt: checkoutController.subscriptionOrder
+          ? DateConverter.dateToDateAndTime(
+              checkoutController.subscriptionRange!.start)
+          : '',
+      subscriptionEndAt: checkoutController.subscriptionOrder
+          ? DateConverter.dateToDateAndTime(
+              checkoutController.subscriptionRange!.end)
+          : '',
+      unavailableItemNote:
+          Get.find<MarketCartController>().notAvailableIndex != -1
+              ? Get.find<MarketCartController>().notAvailableList[
+                  Get.find<MarketCartController>().notAvailableIndex]
+              : '',
+      deliveryInstruction: checkoutController.selectedInstruction != -1
+          ? AppConstants
+              .deliveryInstructionList[checkoutController.selectedInstruction]
+          : '',
+      partialPayment: checkoutController.isPartialPay ? 1 : 0,
+      guestId: isGuestLogIn
+          ? int.parse(Get.find<MarketAuthController>().getGuestId())
+          : 0,
+      isBuyNow: fromCart ? 0 : 1,
+      guestEmail: isGuestLogIn ? finalAddress.email : null,
+      extraPackagingAmount: extraPackagingAmount,
+      bringChangeAmount: checkoutController.paymentMethodIndex == 0 &&
+              checkoutController.exchangeAmount > 0
+          ? checkoutController.exchangeAmount
+          : null,
     );
   }
-
 }

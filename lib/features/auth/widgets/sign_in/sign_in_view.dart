@@ -46,17 +46,17 @@ class _SignInViewState extends State<SignInView> {
   void initState() {
     super.initState();
     _formKeyLogin = GlobalKey<FormState>();
-    AuthController authController  = Get.find<AuthController>();
+    MarketAuthController authController  = Get.find<MarketAuthController>();
 
     _countryDialCode = authController.getUserCountryCode().isNotEmpty ? authController.getUserCountryCode()
-        : CountryCode.fromCountryCode(Get.find<SplashController>().configModel!.country!).dialCode;
+        : CountryCode.fromCountryCode(Get.find<MarketSplashController>(tag: 'xmarket').configModel!.country!).dialCode;
     _phoneController.text =  authController.getUserNumber();
     _passwordController.text = authController.getUserPassword();
     _otpPhoneController.text = authController.getUserOtpPhoneNumber();
 
     WidgetsBinding.instance.addPostFrameCallback((_){
-      bool isOtpActive = CentralizeLoginHelper.getPreferredLoginMethod(Get.find<SplashController>().configModel!.centralizeLoginSetup!, authController.isOtpViewEnable).type == CentralizeLoginType.otp
-      || CentralizeLoginHelper.getPreferredLoginMethod(Get.find<SplashController>().configModel!.centralizeLoginSetup!, authController.isOtpViewEnable).type == CentralizeLoginType.otpAndSocial ;
+      bool isOtpActive = CentralizeLoginHelper.getPreferredLoginMethod(Get.find<MarketSplashController>(tag: 'xmarket').configModel!.centralizeLoginSetup!, authController.isOtpViewEnable).type == CentralizeLoginType.otp
+      || CentralizeLoginHelper.getPreferredLoginMethod(Get.find<MarketSplashController>(tag: 'xmarket').configModel!.centralizeLoginSetup!, authController.isOtpViewEnable).type == CentralizeLoginType.otpAndSocial ;
       if(_countryDialCode != "" && _phoneController.text != "" && _phoneController.text.contains('@') && isOtpActive) {
         _phoneController.text = '';
       } else if(_countryDialCode != "" && _phoneController.text != "" && !_phoneController.text.contains('@')){
@@ -77,15 +77,15 @@ class _SignInViewState extends State<SignInView> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<AuthController>(builder: (authController) {
+    return GetBuilder<MarketAuthController>(builder: (authController) {
       return Form(
         key: _formKeyLogin,
-        child: activeCentralizeLogin(Get.find<SplashController>().configModel!.centralizeLoginSetup!, authController),
+        child: activeCentralizeLogin(Get.find<MarketSplashController>(tag: 'xmarket').configModel!.centralizeLoginSetup!, authController),
       );
     });
   }
 
-  Widget activeCentralizeLogin(CentralizeLoginSetup centralizeLoginSetup, AuthController authController) {
+  Widget activeCentralizeLogin(CentralizeLoginSetup centralizeLoginSetup, MarketAuthController authController) {
     CentralizeLoginType centralizeLogin = CentralizeLoginHelper.getPreferredLoginMethod(centralizeLoginSetup, authController.isOtpViewEnable).type;
 
     switch (centralizeLogin) {
@@ -95,7 +95,7 @@ class _SignInViewState extends State<SignInView> {
           countryDialCode: _countryDialCode,
           onCountryChanged: (CountryCode countryCode) => _countryDialCode = countryCode.dialCode,
           onClickLoginButton: () {
-            _otpLogin(Get.find<AuthController>(), _countryDialCode!, CentralizeLoginType.otp);
+            _otpLogin(Get.find<MarketAuthController>(), _countryDialCode!, CentralizeLoginType.otp);
           },
         );
 
@@ -104,7 +104,7 @@ class _SignInViewState extends State<SignInView> {
           phoneController: _phoneController, passwordController: _passwordController,
           phoneFocus: _phoneFocus, passwordFocus: _passwordFocus, onWebSubmit: (){},
           onClickLoginButton: () {
-            _login(Get.find<AuthController>(), CentralizeLoginType.manual);
+            _login(Get.find<MarketAuthController>(), CentralizeLoginType.manual);
           },
         );
 
@@ -116,7 +116,7 @@ class _SignInViewState extends State<SignInView> {
           phoneController: _phoneController, passwordController: _passwordController, phoneFocus: _phoneFocus, passwordFocus: _passwordFocus,
           socialEnable: true,
           onWebSubmit: (){}, onClickLoginButton: () {
-            _login(Get.find<AuthController>(), CentralizeLoginType.manual);
+            _login(Get.find<MarketAuthController>(), CentralizeLoginType.manual);
           },
         );
 
@@ -134,7 +134,7 @@ class _SignInViewState extends State<SignInView> {
           },
           onWebSubmit: (){},
           onClickLoginButton: () {
-            _login(Get.find<AuthController>(), CentralizeLoginType.manual);
+            _login(Get.find<MarketAuthController>(), CentralizeLoginType.manual);
           },
         );
 
@@ -154,7 +154,7 @@ class _SignInViewState extends State<SignInView> {
           phoneController: _phoneController, passwordController: _passwordController, phoneFocus: _phoneFocus, passwordFocus: _passwordFocus,
           onWebSubmit: (){}, socialEnable: true,
           onClickLoginButton: () {
-            _login(Get.find<AuthController>(), CentralizeLoginType.manual);
+            _login(Get.find<MarketAuthController>(), CentralizeLoginType.manual);
           },
           onOtpViewClick: () {
             widget.isOtpViewEnable!(true);
@@ -172,7 +172,7 @@ class _SignInViewState extends State<SignInView> {
 
 
   
-  void _otpLogin(AuthController authController, String countryDialCode, CentralizeLoginType loginType) async {
+  void _otpLogin(MarketAuthController authController, String countryDialCode, CentralizeLoginType loginType) async {
     String phone = _otpPhoneController.text.trim();
     String numberWithCountryCode = countryDialCode+phone;
     PhoneValid phoneValid = await CustomValidator.isPhoneValid(numberWithCountryCode);
@@ -186,14 +186,14 @@ class _SignInViewState extends State<SignInView> {
           if (response.isSuccess) {
             _processOtpSuccessSetup(response, authController, phone, countryDialCode);
           } else {
-            showCustomSnackBar(response.message);
+            showCustomSnackBar(response.message!);
           }
         });
       }
     }
   }
 
-  void _login(AuthController authController, CentralizeLoginType loginType) async {
+  void _login(MarketAuthController authController, CentralizeLoginType loginType) async {
     String phone = _phoneController.text.trim();
     String password = _passwordController.text.trim();
     String numberWithCountryCode = authController.countryDialCode + phone;
@@ -215,7 +215,7 @@ class _SignInViewState extends State<SignInView> {
           if (status.isSuccess) {
             _processSuccessSetup(authController, phone, isPhone, password, status);
           } else {
-            showCustomSnackBar(status.message);
+            showCustomSnackBar(status.message!);
           }
         });
       }
@@ -223,7 +223,7 @@ class _SignInViewState extends State<SignInView> {
     }
   }
 
-  Future<void> _processSuccessSetup(AuthController authController, String phone, String email, String password, ResponseModel status) async {
+  Future<void> _processSuccessSetup(MarketAuthController authController, String phone, String email, String password, ResponseModel status) async {
     if (authController.isActiveRememberMe) {
       authController.saveUserNumberAndPassword(number: phone, password: password, countryCode: authController.countryDialCode, otpPoneNumber: '');
     } else {
@@ -236,8 +236,8 @@ class _SignInViewState extends State<SignInView> {
       List<int> encoded = utf8.encode(password);
       String data = base64Encode(encoded);
       String token = status.authResponseModel!.token??'';
-      if(Get.find<SplashController>().configModel!.firebaseOtpVerification!) {
-        Get.find<AuthController>().firebaseVerifyPhoneNumber(phone, token, CentralizeLoginType.manual.name, fromSignUp: true);
+      if(Get.find<MarketSplashController>(tag: 'xmarket').configModel!.firebaseOtpVerification!) {
+        Get.find<MarketAuthController>().firebaseVerifyPhoneNumber(phone, token, CentralizeLoginType.manual.name, fromSignUp: true);
       } else {
         Get.toNamed(RouteHelper.getVerificationRoute(
             phone, null, token, RouteHelper.signUp, data, CentralizeLoginType.manual.name),
@@ -256,12 +256,12 @@ class _SignInViewState extends State<SignInView> {
           Get.back();
         }
       } else {
-        Get.find<SplashController>().navigateToLocationScreen('sign-in', offNamed: true);
+        Get.find<MarketSplashController>(tag: 'xmarket').navigateToLocationScreen('sign-in', offNamed: true);
       }
     }
   }
 
-  void _processOtpSuccessSetup(ResponseModel response, AuthController authController, String phone, String countryDialCode) async {
+  void _processOtpSuccessSetup(ResponseModel response, MarketAuthController authController, String phone, String countryDialCode) async {
     if (authController.isActiveRememberMeForOtp) {
       authController.saveUserNumberAndPassword(number: '', password: '', countryCode: countryDialCode, otpPoneNumber: phone);
     } else {
@@ -271,8 +271,8 @@ class _SignInViewState extends State<SignInView> {
       await Get.find<FavouriteController>().getFavouriteList();
     }
     if(response.authResponseModel != null && !response.authResponseModel!.isPhoneVerified!) {
-      if(Get.find<SplashController>().configModel!.firebaseOtpVerification!) {
-        Get.find<AuthController>().firebaseVerifyPhoneNumber(countryDialCode + phone, '', CentralizeLoginType.otp.name, fromSignUp: true);
+      if(Get.find<MarketSplashController>(tag: 'xmarket').configModel!.firebaseOtpVerification!) {
+        Get.find<MarketAuthController>().firebaseVerifyPhoneNumber(countryDialCode + phone, '', CentralizeLoginType.otp.name, fromSignUp: true);
       } else {
         if(ResponsiveHelper.isDesktop(Get.context)) {
           Get.back();
@@ -294,7 +294,7 @@ class _SignInViewState extends State<SignInView> {
           Get.back();
         }
       }else {
-        Get.find<SplashController>().navigateToLocationScreen('sign-in', offNamed: true);
+        Get.find<MarketSplashController>(tag: 'xmarket').navigateToLocationScreen('sign-in', offNamed: true);
       }
     }
   }

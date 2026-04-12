@@ -34,7 +34,7 @@ class AdvertisementRepository implements AdvertisementRepositoryInterface {
             advertisementList?.add(AdvertisementModel.fromJson(data));
           });
         }
-    }
+          }
 
     return advertisementList;
   }

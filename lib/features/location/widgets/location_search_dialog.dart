@@ -13,7 +13,13 @@ class LocationSearchDialog extends StatefulWidget {
   final Widget? child;
   final Function(Position)? callBack;
   final bool? fromAddress;
-  const LocationSearchDialog({super.key, required this.mapController, this.pickedLocation, this.child, this.callBack, this.fromAddress = false});
+  const LocationSearchDialog(
+      {super.key,
+      required this.mapController,
+      this.pickedLocation,
+      this.child,
+      this.callBack,
+      this.fromAddress = false});
 
   @override
   State<LocationSearchDialog> createState() => _LocationSearchDialogState();
@@ -35,21 +41,32 @@ class _LocationSearchDialogState extends State<LocationSearchDialog> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    if(controller.isAttached && !controller.isOpen) {
-      controller.text = widget.pickedLocation ?? '';
+  void didUpdateWidget(LocationSearchDialog oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.pickedLocation != oldWidget.pickedLocation &&
+        !controller.isOpen) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          controller.text = widget.pickedLocation ?? '';
+        }
+      });
     }
-    return GetBuilder<LocationController>(
-      builder: (lController) {
-        return SearchAnchor(
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<MarketLocationController>(builder: (lController) {
+      return SearchAnchor(
           searchController: controller,
           viewSurfaceTintColor: Theme.of(context).cardColor,
           isFullScreen: false,
-          viewLeading: IconButton(onPressed: () => controller.closeView(''), icon: const Icon(Icons.arrow_back)),
+          viewLeading: IconButton(
+              onPressed: () => controller.closeView(''),
+              icon: const Icon(Icons.arrow_back)),
           viewTrailing: [
             IconButton(
               onPressed: () {
-                if(controller.text.isNotEmpty) {
+                if (controller.text.isNotEmpty) {
                   controller.text = '';
                 } else {
                   controller.closeView('');
@@ -58,38 +75,47 @@ class _LocationSearchDialogState extends State<LocationSearchDialog> {
               icon: const Icon(Icons.clear),
             ),
           ],
-          viewOnChanged: (value) async {
-
-          },
-          viewConstraints: const BoxConstraints(minHeight: 100 , maxHeight: 300),
-
+          viewOnChanged: (value) async {},
+          viewConstraints: const BoxConstraints(minHeight: 100, maxHeight: 300),
           builder: (BuildContext context, SearchController controller) {
-            return widget.child ?? Container(
-              height: 50, width: 500,
-              decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
-                borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                border: Border.all(color: Theme.of(context).primaryColor.withValues(alpha: 0.3)),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall),
-              child: Row(children: [
-
-                Icon(Icons.location_on, size: 25, color: Theme.of(context).primaryColor),
-                const SizedBox(width: Dimensions.paddingSizeSmall),
-
-                Expanded(child: Text(
-                  controller.text.isNotEmpty ? controller.text : 'search_location'.tr,
-                  style: robotoRegular.copyWith(color: controller.text.isEmpty ? Theme.of(context).disabledColor : Theme.of(context).textTheme.bodyMedium!.color),
-                  maxLines: 1, overflow: TextOverflow.ellipsis,
-                )),
-
-                Icon(Icons.search, color: Theme.of(context).disabledColor),
-              ]),
-            );
+            return widget.child ??
+                Container(
+                  height: 50,
+                  width: 500,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                    border: Border.all(
+                        color: Theme.of(context)
+                            .primaryColor
+                            .withValues(alpha: 0.3)),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: Dimensions.paddingSizeSmall),
+                  child: Row(children: [
+                    Icon(Icons.location_on, size: 25, color: Colors.black),
+                    const SizedBox(width: Dimensions.paddingSizeSmall),
+                    Expanded(
+                        child: Text(
+                      controller.text.isNotEmpty
+                          ? controller.text
+                          : 'search_location'.tr,
+                      style: robotoRegular.copyWith(
+                          color: controller.text.isEmpty
+                              ? Theme.of(context).disabledColor
+                              : Theme.of(context).textTheme.bodyMedium!.color),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    )),
+                    Icon(Icons.search, color: Colors.black),
+                  ]),
+                );
           },
-          suggestionsBuilder: (BuildContext context, SearchController controller) async {
+          suggestionsBuilder:
+              (BuildContext context, SearchController controller) async {
             _searchingWithQuery = controller.text;
-            final List<String> options = (await _search(_searchingWithQuery!, lController)).toList();
+            final List<String> options =
+                (await _search(_searchingWithQuery!, lController)).toList();
             if (_searchingWithQuery != controller.text) {
               return _lastOptions;
             }
@@ -102,8 +128,10 @@ class _LocationSearchDialogState extends State<LocationSearchDialog> {
                 onTap: () async {
                   int selectedIndex = _predictList.indexOf(location);
                   PredictionModel suggestion = _predictionList[selectedIndex];
-                  Position position = await Get.find<LocationController>().setLocation(suggestion.placeId!, suggestion.description, widget.mapController);
-                  if(widget.fromAddress!) {
+                  Position position = await Get.find<MarketLocationController>()
+                      .setLocation(suggestion.placeId!, suggestion.description,
+                          widget.mapController);
+                  if (widget.fromAddress!) {
                     widget.callBack!(position);
                   }
                   controller.closeView(location);
@@ -113,12 +141,11 @@ class _LocationSearchDialogState extends State<LocationSearchDialog> {
 
             return _lastOptions;
           });
-      }
-    );
-
+    });
   }
 
-  Future<Iterable<String>> _search(String query, LocationController locationController) async {
+  Future<Iterable<String>> _search(
+      String query, MarketLocationController locationController) async {
     _predictionList = await locationController.searchLocation(query);
 
     if (query == '') {
@@ -128,7 +155,7 @@ class _LocationSearchDialogState extends State<LocationSearchDialog> {
     for (var prediction in _predictionList) {
       _predictList.add(prediction.description!);
     }
-    if(_predictList.isEmpty) {
+    if (_predictList.isEmpty) {
       _predictList.add('no_address_found'.tr);
     }
     return _predictList;

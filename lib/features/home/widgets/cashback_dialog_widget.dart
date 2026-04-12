@@ -7,6 +7,7 @@ import 'package:stackfood_multivendor/features/language/controllers/localization
 import 'package:stackfood_multivendor/helper/date_converter.dart';
 import 'package:stackfood_multivendor/helper/price_converter.dart';
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
+import 'package:stackfood_multivendor/localization/localization_controller.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
 
@@ -21,7 +22,7 @@ class CashBackDialogWidget extends StatelessWidget {
     return GetBuilder<HomeController>(builder: (homeController) {
       return homeController.cashBackOfferList != null ? Container(
         padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault, vertical: 50),
-        alignment: Get.find<LocalizationController>().isLtr ? Alignment.bottomRight : Alignment.bottomLeft,
+        alignment: Get.find<LocalizationController>(tag: 'xmarket').isLtr ? Alignment.bottomRight : Alignment.bottomLeft,
         child: Column(mainAxisAlignment: MainAxisAlignment.end, crossAxisAlignment: CrossAxisAlignment.end, children: [
 
           isDesktop ? Padding(

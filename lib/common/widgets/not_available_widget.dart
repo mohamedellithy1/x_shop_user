@@ -1,14 +1,14 @@
-import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/util/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stackfood_multivendor/util/dimensions.dart';
+import 'package:stackfood_multivendor/util/styles.dart';
 
 class NotAvailableWidget extends StatelessWidget {
   final double fontSize;
   final bool isRestaurant;
   final double opacity;
   final Color color;
-  const NotAvailableWidget({super.key, this.fontSize = 8, this.isRestaurant = false, this.opacity = 0.6, this.color = Colors.white});
+  const NotAvailableWidget({super.key, this.fontSize = 15, this.isRestaurant = false, this.opacity = 0.6, this.color = Colors.white});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class NotAvailableWidget extends StatelessWidget {
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(Dimensions.radiusSmall), color: Colors.black.withValues(alpha: opacity)),
         child: Text(
           isRestaurant ? 'closed_now'.tr : 'not_available_now_break'.tr, textAlign: TextAlign.center,
-          style: robotoRegular.copyWith(color: color, fontSize: fontSize),
+          style: robotoRegular.copyWith(color: color, fontSize: fontSize, fontWeight: FontWeight.bold),
         ),
       ),
     );

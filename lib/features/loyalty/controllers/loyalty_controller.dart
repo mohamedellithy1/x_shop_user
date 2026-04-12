@@ -70,8 +70,8 @@ class LoyaltyController extends GetxController implements GetxService {
     if(response.statusCode == 200) {
       Get.back();
       getLoyaltyTransactionList('1', true);
-      Get.find<ProfileController>().getUserInfo();
-      showCustomSnackBar('converted_successfully_transfer_to_your_wallet'.tr, isError: false);
+      Get.find<MarketProfileController>().getUserInfo();
+      showCustomSnackBar('converted_successfully_transfer_to_your_wallet'.tr);
     }
     _isLoading = false;
     update();

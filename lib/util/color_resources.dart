@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ColorResources {
-
   static Color getRightBubbleColor() {
-    return  Theme.of(Get.context!).primaryColor;
+    return Theme.of(Get.context!).primaryColor;
   }
 
-  static Color getLeftBubbleColor() {
-    return Get.isDarkMode ? const Color(0xA2B7B7BB): Theme.of(Get.context!).disabledColor.withValues(alpha: 0.2);
+  static Color getLeftBubbleColor(bool isDark) {
+    return isDark
+        ? const Color(0xFF1b1b1b)
+        : Theme.of(Get.context!).disabledColor.withValues(alpha: 0.2);
   }
 }

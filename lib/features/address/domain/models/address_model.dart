@@ -1,3 +1,4 @@
+
 import 'package:stackfood_multivendor/features/location/domain/models/zone_response_model.dart';
 
 class AddressModel {
@@ -40,8 +41,8 @@ class AddressModel {
     addressType = json['address_type'];
     contactPersonNumber = json['contact_person_number'];
     address = json['address'];
-    latitude = json['latitude'];
-    longitude = json['longitude'];
+    latitude = json['latitude']?.toString();
+    longitude = json['longitude']?.toString();
     zoneId = json['zone_id'];
     zoneIds = json['zone_ids']?.cast<int>();
     method = json['_method'];
@@ -55,7 +56,7 @@ class AddressModel {
         zoneData!.add(ZoneData.fromJson(v));
       });
     }
-    if(json['contact_person_email'] != null) {
+    if (json['contact_person_email'] != null) {
       email = json['contact_person_email'];
     }
   }
@@ -78,7 +79,7 @@ class AddressModel {
     if (zoneData != null) {
       data['zone_data'] = zoneData!.map((v) => v.toJson()).toList();
     }
-    if(email != null) {
+    if (email != null) {
       data['contact_person_email'] = email;
     }
     return data;

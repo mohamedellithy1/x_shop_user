@@ -128,7 +128,7 @@ class SplashRepository implements SplashRepositoryInterface {
   //     headers: {
   //       'Content-Type': 'application/json; charset=UTF-8',
   //       'Accept': 'application/json',
-  //       AppConstants.localizationKey: Get.find<LocalizationController>().locale.languageCode,
+  //       AppConstants.localizationKey: Get.find<LocalizationController>(tag: 'xmarket').locale.languageCode,
   //     },
   //   );
   // }

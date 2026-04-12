@@ -23,11 +23,11 @@ class _AddFundDialogueWidgetState extends State<AddFundDialogueWidget> {
   @override
   void initState() {
     super.initState();
-    Get.find<WalletController>().isTextFieldEmpty('', isUpdate: false);
-    Get.find<WalletController>().changeDigitalPaymentName('', isUpdate: false);
+    Get.find<MarketWalletController>().isTextFieldEmpty('', isUpdate: false);
+    Get.find<MarketWalletController>().changeDigitalPaymentName('', isUpdate: false);
 
-    if(Get.find<SplashController>().configModel!.activePaymentMethodList!.length == 1){
-      Get.find<WalletController>().changeDigitalPaymentName(Get.find<SplashController>().configModel!.activePaymentMethodList!.first.getWay!, isUpdate: false);
+    if(Get.find<MarketSplashController>(tag: 'xmarket').configModel!.activePaymentMethodList!.length == 1){
+      Get.find<MarketWalletController>().changeDigitalPaymentName(Get.find<MarketSplashController>(tag: 'xmarket').configModel!.activePaymentMethodList!.first.getWay!, isUpdate: false);
     }
 
   }
@@ -56,7 +56,7 @@ class _AddFundDialogueWidgetState extends State<AddFundDialogueWidget> {
         ),
         const SizedBox(height: Dimensions.paddingSizeSmall),
 
-        GetBuilder<WalletController>(
+        GetBuilder<MarketWalletController>(
           builder: (walletController) {
             return Container(
               decoration: BoxDecoration(
@@ -73,7 +73,7 @@ class _AddFundDialogueWidgetState extends State<AddFundDialogueWidget> {
                 Text('add_fund_to_wallet'.tr, style: robotoBold.copyWith(fontSize: Dimensions.fontSizeLarge)),
                 const SizedBox(height: Dimensions.paddingSizeSmall),
 
-                Text('add_fund_form_secured_digital_payment_gateways'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall), textAlign: TextAlign.center),
+                // Text('add_fund_form_secured_digital_payment_gateways'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall), textAlign: TextAlign.center),
                 const SizedBox(height: Dimensions.paddingSizeLarge),
 
                 Container(
@@ -85,7 +85,7 @@ class _AddFundDialogueWidgetState extends State<AddFundDialogueWidget> {
                   child: Column(
                     children: [
 
-                      Text('${'enter_amount'.tr} (${Get.find<SplashController>().configModel?.currencySymbol!})', style: robotoRegular),
+                      Text('${'enter_amount'.tr} (EGP)'),
                       SizedBox(height: Dimensions.paddingSizeDefault),
 
                       CustomTextFieldWidget(
@@ -132,14 +132,14 @@ class _AddFundDialogueWidgetState extends State<AddFundDialogueWidget> {
                       const SizedBox(height: Dimensions.paddingSizeSmall),
 
                       ListView.builder(
-                        itemCount: Get.find<SplashController>().configModel!.activePaymentMethodList!.length,
+                        itemCount: Get.find<MarketSplashController>(tag: 'xmarket').configModel!.activePaymentMethodList!.length,
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index){
-                          bool isSelected = Get.find<SplashController>().configModel!.activePaymentMethodList![index].getWay! == walletController.digitalPaymentName;
+                          bool isSelected = Get.find<MarketSplashController>(tag: 'xmarket').configModel!.activePaymentMethodList![index].getWay! == walletController.digitalPaymentName;
                           return InkWell(
                             onTap: (){
-                              walletController.changeDigitalPaymentName(Get.find<SplashController>().configModel!.activePaymentMethodList![index].getWay!);
+                              walletController.changeDigitalPaymentName(Get.find<MarketSplashController>(tag: 'xmarket').configModel!.activePaymentMethodList![index].getWay!);
                             },
                             child: Container(
                               decoration: BoxDecoration(
@@ -160,12 +160,12 @@ class _AddFundDialogueWidgetState extends State<AddFundDialogueWidget> {
 
                                 CustomImageWidget(
                                   height: 20, fit: BoxFit.contain,
-                                  image: '${Get.find<SplashController>().configModel!.activePaymentMethodList![index].getWayImageFullUrl}',
+                                  image: '${Get.find<MarketSplashController>(tag: 'xmarket').configModel!.activePaymentMethodList![index].getWayImageFullUrl}',
                                 ),
                                 const SizedBox(width: Dimensions.paddingSizeSmall),
 
                                 Text(
-                                  Get.find<SplashController>().configModel!.activePaymentMethodList![index].getWayTitle!,
+                                  Get.find<MarketSplashController>(tag: 'xmarket').configModel!.activePaymentMethodList![index].getWayTitle!,
                                   style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault),
                                 ),
                               ]),
@@ -180,6 +180,7 @@ class _AddFundDialogueWidgetState extends State<AddFundDialogueWidget> {
                 ),
 
                 CustomButtonWidget(
+                  color: Colors.orange,
                   buttonText: 'add_fund'.tr,
                   isLoading: walletController.isLoading,
                   onPressed: () => _onAddFundButtonClicked(walletController),
@@ -193,7 +194,7 @@ class _AddFundDialogueWidgetState extends State<AddFundDialogueWidget> {
     );
   }
 
-  void _onAddFundButtonClicked(WalletController walletController) {
+  void _onAddFundButtonClicked(MarketWalletController walletController) {
     if(inputAmountController.text.isEmpty){
       showCustomSnackBar('please_provide_transfer_amount'.tr);
     }else if(inputAmountController.text == '0'){
@@ -201,7 +202,7 @@ class _AddFundDialogueWidgetState extends State<AddFundDialogueWidget> {
     }else if(walletController.digitalPaymentName == ''){
       showCustomSnackBar('please_select_payment_method'.tr);
     }else{
-      double amount = double.parse(inputAmountController.text.replaceAll(Get.find<SplashController>().configModel!.currencySymbol!, ''));
+      double amount = double.parse(inputAmountController.text.replaceAll(Get.find<MarketSplashController>(tag: 'xmarket').configModel!.currencySymbol!, ''));
       walletController.addFundToWallet(amount, walletController.digitalPaymentName!);
     }
   }

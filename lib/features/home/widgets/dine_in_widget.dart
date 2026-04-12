@@ -4,8 +4,8 @@ import 'package:stackfood_multivendor/common/widgets/custom_asset_image_widget.d
 import 'package:stackfood_multivendor/common/widgets/custom_button_widget.dart';
 import 'package:stackfood_multivendor/helper/route_helper.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/util/images.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
+import 'package:stackfood_multivendor/util/xmarket_images.dart';
 
 class DineInWidget extends StatelessWidget {
   const DineInWidget({super.key});
@@ -14,32 +14,34 @@ class DineInWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(
-        top: Dimensions.paddingSizeSmall, bottom: Dimensions.paddingSizeSmall,
-        left: Dimensions.paddingSizeDefault, right: Dimensions.paddingSizeOverLarge,
+        top: Dimensions.paddingSizeSmall,
+        bottom: Dimensions.paddingSizeSmall,
+        left: Dimensions.paddingSizeDefault,
+        right: Dimensions.paddingSizeOverLarge,
       ),
-      margin: EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault, vertical: Dimensions.paddingSizeSmall),
+      margin: EdgeInsets.symmetric(
+          horizontal: Dimensions.paddingSizeDefault,
+          vertical: Dimensions.paddingSizeSmall),
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-
-        CustomAssetImageWidget(Images.dineInUser, height: 65, width: 80),
-
+        CustomAssetImageWidget(XmarketImages.dineInUser, height: 65, width: 80),
         Column(children: [
-
           Text('want_to_dine_in'.tr, style: robotoBold),
           CustomButtonWidget(
-            width: 115, height: 35, radius: Dimensions.radiusSmall,
+            width: 115,
+            height: 35,
+            radius: Dimensions.radiusSmall,
             buttonText: 'view_restaurants'.tr,
-            isBold: false, fontSize: Dimensions.fontSizeSmall,
+            isBold: false,
+            fontSize: Dimensions.fontSizeSmall,
             onPressed: () {
               Get.toNamed(RouteHelper.getDineInRestaurantScreen());
             },
           ),
-
         ]),
-
       ]),
     );
   }

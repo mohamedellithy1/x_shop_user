@@ -56,7 +56,7 @@ class VerificationController extends GetxController implements GetxService {
     update();
     ResponseModel responseModel = await verificationServiceInterface.verifyEmail(email, token, _verificationCode);
     if(responseModel.isSuccess) {
-      Get.find<ProfileController>().getUserInfo();
+      Get.find<MarketProfileController>().getUserInfo();
     }
     _isLoading = false;
     update();
@@ -68,7 +68,7 @@ class VerificationController extends GetxController implements GetxService {
     update();
     ResponseModel responseModel = await verificationServiceInterface.verifyPhone(data);
     if(responseModel.isSuccess && responseModel.authResponseModel != null && responseModel.authResponseModel!.isExistUser == null && responseModel.authResponseModel!.isPersonalInfo!) {
-      Get.find<ProfileController>().getUserInfo();
+      Get.find<MarketProfileController>().getUserInfo();
     }
     _isLoading = false;
     update();
@@ -89,7 +89,7 @@ class VerificationController extends GetxController implements GetxService {
     ResponseModel responseModel = await verificationServiceInterface.verifyFirebaseOtp(phoneNumber: phoneNumber, session: session, otp: otp, loginType: loginType, token: token, isSignUpPage: isSignUpPage, isForgetPassPage: isForgetPassPage);
 
     if (responseModel.isSuccess && isSignUpPage && !isForgetPassPage) {
-      Get.find<ProfileController>().getUserInfo();
+      Get.find<MarketProfileController>().getUserInfo();
     }
     _isLoading = false;
     update();

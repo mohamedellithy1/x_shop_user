@@ -14,7 +14,6 @@ class ItemCampaignScreen extends StatefulWidget {
 }
 
 class _ItemCampaignScreenState extends State<ItemCampaignScreen> {
-
   final ScrollController scrollController = ScrollController();
 
   @override
@@ -25,20 +24,26 @@ class _ItemCampaignScreenState extends State<ItemCampaignScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: CustomAppBarWidget(title: 'trending_food_offers'.tr),
-      endDrawer: const MenuDrawerWidget(), endDrawerEnableOpenDragGesture: false,
-      body: SingleChildScrollView(controller: scrollController, child: Center(child: SizedBox(
-        width: Dimensions.webMaxWidth,
-        child: GetBuilder<CampaignController>(builder: (campController) {
-          return ProductViewWidget(
-            isRestaurant: false, products: campController.itemCampaignList, restaurants: null,
-            isCampaign: true, noDataText: 'no_campaign_found'.tr,
-          );
-        }),
-      ))),
+      endDrawer: const MenuDrawerWidget(),
+      endDrawerEnableOpenDragGesture: false,
+      body: SingleChildScrollView(
+          controller: scrollController,
+          child: Center(
+              child: SizedBox(
+            width: Dimensions.webMaxWidth,
+            child: GetBuilder<CampaignController>(builder: (campController) {
+              return ProductViewWidget(
+                isRestaurant: false,
+                products: campController.itemCampaignList,
+                restaurants: null,
+                useGridCard: true,
+                isCampaign: true,
+                noDataText: 'no_campaign_found'.tr,
+              );
+            }),
+          ))),
     );
   }
-
 }

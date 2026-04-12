@@ -1,17 +1,19 @@
 import 'dart:async';
 import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
 import 'package:stackfood_multivendor/features/cart/controllers/cart_controller.dart';
-import 'package:stackfood_multivendor/features/language/controllers/localization_controller.dart';
+// import 'package:stackfood_multivendor/features/theme/controllers/theme_controller.dart';
+// import 'package:stackfood_multivendor/features/dashboard/screens/dashboard_screen.dart';
 import 'package:stackfood_multivendor/features/notification/domain/models/notification_body_model.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
 import 'package:stackfood_multivendor/features/favourite/controllers/favourite_controller.dart';
+import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
 import 'package:stackfood_multivendor/features/splash/domain/models/deep_link_body.dart';
 import 'package:stackfood_multivendor/helper/notification_helper.dart';
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 import 'package:stackfood_multivendor/helper/route_helper.dart';
+import 'package:stackfood_multivendor/localization/localization_controller.dart';
 import 'package:stackfood_multivendor/theme/dark_theme.dart';
 import 'package:stackfood_multivendor/theme/light_theme.dart';
+import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
 import 'package:stackfood_multivendor/util/app_constants.dart';
 import 'package:stackfood_multivendor/util/messages.dart';
 import 'package:stackfood_multivendor/common/widgets/cookies_view_widget.dart';
@@ -114,16 +116,16 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> _route() async {
     if(GetPlatform.isWeb) {
-      Get.find<SplashController>().initSharedData();
-      if(!Get.find<AuthController>().isLoggedIn() && !Get.find<AuthController>().isGuestLoggedIn() /*&& !ResponsiveHelper.isDesktop(Get.context!)*/) {
-        await Get.find<AuthController>().guestLogin();
+      Get.find<MarketSplashController>().initSharedData();
+      if(!Get.find<MarketAuthController>().isLoggedIn() && !Get.find<MarketAuthController>().isGuestLoggedIn() /*&& !ResponsiveHelper.isDesktop(Get.context!)*/) {
+        await Get.find<MarketAuthController>().guestLogin();
       }
-      if(Get.find<AuthController>().isLoggedIn() || Get.find<AuthController>().isGuestLoggedIn()) {
-        Get.find<CartController>().getCartDataOnline();
+      if(Get.find<MarketAuthController>().isLoggedIn() || Get.find<MarketAuthController>().isGuestLoggedIn()) {
+        Get.find<MarketCartController>().getCartDataOnline();
       }
-      Get.find<SplashController>().getConfigData(fromMainFunction: true);
-      if (Get.find<AuthController>().isLoggedIn()) {
-        Get.find<AuthController>().updateToken();
+      Get.find<MarketSplashController>().getConfigData(fromMainFunction: true);
+      if (Get.find<MarketAuthController>().isLoggedIn()) {
+        Get.find<MarketAuthController>().updateToken();
         await Get.find<FavouriteController>().getFavouriteList();
       }
     }
@@ -132,9 +134,9 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
 
-    return GetBuilder<ThemeController>(builder: (themeController) {
-      return GetBuilder<LocalizationController>(builder: (localizeController) {
-        return GetBuilder<SplashController>(builder: (splashController) {
+    return GetBuilder<MarketThemeController>(tag: 'xmarket', builder: (themeController) {
+      return GetBuilder<LocalizationController>(tag: 'xmarket', builder: (localizeController) {
+        return GetBuilder<MarketSplashController>(tag: 'xmarket', builder: (splashController) {
           return (GetPlatform.isWeb && splashController.configModel == null) ? const SizedBox() : GetMaterialApp(
             title: AppConstants.appName,
             debugShowCheckedModeBanner: false,
@@ -142,7 +144,7 @@ class _MyAppState extends State<MyApp> {
             scrollBehavior: const MaterialScrollBehavior().copyWith(
               dragDevices: {PointerDeviceKind.mouse, PointerDeviceKind.touch},
             ),
-            theme: themeController.darkTheme ? dark : light,
+            theme: themeController!.darkTheme ? dark : light,
             locale: localizeController.locale,
             translations: Messages(languages: widget.languages),
             fallbackLocale: Locale(AppConstants.languages[0].languageCode!, AppConstants.languages[0].countryCode),
@@ -157,7 +159,7 @@ class _MyAppState extends State<MyApp> {
                   child: Stack(children: [
                     widget!,
 
-                    GetBuilder<SplashController>(builder: (splashController){
+                    GetBuilder<MarketSplashController>(tag: 'xmarket', builder: (splashController){
 
                       if(!splashController.savedCookiesData || !splashController.getAcceptCookiesStatus(splashController.configModel?.cookiesText ?? "")){
                         return ResponsiveHelper.isWeb() ? const Align(alignment: Alignment.bottomCenter, child: CookiesViewWidget()) : const SizedBox();

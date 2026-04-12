@@ -16,7 +16,11 @@ class ReviewScreen extends StatefulWidget {
   final String? restaurantName;
   final String? restaurantID;
   final Restaurant? restaurant;
-  const ReviewScreen({super.key, required this.restaurantID, this.restaurantName, this.restaurant});
+  const ReviewScreen(
+      {super.key,
+      required this.restaurantID,
+      this.restaurantName,
+      this.restaurant});
 
   @override
   State<ReviewScreen> createState() => _ReviewScreenState();
@@ -34,63 +38,109 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     bool isDesktop = ResponsiveHelper.isDesktop(context);
 
     return Scaffold(
-      appBar: CustomAppBarWidget(title: widget.restaurantName ?? 'restaurant_reviews'.tr),
-      endDrawer: const MenuDrawerWidget(), endDrawerEnableOpenDragGesture: false,
+      appBar: CustomAppBarWidget(
+          title: widget.restaurantName ?? 'restaurant_reviews'.tr),
+      endDrawer: const MenuDrawerWidget(),
+      endDrawerEnableOpenDragGesture: false,
       body: GetBuilder<ReviewController>(builder: (reviewController) {
-        return reviewController.restaurantReviewList != null ? reviewController.restaurantReviewList!.isNotEmpty ? RefreshIndicator(
-          onRefresh: () async {
-            await reviewController.getRestaurantReviewList(widget.restaurantID);
-          },
-          child: SingleChildScrollView(
-            controller: _scrollController,
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: FooterViewWidget(
-              child: Column(children: [
-
-                WebScreenTitleWidget(title: widget.restaurantName ?? 'restaurant_reviews'.tr),
-
-                Center(child: SizedBox(width: Dimensions.webMaxWidth,
-                  child: Padding(
-                    padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
-                    child: isDesktop ? Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-
-                      Expanded(flex: 4, child: RatingWidget(averageRating: widget.restaurant?.avgRating ?? 0, ratingCount: widget.restaurant?.ratingCount ?? 0, reviewCommentCount: widget.restaurant?.reviewsCommentsCount ?? 0, ratings: widget.restaurant?.ratings)),
-                      const SizedBox(width: Dimensions.paddingSizeLarge),
-
-                      Expanded(
-                        flex: 6,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 40),
-                          height: 600,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).cardColor,
-                            borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                            boxShadow: [BoxShadow(color: Colors.grey.withValues(alpha: 0.1), spreadRadius: 1, blurRadius: 10, offset: const Offset(0, 1))],
+        return reviewController.restaurantReviewList != null
+            ? reviewController.restaurantReviewList!.isNotEmpty
+                ? RefreshIndicator(
+                    color: Colors.orange,
+                    onRefresh: () async {
+                      await reviewController
+                          .getRestaurantReviewList(widget.restaurantID);
+                    },
+                    child: SingleChildScrollView(
+                      controller: _scrollController,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: Column(children: [
+                        WebScreenTitleWidget(
+                            title: widget.restaurantName ??
+                                'restaurant_reviews'.tr),
+                        Center(
+                            child: SizedBox(
+                          width: Dimensions.webMaxWidth,
+                          child: Padding(
+                            padding: const EdgeInsets.all(
+                                Dimensions.paddingSizeDefault),
+                            child: isDesktop
+                                ? Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                        Expanded(
+                                            flex: 4,
+                                            child: RatingWidget(
+                                                averageRating: widget.restaurant
+                                                        ?.avgRating ??
+                                                    0,
+                                                ratingCount: widget.restaurant
+                                                        ?.ratingCount ??
+                                                    0,
+                                                reviewCommentCount: widget
+                                                        .restaurant
+                                                        ?.reviewsCommentsCount ??
+                                                    0,
+                                                ratings: widget
+                                                    .restaurant?.ratings)),
+                                        const SizedBox(
+                                            width: Dimensions.paddingSizeLarge),
+                                        Expanded(
+                                          flex: 6,
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 40),
+                                            height: 600,
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  Theme.of(context).cardColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      Dimensions.radiusSmall),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    color: Colors.grey
+                                                        .withValues(alpha: 0.1),
+                                                    spreadRadius: 1,
+                                                    blurRadius: 10,
+                                                    offset: const Offset(0, 1))
+                                              ],
+                                            ),
+                                            child: ReviewListWidget(
+                                                reviewController:
+                                                    reviewController,
+                                                restaurantName:
+                                                    widget.restaurantName),
+                                          ),
+                                        ),
+                                      ])
+                                : Column(children: [
+                                    RatingWidget(
+                                        averageRating:
+                                            widget.restaurant?.avgRating ?? 0,
+                                        ratingCount:
+                                            widget.restaurant?.ratingCount ?? 0,
+                                        reviewCommentCount: widget.restaurant
+                                                ?.reviewsCommentsCount ??
+                                            0,
+                                        ratings: widget.restaurant?.ratings),
+                                    const SizedBox(
+                                        height: Dimensions.paddingSizeLarge),
+                                    ReviewListWidget(
+                                        reviewController: reviewController,
+                                        restaurantName: widget.restaurantName),
+                                  ]),
                           ),
-                          child: ReviewListWidget(reviewController: reviewController, restaurantName: widget.restaurantName),
-                        ),
-                      ),
-
-                    ]) : Column(children: [
-
-                      RatingWidget(averageRating: widget.restaurant?.avgRating ?? 0, ratingCount: widget.restaurant?.ratingCount ?? 0, reviewCommentCount: widget.restaurant?.reviewsCommentsCount ?? 0, ratings: widget.restaurant?.ratings),
-                      const SizedBox(height: Dimensions.paddingSizeLarge),
-
-                      ReviewListWidget(reviewController: reviewController, restaurantName: widget.restaurantName),
-
-                    ]),
-                  ),
-
-                )),
-
-              ]),
-            ),
-          ),
-        ) : Center(child: NoDataScreen(title: 'no_review_found'.tr)) : const Center(child: CircularProgressIndicator());
+                        )),
+                      ]),
+                    ),
+                  )
+                : Center(child: NoDataScreen(title: 'no_review_found'.tr))
+            : const Center(child: CircularProgressIndicator());
       }),
     );
   }

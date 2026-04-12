@@ -22,7 +22,7 @@ class DashboardController extends GetxController implements GetxService {
   Future<bool> checkLocationActive() async {
     bool isActiveLocation = await Geolocator.isLocationServiceEnabled();
     if(isActiveLocation) {
-      AddressModel currentAddress = await Get.find<LocationController>().getCurrentLocation(true);
+      AddressModel currentAddress = await Get.find<MarketLocationController>().getCurrentLocation(true);
       AddressModel? selectedAddress = AddressHelper.getAddressFromSharedPref();
 
       double? distance = await Get.find<CheckoutController>().getDistanceInKM(

@@ -100,7 +100,7 @@ class RestaurantWidget extends StatelessWidget {
                 bool isWished = favouriteController.wishRestIdList.contains(restaurant!.id);
                 return InkWell(
                   onTap: () {
-                    if(Get.find<AuthController>().isLoggedIn()) {
+                    if(Get.find<MarketAuthController>().isLoggedIn()) {
                       isWished ? favouriteController.removeFromFavouriteList(restaurant!.id, true)
                           : favouriteController.addToFavouriteList(null, restaurant?.id, true);
                     }else {
