@@ -71,7 +71,7 @@ class ApiClient extends GetxService {
       bool showToaster = false}) async {
     try {
       if (kDebugMode) {
-        debugPrint('====> API Call: $uri\nHeader: ${headers ?? _mainHeaders}');
+        debugPrint('====> API Call: ${appBaseUrl + uri}\nHeader: ${headers ?? _mainHeaders}');
       }
       http.Response response = await http
           .get(
@@ -93,7 +93,7 @@ class ApiClient extends GetxService {
       {Map<String, String>? headers, bool handleError = true}) async {
     try {
       if (kDebugMode) {
-        debugPrint('====> API Call: $uri\nHeader: $_mainHeaders');
+        debugPrint('====> API Call: ${appBaseUrl + uri}\nHeader: $_mainHeaders');
         debugPrint('====> API Body: $body');
       }
       http.Response response = await http
@@ -191,7 +191,7 @@ class ApiClient extends GetxService {
       {Map<String, String>? headers, bool handleError = true}) async {
     try {
       if (kDebugMode) {
-        debugPrint('====> API Call: $uri\nHeader: $_mainHeaders');
+        debugPrint('====> API Call: ${appBaseUrl + uri}\nHeader: $_mainHeaders');
         debugPrint('====> API Body: $body');
       }
       http.Response response = await http
@@ -211,7 +211,7 @@ class ApiClient extends GetxService {
       {Map<String, String>? headers, bool handleError = true}) async {
     try {
       if (kDebugMode) {
-        debugPrint('====> API Call: $uri\nHeader: $_mainHeaders');
+        debugPrint('====> API Call: ${appBaseUrl + uri}\nHeader: $_mainHeaders');
       }
       http.Response response = await http
           .delete(

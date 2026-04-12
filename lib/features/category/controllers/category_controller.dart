@@ -71,17 +71,22 @@ class MarketCategoryController extends GetxController implements GetxService {
       {String? search,
       DataSourceEnum dataSource = DataSourceEnum.client,
       bool isXMarket = true}) async {
-    _isLoading = true;
-    if (reload) {
-      _categoryList = null;
-      update();
+    try {
+      _isLoading = true;
+      if (reload) {
+        _categoryList = null;
+        WidgetsBinding.instance.addPostFrameCallback((_) => update());
+      }
+      if (_categoryList == null || reload) {
+        _categoryList = await categoryServiceInterface.getCategoryList(
+            source: dataSource, search: search, isXMarket: isXMarket);
+      }
+    } catch (e) {
+      debugPrint('❌ [MarketCategoryController] Error fetching categories: $e');
+    } finally {
+      _isLoading = false;
+      WidgetsBinding.instance.addPostFrameCallback((_) => update());
     }
-    if (_categoryList == null || reload) {
-      _categoryList = await categoryServiceInterface.getCategoryList(
-          source: dataSource, search: search, isXMarket: isXMarket);
-    }
-    _isLoading = false;
-    update();
   }
 
   String? _parentCategoryId;

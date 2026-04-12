@@ -36,7 +36,7 @@
     </queries>
 
     <application
-        android:label="StackFood"
+        android:label="XShop"
         android:name="${applicationName}"
         android:extractNativeLibs="true"
         android:requestLegacyExternalStorage="true"
@@ -68,7 +68,7 @@
                  Flutter's first frame. -->
             <meta-data
                 android:name="com.google.firebase.messaging.default_notification_channel_id"
-                android:value="stackfood" />
+                android:value="xshop" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -85,8 +85,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Accepts URIs that begin with YOUR_SCHEME://YOUR_HOST -->
                 <data
-                    android:scheme="StackFood"
-                    android:host="stackfood.com" />
+                    android:scheme="XShop"
+                    android:host="xshop.com" />
             </intent-filter>
 
         </activity>

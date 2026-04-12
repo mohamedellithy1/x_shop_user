@@ -19,17 +19,17 @@ class HomeCategoryViewWidget extends StatelessWidget {
     return GetBuilder<MarketCategoryController>(builder: (categoryController) {
       List<CategoryModel>? categories = categoryController.categoryList;
 
-      if (categories == null && categoryController.isLoading) {
-        return const Center(
-            child: Padding(
-          padding: EdgeInsets.all(Dimensions.paddingSizeDefault),
-          child: CircularProgressIndicator(
-            color: Colors.orange,
-          ),
-        ));
-      }
-
-      if (categories!.isEmpty) {
+      if (categories == null || categories.isEmpty) {
+        if (categoryController.isLoading) {
+          return const Center(
+              child: Padding(
+            padding: EdgeInsets.all(Dimensions.paddingSizeDefault),
+            child: CircularProgressIndicator(
+              color: Colors.orange,
+            ),
+          ));
+        }
+        
         return Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(

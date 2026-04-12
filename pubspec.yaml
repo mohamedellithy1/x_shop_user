@@ -114,13 +114,7 @@ flutter:
     - assets/json/
 
   fonts:
-    - family: Roboto
+    - family: Cairo
       fonts:
-        - asset: assets/font/Roboto-Regular.ttf
-          weight: 400
-        - asset: assets/font/Roboto-Medium.ttf
-          weight: 500
-        - asset: assets/font/Roboto-Bold.ttf
-          weight: 700
-        - asset: assets/font/Roboto-Black.ttf
-          weight: 900
+        - asset: assets/font/Cairo-VariableFont_slnt,wght.ttf
+        

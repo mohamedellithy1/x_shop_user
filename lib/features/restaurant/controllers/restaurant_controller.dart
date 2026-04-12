@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:stackfood_multivendor/common/enums/data_source_enum.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
 import 'package:stackfood_multivendor/common/models/product_model.dart';
@@ -222,22 +223,26 @@ class RestaurantController extends GetxController implements GetxService {
       DataSourceEnum source = DataSourceEnum.local}) async {
     if (reload) {
       _restaurantModel = null;
-      update();
+      WidgetsBinding.instance.addPostFrameCallback((_) => update());
     }
 
     RestaurantModel? restaurantModel;
-    if (source == DataSourceEnum.local && offset == 1) {
+    try {
+      if (source == DataSourceEnum.local && offset == 1) {
       restaurantModel = await restaurantServiceInterface.getRestaurantList(
           offset, _restaurantType, _topRated, _discount, _veg, _nonVeg,
           fromMap: fromMap, source: DataSourceEnum.local);
       _prepareRestaurantList(restaurantModel, offset);
       getRestaurantList(1, false,
           fromMap: fromMap, source: DataSourceEnum.client);
-    } else {
-      restaurantModel = await restaurantServiceInterface.getRestaurantList(
-          offset, _restaurantType, _topRated, _discount, _veg, _nonVeg,
-          fromMap: fromMap, source: DataSourceEnum.client);
-      _prepareRestaurantList(restaurantModel, offset);
+      } else {
+        restaurantModel = await restaurantServiceInterface.getRestaurantList(
+            offset, _restaurantType, _topRated, _discount, _veg, _nonVeg,
+            fromMap: fromMap, source: DataSourceEnum.client);
+        _prepareRestaurantList(restaurantModel, offset);
+      }
+    } catch (e) {
+      debugPrint('❌ [RestaurantController] Error fetching restaurant list: $e');
     }
   }
 
@@ -266,8 +271,8 @@ class RestaurantController extends GetxController implements GetxService {
 
       print(
           '🏠 [RestaurantController] All Restaurants: ${_restaurantModel?.restaurants?.map((e) => "${e.name} (${e.id})").toList()}');
-      update();
     }
+    WidgetsBinding.instance.addPostFrameCallback((_) => update());
   }
 
   void setRestaurantType(String type) {

@@ -28,7 +28,8 @@ import 'helper/get_di.dart' as di;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_web_plugins/url_strategy.dart';
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,8 +49,9 @@ Future<void> main() async {
 
   DeepLinkBody? linkBody;
 
-  if(GetPlatform.isWeb) {
-    await Firebase.initializeApp(options: const FirebaseOptions(
+  if (GetPlatform.isWeb) {
+    await Firebase.initializeApp(
+        options: const FirebaseOptions(
       apiKey: "AIzaSyD0Z911mOoWCVkeGdjhIKwWFPRgvd6ZyAw",
       authDomain: "stackmart-500c7.firebaseapp.com",
       projectId: "stackmart-500c7",
@@ -57,7 +59,7 @@ Future<void> main() async {
       messagingSenderId: "491987943015",
       appId: "1:491987943015:web:d8bc7ab8dbc9991c8f1ec2",
     ));
-  }else if(GetPlatform.isAndroid) {
+  } else if (GetPlatform.isAndroid) {
     await Firebase.initializeApp(
       options: const FirebaseOptions(
         apiKey: 'AIzaSyCc3OCd5I2xSlnftZ4bFAbuCzMhgQHLivA',
@@ -75,14 +77,15 @@ Future<void> main() async {
   NotificationBodyModel? body;
   try {
     if (GetPlatform.isMobile) {
-      final RemoteMessage? remoteMessage = await FirebaseMessaging.instance.getInitialMessage();
+      final RemoteMessage? remoteMessage =
+          await FirebaseMessaging.instance.getInitialMessage();
       if (remoteMessage != null) {
         body = NotificationHelper.convertNotification(remoteMessage.data);
       }
       await NotificationHelper.initialize(flutterLocalNotificationsPlugin);
       FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
     }
-  }catch(_) {}
+  } catch (_) {}
 
   if (ResponsiveHelper.isWeb()) {
     await FacebookAuth.instance.webAndDesktopInitialize(
@@ -99,14 +102,17 @@ class MyApp extends StatefulWidget {
   final Map<String, Map<String, String>>? languages;
   final NotificationBodyModel? body;
   final DeepLinkBody? linkBody;
-  const MyApp({super.key, required this.languages, required this.body, required this.linkBody});
+  const MyApp(
+      {super.key,
+      required this.languages,
+      required this.body,
+      required this.linkBody});
 
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   void initState() {
     super.initState();
@@ -115,65 +121,100 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _route() async {
-    if(GetPlatform.isWeb) {
-      Get.find<MarketSplashController>().initSharedData();
-      if(!Get.find<MarketAuthController>().isLoggedIn() && !Get.find<MarketAuthController>().isGuestLoggedIn() /*&& !ResponsiveHelper.isDesktop(Get.context!)*/) {
-        await Get.find<MarketAuthController>().guestLogin();
-      }
-      if(Get.find<MarketAuthController>().isLoggedIn() || Get.find<MarketAuthController>().isGuestLoggedIn()) {
-        Get.find<MarketCartController>().getCartDataOnline();
-      }
-      Get.find<MarketSplashController>().getConfigData(fromMainFunction: true);
-      if (Get.find<MarketAuthController>().isLoggedIn()) {
-        Get.find<MarketAuthController>().updateToken();
-        await Get.find<FavouriteController>().getFavouriteList();
-      }
+    Get.find<MarketSplashController>(tag: 'xmarket').initSharedData();
+    if (!Get.find<MarketAuthController>().isLoggedIn() &&
+        !Get.find<MarketAuthController>().isGuestLoggedIn()) {
+      await Get.find<MarketAuthController>().guestLogin();
+    }
+    if (Get.find<MarketAuthController>().isLoggedIn() ||
+        Get.find<MarketAuthController>().isGuestLoggedIn()) {
+      Get.find<MarketCartController>().getCartDataOnline();
+    }
+    Get.find<MarketSplashController>(tag: 'xmarket')
+        .getConfigData(fromMainFunction: true);
+    if (Get.find<MarketAuthController>().isLoggedIn()) {
+      Get.find<MarketAuthController>().updateToken();
+      await Get.find<FavouriteController>().getFavouriteList();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-
-    return GetBuilder<MarketThemeController>(tag: 'xmarket', builder: (themeController) {
-      return GetBuilder<LocalizationController>(tag: 'xmarket', builder: (localizeController) {
-        return GetBuilder<MarketSplashController>(tag: 'xmarket', builder: (splashController) {
-          return (GetPlatform.isWeb && splashController.configModel == null) ? const SizedBox() : GetMaterialApp(
-            title: AppConstants.appName,
-            debugShowCheckedModeBanner: false,
-            navigatorKey: Get.key,
-            scrollBehavior: const MaterialScrollBehavior().copyWith(
-              dragDevices: {PointerDeviceKind.mouse, PointerDeviceKind.touch},
-            ),
-            theme: themeController!.darkTheme ? dark : light,
-            locale: localizeController.locale,
-            translations: Messages(languages: widget.languages),
-            fallbackLocale: Locale(AppConstants.languages[0].languageCode!, AppConstants.languages[0].countryCode),
-            initialRoute: GetPlatform.isWeb ? RouteHelper.getInitialRoute() : RouteHelper.getSplashRoute(widget.body, widget.linkBody),
-            getPages: RouteHelper.routes,
-            defaultTransition: Transition.topLevel,
-            transitionDuration: const Duration(milliseconds: 500),
-            builder: (BuildContext context, widget) {
-              return MediaQuery(data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1)), child: Material(
-                child: SafeArea(
-                  top: false, bottom: GetPlatform.isAndroid,
-                  child: Stack(children: [
-                    widget!,
-
-                    GetBuilder<MarketSplashController>(tag: 'xmarket', builder: (splashController){
-
-                      if(!splashController.savedCookiesData || !splashController.getAcceptCookiesStatus(splashController.configModel?.cookiesText ?? "")){
-                        return ResponsiveHelper.isWeb() ? const Align(alignment: Alignment.bottomCenter, child: CookiesViewWidget()) : const SizedBox();
-                      }else{
-                        return const SizedBox();
-                      }
-                    })
-                  ]),
-                )),
-              );
-            }
-          );
+    return GetBuilder<MarketThemeController>(
+        tag: 'xmarket',
+        builder: (themeController) {
+          return GetBuilder<LocalizationController>(
+              tag: 'xmarket',
+              builder: (localizeController) {
+                return GetBuilder<MarketSplashController>(
+                    tag: 'xmarket',
+                    builder: (splashController) {
+                      return (GetPlatform.isWeb &&
+                              splashController.configModel == null)
+                          ? const SizedBox()
+                          : GetMaterialApp(
+                              title: AppConstants.appName,
+                              debugShowCheckedModeBanner: false,
+                              navigatorKey: Get.key,
+                              scrollBehavior:
+                                  const MaterialScrollBehavior().copyWith(
+                                dragDevices: {
+                                  PointerDeviceKind.mouse,
+                                  PointerDeviceKind.touch
+                                },
+                              ),
+                              theme: themeController!.darkTheme ? dark : light,
+                              locale: localizeController.locale,
+                              translations:
+                                  Messages(languages: widget.languages),
+                              fallbackLocale: Locale(
+                                  AppConstants.languages[0].languageCode!,
+                                  AppConstants.languages[0].countryCode),
+                              initialRoute: GetPlatform.isWeb
+                                  ? RouteHelper.getInitialRoute()
+                                  : RouteHelper.splash,
+                              getPages: RouteHelper.routes,
+                              defaultTransition: Transition.topLevel,
+                              transitionDuration:
+                                  const Duration(milliseconds: 500),
+                              builder: (BuildContext context, widget) {
+                                return MediaQuery(
+                                  data: MediaQuery.of(context).copyWith(
+                                      textScaler: const TextScaler.linear(1)),
+                                  child: Material(
+                                      child: SafeArea(
+                                    top: false,
+                                    bottom: GetPlatform.isAndroid,
+                                    child: Stack(children: [
+                                      widget!,
+                                      GetBuilder<MarketSplashController>(
+                                          tag: 'xmarket',
+                                          builder: (splashController) {
+                                            if (!splashController
+                                                    .savedCookiesData ||
+                                                !splashController
+                                                    .getAcceptCookiesStatus(
+                                                        splashController
+                                                                .configModel
+                                                                ?.cookiesText ??
+                                                            "")) {
+                                              return ResponsiveHelper.isWeb()
+                                                  ? const Align(
+                                                      alignment: Alignment
+                                                          .bottomCenter,
+                                                      child:
+                                                          CookiesViewWidget())
+                                                  : const SizedBox();
+                                            } else {
+                                              return const SizedBox();
+                                            }
+                                          })
+                                    ]),
+                                  )),
+                                );
+                              });
+                    });
+              });
         });
-      });
-    });
   }
 }

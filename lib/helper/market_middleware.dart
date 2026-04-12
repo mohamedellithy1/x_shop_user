@@ -27,16 +27,7 @@ class MarketMiddleware extends GetMiddleware {
     }
 
     // 3. User Session / Location Logic
-    // If user is at the initial route of market, decide where to go
-    if (route == RouteHelper.initial || route == RouteHelper.splash) {
-      if (AddressHelper.getAddressFromSharedPref() != null) {
-        return null; // Stay on Dashboard/Home
-      } else {
-        return RouteSettings(
-            name: RouteHelper.getAccessLocationRoute('initial'));
-      }
-    }
-
+    // Let navigation proceed normally - location setup is handled by LocationController
     return null;
   }
 }

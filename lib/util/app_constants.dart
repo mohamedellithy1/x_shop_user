@@ -142,8 +142,8 @@ class AppConstants {
   static const String walletBonusUri = '/api/v1/customer/wallet/bonuses';
   static const String mostTipsUri = '/api/v1/most-tips';
   static const String orderAgainUri = '/api/v1/customer/order-again';
-  static const String guestLoginUri = '/api/v1/auth/guest/request'; 
-   static const String changeLanguage = '/api/customer/change-language';
+  static const String guestLoginUri = '/api/v1/auth/guest/request';
+  static const String changeLanguage = '/api/customer/change-language';
 
   static const String offlineMethodListUri =
       '/api/v1/offline_payment_method_list';

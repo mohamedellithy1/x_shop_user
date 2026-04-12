@@ -475,14 +475,9 @@ class RouteHelper {
             pageIndex: 0,
             fromSplash: (Get.parameters['from-splash'] == 'true'))),
         middlewares: [MarketMiddleware()]),
-//     GetPage(
-//         name: splash,
-//         page: () {
-//           NotificationBodyModel? data;
-//           DeepLinkBody? linkData;
-//           if (Get.parameters['data'] != 'null') {
-//             List<int> decode = base64Decode(Get.parameters['data'] != null
-//                 ? Get.parameters['data']!.replaceAll(' ', '+')
+    GetPage(
+        name: splash,
+        page: () => const XMarkSplashScreen()),
 //                 : '');
 //             data =
 //                 NotificationBodyModel.fromJson(jsonDecode(utf8.decode(decode)));

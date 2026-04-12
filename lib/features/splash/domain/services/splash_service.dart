@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:stackfood_multivendor/common/enums/data_source_enum.dart';
 import 'package:stackfood_multivendor/features/splash/domain/models/config_model.dart';
 import 'package:stackfood_multivendor/features/splash/domain/repositories/splash_repository_interface.dart';
@@ -23,7 +24,17 @@ class SplashService implements SplashServiceInterface {
   ConfigModel? prepareConfigData(Response response){
     ConfigModel? configModel;
     if(response.statusCode == 200) {
-      configModel = ConfigModel.fromJson(response.body);
+      try {
+        debugPrint('📦 [SplashService] Parsing config data...');
+        configModel = ConfigModel.fromJson(response.body);
+        debugPrint('✅ [SplashService] Config data parsed successfully.');
+      } catch (e, stackTrace) {
+        debugPrint('❌ [SplashService] Failed to parse config data: $e');
+        debugPrint('Stacktrace: $stackTrace');
+        debugPrint('Response Body: ${response.body}');
+      }
+    } else {
+       debugPrint('❌ [SplashService] Config fetch failed with status: ${response.statusCode}');
     }
     return configModel;
   }

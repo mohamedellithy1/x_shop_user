@@ -262,21 +262,21 @@ class ConfigModel {
     digitAfterDecimalPoint = json['digit_after_decimal_point'];
     loyaltyPointExchangeRate = json['loyalty_point_exchange_rate'];
     loyaltyPointItemPurchasePoint =
-        json['loyalty_point_item_purchase_point'].toDouble();
+        json['loyalty_point_item_purchase_point']?.toDouble() ?? 0.0;
     loyaltyPointStatus = json['loyalty_point_status'] == 1 ||
         json['loyalty_point_status'] == true;
-    minimumPointToTransfer = json['minimum_point_to_transfer'];
+    minimumPointToTransfer = json['minimum_point_to_transfer'] ?? 0;
     customerWalletStatus = json['customer_wallet_status'] == 1 ||
         json['customer_wallet_status'] == true;
     dmTipsStatus = json['dm_tips_status'];
     refEarningStatus =
         json['ref_earning_status'] == 1 || json['ref_earning_status'] == true;
-    refEarningExchangeRate = json['ref_earning_exchange_rate'].toDouble();
-    theme = json['theme'];
+    refEarningExchangeRate = json['ref_earning_exchange_rate']?.toDouble() ?? 0.0;
+    theme = json['theme'] ?? 1;
     businessPlan = json['business_plan'] != null
         ? BusinessPlan.fromJson(json['business_plan'])
         : null;
-    adminCommission = json['admin_commission'].toDouble();
+    adminCommission = json['admin_commission']?.toDouble() ?? 0.0;
     refundStatus = json['refund_active_status'];
     refundPolicyStatus = json['refund_policy_status'] == 1 ||
         json['refund_policy_status'] == true;

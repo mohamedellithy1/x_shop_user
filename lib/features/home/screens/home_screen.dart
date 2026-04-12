@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:lottie/lottie.dart';
+import 'package:stackfood_multivendor/common/enums/data_source_enum.dart';
 // import 'package:lottie/lottie.dart';
 import 'package:stackfood_multivendor/common/widgets/menu_drawer_widget.dart';
 import 'package:stackfood_multivendor/features/coupon/screens/coupon_screen.dart';
@@ -76,6 +77,10 @@ class XMarketHomeScreen extends StatefulWidget {
         '📦 [XMarketHomeScreen] Loading all data from backend... (Reload: $reload)');
     MarketSplashController splashController = Get.find<MarketSplashController>(tag: 'xmarket');
     
+    if(splashController.configModel == null) {
+      debugPrint('📦 [XMarketHomeScreen] Config is null, fetching it now...');
+      await splashController.getConfigData();
+    }
     Get.find<HomeController>().getBannerList(reload);
     Get.find<MarketCategoryController>().getCategoryList(reload, search: '');
     Get.find<CuisineController>().getCuisineList();
@@ -271,6 +276,7 @@ class _XMarketHomeScreenState extends State<XMarketHomeScreen> {
           tag: 'xmarket',
           builder: (splashController) {
             final configModel = splashController.configModel;
+            debugPrint('🏠 [HomeScreen] ConfigModel is: ${configModel != null ? "READY (theme: ${configModel.theme})" : "NULL"}');
             return GetBuilder<LocalizationController>(
                 tag: 'xmarket',
                 builder: (localizationController) {
@@ -291,7 +297,15 @@ class _XMarketHomeScreenState extends State<XMarketHomeScreen> {
                               ? Colors.black
                               : Colors.white,
                           body: configModel == null
-                              ? const Center(child: CircularProgressIndicator())
+                              ? Builder(builder: (context) {
+                                  // جلب الـ Config في الخلفية فوراً
+                                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                                    debugPrint('🔄 [HomeScreen] Config is null, fetching in background...');
+                                    Get.find<MarketSplashController>(tag: 'xmarket')
+                                        .getConfigData(source: DataSourceEnum.client);
+                                  });
+                                  return const Center(child: CircularProgressIndicator(color: Colors.orange));
+                                })
                               : Stack(
                                   children: [
                                     SafeArea(
