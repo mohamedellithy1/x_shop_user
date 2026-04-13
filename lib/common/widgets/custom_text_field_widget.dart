@@ -95,7 +95,7 @@ class CustomTextFieldWidget extends StatefulWidget {
     this.suffixImage,
     this.onTap,
     this.maxLength,
-    this.showFlag = true,
+    this.showFlag = false,
   });
 
   @override
@@ -300,8 +300,16 @@ class CustomTextFieldWidgetState extends State<CustomTextFieldWidget> {
                   ? Icon(widget.prefixIcon,
                       size: widget.iconSize,
                       color: widget.focusNode?.hasFocus == true
-                          ? (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Theme.of(context).textTheme.bodyLarge?.color)
-                          : (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Theme.of(context).hintColor.withValues(alpha: 0.7)))
+                          ? (Get.find<MarketThemeController>(tag: 'xmarket')
+                                  .darkTheme
+                              ? Colors.white
+                              : Theme.of(context).textTheme.bodyLarge?.color)
+                          : (Get.find<MarketThemeController>(tag: 'xmarket')
+                                  .darkTheme
+                              ? Colors.white
+                              : Theme.of(context)
+                                  .hintColor
+                                  .withValues(alpha: 0.7)))
                   : (widget.isPhone || widget.countryDialCode != null)
                       ? SizedBox(
                           width: 95,
@@ -333,7 +341,7 @@ class CustomTextFieldWidgetState extends State<CustomTextFieldWidget> {
                                       ?.countryPickerStatus,
                                   dialogBackgroundColor:
                                       Theme.of(context).cardColor,
-                                  hideMainText: true,
+                                  hideMainText: false,
                                   textStyle: robotoRegular.copyWith(
                                     fontSize: Dimensions.fontSizeDefault,
                                     color: Theme.of(context)
@@ -344,11 +352,13 @@ class CustomTextFieldWidgetState extends State<CustomTextFieldWidget> {
                                 ),
                               ),
                             ),
-                            Container(
-                              height: 20,
-                              width: 2,
-                              color: Theme.of(context).disabledColor,
-                            )
+                            widget.countryDialCode != null
+                                ? Container(
+                                    height: 20,
+                                    width: 2,
+                                    color: Theme.of(context).disabledColor,
+                                  )
+                                : const SizedBox()
                           ]),
                         )
                       : widget.prefixImage != null
@@ -360,23 +370,50 @@ class CustomTextFieldWidgetState extends State<CustomTextFieldWidget> {
                                   width: 25,
                                   fit: BoxFit.scaleDown,
                                   color: widget.focusNode?.hasFocus == true
-                                      ? (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Theme.of(context).textTheme.bodyLarge?.color)
-                                      : (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Theme.of(context).hintColor.withValues(alpha: 0.7))),
+                                      ? (Get.find<MarketThemeController>(
+                                                  tag: 'xmarket')
+                                              .darkTheme
+                                          ? Colors.white
+                                          : Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge
+                                              ?.color)
+                                      : (Get.find<MarketThemeController>(
+                                                  tag: 'xmarket')
+                                              .darkTheme
+                                          ? Colors.white
+                                          : Theme.of(context)
+                                              .hintColor
+                                              .withValues(alpha: 0.7))),
                             )
                           : null,
               suffixIcon: widget.suffixIcon != null
                   ? Icon(widget.suffixIcon,
                       size: widget.iconSize,
                       color: widget.focusNode?.hasFocus == true
-                          ? (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Theme.of(context).textTheme.bodyLarge?.color)
-                          : (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Theme.of(context).hintColor.withValues(alpha: 0.7)))
+                          ? (Get.find<MarketThemeController>(tag: 'xmarket')
+                                  .darkTheme
+                              ? Colors.white
+                              : Theme.of(context).textTheme.bodyLarge?.color)
+                          : (Get.find<MarketThemeController>(tag: 'xmarket')
+                                  .darkTheme
+                              ? Colors.white
+                              : Theme.of(context)
+                                  .hintColor
+                                  .withValues(alpha: 0.7)))
                   : widget.isPassword
                       ? IconButton(
                           icon: Icon(
                               _obscureText
                                   ? Icons.visibility_off
                                   : Icons.visibility,
-                              color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Theme.of(context).hintColor.withValues(alpha: 0.3)),
+                              color: Get.find<MarketThemeController>(
+                                          tag: 'xmarket')
+                                      .darkTheme
+                                  ? Colors.white
+                                  : Theme.of(context)
+                                      .hintColor
+                                      .withValues(alpha: 0.3)),
                           onPressed: _toggle,
                         )
                       : widget.suffixImage != null

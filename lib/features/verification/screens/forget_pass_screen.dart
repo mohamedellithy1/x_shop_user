@@ -169,7 +169,7 @@ class _ForgetPassScreenState extends State<ForgetPassScreen> {
                                   focusNode: _numberFocusNode,
                                   inputType: TextInputType.phone,
                                   inputAction: TextInputAction.done,
-                                  isPhone: true,
+                                  isPhone: false,
                                   onCountryChanged: (CountryCode countryCode) {
                                     _countryDialCode = countryCode.dialCode;
                                   },

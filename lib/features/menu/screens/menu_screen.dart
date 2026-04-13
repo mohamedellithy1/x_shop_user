@@ -770,7 +770,7 @@ class _MenuScreenState extends State<MenuScreen> {
                                           .clearSharedData();
                                       Get.find<MarketProfileController>()
                                           .setForceFullyUserEmpty();
-                                      Get.offAllNamed(RouteHelper.initial);
+                                      Get.offAllNamed(RouteHelper.getSignInRoute(RouteHelper.initial));
                                     },
                                   ),
                                   useSafeArea: false,

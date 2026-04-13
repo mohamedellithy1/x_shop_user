@@ -75,9 +75,10 @@ class XMarketHomeScreen extends StatefulWidget {
   static Future<void> loadData(bool reload) async {
     print(
         '📦 [XMarketHomeScreen] Loading all data from backend... (Reload: $reload)');
-    MarketSplashController splashController = Get.find<MarketSplashController>(tag: 'xmarket');
-    
-    if(splashController.configModel == null) {
+    MarketSplashController splashController =
+        Get.find<MarketSplashController>(tag: 'xmarket');
+
+    if (splashController.configModel == null) {
       debugPrint('📦 [XMarketHomeScreen] Config is null, fetching it now...');
       await splashController.getConfigData();
     }
@@ -86,7 +87,7 @@ class XMarketHomeScreen extends StatefulWidget {
     Get.find<CuisineController>().getCuisineList();
     Get.find<AdvertisementController>().getAdvertisementList();
     Get.find<DineInController>().getDineInRestaurantList(1, reload);
-    
+
     if (splashController.configModel?.popularRestaurant == 1) {
       Get.find<RestaurantController>()
           .getPopularRestaurantList(reload, 'all', false);
@@ -176,12 +177,17 @@ class _XMarketHomeScreenState extends State<XMarketHomeScreen> {
       await Get.find<MarketSplashController>(tag: 'xmarket').getConfigData();
     }
     await XMarketHomeScreen.loadData(true);
-    
-    Get.find<MarketSplashController>(tag: 'xmarket').getReferBottomSheetStatus();
 
-    if ((Get.find<MarketProfileController>().userInfoModel?.isValidForDiscount ?? false) &&
+    Get.find<MarketSplashController>(tag: 'xmarket')
+        .getReferBottomSheetStatus();
+
+    if ((Get.find<MarketProfileController>()
+                .userInfoModel
+                ?.isValidForDiscount ??
+            false) &&
         Get.find<MarketSplashController>(tag: 'xmarket').showReferBottomSheet) {
-      Future.delayed(const Duration(milliseconds: 500), () => _showReferBottomSheet());
+      Future.delayed(
+          const Duration(milliseconds: 500), () => _showReferBottomSheet());
     }
 
     // Initialize WebSocket connection after data is loaded
@@ -276,7 +282,8 @@ class _XMarketHomeScreenState extends State<XMarketHomeScreen> {
           tag: 'xmarket',
           builder: (splashController) {
             final configModel = splashController.configModel;
-            debugPrint('🏠 [HomeScreen] ConfigModel is: ${configModel != null ? "READY (theme: ${configModel.theme})" : "NULL"}');
+            debugPrint(
+                '🏠 [HomeScreen] ConfigModel is: ${configModel != null ? "READY (theme: ${configModel.theme})" : "NULL"}');
             return GetBuilder<LocalizationController>(
                 tag: 'xmarket',
                 builder: (localizationController) {
@@ -299,12 +306,18 @@ class _XMarketHomeScreenState extends State<XMarketHomeScreen> {
                           body: configModel == null
                               ? Builder(builder: (context) {
                                   // جلب الـ Config في الخلفية فوراً
-                                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                                    debugPrint('🔄 [HomeScreen] Config is null, fetching in background...');
-                                    Get.find<MarketSplashController>(tag: 'xmarket')
-                                        .getConfigData(source: DataSourceEnum.client);
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((_) {
+                                    debugPrint(
+                                        '🔄 [HomeScreen] Config is null, fetching in background...');
+                                    Get.find<MarketSplashController>(
+                                            tag: 'xmarket')
+                                        .getConfigData(
+                                            source: DataSourceEnum.client);
                                   });
-                                  return const Center(child: CircularProgressIndicator(color: Colors.orange));
+                                  return const Center(
+                                      child: CircularProgressIndicator(
+                                          color: Colors.orange));
                                 })
                               : Stack(
                                   children: [
@@ -530,7 +543,7 @@ class _XMarketHomeScreenState extends State<XMarketHomeScreen> {
                                                                                       child: Stack(children: [
                                                                                         Transform.translate(
                                                                                           offset: Offset(0, -(scrollingRate * 10)),
-                                                                                          child: Icon(Icons.notifications_outlined, size: 25, color: Theme.of(context).brightness == Brightness.dark ? Colors.black : Colors.white),
+                                                                                          child: Icon(Icons.notifications_outlined, size: 25, color: const Color(0xFF00ac7a)),
                                                                                         ),
                                                                                         notificationController.hasNotification
                                                                                             ? Positioned(
@@ -729,7 +742,6 @@ class _XMarketHomeScreenState extends State<XMarketHomeScreen> {
                                                                       // const TodayTrendsViewWidget(),
                                                                       // const LocationBannerViewWidget(),
                                                                       const HighlightWidgetView(),
-
                                                                       // _isLogin
                                                                       //     ? const OrderAgainViewWidget()
                                                                       // : const SizedBox(),
@@ -738,22 +750,15 @@ class _XMarketHomeScreenState extends State<XMarketHomeScreen> {
                                                                           ? const BestReviewItemViewWidget(
                                                                               isPopular: false)
                                                                           : const SizedBox(),
-                                                                      configModel
-                                                                              .dineInOrderOption!
+                                                                      (configModel.dineInOrderOption ??
+                                                                              false)
                                                                           ? DineInWidget()
                                                                           : const SizedBox(),
                                                                       const HomeCategoryViewWidget(),
-                                                                      // const CuisineViewWidget(),
                                                                       configModel.popularRestaurant ==
                                                                               1
                                                                           ? const PopularRestaurantsViewWidget()
                                                                           : const SizedBox(),
-                                                                      // const ReferBannerViewWidget(),
-                                                                      /*_isLogin
-                                                                ? const PopularRestaurantsViewWidget(
-                                                                    isRecentlyViewed:
-                                                                        true)
-                                                                : const SizedBox(),*/
                                                                       configModel.popularFood ==
                                                                               1
                                                                           ? const PopularFoodNearbyViewWidget()

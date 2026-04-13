@@ -17,11 +17,14 @@ import 'package:stackfood_multivendor/util/app_constants.dart';
 class ReverbHelper {
   static LaravelWebSocket? pusherClient;
 
+  static String? _lastToken;
+
   /// Initialize the WebSocket client using xMarket auth token.
   static Future<void> initializePusher() async {
     debugPrint('🚀 [xMarket WS] Initializing Reverb/Pusher client');
 
     final token = Get.find<MarketAuthController>().getUserToken();
+    _lastToken = token;
     debugPrint(
         '🔑 [xMarket WS] Auth token: ${token.isNotEmpty ? "✅ Available" : "❌ Missing"}');
 
@@ -145,12 +148,20 @@ class ReverbHelper {
       pusherClient = null;
     }
     _currentCustomerId = null;
+    _lastToken = null;
   }
 
   static Future<void> ensureConnected() async {
     debugPrint('🔍 [xMarket WS] Checking connection status...');
-    if (pusherClient == null || pusherClient?.socketId == null) {
-      debugPrint('🔄 [xMarket WS] Not connected, initializing...');
+    final currentToken = Get.find<MarketAuthController>().getUserToken();
+
+    if (pusherClient == null ||
+        pusherClient?.socketId == null ||
+        _lastToken != currentToken) {
+      debugPrint('🔄 [xMarket WS] Not connected or token changed, initializing...');
+      if (pusherClient != null) {
+        await pusherClient!.disconnect();
+      }
       await initializePusher();
     } else {
       debugPrint(

@@ -44,7 +44,7 @@ class MarketAuthController extends GetxController implements GetxService {
   bool _isNumberLogin = false;
   bool get isNumberLogin => _isNumberLogin;
 
-  var countryDialCode= "+880";
+  var countryDialCode= "+2";
 
   bool _isOtpViewEnable = false;
   bool get isOtpViewEnable => _isOtpViewEnable;
@@ -122,7 +122,7 @@ class MarketAuthController extends GetxController implements GetxService {
   }
 
   void initCountryCode({String? countryCode}){
-    countryDialCode = countryCode ?? CountryCode.fromCountryCode(Get.find<MarketSplashController>(tag: 'xmarket').configModel!.country ?? "BD").dialCode ?? "+880";
+    countryDialCode = countryCode ?? "+2";
   }
 
   void saveUserNumberAndPassword({required String number, required String password, required String countryCode, required String otpPoneNumber}) {

@@ -1,6 +1,6 @@
 class XmarketImages {
   static const String logo = 'assets/image/logo.png';
-  static const String splashLogo = 'assets/image/splash_logo.JPG';
+  static const String splashLogo = 'assets/image/splash_tasweqa.jpeg';
   static const String xshopLogo = 'assets/image/xshop.png';
   static const String logoName = 'assets/image/logo_name.png';
   static const String placeholder = 'assets/image/placeholder.svg';

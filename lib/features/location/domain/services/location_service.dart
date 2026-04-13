@@ -205,7 +205,7 @@ class LocationService implements LocationServiceInterface {
   void handleRoute(bool fromSignUp, String? route, bool canRoute,
       {int? restaurantId, bool isDesktop = false}) {
     if (fromSignUp) {
-      Get.offAllNamed(RouteHelper.getInterestRoute());
+      Get.offAllNamed(RouteHelper.getInitialRoute());
     } else {
       if (route != null && canRoute) {
         Get.offAllNamed(route);

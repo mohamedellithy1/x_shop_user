@@ -52,7 +52,7 @@ class MenuButton extends StatelessWidget {
                       // Get.find<MarketAuthController>().socialLogout();
                       Get.find<MarketCartController>().clearCartList();
                       Get.find<FavouriteController>().removeFavourites();
-                      Get.offAllNamed(RouteHelper.getInitialRoute());
+                      Get.offAllNamed(RouteHelper.getSignInRoute(RouteHelper.initial));
                     }),
                 useSafeArea: false);
           } else {

@@ -47,29 +47,22 @@ class ManualLoginWidget extends StatelessWidget {
       }
       return Column(mainAxisSize: MainAxisSize.min, children: [
         Align(
-          alignment: Alignment.topLeft,
+          alignment: Alignment.topRight,
           child: Text('login'.tr,
               style:
                   robotoBold.copyWith(fontSize: Dimensions.fontSizeExtraLarge)),
         ),
         const SizedBox(height: Dimensions.paddingSizeDefault),
         CustomTextFieldWidget(
-          onCountryChanged: (countryCode) =>
-              authController.countryDialCode = countryCode.dialCode!,
-          countryDialCode: authController.isNumberLogin
-              ? CountryCode.fromCountryCode(
-                      Get.find<MarketSplashController>(tag: 'xmarket')
-                          .configModel!
-                          .country!)
-                  .code
-              : null,
+          countryDialCode: null,
           labelText: 'email_or_phone'.tr,
-          hintText: 'enter_email_or_phone'.tr,
+          hintText: '',
           controller: phoneController,
           focusNode: phoneFocus,
           nextFocus: passwordFocus,
-          inputType: TextInputType.emailAddress,
-          prefixIcon: authController.isNumberLogin ? null : Icons.email,
+          isNumber: true,
+          inputType: TextInputType.phone,
+          prefixIcon: Icons.phone_android_rounded,
           onChanged: (String text) {
             final numberRegExp = RegExp(r'^[+]?[0-9]+$');
 
@@ -102,7 +95,7 @@ class ManualLoginWidget extends StatelessWidget {
         ),
         const SizedBox(height: Dimensions.paddingSizeExtraLarge),
         CustomTextFieldWidget(
-          hintText: '8_character'.tr,
+          hintText: '',
           controller: passwordController,
           focusNode: passwordFocus,
           inputAction: TextInputAction.done,
@@ -153,13 +146,23 @@ class ManualLoginWidget extends StatelessWidget {
                 Get.toNamed(RouteHelper.getForgotPassRoute());
               });
             },
-            child: Text('${'forgot_password'.tr}?',
-                style: robotoRegular.copyWith(
-                    color: Theme.of(context).disabledColor)),
+            child: Text('forgot_password'.tr,
+                style: robotoRegular.copyWith(color: Colors.black)),
           ),
         ]),
         const SizedBox(height: Dimensions.paddingSizeLarge),
-        TramsConditionsCheckBoxWidget(authController: authController),
+        InkWell(
+          onTap: () {
+            authController.guestLogin().then((value) {
+              Get.find<MarketSplashController>(tag: 'xmarket')
+                  .navigateToLocationScreen('sign-in', offNamed: true);
+            });
+          },
+          child: Text('guest_login'.tr,
+              style: robotoMedium.copyWith(
+                color: Theme.of(context).primaryColor,
+              )),
+        ),
         const SizedBox(height: Dimensions.paddingSizeExtraLarge),
         CustomButtonWidget(
           height: isDesktop ? 50 : null,
@@ -235,21 +238,14 @@ class ManualLoginWidget extends StatelessWidget {
             ),
             const SizedBox(height: Dimensions.paddingSizeDefault),
             CustomTextFieldWidget(
-              onCountryChanged: (countryCode) =>
-                  authController.countryDialCode = countryCode.dialCode!,
-              countryDialCode: authController.isNumberLogin
-                  ? CountryCode.fromCountryCode(
-                          Get.find<MarketSplashController>(tag: 'xmarket')
-                              .configModel!
-                              .country!)
-                      .code
-                  : null,
+              countryDialCode: null,
               labelText: 'email_or_phone'.tr,
               hintText: 'enter_email_or_phone'.tr,
               controller: phoneController,
               focusNode: phoneFocus,
               nextFocus: passwordFocus,
-              inputType: TextInputType.emailAddress,
+              inputType: TextInputType.phone,
+              prefixIcon: Icons.phone_android_rounded,
               onChanged: (String text) {
                 final numberRegExp = RegExp(r'^[+]?[0-9]+$');
 

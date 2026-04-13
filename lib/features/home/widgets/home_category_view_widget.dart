@@ -78,7 +78,7 @@ class HomeCategoryViewWidget extends StatelessWidget {
               CategoryModel category = categories[index];
               return InkWell(
                 onTap: () => Get.toNamed(RouteHelper.getCategoryProductRoute(
-                    category.id, category.name!)),
+                    category.id, category.name ?? '')),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [

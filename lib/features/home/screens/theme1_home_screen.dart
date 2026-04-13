@@ -121,8 +121,18 @@ class Theme1HomeScreen extends StatelessWidget {
                     child: GetBuilder<MarketNotificationController>(
                         builder: (notificationController) {
                       return Stack(children: [
-                        Icon(Icons.notifications,
-                            size: 25, color: Colors.white),
+                        Container(
+                          width: 30,
+                          height: 30,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(
+                                Dimensions.radiusExtraLarge),
+                            border: Border.all(color: Colors.white, width: 1.2),
+                          ),
+                          child: Icon(Icons.notifications,
+                              size: 25, color: const Color(0xFF00ac7a)),
+                        ),
                         notificationController.hasNotification
                             ? Positioned(
                                 top: 0,

@@ -24,7 +24,7 @@ class BannerViewWidget1 extends StatelessWidget {
       List<String?>? bannerList = homeController.bannerImageList;
       List<dynamic>? bannerDataList = homeController.bannerDataList;
 
-      return (bannerList!.isEmpty) ? const SizedBox() : Container(
+      return (bannerList == null || bannerList.isEmpty) ? const SizedBox() : Container(
         width: MediaQuery.of(context).size.width,
         height: GetPlatform.isDesktop ? 500 : MediaQuery.of(context).size.width * 0.45,
         padding: const EdgeInsets.only(top: Dimensions.paddingSizeDefault),
@@ -43,11 +43,11 @@ class BannerViewWidget1 extends StatelessWidget {
                     homeController.setCurrentIndex(index, true);
                   },
                 ),
-                itemCount: bannerList!.isEmpty ? 1 : bannerList.length,
+                itemCount: bannerList.length,
                 itemBuilder: (context, index, _) {
                   return InkWell(
                     onTap: () {
-                      if(bannerDataList![index] is Product) {
+                      if(bannerDataList != null && bannerDataList[index] is Product) {
                         Product? product = bannerDataList[index];
                         ResponsiveHelper.isMobile(context) ? showModalBottomSheet(
                           context: context, isScrollControlled: true, backgroundColor: Colors.transparent,
@@ -55,7 +55,7 @@ class BannerViewWidget1 extends StatelessWidget {
                         ) : showDialog(context: context, builder: (con) => Dialog(
                             child: ProductBottomSheetWidget(product: product)),
                         );
-                      }else if(bannerDataList[index] is Restaurant) {
+                      }else if(bannerDataList![index] is Restaurant) {
                         Restaurant restaurant = bannerDataList[index];
                         Get.toNamed(
                           RouteHelper.getRestaurantRoute(restaurant.id, slug: restaurant.slug ?? ''),

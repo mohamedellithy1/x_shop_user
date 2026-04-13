@@ -31,7 +31,7 @@ class PopularRestaurantsViewWidget extends StatelessWidget {
       List<Restaurant>? restaurantList = isRecentlyViewed
           ? restController.recentlyViewedRestaurantList
           : restController.popularRestaurantList;
-      return (restaurantList!.isEmpty)
+      return (restaurantList == null || restaurantList.isEmpty)
           ? const SizedBox()
           : Padding(
               padding: EdgeInsets.symmetric(

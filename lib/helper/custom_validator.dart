@@ -6,16 +6,20 @@ class CustomValidator {
   static Future<PhoneValid> isPhoneValid(String number) async {
     String phone = '';
     String countryCode = '';
-    bool isValid = true;
+    bool isValid = false;
     try {
       PhoneNumber phoneNumber = PhoneNumber.parse(number);
       isValid = phoneNumber.isValid(type: PhoneNumberType.mobile);
+      if(!isValid) {
+        isValid = phoneNumber.isValid();
+      }
       countryCode = phoneNumber.countryCode;
       if(isValid) {
         phone = '+${phoneNumber.countryCode}${phoneNumber.nsn}';
       }
     } catch (e) {
       debugPrint('Phone Number is not parsing: $e');
+      isValid = false;
     }
     return PhoneValid(isValid: isValid, countryCode: countryCode,  phone: phone);
   }

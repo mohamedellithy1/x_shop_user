@@ -24,6 +24,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:stackfood_multivendor/helper/permission_helper.dart';
 import 'helper/get_di.dart' as di;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_web_plugins/url_strategy.dart';
@@ -33,6 +34,10 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // طلب الأذونات فوراً عند بدء التطبيق وقبل عرض أي واجهة
+  await PermissionHelper.requestInitialPermissions();
+
   if (kIsWeb) {
     usePathUrlStrategy();
   }

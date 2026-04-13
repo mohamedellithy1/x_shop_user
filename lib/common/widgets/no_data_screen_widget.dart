@@ -47,129 +47,131 @@ class NoDataScreen extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.all(Dimensions.paddingSizeLarge),
-      child: Column(
-          mainAxisAlignment:
-              fromAddress ? MainAxisAlignment.start : MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            (fromAddress || isCenter)
-                ? const SizedBox()
-                : SizedBox(
-                    height: isEmptyTransaction || isEmptyCoupon
-                        ? height * 0.15
-                        : isDesktop
-                            ? height * 0.2
-                            : height * 0.3,
-                  ),
-            isEmptyWishlist || isEmptyTransaction
-                ? Container(
-                    height: 100,
-                    width: 100,
-                    decoration: BoxDecoration(
-                      color:
-                          Colors.orange.withValues(alpha: 0.2),
-                      shape: BoxShape.circle,
+      child: Center(
+        child: Column(
+            mainAxisAlignment:
+                fromAddress ? MainAxisAlignment.start : MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              (fromAddress || isCenter)
+                  ? const SizedBox()
+                  : SizedBox(
+                      height: isEmptyTransaction || isEmptyCoupon
+                          ? height * 0.15
+                          : isDesktop
+                              ? height * 0.2
+                              : height * 0.3,
                     ),
-                    child: Icon(
-                      isEmptyWishlist
-                          ? Icons.favorite_border_rounded
-                          : Icons.account_balance_wallet_outlined,
-                      color: Colors.orange,
-                      size: 60,
-                    ),
-                  )
-                : CustomAssetImageWidget(
-                    color: Theme.of(context).disabledColor,
-                    isEmptyAddress
-                        ? XmarketImages.emptyAddress
-                        : isEmptyCart
-                            ? XmarketImages.emptyCart
-                            : isEmptyChat
-                                ? XmarketImages.emptyChat
-                                : isEmptyOrder
-                                    ? XmarketImages.emptyOrder
-                                    : isEmptyCoupon
-                                        ? XmarketImages.emptyCoupon
-                                        : isEmptyFood
-                                            ? XmarketImages.emptyFood
-                                            : isEmptyNotification
-                                                ? XmarketImages
-                                                    .emptyNotification
-                                                : isEmptyRestaurant
-                                                    ? XmarketImages
-                                                        .emptyRestaurant
-                                                    : isEmptySearchFood
-                                                        ? XmarketImages
-                                                            .emptySearchFood
-                                                        : isEmptyTransaction
-                                                            ? XmarketImages
-                                                                .emptyTransaction
-                                                            : isEmptyWishlist
-                                                                ? XmarketImages
-                                                                    .emptyWishlist
-                                                                : XmarketImages
-                                                                    .emptyFood,
-                    width: isDesktop ? 130 : 80,
-                    height: isDesktop ? 130 : 80,
-                  ),
-            SizedBox(height: fromAddress ? 10 : 10),
-            Text(
-              title ?? '',
-              style: TextStyle(
-                color: Theme.of(context).brightness == Brightness.dark
-                    ? Colors.white
-                    : Colors.black,
-                // color: fromAddress ? Theme.of(context).textTheme.bodyMedium!.color : Theme.of(context).disabledColor,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(
-                height: fromAddress
-                    ? 10
-                    : MediaQuery.of(context).size.height * 0.03),
-            fromAddress
-                ? Text(
-                    'please_add_your_address_for_your_better_experience'.tr,
-                    style: robotoRegular.copyWith(
-                        color: Theme.of(context).disabledColor),
-                    textAlign: TextAlign.center,
-                  )
-                : const SizedBox(),
-            SizedBox(
-                height: isEmptyAddress
-                    ? 30
-                    : MediaQuery.of(context).size.height * 0.05),
-            fromAddress
-                ? InkWell(
-                    onTap: () =>
-                        Get.toNamed(RouteHelper.getAddAddressRoute(false, 0)),
-                    child: Container(
+              isEmptyWishlist || isEmptyTransaction
+                  ? Container(
+                      height: 100,
+                      width: 100,
                       decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.circular(Dimensions.radiusDefault),
-                        color: Theme.of(context).primaryColor,
+                        color:
+                            Colors.orange.withValues(alpha: 0.2),
+                        shape: BoxShape.circle,
                       ),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: Dimensions.paddingSizeDefault,
-                          horizontal: Dimensions.paddingSizeExtraOverLarge),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.add_circle_outline_sharp,
-                              size: 18.0, color: Theme.of(context).cardColor),
-                          const SizedBox(width: Dimensions.paddingSizeSmall),
-                          Text('add_address'.tr,
-                              style: robotoBold.copyWith(
-                                  color: Theme.of(context).cardColor)),
-                        ],
+                      child: Icon(
+                        isEmptyWishlist
+                            ? Icons.favorite_border_rounded
+                            : Icons.account_balance_wallet_outlined,
+                        color: Colors.orange,
+                        size: 60,
                       ),
+                    )
+                  : CustomAssetImageWidget(
+                      color: Theme.of(context).disabledColor,
+                      isEmptyAddress
+                          ? XmarketImages.emptyAddress
+                          : isEmptyCart
+                              ? XmarketImages.emptyCart
+                              : isEmptyChat
+                                  ? XmarketImages.emptyChat
+                                  : isEmptyOrder
+                                      ? XmarketImages.emptyOrder
+                                      : isEmptyCoupon
+                                          ? XmarketImages.emptyCoupon
+                                          : isEmptyFood
+                                              ? XmarketImages.emptyFood
+                                              : isEmptyNotification
+                                                  ? XmarketImages
+                                                      .emptyNotification
+                                                  : isEmptyRestaurant
+                                                      ? XmarketImages
+                                                          .emptyRestaurant
+                                                      : isEmptySearchFood
+                                                          ? XmarketImages
+                                                              .emptySearchFood
+                                                          : isEmptyTransaction
+                                                              ? XmarketImages
+                                                                  .emptyTransaction
+                                                              : isEmptyWishlist
+                                                                  ? XmarketImages
+                                                                      .emptyWishlist
+                                                                  : XmarketImages
+                                                                      .emptyFood,
+                      width: isDesktop ? 130 : 80,
+                      height: isDesktop ? 130 : 80,
                     ),
-                  )
-                : const SizedBox(),
-          ]),
+              SizedBox(height: fromAddress ? 10 : 10),
+              Text(
+                title ?? '',
+                style: TextStyle(
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white
+                      : Colors.black,
+                  // color: fromAddress ? Theme.of(context).textTheme.bodyMedium!.color : Theme.of(context).disabledColor,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(
+                  height: fromAddress
+                      ? 10
+                      : MediaQuery.of(context).size.height * 0.03),
+              fromAddress
+                  ? Text(
+                      'please_add_your_address_for_your_better_experience'.tr,
+                      style: robotoRegular.copyWith(
+                          color: Theme.of(context).disabledColor),
+                      textAlign: TextAlign.center,
+                    )
+                  : const SizedBox(),
+              SizedBox(
+                  height: isEmptyAddress
+                      ? 30
+                      : MediaQuery.of(context).size.height * 0.05),
+              fromAddress
+                  ? InkWell(
+                      onTap: () =>
+                          Get.toNamed(RouteHelper.getAddAddressRoute(false, 0)),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              BorderRadius.circular(Dimensions.radiusDefault),
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: Dimensions.paddingSizeDefault,
+                            horizontal: Dimensions.paddingSizeExtraOverLarge),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.add_circle_outline_sharp,
+                                size: 18.0, color: Theme.of(context).cardColor),
+                            const SizedBox(width: Dimensions.paddingSizeSmall),
+                            Text('add_address'.tr,
+                                style: robotoBold.copyWith(
+                                    color: Theme.of(context).cardColor)),
+                          ],
+                        ),
+                      ),
+                    )
+                  : const SizedBox(),
+            ]),
+      ),
     );
   }
 }

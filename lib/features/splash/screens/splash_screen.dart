@@ -5,7 +5,7 @@ import 'package:stackfood_multivendor/common/enums/data_source_enum.dart';
 import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
 import 'package:stackfood_multivendor/helper/route_helper.dart';
-// import 'package:stackfood_multivendor/util/images.dart';
+import 'package:stackfood_multivendor/util/xmarket_images.dart';
 
 class XMarkSplashScreen extends StatefulWidget {
   const XMarkSplashScreen({super.key});
@@ -44,7 +44,11 @@ class XMarkSplashScreenState extends State<XMarkSplashScreen> {
 
   void _navigateToHome() {
     if (Get.currentRoute != RouteHelper.getInitialRoute()) {
-      Get.offAllNamed(RouteHelper.getInitialRoute());
+      if (Get.find<MarketAuthController>().isLoggedIn()) {
+        Get.offAllNamed(RouteHelper.getInitialRoute());
+      } else {
+        Get.offAllNamed(RouteHelper.getSignInRoute(RouteHelper.splash));
+      }
     }
   }
 
@@ -52,18 +56,24 @@ class XMarkSplashScreenState extends State<XMarkSplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Image.asset(
-              'assets/image/xshop.png',
-              width: 200,
+      body: Stack(
+        children: [
+          Center(
+            child: Image.asset(
+              XmarketImages.splashLogo,
+              width: MediaQuery.of(context).size.width,
+              fit: BoxFit.cover,
             ),
-            const SizedBox(height: 20),
-            const CircularProgressIndicator(color: Colors.orange),
-          ],
-        ),
+          ),
+          // const Positioned(
+          //   bottom: 50,
+          //   left: 0,
+          //   right: 0,
+          //   child: Center(
+          //     child: CircularProgressIndicator(color: Colors.orange),
+          //   ),
+          // ),
+        ],
       ),
     );
   }

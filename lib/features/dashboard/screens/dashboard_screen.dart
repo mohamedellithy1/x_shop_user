@@ -198,11 +198,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                                   height: 65,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
-                                    gradient: const LinearGradient(
-                                      colors: [Colors.orange, Colors.red],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                    ),
+                                    color: const Color(0xFFacb566),
                                     boxShadow: [
                                       BoxShadow(
                                         offset: const Offset(0, 4),

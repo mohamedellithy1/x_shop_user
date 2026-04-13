@@ -75,12 +75,15 @@ class ValidateCheck{
   }
 
   static String getValidPhone(String number, {bool withCountryCode = false}) {
-    bool isValid = false;
     String phone = "";
 
     try{
-      PhoneNumber phoneNumber = PhoneNumber.parse(number);
-      isValid = phoneNumber.isValid(type: PhoneNumberType.mobile);
+      String numberWithPlus = number.startsWith('+') ? number : '+$number';
+      PhoneNumber phoneNumber = PhoneNumber.parse(numberWithPlus);
+      bool isValid = phoneNumber.isValid(type: PhoneNumberType.mobile);
+      if(!isValid) {
+        isValid = phoneNumber.isValid();
+      }
       if(isValid){
         phone = withCountryCode ? "+${phoneNumber.countryCode}${phoneNumber.nsn}" : phoneNumber.nsn.toString();
         if (kDebugMode) {

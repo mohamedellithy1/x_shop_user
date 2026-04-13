@@ -19,7 +19,7 @@ class InterestController extends GetxController implements GetxService {
 
   Future<void> getCategoryList(bool reload) async {
     if(Get.find<MarketCategoryController>().categoryList == null || Get.find<MarketCategoryController>().categoryList!.isEmpty) {
-      await Get.find<MarketCategoryController>().getCategoryList(false, search: '');
+      await Get.find<MarketCategoryController>().getCategoryList(true, search: '');
     }
     _categoryList = Get.find<MarketCategoryController>().categoryList;
     _interestCategorySelectedList = interestServiceInterface.processCategorySelectedList(_categoryList);

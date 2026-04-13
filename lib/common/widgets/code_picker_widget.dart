@@ -52,7 +52,7 @@ class CodePickerWidget extends StatefulWidget {
     this.emptySearchBuilder,
     this.showOnlyCountryWhenClosed = false,
     this.alignLeft = false,
-    this.showFlag = true,
+    this.showFlag = false,
     this.showFlagDialog,
     this.hideMainText = false,
     this.showFlagMain,

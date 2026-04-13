@@ -111,14 +111,10 @@ class SignUpWidgetState extends State<SignUpWidget> {
                             ),
                           )
                         : const SizedBox(),
-                    isDesktop
-                        ? Align(
-                            alignment: Alignment.topLeft,
-                            child: Text('sign_up'.tr,
-                                style: robotoBold.copyWith(
-                                    fontSize: Dimensions.fontSizeExtraLarge)),
-                          )
-                        : const SizedBox(),
+                    // Align(
+                    //   alignment: Alignment.topRight,
+                    //   child: Text('sign_up'.tr, style: robotoBold.copyWith(fontSize: Dimensions.fontSizeExtraLarge)),
+                    // ),
                     SizedBox(
                         height: isDesktop
                             ? Dimensions.paddingSizeLarge
@@ -126,7 +122,7 @@ class SignUpWidgetState extends State<SignUpWidget> {
                     Row(children: [
                       Expanded(
                         child: CustomTextFieldWidget(
-                          hintText: 'ex_jhon'.tr,
+                          hintText: '',
                           labelText: 'user_name'.tr,
                           showLabelText: true,
                           required: true,
@@ -141,17 +137,10 @@ class SignUpWidgetState extends State<SignUpWidget> {
                         ),
                       ),
                       SizedBox(
-                          width:
-                              Get.find<MarketSplashController>(tag: 'xmarket')
-                                          .configModel!
-                                          .refEarningStatus! &&
-                                      isDesktop
-                                  ? Dimensions.paddingSizeSmall
-                                  : 0),
-                      (Get.find<MarketSplashController>(tag: 'xmarket')
-                                  .configModel!
-                                  .refEarningStatus! &&
-                              isDesktop)
+                          width: isDesktop
+                              ? Dimensions.paddingSizeSmall
+                              : 0),
+                      isDesktop
                           ? Expanded(
                               child: Padding(
                                 padding: EdgeInsets.only(
@@ -159,13 +148,14 @@ class SignUpWidgetState extends State<SignUpWidget> {
                                         ? Dimensions.paddingSizeLarge + 1
                                         : 0),
                                 child: CustomTextFieldWidget(
-                                  hintText: 'refer_code'.tr,
-                                  labelText: 'refer_code'.tr,
+                                  hintText: '',
+                                  labelText:
+                                      '${'refer_code'.tr} (${'optional'.tr})',
                                   showLabelText: true,
                                   controller: _referCodeController,
                                   focusNode: _referCodeFocus,
                                   nextFocus:
-                                      isDesktop ? _emailFocus : _phoneFocus,
+                                      isDesktop ? _phoneFocus : _phoneFocus,
                                   inputType: TextInputType.text,
                                   capitalization: TextCapitalization.words,
                                   prefixImage: XmarketImages.referCode,
@@ -181,50 +171,20 @@ class SignUpWidgetState extends State<SignUpWidget> {
                             ? Dimensions.paddingSizeLarge
                             : Dimensions.paddingSizeLarge),
                     Row(children: [
-                      isDesktop
-                          ? Expanded(
-                              child: CustomTextFieldWidget(
-                                hintText: 'enter_email'.tr,
-                                labelText: 'email'.tr,
-                                showLabelText: true,
-                                required: true,
-                                controller: _emailController,
-                                focusNode: _emailFocus,
-                                nextFocus:
-                                    isDesktop ? _phoneFocus : _passwordFocus,
-                                inputType: TextInputType.emailAddress,
-                                prefixIcon: CupertinoIcons.mail_solid,
-                                validator: (value) =>
-                                    ValidateCheck.validateEmail(value),
-                              ),
-                            )
-                          : const SizedBox(),
-                      SizedBox(
-                          width: isDesktop ? Dimensions.paddingSizeSmall : 0),
+                      const SizedBox(),
+                      const SizedBox(width: 0),
                       Expanded(
                         child: CustomTextFieldWidget(
-                          hintText: 'xxx-xxx-xxxxx'.tr,
+                          hintText: '',
                           labelText: 'phone'.tr,
                           showLabelText: true,
                           required: true,
                           controller: _phoneController,
                           focusNode: _phoneFocus,
-                          nextFocus: isDesktop ? _passwordFocus : _emailFocus,
+                          nextFocus: _passwordFocus,
                           inputType: TextInputType.phone,
-                          isPhone: true,
-                          onCountryChanged: (CountryCode countryCode) {
-                            _countryDialCode = countryCode.dialCode;
-                          },
-                          countryDialCode: _countryDialCode != null
-                              ? CountryCode.fromCountryCode(
-                                      Get.find<MarketSplashController>(
-                                              tag: 'xmarket')
-                                          .configModel!
-                                          .country!)
-                                  .code
-                              : Get.find<LocalizationController>(tag: 'xmarket')
-                                  .locale
-                                  .countryCode,
+                          isPhone: false,
+                          prefixIcon: Icons.phone_android_rounded,
                           validator: (value) => ValidateCheck.validateEmptyText(
                               value, "please_enter_phone_number".tr),
                         ),
@@ -234,22 +194,7 @@ class SignUpWidgetState extends State<SignUpWidget> {
                         height: isDesktop
                             ? Dimensions.paddingSizeLarge
                             : Dimensions.paddingSizeLarge),
-                    !isDesktop
-                        ? CustomTextFieldWidget(
-                            labelText: 'email'.tr,
-                            hintText: 'enter_email'.tr,
-                            showLabelText: true,
-                            required: true,
-                            controller: _emailController,
-                            focusNode: _emailFocus,
-                            nextFocus: _passwordFocus,
-                            inputType: TextInputType.emailAddress,
-                            prefixIcon: CupertinoIcons.mail_solid,
-                            validator: (value) =>
-                                ValidateCheck.validateEmail(value),
-                            divider: false,
-                          )
-                        : const SizedBox(),
+                    const SizedBox(),
                     SizedBox(
                         height: !isDesktop ? Dimensions.paddingSizeLarge : 0),
                     Row(
@@ -258,7 +203,7 @@ class SignUpWidgetState extends State<SignUpWidget> {
                           Expanded(
                             child: Column(children: [
                               CustomTextFieldWidget(
-                                hintText: '8+characters'.tr,
+                                hintText: '',
                                 labelText: 'password'.tr,
                                 showLabelText: true,
                                 required: true,
@@ -280,7 +225,7 @@ class SignUpWidgetState extends State<SignUpWidget> {
                           isDesktop
                               ? Expanded(
                                   child: CustomTextFieldWidget(
-                                  hintText: 're_enter_your_password'.tr,
+                                  hintText: '',
                                   labelText: 'confirm_password'.tr,
                                   showLabelText: true,
                                   required: true,
@@ -317,7 +262,7 @@ class SignUpWidgetState extends State<SignUpWidget> {
                             : Dimensions.paddingSizeLarge),
                     !isDesktop
                         ? CustomTextFieldWidget(
-                            hintText: 're_enter_your_password'.tr,
+                            hintText: '',
                             labelText: 'confirm_password'.tr,
                             showLabelText: true,
                             required: true,
@@ -348,13 +293,10 @@ class SignUpWidgetState extends State<SignUpWidget> {
                         : const SizedBox(),
                     SizedBox(
                         height: !isDesktop ? Dimensions.paddingSizeLarge : 0),
-                    (Get.find<MarketSplashController>(tag: 'xmarket')
-                                .configModel!
-                                .refEarningStatus! &&
-                            !isDesktop)
+                    !isDesktop
                         ? CustomTextFieldWidget(
-                            hintText: 'refer_code'.tr,
-                            labelText: 'refer_code'.tr,
+                            hintText: '',
+                            labelText: '${'refer_code'.tr} (${'optional'.tr})',
                             showLabelText: true,
                             controller: _referCodeController,
                             focusNode: _referCodeFocus,
@@ -367,13 +309,7 @@ class SignUpWidgetState extends State<SignUpWidget> {
                           )
                         : const SizedBox(),
                     SizedBox(
-                        height:
-                            (Get.find<MarketSplashController>(tag: 'xmarket')
-                                        .configModel!
-                                        .refEarningStatus! &&
-                                    !isDesktop)
-                                ? Dimensions.paddingSizeLarge
-                                : 0),
+                        height: !isDesktop ? Dimensions.paddingSizeLarge : 0),
                     TramsConditionsCheckBoxWidget(
                         authController: authController,
                         fromSignUp: true,
@@ -466,7 +402,9 @@ class SignUpWidgetState extends State<SignUpWidget> {
   void _handleResponse(ResponseModel status, String countryCode) {
     String password = _passwordController.text.trim();
     String numberWithCountryCode = countryCode + _phoneController.text.trim();
-    String email = _emailController.text.trim();
+    String email = _emailController.text.trim().isEmpty
+        ? "${_phoneController.text.trim()}@taswiqa.com"
+        : _emailController.text.trim();
 
     if (status.isSuccess) {
       if (ResponsiveHelper.isDesktop(context)) {
@@ -543,8 +481,6 @@ class SignUpWidgetState extends State<SignUpWidget> {
     } else {
       if (status.code == 'phone') {
         FocusScope.of(context).requestFocus(_phoneFocus);
-      } else if (status.code == 'email') {
-        FocusScope.of(context).requestFocus(_emailFocus);
       } else if (status.code == 'ref_code') {
         FocusScope.of(context).requestFocus(_referCodeFocus);
       }
@@ -563,7 +499,13 @@ class SignUpWidgetState extends State<SignUpWidget> {
 
     bool isDesktop = ResponsiveHelper.isDesktop(context);
 
-    String numberWithCountryCode = countryCode + number;
+    // Ensure we add +2 before the number as requested
+    String numberWithCountryCode = number;
+    if (!number.startsWith('+')) {
+      // If user typed 012..., it becomes +2012... which is correct international format for Egypt
+      numberWithCountryCode = '+2' + number;
+    }
+
     PhoneValid phoneValid =
         await CustomValidator.isPhoneValid(numberWithCountryCode);
     numberWithCountryCode = phoneValid.phone;
@@ -584,10 +526,6 @@ class SignUpWidgetState extends State<SignUpWidget> {
     if (_formKeySignUp!.currentState!.validate()) {
       if (name.isEmpty) {
         showCustomSnackBar('please_enter_your_name'.tr);
-      } else if (email.isEmpty) {
-        showCustomSnackBar('enter_email_address'.tr);
-      } else if (!GetUtils.isEmail(email)) {
-        showCustomSnackBar('enter_a_valid_email_address'.tr);
       } else if (number.isEmpty) {
         showCustomSnackBar('enter_phone_number'.tr);
       } else if (!phoneValid.isValid) {
@@ -603,7 +541,7 @@ class SignUpWidgetState extends State<SignUpWidget> {
       } else {
         SignUpBodyModel signUpBody = SignUpBodyModel(
           name: name,
-          email: email,
+          email: "${number}@taswiqa.com",
           phone: numberWithCountryCode,
           password: password,
           refCode: referCode,

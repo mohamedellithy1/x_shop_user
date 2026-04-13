@@ -22,7 +22,10 @@ class BannerViewWidget extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return GetBuilder<HomeController>(builder: (homeController) {
-      return (homeController.bannerImageList != null && homeController.bannerImageList!.isEmpty) ? const SizedBox() : Container(
+      if (homeController.bannerImageList == null || homeController.bannerImageList!.isEmpty) {
+        return const SizedBox();
+      }
+      return Container(
         width: MediaQuery.of(context).size.width,
         height: GetPlatform.isDesktop ? 500 : 205,
         padding: const EdgeInsets.only(top: Dimensions.paddingSizeDefault),
@@ -41,7 +44,7 @@ class BannerViewWidget extends StatelessWidget {
                   homeController.setCurrentIndex(index, true);
                 },
               ),
-              itemCount: homeController.bannerImageList!.isEmpty ? 1 : homeController.bannerImageList!.length,
+              itemCount: homeController.bannerImageList!.length,
               itemBuilder: (context, index, _) {
                 return InkWell(
                   onTap: () {

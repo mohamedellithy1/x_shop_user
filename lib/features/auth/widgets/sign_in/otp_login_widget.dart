@@ -50,7 +50,7 @@ class OtpLoginWidget extends StatelessWidget {
             focusNode: phoneFocus,
             inputAction: TextInputAction.done,
             inputType: TextInputType.phone,
-            isPhone: true,
+            isPhone: false,
             onCountryChanged: onCountryChanged,
             countryDialCode: CountryCode.fromCountryCode(
                         Get.find<MarketSplashController>(tag: 'xmarket')

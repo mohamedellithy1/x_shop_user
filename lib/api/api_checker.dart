@@ -15,7 +15,7 @@ class ApiChecker {
           .clearSharedData(removeToken: false)
           .then((value) {
         Get.find<FavouriteController>().removeFavourites();
-        Get.offAllNamed(RouteHelper.getInitialRoute());
+        Get.offAllNamed(RouteHelper.getSignInRoute(RouteHelper.initial));
       });
     } else {
       showCustomSnackBar(response.statusText!);

@@ -385,6 +385,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           )
                         : NoDataScreen(
                             title: 'no_notification'.tr,
+                            isCenter: true,
                             isEmptyNotification: true)
                     : const Center(child: CircularProgressIndicator());
               })
