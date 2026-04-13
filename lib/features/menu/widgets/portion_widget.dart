@@ -10,54 +10,29 @@ class PortionWidget extends StatelessWidget {
   final String route;
   final String? suffix;
   final Function()? onTap;
-  const PortionWidget(
-      {super.key,
-      required this.icon,
-      required this.title,
-      required this.route,
-      this.hideDivider = false,
-      this.suffix,
-      this.onTap});
+  const PortionWidget({super.key, required this.icon, required this.title, required this.route, this.hideDivider = false, this.suffix, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap ?? () => Get.toNamed(route),
       child: Container(
-        padding:
-            const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeSmall),
+        padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeSmall),
         child: Column(children: [
           Row(children: [
-            Image.asset(icon,
-                height: 16,
-                width: 16,
-                color: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .color
-                    ?.withValues(alpha: 0.7)),
+            Image.asset(icon, height: 16, width: 16, color: Theme.of(context).textTheme.bodyMedium!.color?.withValues(alpha: 0.7)),
             const SizedBox(width: Dimensions.paddingSizeSmall),
-            Expanded(
-                child: Text(title,
-                    style: robotoRegular.copyWith(
-                        fontSize: Dimensions.fontSizeDefault))),
-            suffix != null
-                ? Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius:
-                          BorderRadius.circular(Dimensions.radiusDefault),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                        vertical: Dimensions.paddingSizeExtraSmall,
-                        horizontal: Dimensions.paddingSizeSmall),
-                    child: Text(suffix!,
-                        style: robotoRegular.copyWith(
-                            fontSize: Dimensions.fontSizeSmall,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.deepOrange)),
-                  )
-                : const SizedBox(),
+
+            Expanded(child: Text(title, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault))),
+
+            suffix != null ? Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.error,
+                borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+              ),
+              padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeExtraSmall, horizontal: Dimensions.paddingSizeSmall),
+              child: Text(suffix!, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Colors.white)),
+            ) : const SizedBox(),
           ]),
           hideDivider ? const SizedBox() : const Divider()
         ]),

@@ -1,8 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
-import 'package:flutter/material.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
+import 'package:flutter/material.dart';
 
 
 class MinMaxTimePickerWidget extends StatefulWidget {

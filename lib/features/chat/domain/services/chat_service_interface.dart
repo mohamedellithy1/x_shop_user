@@ -1,10 +1,10 @@
-import 'package:get/get_connect/http/src/response/response.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:stackfood_multivendor/api/api_client.dart';
 import 'package:stackfood_multivendor/features/chat/domain/models/conversation_model.dart';
 import 'package:stackfood_multivendor/features/chat/domain/models/message_model.dart';
 import 'package:stackfood_multivendor/features/chat/enums/user_type_enum.dart';
 import 'package:stackfood_multivendor/features/notification/domain/models/notification_body_model.dart';
+import 'package:get/get_connect/http/src/response/response.dart';
+import 'package:image_picker/image_picker.dart';
 
 abstract class ChatServiceInterface{
   Future<ConversationsModel?> getConversationList(int offset, String type);

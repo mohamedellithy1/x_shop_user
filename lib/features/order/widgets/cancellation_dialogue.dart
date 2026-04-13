@@ -6,7 +6,6 @@ import 'package:stackfood_multivendor/common/widgets/custom_button_widget.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
 
 class CancellationDialogue extends StatefulWidget {
   final int? orderId;
@@ -30,7 +29,6 @@ class _CancellationDialogueState extends State<CancellationDialogue> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF141313) : Theme.of(context).cardColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Dimensions.radiusDefault)),
       insetPadding: const EdgeInsets.all(30),
       clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -50,7 +48,7 @@ class _CancellationDialogueState extends State<CancellationDialogue> {
               ),
             ),
 
-            Text('select_cancellation_reasons'.tr, style: robotoSemiBold.copyWith(fontSize: Dimensions.fontSizeLarge, color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black)),
+            Text('select_cancellation_reasons'.tr, style: robotoSemiBold.copyWith(fontSize: Dimensions.fontSizeLarge)),
 
             Flexible(
               child: Padding(
@@ -67,10 +65,10 @@ class _CancellationDialogueState extends State<CancellationDialogue> {
                           margin: EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
                           padding: EdgeInsets.all(Dimensions.paddingSizeDefault),
                           decoration: BoxDecoration(
-                            color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF1b1b1b) : Theme.of(context).cardColor,
+                            color: Theme.of(context).cardColor,
                             borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                            boxShadow: orderController.orderCancelReasons![index].reason == orderController.cancelReason ? [BoxShadow(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.black.withValues(alpha: 0.2) : Colors.black12, blurRadius: 5, spreadRadius: 1)] : [],
-                            border: Border.all(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white10 : Theme.of(context).disabledColor.withValues(alpha: 0.2)),
+                            boxShadow: orderController.orderCancelReasons![index].reason == orderController.cancelReason ? [BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 1)] : [],
+                            border: Border.all(color: Theme.of(context).disabledColor.withValues(alpha: 0.2)),
                           ),
                           child: InkWell(
                             onTap: (){
@@ -82,7 +80,7 @@ class _CancellationDialogueState extends State<CancellationDialogue> {
                                     color: orderController.orderCancelReasons![index].reason == orderController.cancelReason ? Theme.of(context).primaryColor : Theme.of(context).disabledColor, size: 18),
                                 const SizedBox(width: Dimensions.paddingSizeExtraSmall),
 
-                                Flexible(child: Text(orderController.orderCancelReasons![index].reason!, style: robotoRegular.copyWith(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black), maxLines: 3, overflow: TextOverflow.ellipsis)),
+                                Flexible(child: Text(orderController.orderCancelReasons![index].reason!, style: robotoRegular, maxLines: 3, overflow: TextOverflow.ellipsis)),
                               ],
                             ),
                           ),
@@ -93,7 +91,7 @@ class _CancellationDialogueState extends State<CancellationDialogue> {
 
                   Text(
                     'comments'.tr,
-                    style: robotoBold.copyWith(fontSize: Dimensions.fontSizeLarge, color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black),
+                    style: robotoBold.copyWith(fontSize: Dimensions.fontSizeLarge),
                   ),
                   const SizedBox(height: Dimensions.paddingSizeSmall),
 
@@ -117,14 +115,13 @@ class _CancellationDialogueState extends State<CancellationDialogue> {
               padding: EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault, vertical: Dimensions.paddingSizeDefault),
               child: !orderController.isCancelLoading ? Row(children: [
                 Expanded(child: CustomButtonWidget(
-                  buttonText: 'cancel'.tr, color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white10 : Theme.of(context).disabledColor.withValues(alpha: 0.2),
-                  textColor: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Theme.of(context).textTheme.bodyLarge?.color,
+                  buttonText: 'cancel'.tr, color: Theme.of(context).disabledColor.withValues(alpha: 0.2),
+                  textColor: Theme.of(context).textTheme.bodyLarge?.color,
                   onPressed: () => Get.back(),
                 )),
                 const SizedBox(width: Dimensions.paddingSizeSmall),
 
                 Expanded(child: CustomButtonWidget(
-                  color: Colors.orange,
                   buttonText: 'submit'.tr,
                   onPressed: (){
                     if((orderController.cancelReason != '' && orderController.cancelReason != null) || commentController.text.isNotEmpty){

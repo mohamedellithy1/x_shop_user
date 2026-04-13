@@ -1,13 +1,13 @@
-import 'package:get/get.dart';
 import 'package:stackfood_multivendor/common/enums/data_source_enum.dart';
+import 'package:stackfood_multivendor/features/checkout/controllers/checkout_controller.dart';
 import 'package:stackfood_multivendor/common/models/response_model.dart';
 import 'package:stackfood_multivendor/features/address/domain/models/address_model.dart';
 import 'package:stackfood_multivendor/features/address/domain/services/address_service_interface.dart';
-import 'package:stackfood_multivendor/features/checkout/controllers/checkout_controller.dart';
+import 'package:get/get.dart';
 
-class MarketAddressController extends GetxController implements GetxService {
+class AddressController extends GetxController implements GetxService {
   final AddressServiceInterface addressServiceInterface;
-  MarketAddressController({required this.addressServiceInterface});
+  AddressController({required this.addressServiceInterface});
 
   List<AddressModel>? _addressList;
   late List<AddressModel> _allAddressList;
@@ -21,30 +21,25 @@ class MarketAddressController extends GetxController implements GetxService {
     if (responseModel.isSuccess) {
       _addressList!.removeAt(index);
     }
-    update(['xmarket']);
+    update();
     return responseModel;
   }
 
-  Future<void> getAddressList(
-      {bool canInsertAddress = false,
-      DataSourceEnum dataSource = DataSourceEnum.local}) async {
+  Future<void> getAddressList({bool canInsertAddress = false, DataSourceEnum dataSource = DataSourceEnum.local}) async {
     _addressList = null;
     List<AddressModel>? addressList;
 
-    if (dataSource == DataSourceEnum.local) {
-      addressList =
-          await addressServiceInterface.getList(source: DataSourceEnum.local);
+    if(dataSource == DataSourceEnum.local){
+      addressList = await addressServiceInterface.getList(source: DataSourceEnum.local);
       _prepareAddressList(addressList, canInsertAddress: canInsertAddress);
       getAddressList(dataSource: DataSourceEnum.client);
-    } else {
-      addressList =
-          await addressServiceInterface.getList(source: DataSourceEnum.client);
+    }else{
+      addressList = await addressServiceInterface.getList(source: DataSourceEnum.client);
       _prepareAddressList(addressList, canInsertAddress: canInsertAddress);
     }
   }
 
-  void _prepareAddressList(List<AddressModel>? addressList,
-      {bool canInsertAddress = false}) {
+  void _prepareAddressList(List<AddressModel>? addressList, {bool canInsertAddress = false}) {
     if (addressList != null) {
       _addressList = [];
       _allAddressList = [];
@@ -54,17 +49,15 @@ class MarketAddressController extends GetxController implements GetxService {
         Get.find<CheckoutController>().insertAddresses(null);
       }
     }
-    update(['xmarket']);
+    update();
   }
 
-  Future<ResponseModel> addAddress(AddressModel addressModel, bool fromCheckout,
-      int? restaurantZoneId) async {
+  Future<ResponseModel> addAddress(AddressModel addressModel, bool fromCheckout, int? restaurantZoneId) async {
     _isLoading = true;
-    update(['xmarket']);
-    ResponseModel responseModel = await addressServiceInterface.add(
-        addressModel, fromCheckout, restaurantZoneId);
+    update();
+    ResponseModel responseModel = await addressServiceInterface.add(addressModel, fromCheckout, restaurantZoneId);
     _isLoading = false;
-    update(['xmarket']);
+    update();
     return responseModel;
   }
 
@@ -75,23 +68,20 @@ class MarketAddressController extends GetxController implements GetxService {
 
   void filterAddresses(String queryText) {
     if (_addressList != null) {
-      _addressList =
-          addressServiceInterface.filterAddresses(_addressList!, queryText);
-      update(['xmarket']);
+      _addressList = addressServiceInterface.filterAddresses(_addressList!, queryText);
+      update();
     }
   }
 
-  Future<ResponseModel> updateAddress(
-      AddressModel addressModel, int? addressId) async {
+  Future<ResponseModel> updateAddress(AddressModel addressModel, int? addressId) async {
     _isLoading = true;
-    update(['xmarket']);
-    ResponseModel responseModel =
-        await addressServiceInterface.update(addressModel.toJson(), addressId!);
+    update();
+    ResponseModel responseModel = await addressServiceInterface.update(addressModel.toJson(), addressId!);
     if (responseModel.isSuccess) {
-      getAddressList();
+      Get.find<AddressController>().getAddressList();
     }
     _isLoading = false;
-    update(['xmarket']);
+    update();
     return responseModel;
   }
 }

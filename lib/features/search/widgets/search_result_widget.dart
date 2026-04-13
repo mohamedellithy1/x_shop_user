@@ -1,7 +1,5 @@
-import 'package:stackfood_multivendor/features/search/controllers/search_controller.dart'
-    as search;
+import 'package:stackfood_multivendor/features/search/controllers/search_controller.dart' as search;
 import 'package:stackfood_multivendor/features/search/widgets/item_view_widget.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
@@ -16,8 +14,7 @@ class SearchResultWidget extends StatefulWidget {
   SearchResultWidgetState createState() => SearchResultWidgetState();
 }
 
-class SearchResultWidgetState extends State<SearchResultWidget>
-    with TickerProviderStateMixin {
+class SearchResultWidgetState extends State<SearchResultWidget> with TickerProviderStateMixin {
   TabController? _tabController;
 
   ScrollController scrollController = ScrollController();
@@ -27,21 +24,17 @@ class SearchResultWidgetState extends State<SearchResultWidget>
   void initState() {
     super.initState();
 
-    search.SearchController searchController =
-        Get.find<search.SearchController>();
+    search.SearchController searchController = Get.find<search.SearchController>();
 
     _tabController = TabController(length: 2, initialIndex: 0, vsync: this);
 
     scrollController.addListener(() {
-      if (scrollController.position.pixels ==
-              scrollController.position.maxScrollExtent &&
-          searchController.totalSize != null &&
-          searchController.pageOffset != null) {
+      if (scrollController.position.pixels == scrollController.position.maxScrollExtent
+          && searchController.totalSize != null && searchController.pageOffset != null) {
         int totalPage = (searchController.totalSize! / 10).ceil();
-        if (searchController.pageOffset! < totalPage) {
-          searchController.searchData(
-              searchController.searchText, searchController.pageOffset! + 1);
-          searchController.pageOffset = searchController.pageOffset! + 1;
+        if(searchController.pageOffset! < totalPage){
+          searchController.searchData(searchController.searchText, searchController.pageOffset!+1);
+          searchController.pageOffset = searchController.pageOffset!+1;
         }
       }
     });
@@ -49,11 +42,8 @@ class SearchResultWidgetState extends State<SearchResultWidget>
 
   Future<void> checkEmpty() {
     return Future.delayed(const Duration(milliseconds: 600), () {
-      search.SearchController searchController =
-          Get.find<search.SearchController>();
-      if (searchController.searchProductList != null &&
-          searchController.searchProductList!.isEmpty &&
-          isFirstTimeSearch) {
+      search.SearchController searchController = Get.find<search.SearchController>();
+      if(searchController.searchProductList != null && searchController.searchProductList!.isEmpty && isFirstTimeSearch) {
         searchController.setRestaurant(true, willUpdate: false);
         searchController.searchData(widget.searchText, 1, willUpdate: false);
         _tabController!.animateTo(1);
@@ -65,98 +55,70 @@ class SearchResultWidgetState extends State<SearchResultWidget>
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+
       GetBuilder<search.SearchController>(builder: (searchController) {
         bool isNull = true;
         int length = 0;
-        if (searchController.isRestaurant) {
+        if(searchController.isRestaurant) {
           isNull = searchController.searchRestList == null;
-          if (!isNull) {
+          if(!isNull) {
             length = searchController.searchRestList!.length;
           }
-        } else {
+        }else {
           isNull = searchController.searchProductList == null;
-          if (!isNull) {
-            length = searchController.totalSize ?? 0;
+          if(!isNull) {
+            length = searchController.totalSize??0;
           }
         }
 
         checkEmpty();
 
-        return isNull
-            ? const SizedBox()
-            : Center(
-                child: SizedBox(
-                    width: Dimensions.webMaxWidth,
-                    child: Padding(
-                      padding:
-                          const EdgeInsets.all(Dimensions.paddingSizeSmall),
-                      child: Row(children: [
-                        Text(
-                          length.toString(),
-                          style: robotoBold.copyWith(
-                              color: Colors.orange,
-                              fontSize: Dimensions.fontSizeSmall),
-                        ),
-                        const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                        Text(
-                          'results_found'.tr,
-                          style: robotoRegular.copyWith(
-                              color: Get.find<MarketThemeController>(
-                                          tag: 'xmarket')
-                                      .darkTheme
-                                  ? Colors.white
-                                  : Colors.black,
-                              fontSize: Dimensions.fontSizeSmall),
-                        ),
-                        const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                        Flexible(
-                          child: Text(
-                            widget.searchText,
-                            style: robotoBold.copyWith(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .color,
-                                fontSize: Dimensions.fontSizeSmall),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ]),
-                    )));
+        return isNull ? const SizedBox() : Center(child: SizedBox(width: Dimensions.webMaxWidth, child: Padding(
+          padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
+          child: Row(children: [
+            Text(
+              length.toString(),
+              style: robotoBold.copyWith(color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeSmall),
+            ),
+            const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+            Text(
+              'results_found'.tr,
+              style: robotoRegular.copyWith(color: Theme.of(context).disabledColor, fontSize: Dimensions.fontSizeSmall),
+            ),
+            const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+
+            Flexible(
+              child: Text(
+                widget.searchText,
+                style: robotoBold.copyWith(color: Theme.of(context).textTheme.bodyLarge!.color, fontSize: Dimensions.fontSizeSmall),
+                maxLines: 1, overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ]),
+        )));
       }),
-      Center(
-          child: Container(
+
+      Center(child: Container(
         width: Dimensions.webMaxWidth,
         color: Theme.of(context).cardColor,
         child: Align(
-          alignment: ResponsiveHelper.isDesktop(context)
-              ? Alignment.centerLeft
-              : Alignment.center,
+          alignment: ResponsiveHelper.isDesktop(context) ? Alignment.centerLeft : Alignment.center,
           child: Container(
-            width: ResponsiveHelper.isDesktop(context)
-                ? 250
-                : Dimensions.webMaxWidth,
-            color: ResponsiveHelper.isDesktop(context)
-                ? Colors.transparent
-                : Theme.of(context).cardColor,
+            width: ResponsiveHelper.isDesktop(context) ? 250 : Dimensions.webMaxWidth,
+            color: ResponsiveHelper.isDesktop(context) ? Colors.transparent : Theme.of(context).cardColor,
             child: TabBar(
               controller: _tabController,
-              indicatorColor: Colors.orange,
+              indicatorColor: Theme.of(context).primaryColor,
               indicatorWeight: 3,
-              labelColor: Colors.orange,
+              labelColor: Theme.of(context).primaryColor,
               unselectedLabelColor: Theme.of(context).disabledColor,
-              unselectedLabelStyle: robotoRegular.copyWith(
-                  color: Theme.of(context).disabledColor,
-                  fontSize: Dimensions.fontSizeSmall),
-              labelStyle: robotoBold.copyWith(
-                  fontSize: Dimensions.fontSizeSmall,
-                  color: Colors.orange),
+              unselectedLabelStyle: robotoRegular.copyWith(color: Theme.of(context).disabledColor, fontSize: Dimensions.fontSizeSmall),
+              labelStyle: robotoBold.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor),
               onTap: (int index) {
                 Get.find<search.SearchController>().setRestaurant(index == 1);
-                Get.find<search.SearchController>()
-                    .searchData(widget.searchText, 1);
+                Get.find<search.SearchController>().searchData(widget.searchText, 1);
               },
+
               tabs: [
                 Tab(text: 'food'.tr),
                 Tab(text: 'restaurants'.tr),
@@ -165,17 +127,16 @@ class SearchResultWidgetState extends State<SearchResultWidget>
           ),
         ),
       )),
-      Expanded(
-          child: TabBarView(
+
+      Expanded(child: TabBarView(
         controller: _tabController,
         physics: NeverScrollableScrollPhysics(),
         children: [
-          ItemViewWidget(
-              isRestaurant: false, scrollController: scrollController),
-          ItemViewWidget(
-              isRestaurant: true, scrollController: scrollController),
+          ItemViewWidget(isRestaurant: false, scrollController: scrollController),
+          ItemViewWidget(isRestaurant: true, scrollController: scrollController),
         ],
       )),
+
     ]);
   }
 }

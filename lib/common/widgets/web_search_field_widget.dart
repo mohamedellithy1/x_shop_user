@@ -1,7 +1,7 @@
 
-import 'package:flutter/material.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
+import 'package:flutter/material.dart';
 
 class WebSearchFieldWidget extends StatefulWidget {
   final TextEditingController controller;

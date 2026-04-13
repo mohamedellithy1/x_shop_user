@@ -111,7 +111,7 @@ class RestaurantRepository implements RestaurantRepositoryInterface {
         if(cacheResponseData != null) {
           restaurantModel = RestaurantModel.fromJson(jsonDecode(cacheResponseData));
         }
-          }
+    }
     return restaurantModel;
   }
 
@@ -151,7 +151,7 @@ class RestaurantRepository implements RestaurantRepositoryInterface {
             latestRestaurantList!.add(Restaurant.fromJson(restaurant));
           });
         }
-          }
+    }
     return latestRestaurantList;
   }
 
@@ -177,7 +177,7 @@ class RestaurantRepository implements RestaurantRepositoryInterface {
             popularRestaurantList!.add(Restaurant.fromJson(restaurant));
           });
         }
-          }
+    }
 
     return popularRestaurantList;
   }
@@ -204,7 +204,7 @@ class RestaurantRepository implements RestaurantRepositoryInterface {
             recentlyViewedRestaurantList!.add(Restaurant.fromJson(restaurant));
           });
         }
-          }
+    }
     return recentlyViewedRestaurantList;
   }
 
@@ -230,7 +230,7 @@ class RestaurantRepository implements RestaurantRepositoryInterface {
             orderAgainRestaurantList!.add(Restaurant.fromJson(restaurant));
           });
         }
-          }
+    }
     return orderAgainRestaurantList;
   }
 

@@ -1,3 +1,4 @@
+
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -11,14 +12,13 @@ import 'package:stackfood_multivendor/features/chat/controllers/chat_controller.
 import 'package:stackfood_multivendor/features/chat/domain/models/message_model.dart';
 import 'package:stackfood_multivendor/features/chat/screens/preview_screen.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
+import 'package:stackfood_multivendor/util/images.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
-import 'package:stackfood_multivendor/util/xmarket_images.dart';
 
 class PdfViewWidget extends StatefulWidget {
   final Message currentMessage;
   final bool isRightMessage;
-  const PdfViewWidget(
-      {super.key, required this.currentMessage, required this.isRightMessage});
+  const PdfViewWidget({super.key, required this.currentMessage, required this.isRightMessage});
 
   @override
   State<PdfViewWidget> createState() => _PdfViewWidgetState();
@@ -35,10 +35,9 @@ class _PdfViewWidgetState extends State<PdfViewWidget> {
   }
 
   Future<void> generateThumbnailList() async {
-    if (widget.currentMessage.filesFullUrl != null &&
-        widget.currentMessage.filesFullUrl!.isNotEmpty) {
+    if(widget.currentMessage.filesFullUrl != null && widget.currentMessage.filesFullUrl!.isNotEmpty) {
       for (var url in widget.currentMessage.filesFullUrl!) {
-        if (Get.find<ChatController>().isVideoExtension(url)) {
+        if(Get.find<ChatController>().isVideoExtension(url)) {
           thumbnailList.add(await _thumbnail(url));
         } else {
           thumbnailList.add(null);
@@ -64,80 +63,68 @@ class _PdfViewWidgetState extends State<PdfViewWidget> {
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemCount: widget.currentMessage.filesFullUrl!.length,
-        itemBuilder: (context, index) {
+        itemBuilder: (context, index){
           String url = widget.currentMessage.filesFullUrl![index];
 
-          if (Get.find<ChatController>().isVideoExtension(url) &&
-              thumbnailList.isNotEmpty) {
+          if(Get.find<ChatController>().isVideoExtension(url) && thumbnailList.isNotEmpty) {
             return CustomInkWellWidget(
-              onTap: () =>
-                  Get.to(PreviewScreen(images: [url], selectedIndex: index)),
+              onTap: ()=> Get.to(PreviewScreen(images: [url], selectedIndex: index)),
               padding: EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
               child: Stack(children: [
                 thumbnailView(index),
-                if (!GetPlatform.isWeb)
-                  Positioned.fill(
-                      child: Center(
-                          child: Icon(Icons.play_circle, color: Colors.white))),
+
+                if(!GetPlatform.isWeb)
+                  Positioned.fill(child: Center(child: Icon(Icons.play_circle, color: Colors.white))),
+
               ]),
             );
           }
 
-          return Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-              border: Border.all(
-                  color: Theme.of(context).disabledColor, width: 0.3),
-              color: Theme.of(context).cardColor,
+      return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+          border: Border.all(color: Theme.of(context).disabledColor, width: 0.3),
+          color: Theme.of(context).cardColor,
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeExtraSmall, vertical: Dimensions.paddingSizeSmall),
+        margin: const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
+        child: InkWell(
+          onTap: (){
+            Get.find<ChatController>().downloadPdf(url);
+          },
+          child: Center(
+            child: Directionality(
+              textDirection: TextDirection.ltr,
+              child: Row(crossAxisAlignment: CrossAxisAlignment.center,children: [
+                const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+
+                Image.asset(Images.fileIcon,height: 30, width: 30),
+                const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+
+                Expanded(child: Text(
+                  '${'attachment'.tr} ${index + 1}.pdf',
+                  maxLines: 3, overflow: TextOverflow.ellipsis,
+                  style: robotoBold.copyWith(fontSize: Dimensions.fontSizeDefault),
+                )),
+
+
+              ]),
             ),
-            padding: const EdgeInsets.symmetric(
-                horizontal: Dimensions.paddingSizeExtraSmall,
-                vertical: Dimensions.paddingSizeSmall),
-            margin: const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
-            child: InkWell(
-              onTap: () {
-                Get.find<ChatController>().downloadPdf(url);
-              },
-              child: Center(
-                child: Directionality(
-                  textDirection: TextDirection.ltr,
-                  child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                        Image.asset(XmarketImages.fileIcon,
-                            height: 30, width: 30),
-                        const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                        Expanded(
-                            child: Text(
-                          '${'attachment'.tr} ${index + 1}.pdf',
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                          style: robotoBold.copyWith(
-                              fontSize: Dimensions.fontSizeDefault),
-                        )),
-                      ]),
-                ),
-              ),
-            ),
-          );
-        });
+          ),
+        ),
+      );
+    });
   }
 
   Widget thumbnailView(int index) {
-    return kIsWeb
+    return  kIsWeb
         ? ClipRRect(
-            borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-            child: Image.asset(XmarketImages.videoPlaceholder,
-                fit: BoxFit.cover, height: 100, width: double.infinity),
-          )
-        : thumbnailList.isNotEmpty &&
-                thumbnailList.length > index &&
-                thumbnailList[index] != null
-            ? ClipRRect(
-                borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
-                child: Image.file(File(thumbnailList[index]!.path)),
-              )
-            : const SizedBox();
+      borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+      child: Image.asset(Images.videoPlaceholder, fit: BoxFit.cover, height: 100, width: double.infinity),
+    )
+        : thumbnailList.isNotEmpty && thumbnailList.length > index && thumbnailList[index] != null ? ClipRRect(
+      borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
+      child: Image.file(File(thumbnailList[index]!.path)),
+    ) : const SizedBox();
   }
 }

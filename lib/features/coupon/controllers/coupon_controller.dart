@@ -7,9 +7,9 @@ import 'package:stackfood_multivendor/helper/price_converter.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
 import 'package:get/get.dart';
 
-class MarketCouponController extends GetxController implements GetxService {
+class CouponController extends GetxController implements GetxService {
   final CouponServiceInterface couponServiceInterface;
-  MarketCouponController({required this.couponServiceInterface});
+  CouponController({required this.couponServiceInterface});
 
   List<CouponModel>? _couponList;
   List<CouponModel>? get couponList => _couponList;
@@ -36,10 +36,10 @@ class MarketCouponController extends GetxController implements GetxService {
   int get currentIndex => _currentIndex;
 
   Future<void> getCouponList({int? restaurantId, int? orderRestaurantId, double? orderAmount}) async {
-    if(Get.find<MarketProfileController>().userInfoModel == null){
-      await Get.find<MarketProfileController>().getUserInfo();
+    if(Get.find<ProfileController>().userInfoModel == null){
+      await Get.find<ProfileController>().getUserInfo();
     }
-    _customerCouponModel = await couponServiceInterface.getCouponList(customerId: Get.find<MarketProfileController>().userInfoModel!.id, restaurantId: restaurantId, orderRestaurantId: orderRestaurantId, orderAmount: orderAmount);
+    _customerCouponModel = await couponServiceInterface.getCouponList(customerId: Get.find<ProfileController>().userInfoModel!.id, restaurantId: restaurantId, orderRestaurantId: orderRestaurantId, orderAmount: orderAmount);
     update();
   }
 

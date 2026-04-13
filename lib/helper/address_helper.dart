@@ -11,27 +11,23 @@ class AddressHelper {
   static Future<bool> saveAddressInSharedPref(AddressModel address) async {
     SharedPreferences sharedPreferences = Get.find<SharedPreferences>();
     String userAddress = jsonEncode(address.toJson());
-    Get.find<ApiClient>(tag: 'xmarket').updateHeader(
+    Get.find<ApiClient>().updateHeader(
       sharedPreferences.getString(AppConstants.token),
       address.zoneIds,
       sharedPreferences.getString(AppConstants.languageCode),
       address.latitude,
       address.longitude,
     );
-    return await sharedPreferences.setString(
-        AppConstants.userAddress, userAddress);
+    return await sharedPreferences.setString(AppConstants.userAddress, userAddress);
   }
 
   static AddressModel? getAddressFromSharedPref() {
     SharedPreferences sharedPreferences = Get.find<SharedPreferences>();
     AddressModel? addressModel;
-    String? addressJson = sharedPreferences.getString(AppConstants.userAddress);
-    if (addressJson != null) {
-      try {
-        addressModel = AddressModel.fromJson(jsonDecode(addressJson));
-      } catch (e) {
-        debugPrint('Catch exception : $e');
-      }
+    try {
+      addressModel = AddressModel.fromJson(jsonDecode(sharedPreferences.getString(AppConstants.userAddress)!));
+    } catch (e) {
+      debugPrint('Catch exception : $e');
     }
     return addressModel;
   }
@@ -41,4 +37,5 @@ class AddressHelper {
     sharedPreferences.remove(AppConstants.userAddress);
     return true;
   }
+
 }

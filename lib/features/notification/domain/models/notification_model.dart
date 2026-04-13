@@ -57,7 +57,7 @@ class Data {
     type = json['type'];
     orderId = json['order_id'];
     orderStatus = json['order_status'];
-    amount = json['amount']?.toString();
+    amount = json['amount'];
   }
 
   Map<String, dynamic> toJson() {

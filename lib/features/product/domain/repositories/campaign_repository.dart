@@ -76,7 +76,7 @@ class CampaignRepository implements CampaignRepositoryInterface {
             itemCampaignList!.add(Product.fromJson(campaign));
           });
         }
-          }
+    }
     return itemCampaignList;
   }
 

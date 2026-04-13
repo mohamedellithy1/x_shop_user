@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stackfood_multivendor/common/models/restaurant_model.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_button_widget.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
 import 'package:stackfood_multivendor/features/checkout/controllers/checkout_controller.dart';
 import 'package:stackfood_multivendor/features/checkout/domain/models/date_month_body_model.dart';
-import 'package:stackfood_multivendor/common/models/restaurant_model.dart';
 import 'package:stackfood_multivendor/features/restaurant/controllers/restaurant_controller.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
 import 'package:stackfood_multivendor/helper/date_converter.dart';
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
@@ -18,31 +17,28 @@ class DineInDateSelectBottomSheet extends StatefulWidget {
   const DineInDateSelectBottomSheet({super.key, required this.restaurant});
 
   @override
-  State<DineInDateSelectBottomSheet> createState() =>
-      _DineInDateSelectBottomSheetState();
+  State<DineInDateSelectBottomSheet> createState() => _DineInDateSelectBottomSheetState();
 }
 
-class _DineInDateSelectBottomSheetState
-    extends State<DineInDateSelectBottomSheet> {
+class _DineInDateSelectBottomSheetState extends State<DineInDateSelectBottomSheet> {
+
   @override
   Widget build(BuildContext context) {
+
     return GetBuilder<CheckoutController>(builder: (checkoutController) {
       return Container(
         width: ResponsiveHelper.isDesktop(context) ? 500 : context.width,
         padding: const EdgeInsets.all(Dimensions.paddingSizeLarge),
         decoration: BoxDecoration(
-          color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF141313) : Theme.of(context).cardColor,
-          borderRadius: ResponsiveHelper.isDesktop(context)
-              ? BorderRadius.circular(Dimensions.radiusSmall)
-              : const BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
+          color: Theme.of(context).cardColor,
+          borderRadius: ResponsiveHelper.isDesktop(context) ? BorderRadius.circular(Dimensions.radiusSmall) : const BorderRadius.only(
+            topLeft: Radius.circular(20), topRight: Radius.circular(20),
+          ),
         ),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
+
           Container(
-            height: 5,
-            width: 35,
+            height: 5, width: 35,
             decoration: BoxDecoration(
               color: Theme.of(context).disabledColor.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(5),
@@ -50,58 +46,35 @@ class _DineInDateSelectBottomSheetState
           ),
           SizedBox(height: Dimensions.paddingSizeLarge),
 
-          Text('select_your_date'.tr,
-              style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge, color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black),
-              textAlign: TextAlign.center),
+          Text('select_your_date'.tr, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge), textAlign: TextAlign.center),
           SizedBox(height: Dimensions.paddingSizeLarge),
 
           SfDateRangePicker(
-              backgroundColor: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF141313) : Theme.of(context).cardColor,
-              headerStyle: DateRangePickerHeaderStyle(
-                textAlign: TextAlign.start,
-                textStyle: robotoMedium.copyWith(
-                    color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black, fontSize: Dimensions.fontSizeLarge),
-                backgroundColor: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF141313) : Theme.of(context).cardColor,
-              ),
-              monthCellStyle: DateRangePickerMonthCellStyle(
-                textStyle: robotoRegular.copyWith(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black),
-                todayTextStyle: robotoRegular.copyWith(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black),
-              ),
-              yearCellStyle: DateRangePickerYearCellStyle(
-                textStyle: robotoRegular.copyWith(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black),
-                todayTextStyle: robotoRegular.copyWith(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black),
-              ),
-              selectionColor: Theme.of(context).primaryColor,
-              selectionTextStyle: robotoRegular.copyWith(color: Colors.white),
-              todayHighlightColor: Theme.of(context).primaryColor,
-              monthViewSettings: DateRangePickerMonthViewSettings(
-                viewHeaderStyle: DateRangePickerViewHeaderStyle(
-                  textStyle: robotoRegular.copyWith(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white60 : Colors.black),
-                ),
-              ),
-              initialSelectedDate: checkoutController.selectedDineInDate,
-              selectionShape: DateRangePickerSelectionShape.circle,
-              onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
-                //when we select date then it will show selected date and today and tomorrow button will be enable and disable according to selected date
-                DateTime selectedDate =
-                    DateConverter.dateStringToDate(args.value.toString());
+            backgroundColor: Theme.of(context).cardColor,
+            headerStyle: DateRangePickerHeaderStyle(
+              textAlign: TextAlign.start,
+              textStyle: robotoRegular.copyWith(color: Theme.of(context).disabledColor),
+              backgroundColor: Theme.of(context).cardColor,
+            ),
 
-                bool isClose = checkRestaurantClose(selectedDate);
-                if (isClose) {
-                  showCustomSnackBar(
-                      'restaurant_is_close_on_your_selected_date'.tr);
-                } else {
-                  checkoutController.setSelectedDineInDate(selectedDate);
-                }
-              },
+            initialSelectedDate: checkoutController.selectedDineInDate,
+            selectionShape: DateRangePickerSelectionShape.circle,
+            onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
+              //when we select date then it will show selected date and today and tomorrow button will be enable and disable according to selected date
+              DateTime selectedDate = DateConverter.dateStringToDate(args.value.toString());
+
+              bool isClose = checkRestaurantClose(selectedDate);
+              if(isClose) {
+                showCustomSnackBar('restaurant_is_close_on_your_selected_date'.tr);
+              } else {
+                checkoutController.setSelectedDineInDate(selectedDate);
+              }
+            },
               showNavigationArrow: true,
               selectableDayPredicate: (DateTime val) {
-                return _canSelectDate(
-                    duration: widget.restaurant.dineInBookingDuration!,
-                    timeFormat:
-                        widget.restaurant.dineInBookingDurationTimeFormat,
-                    value: val);
-              }),
+              return _canSelectDate(duration: widget.restaurant.dineInBookingDuration!, timeFormat: widget.restaurant.dineInBookingDurationTimeFormat, value: val);
+            }
+          ),
           //SizedBox(height: Dimensions.paddingSizeLarge),
 
           // Row(children: [
@@ -144,13 +117,12 @@ class _DineInDateSelectBottomSheetState
           SizedBox(height: Dimensions.paddingSizeLarge),
 
           CustomButtonWidget(
-            textColor: Colors.white,
             buttonText: 'done'.tr,
-            color: Colors.orange,
-            onPressed: () {
+            onPressed: (){
               Get.back();
             },
           ),
+
         ]),
       );
     });
@@ -158,37 +130,27 @@ class _DineInDateSelectBottomSheetState
 }
 
 bool checkRestaurantClose(DateTime selectCustomDate) {
+
   Get.find<CheckoutController>().updateDateSlot(selectCustomDate, true);
 
   bool isClose = Get.find<RestaurantController>().isRestaurantClosed(
-    selectCustomDate,
-    Get.find<CheckoutController>().restaurant!.active!,
+    selectCustomDate, Get.find<CheckoutController>().restaurant!.active!,
     Get.find<CheckoutController>().restaurant!.schedules,
   );
   return isClose;
 }
 
-bool _canSelectDate(
-    {required int duration,
-    required String? timeFormat,
-    required DateTime value}) {
+bool _canSelectDate({required int duration, required String? timeFormat, required DateTime value}) {
   List<DateMonthBodyModel> date = [];
-  for (int i = 0; i < 100; i++) {
-    date.add(DateMonthBodyModel(
-        date: DateTime.now().add(Duration(days: i)).day,
-        month: DateTime.now().add(Duration(days: i)).month));
+  for(int i=0; i<100; i++){
+    date.add(DateMonthBodyModel(date: DateTime.now().add(Duration(days: i)).day, month: DateTime.now().add(Duration(days: i)).month));
   }
   bool status = false;
-  for (int i = 0; i < date.length; i++) {
-    if (i > (duration - 1) &&
-        timeFormat == 'day' &&
-        date[i].month == value.month &&
-        date[i].date == value.day) {
+  for(int i=0; i<date.length; i++){
+    if(i > (duration-1) && timeFormat == 'day' && date[i].month == value.month && date[i].date == value.day){
       status = true;
       break;
-    } else if (timeFormat != 'day' &&
-        date[i].month == value.month &&
-        date[i].date == value.day) {
+    } else if(timeFormat != 'day' && date[i].month == value.month && date[i].date == value.day) {
       status = true;
       break;
     } else {

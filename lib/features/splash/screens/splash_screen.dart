@@ -1,70 +1,110 @@
 import 'dart:async';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:stackfood_multivendor/common/widgets/no_internet_screen_widget.dart';
+import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
+import 'package:stackfood_multivendor/features/cart/controllers/cart_controller.dart';
+import 'package:stackfood_multivendor/features/notification/domain/models/notification_body_model.dart';
+import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
+import 'package:stackfood_multivendor/features/splash/domain/models/deep_link_body.dart';
+import 'package:stackfood_multivendor/helper/address_helper.dart';
+import 'package:stackfood_multivendor/util/dimensions.dart';
+import 'package:stackfood_multivendor/util/images.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stackfood_multivendor/common/enums/data_source_enum.dart';
-import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
-import 'package:stackfood_multivendor/helper/route_helper.dart';
-// import 'package:stackfood_multivendor/util/images.dart';
 
-class XMarkSplashScreen extends StatefulWidget {
-  const XMarkSplashScreen({super.key});
+class SplashScreen extends StatefulWidget {
+  final NotificationBodyModel? notificationBody;
+  final DeepLinkBody? linkBody;
+  const SplashScreen(
+      {super.key, required this.notificationBody, required this.linkBody});
 
   @override
-  XMarkSplashScreenState createState() => XMarkSplashScreenState();
+  SplashScreenState createState() => SplashScreenState();
 }
 
-class XMarkSplashScreenState extends State<XMarkSplashScreen> {
+class SplashScreenState extends State<SplashScreen> {
+  final GlobalKey<ScaffoldState> _globalKey = GlobalKey();
+  StreamSubscription<List<ConnectivityResult>>? _onConnectivityChanged;
+
   @override
   void initState() {
     super.initState();
+
+    bool firstTime = true;
+    _onConnectivityChanged = Connectivity()
+        .onConnectivityChanged
+        .listen((List<ConnectivityResult> result) {
+      bool isConnected = result.contains(ConnectivityResult.wifi) ||
+          result.contains(ConnectivityResult.mobile);
+
+      if (!firstTime) {
+        ScaffoldMessenger.of(Get.context!).hideCurrentSnackBar();
+        ScaffoldMessenger.of(Get.context!).showSnackBar(SnackBar(
+          backgroundColor: isConnected ? Colors.green : Colors.red,
+          duration: Duration(seconds: isConnected ? 3 : 6000),
+          content: Text(isConnected ? 'connected'.tr : 'no_connection'.tr,
+              textAlign: TextAlign.center),
+        ));
+        if (isConnected) {
+          _route();
+        } else {
+          Get.to(const NoInternetScreen());
+        }
+      }
+
+      firstTime = false;
+    });
+
+    Get.find<SplashController>().initSharedData();
+    if (AddressHelper.getAddressFromSharedPref() != null &&
+        (AddressHelper.getAddressFromSharedPref()!.zoneIds == null ||
+            AddressHelper.getAddressFromSharedPref()!.zoneData == null)) {
+      AddressHelper.clearAddressFromSharedPref();
+    }
+    if (Get.find<AuthController>().isGuestLoggedIn() ||
+        Get.find<AuthController>().isLoggedIn()) {
+      Get.find<CartController>().getCartDataOnline();
+    }
     _route();
   }
 
-  void _route() {
-    debugPrint('🚀 [Splash] Starting config fetch...');
-    
-    // محاولة جلب البيانات مع تحديد مهلة زمنية (Timeout) للأمان
-    Get.find<MarketSplashController>(tag: 'xmarket').getConfigData(source: DataSourceEnum.client).then((value) {
-      debugPrint('✅ [Splash] Config fetch completed.');
-      _navigateToHome();
-    }).catchError((error) {
-      debugPrint('❌ [Splash] Config fetch error: $error');
-      _navigateToHome(); // برضه هنحول للهوم عشان ميفضلش معلق
-    });
+  @override
+  void dispose() {
+    super.dispose();
 
-    // سياج أمان: لو البيانات اتأخرت أكتر من 5 ثواني حول للهوم فوراً
-    Future.delayed(const Duration(seconds: 5), () {
-      if (mounted) {
-        debugPrint('⏰ [Splash] Timeout reached, navigating to home...');
-        _navigateToHome();
-      }
-    });
+    _onConnectivityChanged?.cancel();
   }
 
-  void _navigateToHome() {
-    if (Get.currentRoute != RouteHelper.getInitialRoute()) {
-      Get.offAllNamed(RouteHelper.getInitialRoute());
-    }
+  void _route() {
+    Get.find<SplashController>().getConfigData(
+        handleMaintenanceMode: false,
+        notificationBody: widget.notificationBody);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Image.asset(
-              'assets/image/xshop.png',
-              width: 200,
+      key: _globalKey,
+      body: GetBuilder<SplashController>(builder: (splashController) {
+        if (splashController.hasConnection) {
+          return SizedBox(
+            width: MediaQuery.of(context).size.width ,
+            height: MediaQuery.of(context).size.height,
+            child: Image.asset(
+              Images.logo,
+              fit: BoxFit.cover,
             ),
-            const SizedBox(height: 20),
-            const CircularProgressIndicator(color: Colors.orange),
-          ],
-        ),
-      ),
+          );
+        } else {
+          return Center(
+            child: NoInternetScreen(
+              child: SplashScreen(
+                  notificationBody: widget.notificationBody,
+                  linkBody: widget.linkBody),
+            ),
+          );
+        }
+      }),
     );
   }
 }

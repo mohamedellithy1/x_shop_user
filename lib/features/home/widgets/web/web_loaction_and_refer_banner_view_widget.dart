@@ -21,7 +21,7 @@ class WebLocationAndReferBannerViewWidget extends StatelessWidget {
               child: LocationBannerViewWidget(),
             ),
 
-            (Get.find<MarketSplashController>(tag: 'xmarket').configModel!.refEarningStatus!) ? const Expanded(
+            (Get.find<SplashController>().configModel!.refEarningStatus!) ? const Expanded(
               child: Padding(
                 padding: EdgeInsets.only(left: Dimensions.paddingSizeLarge),
                 child: ReferBannerViewWidget(),

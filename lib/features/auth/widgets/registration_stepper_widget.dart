@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 class RegistrationStepperWidget extends StatelessWidget {
   final String status;
   const RegistrationStepperWidget({super.key, required this.status});

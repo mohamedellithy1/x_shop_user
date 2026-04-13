@@ -8,71 +8,53 @@ import 'package:flutter/material.dart';
 class ReviewDialogWidget extends StatelessWidget {
   final ReviewModel review;
   final bool fromOrderDetails;
-  const ReviewDialogWidget(
-      {super.key, required this.review, this.fromOrderDetails = false});
+  const ReviewDialogWidget({super.key, required this.review, this.fromOrderDetails = false});
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Dimensions.radiusSmall)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Dimensions.radiusSmall)),
       insetPadding: const EdgeInsets.all(30),
       clipBehavior: Clip.antiAliasWithSaveLayer,
-      child: SizedBox(
-          width: 500,
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(Dimensions.paddingSizeLarge),
-            child: !fromOrderDetails
-                ? Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    ClipOval(
-                      child: CustomImageWidget(
-                        image: review.foodImageFullUrl ?? '',
-                        height: 60,
-                        width: 60,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    const SizedBox(width: Dimensions.paddingSizeSmall),
-                    Expanded(
-                        child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                          Text(
-                            review.foodName!,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: robotoBold.copyWith(
-                                color: Colors.black,
-                                fontSize: Dimensions.fontSizeSmall),
-                          ),
-                          RatingBarWidget(
-                              rating: review.rating!.toDouble(),
-                              ratingCount: null,
-                              size: 15),
-                          Text(
-                            review.customerName ?? '',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: robotoMedium.copyWith(
-                                color: Colors.black,
-                                fontSize: Dimensions.fontSizeExtraSmall),
-                          ),
-                          Text(
-                            review.comment!,
-                            style: robotoRegular.copyWith(
-                                fontSize: Dimensions.fontSizeExtraSmall,
-                                color: Colors.black),
-                          ),
-                        ])),
-                  ])
-                : Text(
-                    review.comment!,
-                    style: robotoRegular.copyWith(
-                        fontSize: Dimensions.fontSizeSmall,
-                        color: Colors.black),
-                  ),
-          )),
+      child: SizedBox(width: 500, child: SingleChildScrollView(
+        padding: const EdgeInsets.all(Dimensions.paddingSizeLarge),
+        child: !fromOrderDetails ? Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+
+          ClipOval(
+            child: CustomImageWidget(
+              image: review.foodImageFullUrl ?? '',
+              height: 60, width: 60, fit: BoxFit.cover,
+            ),
+          ),
+          const SizedBox(width: Dimensions.paddingSizeSmall),
+
+          Expanded(child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+
+            Text(
+              review.foodName!, maxLines: 1, overflow: TextOverflow.ellipsis,
+              style: robotoBold.copyWith(fontSize: Dimensions.fontSizeSmall),
+            ),
+
+            RatingBarWidget(rating: review.rating!.toDouble(), ratingCount: null, size: 15),
+
+            Text(
+              review.customerName ?? '',
+              maxLines: 1, overflow: TextOverflow.ellipsis,
+              style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraSmall),
+            ),
+
+            Text(
+              review.comment!,
+              style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).disabledColor),
+            ),
+
+          ])),
+
+        ]) : Text(
+          review.comment!,
+          style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).textTheme.bodyLarge!.color),
+        ),
+      )),
     );
   }
 }

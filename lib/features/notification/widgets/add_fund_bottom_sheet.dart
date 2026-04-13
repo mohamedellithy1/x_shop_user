@@ -15,7 +15,7 @@ class AddFundBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    double? walletAmount = Get.find<MarketProfileController>().userInfoModel?.walletBalance ?? 0.0;
+    double? walletAmount = Get.find<ProfileController>().userInfoModel?.walletBalance ?? 0.0;
     double? previousAmount = walletAmount - double.parse(notificationModel.data?.amount ?? '0.0');
 
     return Container(

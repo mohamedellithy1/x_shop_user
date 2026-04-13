@@ -1,9 +1,9 @@
-import 'package:get/get.dart';
 import 'package:stackfood_multivendor/api/api_client.dart';
 import 'package:stackfood_multivendor/features/business/domain/models/business_plan_body.dart';
 import 'package:stackfood_multivendor/features/business/domain/reposotories/business_repo_interface.dart';
 import 'package:stackfood_multivendor/helper/route_helper.dart';
 import 'package:stackfood_multivendor/util/app_constants.dart';
+import 'package:get/get.dart';
 import 'package:universal_html/html.dart' as html;
 
 class BusinessRepo implements BusinessRepoInterface<dynamic> {

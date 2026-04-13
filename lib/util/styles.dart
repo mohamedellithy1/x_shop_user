@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:stackfood_multivendor/util/app_constants.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
+import 'package:flutter/material.dart';
 
 final robotoRegular = TextStyle(
   fontFamily: AppConstants.fontFamily,
@@ -27,7 +27,7 @@ final robotoBold = TextStyle(
 );
 
 final robotoBlack = TextStyle(
-  fontFamily: AppConstants.fontFamily,
+  fontFamily: 'Roboto',
   fontWeight: FontWeight.w900,
   fontSize: Dimensions.fontSizeDefault,
 );

@@ -1,9 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
+import 'package:flutter/material.dart';
 
 class ChatSearchFieldWidget extends StatefulWidget {
   final TextEditingController controller;
@@ -37,13 +35,13 @@ class _ChatSearchFieldWidgetState extends State<ChatSearchFieldWidget> {
           borderSide: BorderSide(width: 1, color: Theme.of(context).primaryColor.withValues(alpha: 0.3)),
         ),
         hintText: widget.hint,
-        hintStyle: robotoRegular.copyWith(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white54 : Colors.black),
+        hintStyle: robotoRegular.copyWith(color: Theme.of(context).disabledColor),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(ResponsiveHelper.isDesktop(context) ? Dimensions.radiusSmall : 60),
           borderSide: BorderSide.none,
         ),
         filled: true,
-        fillColor: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF1b1b1b) : Theme.of(context).cardColor,
+        fillColor: Theme.of(context).cardColor,
         contentPadding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
         suffixIcon: IconButton(
           onPressed: widget.iconPressed as void Function()?,

@@ -1,14 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:stackfood_multivendor/features/checkout/controllers/checkout_controller.dart';
 import 'package:stackfood_multivendor/features/checkout/widgets/coupon_bottom_sheet.dart';
 import 'package:stackfood_multivendor/features/coupon/controllers/coupon_controller.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
+import 'package:stackfood_multivendor/util/images.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
-import 'package:stackfood_multivendor/util/xmarket_images.dart';
-
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 class CouponSection extends StatelessWidget {
   final CheckoutController checkoutController;
   final double price;
@@ -17,145 +15,93 @@ class CouponSection extends StatelessWidget {
   final double deliveryCharge;
   final double charge;
   final double total;
-  const CouponSection(
-      {super.key,
-      required this.checkoutController,
-      required this.price,
-      required this.discount,
-      required this.addOns,
-      required this.deliveryCharge,
-      required this.total,
-      required this.charge});
+  const CouponSection({super.key, required this.checkoutController, required this.price, required this.discount, required this.addOns, required this.deliveryCharge, required this.total, required this.charge});
 
   @override
   Widget build(BuildContext context) {
     bool isDesktop = ResponsiveHelper.isDesktop(context);
-    return GetBuilder<MarketCouponController>(
+    return GetBuilder<CouponController>(
       builder: (couponController) {
         return Container(
           decoration: BoxDecoration(
-            color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF1b1b1b) : Theme.of(context).cardColor,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
-                  spreadRadius: 1,
-                  blurRadius: 10,
-                  offset: const Offset(0, 1))
-            ],
+            boxShadow: [BoxShadow(color: Colors.grey.withValues(alpha: 0.1), spreadRadius: 1, blurRadius: 10, offset: const Offset(0, 1))],
           ),
           padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
-          margin: EdgeInsets.symmetric(
-              horizontal: isDesktop
-                  ? Dimensions.paddingSizeLarge
-                  : Dimensions.paddingSizeDefault),
-          child: (couponController.discount! <= 0 &&
-                  !couponController.freeDelivery)
-              ? Row(children: [
+          margin: EdgeInsets.symmetric(horizontal: isDesktop ? Dimensions.paddingSizeLarge : Dimensions.paddingSizeDefault),
+          child: (couponController.discount! <= 0 && !couponController.freeDelivery) ? Row(children: [
+            Expanded(
+              child: Row(children: [
+                Image.asset(Images.couponIcon1, height: 20, width: 20),
+                const SizedBox(width: Dimensions.paddingSizeSmall),
+                Text('add_coupon'.tr, style: robotoRegular),
+              ]),
+            ),
+
+            InkWell(
+              onTap: () {
+                if(ResponsiveHelper.isDesktop(context)){
+                  Get.dialog(Dialog(child: CouponBottomSheet(checkoutController: checkoutController, price: price, discount: discount, addOns: addOns, deliveryCharge: deliveryCharge, charge: charge, total: total))).then((value) {
+                    if(value != null) {
+                      checkoutController.couponController.text = value.toString();
+                    }
+                  });
+                }else{
+                  Get.bottomSheet(
+                    CouponBottomSheet(checkoutController: checkoutController, price: price, discount: discount, addOns: addOns, deliveryCharge: deliveryCharge, charge: charge, total: total),
+                    backgroundColor: Colors.transparent, isScrollControlled: true,
+                  );
+                }
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(children: [
+                  Text('add'.tr, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall)),
+                  const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                  const Icon(Icons.add, size: 20),
+                ]),
+              ),
+            ),
+          ]) : Column(children: [
+            Row(children: [
+              const Icon(Icons.check_circle_rounded, size: 16, color: Colors.green),
+              const SizedBox(width: Dimensions.paddingSizeSmall),
+
+              Text('${'coupon_applied'.tr}!', style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall)),
+            ]),
+            const SizedBox(height: Dimensions.paddingSizeSmall),
+
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                border: Border.all(color: Theme.of(context).disabledColor, width: 0.6),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: Dimensions.paddingSizeExtraSmall),
+              child: Row(
+                children: [
                   Expanded(
                     child: Row(children: [
-                      Image.asset(XmarketImages.couponIcon1,
-                          height: 20, width: 20),
+                      Image.asset(Images.couponIcon1, height: 20, width: 20),
                       const SizedBox(width: Dimensions.paddingSizeSmall),
-                       Text('add_coupon'.tr, style: robotoRegular.copyWith(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black)),
+                      Text(checkoutController.couponController.text, style: robotoRegular),
                     ]),
                   ),
+
                   InkWell(
-                    onTap: () {
-                      if (ResponsiveHelper.isDesktop(context)) {
-                        Get.dialog(Dialog(
-                                child: CouponBottomSheet(
-                                    checkoutController: checkoutController,
-                                    price: price,
-                                    discount: discount,
-                                    addOns: addOns,
-                                    deliveryCharge: deliveryCharge,
-                                    charge: charge,
-                                    total: total)))
-                            .then((value) {
-                          if (value != null) {
-                            checkoutController.couponController.text =
-                                value.toString();
-                          }
-                        });
-                      } else {
-                        Get.bottomSheet(
-                          CouponBottomSheet(
-                              checkoutController: checkoutController,
-                              price: price,
-                              discount: discount,
-                              addOns: addOns,
-                              deliveryCharge: deliveryCharge,
-                              charge: charge,
-                              total: total),
-                          backgroundColor: Colors.transparent,
-                          isScrollControlled: true,
-                        );
-                      }
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Row(children: [
-                        Text('add'.tr,
-                             style  : robotoMedium.copyWith(
-                                 fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor)),
-                        const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                        Icon(Icons.add, size: 20, color: Theme.of(context).primaryColor),
-                      ]),
-                    ),
-                  ),
-                ])
-              : Column(children: [
-                  Row(children: [
-                    const Icon(Icons.check_circle_rounded,
-                        size: 16, color: Colors.green),
-                    const SizedBox(width: Dimensions.paddingSizeSmall),
-                    Text('${'coupon_applied'.tr}!',
-                        style: robotoMedium.copyWith(
-                            fontSize: Dimensions.fontSizeSmall, color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black)),
-                  ]),
-                  const SizedBox(height: Dimensions.paddingSizeSmall),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.circular(Dimensions.radiusDefault),
-                      border: Border.all(
-                          color: Theme.of(context).disabledColor, width: 0.6),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: Dimensions.paddingSizeSmall,
-                        vertical: Dimensions.paddingSizeExtraSmall),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Row(children: [
-                            Image.asset(XmarketImages.couponIcon1,
-                                height: 20, width: 20),
-                            const SizedBox(width: Dimensions.paddingSizeSmall),
-                            Text(checkoutController.couponController.text,
-                                style: robotoRegular),
-                          ]),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            couponController.removeCouponData(true);
-                            checkoutController.couponController.text = '';
-                            if (checkoutController.isPartialPay ||
-                                checkoutController.paymentMethodIndex == 1) {
-                              checkoutController
-                                  .checkBalanceStatus((total + charge));
-                            }
-                          },
-                          child: SizedBox(
-                              height: 50,
-                              width: 50,
-                              child: Icon(Icons.clear,
-                                  color: Theme.of(context).colorScheme.error)),
-                        )
-                      ],
-                    ),
+                  onTap: () {
+                    couponController.removeCouponData(true);
+                    checkoutController.couponController.text = '';
+                    if(checkoutController.isPartialPay || checkoutController.paymentMethodIndex == 1){
+                      checkoutController.checkBalanceStatus((total + charge));
+                    }
+                  },
+                    child: SizedBox(height: 50, width: 50, child: Icon(Icons.clear, color: Theme.of(context).colorScheme.error)),
                   )
-                ]),
+                ],
+              ),
+            )
+          ]),
         );
       },
     );

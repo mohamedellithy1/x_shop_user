@@ -194,20 +194,20 @@ class WebBannerShimmer extends StatelessWidget {
 
           Expanded(child: Container(
             height: 220,
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(Dimensions.radiusSmall), color: Colors.grey[Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? 700 : 300]),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(Dimensions.radiusSmall), color: Colors.grey[Get.find<ThemeController>().darkTheme ? 700 : 300]),
           )),
 
           const SizedBox(width: Dimensions.paddingSizeLarge),
 
           Expanded(child: Container(
             height: 220,
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(Dimensions.radiusSmall), color: Colors.grey[Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? 700 : 300]),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(Dimensions.radiusSmall), color: Colors.grey[Get.find<ThemeController>().darkTheme ? 700 : 300]),
           )),
           const SizedBox(width: Dimensions.paddingSizeLarge),
 
           Expanded(child: Container(
             height: 220,
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(Dimensions.radiusSmall), color: Colors.grey[Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? 700 : 300]),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(Dimensions.radiusSmall), color: Colors.grey[Get.find<ThemeController>().darkTheme ? 700 : 300]),
           )),
 
         ]),

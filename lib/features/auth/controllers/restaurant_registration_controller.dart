@@ -1,20 +1,20 @@
+import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
+import 'package:stackfood_multivendor/features/business/controllers/business_controller.dart';
+import 'package:stackfood_multivendor/features/business/domain/models/package_model.dart';
+import 'package:stackfood_multivendor/features/dashboard/controllers/dashboard_controller.dart';
+import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
+import 'package:stackfood_multivendor/api/api_client.dart';
+import 'package:stackfood_multivendor/features/splash/domain/models/config_model.dart';
+import 'package:stackfood_multivendor/features/auth/domain/models/zone_model.dart';
+import 'package:stackfood_multivendor/features/location/controllers/location_controller.dart';
+import 'package:stackfood_multivendor/features/location/domain/models/zone_response_model.dart';
+import 'package:stackfood_multivendor/features/auth/controllers/deliveryman_registration_controller.dart';
+import 'package:stackfood_multivendor/features/auth/domain/services/restaurant_registration_service_interface.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:stackfood_multivendor/api/api_client.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
-import 'package:stackfood_multivendor/features/auth/controllers/deliveryman_registration_controller.dart';
-import 'package:stackfood_multivendor/features/auth/domain/models/zone_model.dart';
-import 'package:stackfood_multivendor/features/auth/domain/services/restaurant_registration_service_interface.dart';
-import 'package:stackfood_multivendor/features/business/controllers/business_controller.dart';
-import 'package:stackfood_multivendor/features/business/domain/models/package_model.dart';
-import 'package:stackfood_multivendor/features/dashboard/controllers/dashboard_controller.dart';
-import 'package:stackfood_multivendor/features/location/controllers/location_controller.dart';
-import 'package:stackfood_multivendor/features/location/domain/models/zone_response_model.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
-import 'package:stackfood_multivendor/features/splash/domain/models/config_model.dart';
 import 'package:stackfood_multivendor/helper/date_converter.dart';
 import 'package:stackfood_multivendor/helper/route_helper.dart';
 
@@ -98,9 +98,9 @@ class RestaurantRegistrationController extends GetxController implements GetxSer
   void setRestaurantAdditionalJoinUsPageData({bool isUpdate = true}){
     _dataList = [];
     _additionalList = [];
-    if(Get.find<MarketSplashController>(tag: 'xmarket').configModel!.restaurantAdditionalJoinUsPageData != null) {
-      for (var data in Get.find<MarketSplashController>(tag: 'xmarket').configModel!.restaurantAdditionalJoinUsPageData!.data!) {
-        int index = Get.find<MarketSplashController>(tag: 'xmarket').configModel!.restaurantAdditionalJoinUsPageData!.data!.indexOf(data);
+    if(Get.find<SplashController>().configModel!.restaurantAdditionalJoinUsPageData != null) {
+      for (var data in Get.find<SplashController>().configModel!.restaurantAdditionalJoinUsPageData!.data!) {
+        int index = Get.find<SplashController>().configModel!.restaurantAdditionalJoinUsPageData!.data!.indexOf(data);
         _dataList!.add(data);
         if(data.fieldType == 'text' || data.fieldType == 'number' || data.fieldType == 'email' || data.fieldType == 'phone'){
           _additionalList!.add(TextEditingController());
@@ -142,8 +142,10 @@ class RestaurantRegistrationController extends GetxController implements GetxSer
 
   Future<void> pickFile(int index, MediaData mediaData) async {
     FilePickerResult? result = await restaurantRegistrationServiceInterface.picFile(mediaData);
-    _additionalList![index].add(result);
-      update();
+    if(result != null) {
+      _additionalList![index].add(result);
+    }
+    update();
   }
 
   void removeAdditionalFile(int index, int subIndex) {
@@ -167,8 +169,8 @@ class RestaurantRegistrationController extends GetxController implements GetxSer
     _zoneList = await Get.find<DeliverymanRegistrationController>().getZoneList();
     if (_zoneList != null) {
       setLocation(LatLng(
-        double.parse(Get.find<MarketSplashController>(tag: 'xmarket').configModel!.defaultLocation!.lat ?? '0'),
-        double.parse(Get.find<MarketSplashController>(tag: 'xmarket').configModel!.defaultLocation!.lng ?? '0'),
+        double.parse(Get.find<SplashController>().configModel!.defaultLocation!.lat ?? '0'),
+        double.parse(Get.find<SplashController>().configModel!.defaultLocation!.lng ?? '0'),
       ));
     }
     update();
@@ -177,11 +179,11 @@ class RestaurantRegistrationController extends GetxController implements GetxSer
   void setLocation(LatLng location, {bool forRestaurantRegistration = false, int? zoneId}) async {
     _zoneLoading = true;
     update();
-    ZoneResponseModel response = await Get.find<MarketLocationController>().getZone(
+    ZoneResponseModel response = await Get.find<LocationController>().getZone(
       location.latitude.toString(), location.longitude.toString(), false,
     );
     _inZone = await restaurantRegistrationServiceInterface.checkInZone(location.latitude.toString(), location.longitude.toString(), zoneId!);
-    _restaurantAddress = await Get.find<MarketLocationController>().getAddressFromGeocode(LatLng(location.latitude, location.longitude));
+    _restaurantAddress = await Get.find<LocationController>().getAddressFromGeocode(LatLng(location.latitude, location.longitude));
     if(response.isSuccess && response.zoneIds.isNotEmpty) {
       _restaurantLocation = location;
       _zoneIds = response.zoneIds;
@@ -283,10 +285,10 @@ class RestaurantRegistrationController extends GetxController implements GetxSer
   }
 
   void resetBusiness(){
-    _businessIndex = Get.find<MarketSplashController>(tag: 'xmarket').configModel!.commissionBusinessModel == 0 ? 1 : 0;
+    _businessIndex = Get.find<SplashController>().configModel!.commissionBusinessModel == 0 ? 1 : 0;
     _activeSubscriptionIndex = 0;
     _businessPlanStatus = 'business';
-    _paymentIndex = Get.find<MarketSplashController>(tag: 'xmarket').configModel!.subscriptionFreeTrialStatus??false ? 1 : 0;
+    _paymentIndex = Get.find<SplashController>().configModel!.subscriptionFreeTrialStatus??false ? 1 : 0;
   }
 
   Future<void> getPackageList({bool isUpdate = true}) async {
@@ -326,7 +328,7 @@ class RestaurantRegistrationController extends GetxController implements GetxSer
 
     if (result != null && result.files.isNotEmpty) {
       for (var file in result.files) {
-        if (file.size > 800000000) {
+        if (file.size > 2000000) {
           showCustomSnackBar('please_upload_lower_size_file'.tr);
         } else {
           _tinFiles.add(result);

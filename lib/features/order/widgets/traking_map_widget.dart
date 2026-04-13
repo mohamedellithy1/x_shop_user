@@ -8,12 +8,11 @@ import 'package:stackfood_multivendor/features/splash/controllers/theme_controll
 import 'package:stackfood_multivendor/helper/marker_helper.dart';
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
+import 'package:stackfood_multivendor/util/images.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:collection';
-
-import 'package:stackfood_multivendor/util/xmarket_images.dart';
 
 class TrackingMapWidget extends StatefulWidget {
   final OrderModel? track;
@@ -39,8 +38,7 @@ class _TrackingMapWidgetState extends State<TrackingMapWidget> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     return Container(
-      height: 200,
-      width: ResponsiveHelper.isMobilePhone() ? width : 1170.0 - 100.0,
+      height: 200, width: ResponsiveHelper.isMobilePhone() ? width : 1170.0 - 100.0,
       margin: const EdgeInsets.all(20),
       padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
       alignment: Alignment.center,
@@ -48,192 +46,126 @@ class _TrackingMapWidgetState extends State<TrackingMapWidget> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
       ),
-      child: widget.track!.deliveryMan != null
-          ? Stack(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
-                  child: GoogleMap(
-                    mapType: MapType.hybrid,
-                    initialCameraPosition: CameraPosition(
-                        target: LatLng(
-                          double.parse(
-                              widget.track!.deliveryAddress!.latitude!),
-                          double.parse(
-                              widget.track!.deliveryAddress!.longitude!),
-                        ),
-                        zoom: 18),
-                    minMaxZoomPreference: const MinMaxZoomPreference(0, 21),
-                    zoomControlsEnabled: true,
-                    markers: _markers,
-                    onMapCreated: (GoogleMapController controller) {
-                      _controller = controller;
-                      _isLoading = false;
-                      setMarker(
-                        widget.track!.restaurant,
-                        widget.track!.deliveryMan,
-                        widget.track!.orderType == 'take_away'
-                            ? Get.find<MarketLocationController>()
-                                        .position
-                                        .latitude ==
-                                    0
-                                ? widget.track!.deliveryAddress
-                                : AddressModel(
-                                    latitude:
-                                        Get.find<MarketLocationController>()
-                                            .position
-                                            .latitude
-                                            .toString(),
-                                    longitude:
-                                        Get.find<MarketLocationController>()
-                                            .position
-                                            .longitude
-                                            .toString(),
-                                    address:
-                                        Get.find<MarketLocationController>()
-                                            .address,
-                                  )
-                            : widget.track!.deliveryAddress,
-                        widget.track!.orderType == 'take_away',
-                      );
-                    },
-                    gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
-                      Factory<OneSequenceGestureRecognizer>(
-                          () => EagerGestureRecognizer()),
-                      Factory<PanGestureRecognizer>(
-                          () => PanGestureRecognizer()),
-                      Factory<ScaleGestureRecognizer>(
-                          () => ScaleGestureRecognizer()),
-                      Factory<TapGestureRecognizer>(
-                          () => TapGestureRecognizer()),
-                      Factory<VerticalDragGestureRecognizer>(
-                          () => VerticalDragGestureRecognizer()),
-                    },
-                    style: Get.isDarkMode
-                        ? Get.find<MarketThemeController>(tag: 'xmarket')
-                            .darkMap
-                        : Get.find<MarketThemeController>(tag: 'xmarket')
-                            .lightMap,
-                  ),
-                ),
-                _isLoading
-                    ? Center(
-                        child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                                Theme.of(context).primaryColor)))
-                    : const SizedBox(),
-              ],
-            )
-          : FittedBox(child: Text('no_delivery_man_data_found'.tr)),
+      child: widget.track!.deliveryMan != null ? Stack(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
+            child: GoogleMap(
+              mapType: MapType.normal,
+              initialCameraPosition: CameraPosition(target: LatLng(
+                double.parse(widget.track!.deliveryAddress!.latitude!), double.parse(widget.track!.deliveryAddress!.longitude!),
+              ), zoom: 16),
+              minMaxZoomPreference: const MinMaxZoomPreference(0, 16),
+              zoomControlsEnabled: true,
+              markers: _markers,
+              onMapCreated: (GoogleMapController controller) {
+                _controller = controller;
+                _isLoading = false;
+                setMarker(
+                  widget.track!.restaurant, widget.track!.deliveryMan,
+                  widget.track!.orderType == 'take_away' ? Get.find<LocationController>().position.latitude == 0 ? widget.track!.deliveryAddress : AddressModel(
+                    latitude: Get.find<LocationController>().position.latitude.toString(),
+                    longitude: Get.find<LocationController>().position.longitude.toString(),
+                    address: Get.find<LocationController>().address,
+                  ) : widget.track!.deliveryAddress,
+                  widget.track!.orderType == 'take_away',
+                );
+              },
+              gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
+                Factory<OneSequenceGestureRecognizer>(() => EagerGestureRecognizer()),
+                Factory<PanGestureRecognizer>(() => PanGestureRecognizer()),
+                Factory<ScaleGestureRecognizer>(() => ScaleGestureRecognizer()),
+                Factory<TapGestureRecognizer>(() => TapGestureRecognizer()),
+                Factory<VerticalDragGestureRecognizer>(() => VerticalDragGestureRecognizer()),
+              },
+              style: Get.isDarkMode ? Get.find<ThemeController>().darkMap : Get.find<ThemeController>().lightMap,
+            ),
+          ),
+
+          _isLoading ? Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor))) : const SizedBox(),
+        ],
+      ) : FittedBox(child: Text('no_delivery_man_data_found'.tr)),
     );
   }
 
-  void setMarker(Restaurant? restaurant, DeliveryMan? deliveryMan,
-      AddressModel? addressModel, bool takeAway) async {
+  void setMarker(Restaurant? restaurant, DeliveryMan? deliveryMan, AddressModel? addressModel, bool takeAway) async {
     try {
-      BitmapDescriptor restaurantImageData =
-          await MarkerHelper.convertAssetToBitmapDescriptor(
-              width: 50, imagePath: XmarketImages.restaurantMarker);
-      BitmapDescriptor deliveryBoyImageData =
-          await MarkerHelper.convertAssetToBitmapDescriptor(
-              width: 50, imagePath: XmarketImages.deliveryManMarker);
-      BitmapDescriptor destinationImageData =
-          await MarkerHelper.convertAssetToBitmapDescriptor(
-              width: 50, imagePath: XmarketImages.myLocationMarker);
+
+      BitmapDescriptor restaurantImageData = await MarkerHelper.convertAssetToBitmapDescriptor(width: 50, imagePath: Images.restaurantMarker);
+      BitmapDescriptor deliveryBoyImageData = await MarkerHelper.convertAssetToBitmapDescriptor(width: 50, imagePath: Images.deliveryManMarker);
+      BitmapDescriptor destinationImageData = await MarkerHelper.convertAssetToBitmapDescriptor(width: 50, imagePath: Images.myLocationMarker);
 
       // Animate to coordinate
       LatLngBounds? bounds;
       double rotation = 0;
-      if (_controller != null) {
-        if (double.parse(addressModel!.latitude!) <
-            double.parse(restaurant!.latitude!)) {
+      if(_controller != null) {
+        if (double.parse(addressModel!.latitude!) < double.parse(restaurant!.latitude!)) {
           bounds = LatLngBounds(
-            southwest: LatLng(double.parse(addressModel.latitude!),
-                double.parse(addressModel.longitude!)),
-            northeast: LatLng(double.parse(restaurant.latitude!),
-                double.parse(restaurant.longitude!)),
+            southwest: LatLng(double.parse(addressModel.latitude!), double.parse(addressModel.longitude!)),
+            northeast: LatLng(double.parse(restaurant.latitude!), double.parse(restaurant.longitude!)),
           );
           rotation = 0;
-        } else {
+        }else {
           bounds = LatLngBounds(
-            southwest: LatLng(double.parse(restaurant.latitude!),
-                double.parse(restaurant.longitude!)),
-            northeast: LatLng(double.parse(addressModel.latitude!),
-                double.parse(addressModel.longitude!)),
+            southwest: LatLng(double.parse(restaurant.latitude!), double.parse(restaurant.longitude!)),
+            northeast: LatLng(double.parse(addressModel.latitude!), double.parse(addressModel.longitude!)),
           );
           rotation = 180;
         }
       }
       LatLng centerBounds = LatLng(
-        (bounds!.northeast.latitude + bounds.southwest.latitude) / 2,
-        (bounds.northeast.longitude + bounds.southwest.longitude) / 2,
+        (bounds!.northeast.latitude + bounds.southwest.latitude)/2,
+        (bounds.northeast.longitude + bounds.southwest.longitude)/2,
       );
 
-      _controller!.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(
-          target: centerBounds, zoom: GetPlatform.isWeb ? 10 : 18)));
-      if (!ResponsiveHelper.isWeb()) {
+      _controller!.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(target: centerBounds, zoom: GetPlatform.isWeb ? 10 : 15)));
+      if(!ResponsiveHelper.isWeb()) {
         zoomToFit(_controller, bounds, centerBounds, padding: 10);
       }
 
       // Marker
       _markers = HashSet<Marker>();
-      addressModel != null
-          ? _markers.add(Marker(
-              markerId: const MarkerId('destination'),
-              position: LatLng(double.parse(addressModel.latitude!),
-                  double.parse(addressModel.longitude!)),
-              infoWindow: InfoWindow(
-                title: 'Destination',
-                snippet: addressModel.address,
-              ),
-              icon: GetPlatform.isWeb
-                  ? BitmapDescriptor.defaultMarker
-                  : destinationImageData,
-            ))
-          : const SizedBox();
+      addressModel != null ? _markers.add(Marker(
+        markerId: const MarkerId('destination'),
+        position: LatLng(double.parse(addressModel.latitude!), double.parse(addressModel.longitude!)),
+        infoWindow: InfoWindow(
+          title: 'Destination',
+          snippet: addressModel.address,
+        ),
+        icon: GetPlatform.isWeb ? BitmapDescriptor.defaultMarker : destinationImageData,
+      )) : const SizedBox();
 
-      restaurant != null
-          ? _markers.add(Marker(
-              markerId: const MarkerId('restaurant'),
-              position: LatLng(double.parse(restaurant.latitude!),
-                  double.parse(restaurant.longitude!)),
-              infoWindow: InfoWindow(
-                title: 'restaurant'.tr,
-                snippet: restaurant.address,
-              ),
-              icon: GetPlatform.isWeb
-                  ? BitmapDescriptor.defaultMarker
-                  : restaurantImageData,
-            ))
-          : const SizedBox();
+      restaurant != null ? _markers.add(Marker(
+        markerId: const MarkerId('restaurant'),
+        position: LatLng(double.parse(restaurant.latitude!), double.parse(restaurant.longitude!)),
+        infoWindow: InfoWindow(
+          title: 'restaurant'.tr,
+          snippet: restaurant.address,
+        ),
+        icon: GetPlatform.isWeb ? BitmapDescriptor.defaultMarker : restaurantImageData,
+      )) : const SizedBox();
 
-      deliveryMan != null
-          ? _markers.add(Marker(
-              markerId: const MarkerId('delivery_boy'),
-              position: LatLng(double.parse(deliveryMan.lat ?? '0'),
-                  double.parse(deliveryMan.lng ?? '0')),
-              infoWindow: InfoWindow(
-                title: 'delivery_man'.tr,
-                snippet: deliveryMan.location,
-              ),
-              rotation: rotation,
-              icon: GetPlatform.isWeb
-                  ? BitmapDescriptor.defaultMarker
-                  : deliveryBoyImageData,
-            ))
-          : const SizedBox();
-    } catch (_) {}
+      deliveryMan != null ? _markers.add(Marker(
+        markerId: const MarkerId('delivery_boy'),
+        position: LatLng(double.parse(deliveryMan.lat ?? '0'), double.parse(deliveryMan.lng ?? '0')),
+        infoWindow: InfoWindow(
+          title: 'delivery_man'.tr,
+          snippet: deliveryMan.location,
+        ),
+        rotation: rotation,
+        icon: GetPlatform.isWeb ? BitmapDescriptor.defaultMarker : deliveryBoyImageData,
+      )) : const SizedBox();
+    }catch(_) {}
     setState(() {});
   }
 
-  Future<void> zoomToFit(GoogleMapController? controller, LatLngBounds? bounds,
-      LatLng centerBounds,
-      {double padding = 0.5}) async {
+
+  Future<void> zoomToFit(GoogleMapController? controller, LatLngBounds? bounds, LatLng centerBounds, {double padding = 0.5}) async {
     bool keepZoomingOut = true;
 
-    while (keepZoomingOut) {
+    while(keepZoomingOut) {
       final LatLngBounds screenBounds = await controller!.getVisibleRegion();
-      if (fits(bounds!, screenBounds)) {
+      if(fits(bounds!, screenBounds)){
         keepZoomingOut = false;
         final double zoomLevel = await controller.getZoomLevel() - 0.5;
         controller.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(
@@ -241,7 +173,8 @@ class _TrackingMapWidgetState extends State<TrackingMapWidget> {
           zoom: zoomLevel,
         )));
         break;
-      } else {
+      }
+      else {
         // Zooming out by 0.1 zoom level per iteration
         final double zoomLevel = await controller.getZoomLevel() - 0.1;
         controller.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(
@@ -253,19 +186,13 @@ class _TrackingMapWidgetState extends State<TrackingMapWidget> {
   }
 
   bool fits(LatLngBounds fitBounds, LatLngBounds screenBounds) {
-    final bool northEastLatitudeCheck =
-        screenBounds.northeast.latitude >= fitBounds.northeast.latitude;
-    final bool northEastLongitudeCheck =
-        screenBounds.northeast.longitude >= fitBounds.northeast.longitude;
+    final bool northEastLatitudeCheck = screenBounds.northeast.latitude >= fitBounds.northeast.latitude;
+    final bool northEastLongitudeCheck = screenBounds.northeast.longitude >= fitBounds.northeast.longitude;
 
-    final bool southWestLatitudeCheck =
-        screenBounds.southwest.latitude <= fitBounds.southwest.latitude;
-    final bool southWestLongitudeCheck =
-        screenBounds.southwest.longitude <= fitBounds.southwest.longitude;
+    final bool southWestLatitudeCheck = screenBounds.southwest.latitude <= fitBounds.southwest.latitude;
+    final bool southWestLongitudeCheck = screenBounds.southwest.longitude <= fitBounds.southwest.longitude;
 
-    return northEastLatitudeCheck &&
-        northEastLongitudeCheck &&
-        southWestLatitudeCheck &&
-        southWestLongitudeCheck;
+    return northEastLatitudeCheck && northEastLongitudeCheck && southWestLatitudeCheck && southWestLongitudeCheck;
   }
+
 }

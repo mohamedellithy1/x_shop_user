@@ -84,7 +84,7 @@ class NotificationRepository implements NotificationRepositoryInterface {
             notificationList!.add(NotificationModel.fromJson(notification));
           });
         }
-          }
+    }
     return notificationList;
   }
 

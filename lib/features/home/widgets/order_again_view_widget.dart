@@ -4,8 +4,6 @@ import 'package:stackfood_multivendor/features/language/controllers/localization
 import 'package:stackfood_multivendor/features/restaurant/controllers/restaurant_controller.dart';
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 import 'package:stackfood_multivendor/helper/route_helper.dart';
-import 'package:stackfood_multivendor/localization/localization_controller.dart'
-   ;
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
 import 'package:flutter/material.dart';
@@ -17,86 +15,53 @@ class OrderAgainViewWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<RestaurantController>(builder: (restController) {
-      return (restController.orderAgainRestaurantList != null &&
-              restController.orderAgainRestaurantList!.isNotEmpty)
-          ? Padding(
-              padding: EdgeInsets.symmetric(
-                  vertical: ResponsiveHelper.isMobile(context)
-                      ? Dimensions.paddingSizeDefault
-                      : Dimensions.paddingSizeLarge),
-              child: SizedBox(
-                height: ResponsiveHelper.isDesktop(context) ? 236 : 210,
-                width: Dimensions.webMaxWidth,
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: ResponsiveHelper.isMobile(context)
-                                ? Dimensions.paddingSizeDefault
-                                : 0),
-                        child: Row(children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment:
-                                  ResponsiveHelper.isMobile(context)
-                                      ? CrossAxisAlignment.start
-                                      : CrossAxisAlignment.center,
-                              children: [
-                                Text('order_again'.tr,
-                                    style: robotoBold.copyWith(
-                                        fontSize: Dimensions.fontSizeLarge,
-                                        fontWeight: FontWeight.w600)),
-                                Text(
-                                    '${'recently_you_ordered_from'.tr} ${restController.orderAgainRestaurantList!.length} ${'restaurants'.tr}',
-                                    style: robotoRegular.copyWith(
-                                        color: Theme.of(context).disabledColor,
-                                        fontSize: Dimensions.fontSizeSmall)),
-                              ],
-                            ),
-                          ),
-                          ArrowIconButtonWidget(
-                            onTap: () => Get.toNamed(
-                                RouteHelper.getAllRestaurantRoute(
-                                    'order_again')),
-                          ),
-                        ]),
-                      ),
-                      const SizedBox(height: Dimensions.paddingSizeDefault),
-                      SizedBox(
-                        height: ResponsiveHelper.isDesktop(context) ? 155 : 150,
-                        child: ListView.builder(
-                          itemCount:
-                              restController.orderAgainRestaurantList!.length,
-                          padding: EdgeInsets.only(
-                              right: ResponsiveHelper.isMobile(context)
-                                  ? Dimensions.paddingSizeDefault
-                                  : 0),
-                          scrollDirection: Axis.horizontal,
-                          physics: const BouncingScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                  left: (ResponsiveHelper.isDesktop(context) &&
-                                          index == 0 &&
-                                          Get.find<LocalizationController>(
-                                                  tag: 'xmarket')
-                                              .isLtr)
-                                      ? 0
-                                      : Dimensions.paddingSizeDefault),
-                              child: RestaurantsCardWidget(
-                                isNewOnStackFood: false,
-                                restaurant: restController
-                                    .orderAgainRestaurantList![index],
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ]),
+      return (restController.orderAgainRestaurantList != null && restController.orderAgainRestaurantList!.isNotEmpty) ? Padding(
+        padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.isMobile(context) ? Dimensions.paddingSizeDefault : Dimensions.paddingSizeLarge),
+        child: SizedBox(
+          height: ResponsiveHelper.isDesktop(context) ? 236 : 210,
+          width: Dimensions.webMaxWidth,
+          child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: ResponsiveHelper.isMobile(context) ? Dimensions.paddingSizeDefault : 0),
+              child: Row(children: [
+                Expanded(
+                  child: Column(crossAxisAlignment: ResponsiveHelper.isMobile(context) ? CrossAxisAlignment.start : CrossAxisAlignment.center, children: [
+                      Text('order_again'.tr, style: robotoBold.copyWith(fontSize: Dimensions.fontSizeLarge, fontWeight: FontWeight.w600)),
+
+                      Text('${'recently_you_ordered_from'.tr} ${restController.orderAgainRestaurantList!.length} ${'restaurants'.tr}',
+                          style: robotoRegular.copyWith(color: Theme.of(context).disabledColor, fontSize: Dimensions.fontSizeSmall)),
+                    ],
+                  ),
+                ),
+
+                ArrowIconButtonWidget(
+                  onTap: () => Get.toNamed(RouteHelper.getAllRestaurantRoute('order_again')),
+                ),
+              ]),
+            ),
+            const SizedBox(height: Dimensions.paddingSizeDefault),
+
+            SizedBox(
+              height: ResponsiveHelper.isDesktop(context) ? 155 : 150,
+              child: ListView.builder(
+                itemCount: restController.orderAgainRestaurantList!.length,
+                padding: EdgeInsets.only(right: ResponsiveHelper.isMobile(context) ? Dimensions.paddingSizeDefault : 0),
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: EdgeInsets.only(left: (ResponsiveHelper.isDesktop(context) && index == 0 && Get.find<LocalizationController>().isLtr) ? 0 : Dimensions.paddingSizeDefault),
+                    child: RestaurantsCardWidget(
+                      isNewOnStackFood: false,
+                      restaurant: restController.orderAgainRestaurantList![index],
+                    ),
+                  );
+                },
               ),
-            )
-          : const SizedBox();
+            ),
+          ]),
+        ),
+      ) : const SizedBox();
     });
   }
 }

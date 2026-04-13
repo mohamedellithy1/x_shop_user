@@ -24,7 +24,6 @@ class PickMapScreen extends StatefulWidget {
   final bool fromAddAddress;
   final bool canRoute;
   final String? route;
-  final bool? isCurrent;
   final GoogleMapController? googleMapController;
   final bool fromGuestCheckout;
   const PickMapScreen({
@@ -32,7 +31,6 @@ class PickMapScreen extends StatefulWidget {
     required this.fromSignUp,
     required this.fromAddAddress,
     required this.canRoute,
-    this.isCurrent = true,
     required this.route,
     this.googleMapController,
     required this.fromSplash,
@@ -47,49 +45,40 @@ class _PickMapScreenState extends State<PickMapScreen> {
   GoogleMapController? _mapController;
   CameraPosition? _cameraPosition;
   late LatLng _initialPosition;
-  double _currentZoomLevel = 18.0;
+  double _currentZoomLevel = 16.0;
 
   @override
   void initState() {
     super.initState();
 
-    Get.find<MarketLocationController>().makeLoadingOff();
+    Get.find<LocationController>().makeLoadingOff();
 
     if (widget.fromAddAddress) {
-      Get.find<MarketLocationController>().setPickData();
+      Get.find<LocationController>().setPickData();
     }
     _initialPosition = LatLng(
-      double.parse(Get.find<MarketSplashController>(tag: 'xmarket')
-              .configModel!
-              .defaultLocation!
-              .lat ??
-          '0'),
-      double.parse(Get.find<MarketSplashController>(tag: 'xmarket')
-              .configModel!
-              .defaultLocation!
-              .lng ??
-          '0'),
+      double.parse(
+          Get.find<SplashController>().configModel!.defaultLocation!.lat ??
+              '0'),
+      double.parse(
+          Get.find<SplashController>().configModel!.defaultLocation!.lng ??
+              '0'),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    PreferredSizeWidget? appBar;
-    if (ResponsiveHelper.isDesktop(context)) {
-      appBar = const WebMenuBar();
-    } else if (widget.fromAddAddress && widget.fromGuestCheckout) {
-      appBar = CustomAppBarWidget(title: 'delivery_address'.tr);
-    } else {
-      appBar = null;
-    }
     return Scaffold(
-      appBar: appBar,
+      appBar: (ResponsiveHelper.isDesktop(context)
+          ? const WebMenuBar()
+          : (widget.fromAddAddress && widget.fromGuestCheckout)
+              ? CustomAppBarWidget(title: 'delivery_address'.tr)
+              : null) as PreferredSizeWidget?,
       body: SafeArea(
           child: Center(
               child: SizedBox(
         width: Dimensions.webMaxWidth,
-        child:
-            GetBuilder<MarketLocationController>(builder: (locationController) {
+        child: GetBuilder<LocationController>(builder: (locationController) {
           return Stack(children: [
             GoogleMap(
               initialCameraPosition: CameraPosition(
@@ -99,12 +88,11 @@ class _PickMapScreenState extends State<PickMapScreen> {
                     : _initialPosition,
                 zoom: _currentZoomLevel,
               ),
-              minMaxZoomPreference: const MinMaxZoomPreference(0, 21),
-              mapType: MapType.hybrid,
+              minMaxZoomPreference: const MinMaxZoomPreference(0, 16),
               onMapCreated: (GoogleMapController mapController) {
                 _mapController = mapController;
                 if (!widget.fromAddAddress && widget.route != 'splash') {
-                  Get.find<MarketLocationController>()
+                  Get.find<LocationController>()
                       .getCurrentLocation(false, mapController: mapController)
                       .then((value) {
                     if (widget.fromSplash) {
@@ -123,12 +111,12 @@ class _PickMapScreenState extends State<PickMapScreen> {
               },
               onCameraIdle: () {
                 locationController.updateCameraMovingStatus(false);
-                Get.find<MarketLocationController>()
+                Get.find<LocationController>()
                     .updatePosition(_cameraPosition, false);
               },
               style: Get.isDarkMode
-                  ? Get.find<MarketThemeController>(tag: 'xmarket').darkMap
-                  : Get.find<MarketThemeController>(tag: 'xmarket').lightMap,
+                  ? Get.find<ThemeController>().darkMap
+                  : Get.find<ThemeController>().lightMap,
             ),
             Center(
                 child: Padding(
@@ -141,29 +129,6 @@ class _PickMapScreenState extends State<PickMapScreen> {
             Positioned(
               top: Dimensions.paddingSizeLarge,
               left: Dimensions.paddingSizeSmall,
-              child: InkWell(
-                onTap: () => Get.back(),
-                child: Container(
-                  height: 45,
-                  width: 45,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor,
-                    borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.2),
-                          blurRadius: 6,
-                          spreadRadius: 0.5,
-                          offset: const Offset(0, 4))
-                    ],
-                  ),
-                  child: const Icon(Icons.arrow_forward_ios, color: Colors.black),
-                ),
-              ),
-            ),
-            Positioned(
-              top: Dimensions.paddingSizeLarge,
-              left: 60,
               right: Dimensions.paddingSizeSmall,
               child: LocationSearchDialog(
                   mapController: _mapController,
@@ -190,11 +155,11 @@ class _PickMapScreenState extends State<PickMapScreen> {
                     mini: true,
                     backgroundColor: Theme.of(context).cardColor,
                     onPressed: () => _checkPermission(() {
-                      Get.find<MarketLocationController>().getCurrentLocation(
-                          false,
+                      Get.find<LocationController>().getCurrentLocation(false,
                           mapController: _mapController);
                     }),
-                    child: Icon(Icons.my_location, color: Colors.black),
+                    child: Icon(Icons.my_location,
+                        color: Theme.of(context).primaryColor),
                   ),
                 ),
                 const SizedBox(height: Dimensions.paddingSizeDefault),
@@ -245,7 +210,6 @@ class _PickMapScreenState extends State<PickMapScreen> {
               left: Dimensions.paddingSizeLarge,
               right: Dimensions.paddingSizeLarge,
               child: CustomButtonWidget(
-                color: Colors.orange,
                 buttonText: locationController.inZone
                     ? widget.fromAddAddress
                         ? 'confirm_address'.tr
@@ -264,8 +228,7 @@ class _PickMapScreenState extends State<PickMapScreen> {
     );
   }
 
-  void _onPickAddressButtonPressed(
-      MarketLocationController locationController) {
+  void _onPickAddressButtonPressed(LocationController locationController) {
     if (locationController.pickPosition.latitude != 0 &&
         locationController.pickAddress!.isNotEmpty) {
       if (widget.fromAddAddress) {
@@ -276,7 +239,7 @@ class _PickMapScreenState extends State<PickMapScreen> {
                     locationController.pickPosition.latitude,
                     locationController.pickPosition.longitude,
                   ),
-                  zoom: 18)));
+                  zoom: 17)));
         }
 
         locationController.addAddressData();

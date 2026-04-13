@@ -1,29 +1,29 @@
 import 'dart:collection';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_asset_image_widget.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_text_field_widget.dart';
+import 'package:stackfood_multivendor/common/widgets/validate_check.dart';
+import 'package:stackfood_multivendor/features/auth/widgets/zone_selection_widget.dart';
+import 'package:stackfood_multivendor/features/location/controllers/location_controller.dart';
+import 'package:stackfood_multivendor/features/location/widgets/permission_dialog.dart';
+import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
+import 'package:stackfood_multivendor/features/auth/controllers/restaurant_registration_controller.dart';
+import 'package:stackfood_multivendor/features/auth/domain/models/zone_model.dart';
+import 'package:stackfood_multivendor/features/location/widgets/location_search_dialog.dart';
+import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
+import 'package:stackfood_multivendor/helper/responsive_helper.dart';
+import 'package:stackfood_multivendor/util/dimensions.dart';
+import 'package:stackfood_multivendor/util/images.dart';
+import 'package:stackfood_multivendor/util/styles.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_app_bar_widget.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_button_widget.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_dropdown_widget.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_app_bar_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_asset_image_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_button_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_dropdown_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_text_field_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/validate_check.dart';
-import 'package:stackfood_multivendor/features/auth/controllers/restaurant_registration_controller.dart';
-import 'package:stackfood_multivendor/features/auth/domain/models/zone_model.dart';
-import 'package:stackfood_multivendor/features/auth/widgets/zone_selection_widget.dart';
-import 'package:stackfood_multivendor/features/location/controllers/location_controller.dart';
-import 'package:stackfood_multivendor/features/location/widgets/location_search_dialog.dart';
-import 'package:stackfood_multivendor/features/location/widgets/permission_dialog.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
-import 'package:stackfood_multivendor/helper/responsive_helper.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/util/styles.dart';
-import 'package:stackfood_multivendor/util/xmarket_images.dart';
 
 class SelectLocationViewWidget extends StatefulWidget {
   final bool fromView;
@@ -47,7 +47,7 @@ class SelectLocationViewWidget extends StatefulWidget {
 }
 
 class _SelectLocationViewWidgetState extends State<SelectLocationViewWidget> {
-  CameraPosition? _cameraPosition;
+  late CameraPosition _cameraPosition;
   Set<Polygon> _polygone = {};
   GoogleMapController? _mapController;
 
@@ -101,72 +101,71 @@ class _SelectLocationViewWidgetState extends State<SelectLocationViewWidget> {
           child: SizedBox(
               width: Dimensions.webMaxWidth,
               child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ZoneSelectionWidget(
-                            restaurantRegController: restaurantRegController,
-                            zoneList: zoneList,
-                            callBack: () {
-                              _setPolygon(restaurantRegController.zoneList![
-                                  restaurantRegController.selectedZoneIndex!]);
-                            }),
-                        const SizedBox(
-                            height: Dimensions.paddingSizeExtraLarge),
-                        mapView(restaurantRegController),
-                        !restaurantRegController.inZone
-                            ? Padding(
-                                padding: const EdgeInsets.only(top: 5.0),
-                                child: Row(children: [
-                                  Text('* ',
-                                      style: robotoBold.copyWith(
-                                          color: Colors.red)),
-                                  Text(
-                                      'please_place_the_marker_inside_the_zone'
-                                          .tr,
-                                      style: robotoRegular.copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .error)),
-                                ]),
-                              )
-                            : const SizedBox(),
-                        !isDesktop
-                            ? SizedBox(
-                                height: !widget.fromView
-                                    ? Dimensions.paddingSizeSmall
-                                    : 0)
-                            : const SizedBox(),
-                        SizedBox(
-                            height: widget.fromView
-                                ? Dimensions.paddingSizeOverLarge
-                                : 0),
-                        if (!isDesktop) ...[
-                          const SizedBox(height: Dimensions.paddingSizeDefault),
-                          Text('restaurant_address'.tr,
-                              style: robotoBold.copyWith(
-                                  color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black,
-                                  fontSize: Dimensions.fontSizeLarge)),
-                          const SizedBox(height: Dimensions.paddingSizeSmall),
-                          CustomTextFieldWidget(
-                            controller: widget.addressController,
-                            focusNode: widget.addressFocus,
-                            inputAction: TextInputAction.done,
-                            inputType: TextInputType.text,
-                            capitalization: TextCapitalization.sentences,
-                            maxLines: 3,
-                            showTitle: false,
-                            required: true,
-                            showBorder: true,
-                            validator: (value) =>
-                                ValidateCheck.validateEmptyText(value,
-                                    "restaurant_address_field_is_required".tr),
-                          ),
-                        ],
-                      ]),
-                ),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      widget.fromView
+                          ? ZoneSelectionWidget(
+                              restaurantRegController: restaurantRegController,
+                              zoneList: zoneList,
+                              callBack: () {
+                                _setPolygon(restaurantRegController.zoneList![
+                                    restaurantRegController
+                                        .selectedZoneIndex!]);
+                              })
+                          : const SizedBox(),
+                      widget.fromView
+                          ? const SizedBox(
+                              height: Dimensions.paddingSizeExtraLarge)
+                          : const SizedBox(),
+                      mapView(restaurantRegController),
+                      !restaurantRegController.inZone
+                          ? Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(children: [
+                                Text('* ',
+                                    style:
+                                        robotoBold.copyWith(color: Colors.red)),
+                                Text(
+                                    'please_place_the_marker_inside_the_zone'
+                                        .tr,
+                                    style: robotoRegular.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .error)),
+                              ]),
+                            )
+                          : const SizedBox(),
+                      !isDesktop
+                          ? SizedBox(
+                              height: !widget.fromView
+                                  ? Dimensions.paddingSizeSmall
+                                  : 0)
+                          : const SizedBox(),
+                      SizedBox(
+                          height: widget.fromView
+                              ? Dimensions.paddingSizeOverLarge
+                              : 0),
+                      widget.fromView && !isDesktop
+                          ? CustomTextFieldWidget(
+                              titleText: 'write_restaurant_address'.tr,
+                              controller: widget.addressController,
+                              focusNode: widget.addressFocus,
+                              inputAction: TextInputAction.done,
+                              inputType: TextInputType.text,
+                              capitalization: TextCapitalization.sentences,
+                              maxLines: 3,
+                              showTitle: isDesktop,
+                              required: true,
+                              labelText: 'restaurant_address'.tr,
+                              validator: (value) =>
+                                  ValidateCheck.validateEmptyText(
+                                      value,
+                                      "restaurant_address_field_is_required"
+                                          .tr),
+                            )
+                          : const SizedBox(),
+                    ]),
               )),
         ),
       );
@@ -179,10 +178,10 @@ class _SelectLocationViewWidgetState extends State<SelectLocationViewWidget> {
             height: ResponsiveHelper.isDesktop(context)
                 ? widget.fromView
                     ? 180
-                    : MediaQuery.of(context).size.height * 0.5
+                    : MediaQuery.of(context).size.height * 0.8
                 : widget.fromView
                     ? 150
-                    : (context.height * 0.55),
+                    : (context.height * 0.87),
             width: MediaQuery.of(context).size.width,
             decoration: widget.fromView
                 ? BoxDecoration(
@@ -197,23 +196,20 @@ class _SelectLocationViewWidgetState extends State<SelectLocationViewWidget> {
                 GoogleMap(
                   initialCameraPosition: CameraPosition(
                     target: LatLng(
-                      double.parse(
-                          Get.find<MarketSplashController>(tag: 'xmarket')
-                                  .configModel!
-                                  .defaultLocation!
-                                  .lat ??
-                              '0'),
-                      double.parse(
-                          Get.find<MarketSplashController>(tag: 'xmarket')
-                                  .configModel!
-                                  .defaultLocation!
-                                  .lng ??
-                              '0'),
+                      double.parse(Get.find<SplashController>()
+                              .configModel!
+                              .defaultLocation!
+                              .lat ??
+                          '0'),
+                      double.parse(Get.find<SplashController>()
+                              .configModel!
+                              .defaultLocation!
+                              .lng ??
+                          '0'),
                     ),
-                    zoom: 18,
+                    zoom: 16,
                   ),
-                  minMaxZoomPreference: const MinMaxZoomPreference(0, 21),
-                  mapType: MapType.hybrid,
+                  minMaxZoomPreference: const MinMaxZoomPreference(0, 16),
                   zoomControlsEnabled: false,
                   compassEnabled: false,
                   indoorViewEnabled: true,
@@ -222,23 +218,16 @@ class _SelectLocationViewWidgetState extends State<SelectLocationViewWidget> {
                   zoomGesturesEnabled: true,
                   polygons: _polygone,
                   onCameraIdle: () {
-                    if (_cameraPosition != null) {
-                      restaurantRegController.setLocation(
-                        _cameraPosition!.target,
-                        forRestaurantRegistration: true,
-                        zoneId: (restaurantRegController.zoneList != null &&
-                                restaurantRegController.zoneList!.isNotEmpty &&
-                                restaurantRegController.selectedZoneIndex != -1)
-                            ? restaurantRegController
-                                .zoneList![
-                                    restaurantRegController.selectedZoneIndex!]
-                                .id
-                            : 0,
-                      );
-                      if (!widget.fromView && widget.mapController != null) {
-                        widget.mapController!.moveCamera(
-                            CameraUpdate.newCameraPosition(_cameraPosition!));
-                      }
+                    restaurantRegController.setLocation(
+                      _cameraPosition.target,
+                      forRestaurantRegistration: true,
+                      zoneId: restaurantRegController
+                          .zoneList![restaurantRegController.selectedZoneIndex!]
+                          .id,
+                    );
+                    if (!widget.fromView) {
+                      widget.mapController!.moveCamera(
+                          CameraUpdate.newCameraPosition(_cameraPosition));
                     }
                   },
                   onCameraMove: ((position) => _cameraPosition = position),
@@ -258,15 +247,12 @@ class _SelectLocationViewWidgetState extends State<SelectLocationViewWidget> {
                         () => VerticalDragGestureRecognizer()),
                   },
                   style: Get.isDarkMode
-                      ? Get.find<MarketThemeController>(tag: 'xmarket').darkMap
-                      : Get.find<MarketThemeController>(tag: 'xmarket')
-                          .lightMap,
+                      ? Get.find<ThemeController>().darkMap
+                      : Get.find<ThemeController>().lightMap,
                 ),
                 const Center(
-                    child: CustomAssetImageWidget(
-                        XmarketImages.picRestaurantMarker,
-                        height: 50,
-                        width: 50)),
+                    child: CustomAssetImageWidget(Images.picRestaurantMarker,
+                        height: 50, width: 50)),
                 Positioned(
                   top: widget.fromView ? 10 : 20,
                   left: widget.fromView ? 10 : 20,
@@ -280,12 +266,12 @@ class _SelectLocationViewWidgetState extends State<SelectLocationViewWidget> {
                         _cameraPosition = CameraPosition(
                             target:
                                 LatLng(position.latitude, position.longitude),
-                            zoom: 18);
-                        if (!widget.fromView && widget.mapController != null) {
+                            zoom: 16);
+                        if (!widget.fromView) {
                           widget.mapController!.moveCamera(
-                              CameraUpdate.newCameraPosition(_cameraPosition!));
+                              CameraUpdate.newCameraPosition(_cameraPosition));
                           restaurantRegController.setLocation(
-                            _cameraPosition!.target,
+                            _cameraPosition.target,
                             forRestaurantRegistration: true,
                             zoneId: restaurantRegController
                                 .zoneList![
@@ -299,31 +285,24 @@ class _SelectLocationViewWidgetState extends State<SelectLocationViewWidget> {
                       height: widget.fromView ? 30 : 40,
                       width: 200,
                       decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.circular(Dimensions.radiusSmall),
+                        borderRadius: BorderRadius.circular(
+                            widget.fromView ? Dimensions.radiusSmall : 50),
                         color: Theme.of(context).cardColor,
                         boxShadow: [
                           BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.1),
-                              blurRadius: 10)
+                              color: Colors.black.withValues(alpha: 0.05),
+                              blurRadius: 2)
                         ],
                       ),
-                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      padding: const EdgeInsets.only(left: 10),
                       alignment: Alignment.centerLeft,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            (GetPlatform.isWeb && !widget.fromView)
-                                ? restaurantRegController.restaurantAddress
-                                    .toString()
-                                : 'search'.tr,
-                            style: robotoRegular.copyWith(
-                                color: Theme.of(context).hintColor,
-                                fontSize: Dimensions.fontSizeSmall),
-                          ),
-                          const Icon(Icons.search, color: Colors.orange),
-                        ],
+                      child: Text(
+                        (GetPlatform.isWeb && !widget.fromView)
+                            ? restaurantRegController.restaurantAddress
+                                .toString()
+                            : 'search'.tr,
+                        style: robotoRegular.copyWith(
+                            color: Theme.of(context).hintColor),
                       ),
                     ),
                   ),
@@ -345,19 +324,15 @@ class _SelectLocationViewWidgetState extends State<SelectLocationViewWidget> {
                           onTap: () {
                             if (ResponsiveHelper.isDesktop(context)) {
                               showGeneralDialog(
-                                context: context,
-                                pageBuilder:
-                                    (context, animation, secondaryAnimation) {
-                                  return SelectLocationViewWidget(
-                                    fromView: false,
-                                    mapController: _mapController,
-                                    inDialog: true,
-                                  );
-                                },
-                              );
+                                  context: context,
+                                  pageBuilder: (_, __, ___) {
+                                    return SelectLocationViewWidget(
+                                        fromView: false,
+                                        mapController: _mapController,
+                                        inDialog: true);
+                                  });
                             } else {
                               Get.to(Scaffold(
-                                backgroundColor: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF141313) : Colors.white,
                                 appBar: CustomAppBarWidget(
                                     title: 'set_your_store_location'.tr),
                                 body: SelectLocationViewWidget(
@@ -386,8 +361,7 @@ class _SelectLocationViewWidgetState extends State<SelectLocationViewWidget> {
                   right: 0,
                   child: InkWell(
                     onTap: () => _checkPermission(() {
-                      Get.find<MarketLocationController>().getCurrentLocation(
-                          false,
+                      Get.find<LocationController>().getCurrentLocation(false,
                           mapController: _mapController);
                     }),
                     child: Container(
@@ -429,7 +403,7 @@ class _SelectLocationViewWidgetState extends State<SelectLocationViewWidget> {
                                 _mapController?.animateCamera(
                                   CameraUpdate.newCameraPosition(
                                     CameraPosition(
-                                      target: _cameraPosition!.target,
+                                      target: _cameraPosition.target,
                                       zoom: currentZoomLevel,
                                     ),
                                   ),
@@ -446,7 +420,7 @@ class _SelectLocationViewWidgetState extends State<SelectLocationViewWidget> {
                                 _mapController?.animateCamera(
                                   CameraUpdate.newCameraPosition(
                                     CameraPosition(
-                                      target: _cameraPosition!.target,
+                                      target: _cameraPosition.target,
                                       zoom: currentZoomLevel,
                                     ),
                                   ),
@@ -464,19 +438,15 @@ class _SelectLocationViewWidgetState extends State<SelectLocationViewWidget> {
                         right: 20,
                         bottom: ResponsiveHelper.isDesktop(context) ? 40 : 20,
                         child: CustomButtonWidget(
-                          color: Colors.orange,
                           buttonText: restaurantRegController.inZone
-                              ? 'confirm'.tr
+                              ? 'set_location'.tr
                               : 'not_in_zone'.tr,
-                          onPressed: restaurantRegController.inZone &&
-                                  _cameraPosition != null
+                          onPressed: restaurantRegController.inZone
                               ? () {
                                   try {
-                                    if (widget.mapController != null) {
-                                      widget.mapController!.moveCamera(
-                                          CameraUpdate.newCameraPosition(
-                                              _cameraPosition!));
-                                    }
+                                    widget.mapController!.moveCamera(
+                                        CameraUpdate.newCameraPosition(
+                                            _cameraPosition));
                                     Get.back();
                                   } catch (e) {
                                     showCustomSnackBar(

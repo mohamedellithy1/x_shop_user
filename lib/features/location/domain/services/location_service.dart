@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:flutter/material.dart';
 import 'package:stackfood_multivendor/features/location/domain/models/prediction_model.dart';
 import 'package:stackfood_multivendor/features/location/domain/models/zone_response_model.dart';
 import 'package:stackfood_multivendor/features/address/domain/models/address_model.dart';
@@ -16,38 +13,24 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:stackfood_multivendor/util/app_constants.dart';
-import 'package:stackfood_multivendor/api/api_checker.dart';
-import 'package:stackfood_multivendor/features/location/domain/models/place_details_model.dart';
-import 'package:geocoding/geocoding.dart' as geo;
 
-class LocationService implements LocationServiceInterface {
+class LocationService implements LocationServiceInterface{
   final LocationRepoInterface locationRepoInterface;
   LocationService({required this.locationRepoInterface});
 
   @override
-  Future<Position> getPosition(
-      LatLng? defaultLatLng, LatLng configLatLng) async {
+  Future<Position> getPosition(LatLng? defaultLatLng, LatLng configLatLng) async {
     Position myPosition;
     try {
       await Geolocator.requestPermission();
       Position newLocalData = await Geolocator.getCurrentPosition();
       myPosition = newLocalData;
-    } catch (e) {
+    }catch(e) {
       myPosition = Position(
-        latitude: defaultLatLng != null
-            ? defaultLatLng.latitude
-            : configLatLng.latitude,
-        longitude: defaultLatLng != null
-            ? defaultLatLng.longitude
-            : configLatLng.longitude,
-        timestamp: DateTime.now(),
-        accuracy: 1,
-        altitude: 1,
-        heading: 1,
-        speed: 1,
-        speedAccuracy: 1,
-        altitudeAccuracy: 1,
-        headingAccuracy: 1,
+        latitude: defaultLatLng != null ? defaultLatLng.latitude : configLatLng.latitude,
+        longitude: defaultLatLng != null ? defaultLatLng.longitude : configLatLng.longitude,
+        timestamp: DateTime.now(), accuracy: 1, altitude: 1, heading: 1, speed: 1, speedAccuracy: 1, altitudeAccuracy: 1, headingAccuracy: 1,
+
       );
     }
     return myPosition;
@@ -59,38 +42,30 @@ class LocationService implements LocationServiceInterface {
   }
 
   @override
-  void handleTopicSubscription(
-      AddressModel? savedAddress, AddressModel? address) {
-    if (!GetPlatform.isWeb) {
-      if (Get.find<MarketSplashController>(tag: 'xmarket').configModel!.demo!) {
-        FirebaseMessaging.instance
-            .subscribeToTopic(AppConstants.demoResetTopic);
+  void handleTopicSubscription(AddressModel? savedAddress, AddressModel? address) {
+    if(!GetPlatform.isWeb) {
+      if(Get.find<SplashController>().configModel!.demo!) {
+        FirebaseMessaging.instance.subscribeToTopic(AppConstants.demoResetTopic);
       } else {
-        FirebaseMessaging.instance
-            .unsubscribeFromTopic(AppConstants.demoResetTopic);
+        FirebaseMessaging.instance.unsubscribeFromTopic(AppConstants.demoResetTopic);
       }
       if (savedAddress != null) {
-        if (savedAddress.zoneIds != null) {
-          for (int zoneID in savedAddress.zoneIds!) {
-            FirebaseMessaging.instance
-                .unsubscribeFromTopic('zone_${zoneID}_customer');
+        if(savedAddress.zoneIds != null) {
+          for(int zoneID in savedAddress.zoneIds!) {
+            FirebaseMessaging.instance.unsubscribeFromTopic('zone_${zoneID}_customer');
           }
-        } else {
-          FirebaseMessaging.instance
-              .unsubscribeFromTopic('zone_${savedAddress.zoneId}_customer');
+        }else {
+          FirebaseMessaging.instance.unsubscribeFromTopic('zone_${savedAddress.zoneId}_customer');
         }
       } else {
-        FirebaseMessaging.instance
-            .subscribeToTopic('zone_${address!.zoneId}_customer');
+        FirebaseMessaging.instance.subscribeToTopic('zone_${address!.zoneId}_customer');
       }
-      if (address!.zoneIds != null) {
-        for (int zoneID in address.zoneIds!) {
-          FirebaseMessaging.instance
-              .subscribeToTopic('zone_${zoneID}_customer');
+      if(address!.zoneIds != null) {
+        for(int zoneID in address.zoneIds!) {
+          FirebaseMessaging.instance.subscribeToTopic('zone_${zoneID}_customer');
         }
-      } else {
-        FirebaseMessaging.instance
-            .subscribeToTopic('zone_${address.zoneId}_customer');
+      }else {
+        FirebaseMessaging.instance.subscribeToTopic('zone_${address.zoneId}_customer');
       }
     }
   }
@@ -99,89 +74,34 @@ class LocationService implements LocationServiceInterface {
   Future<LatLng> getLatLng(String id) async {
     LatLng latLng = const LatLng(0, 0);
     Response? response = await locationRepoInterface.get(id);
-    if (response!.statusCode == 200 && response.body != null) {
-      if (response.body['result'] != null) {
-        PlaceDetailsModel placeDetails =
-            PlaceDetailsModel.fromJson(response.body);
-        if (placeDetails.result?.geometry?.location != null) {
-          latLng = LatLng(placeDetails.result!.geometry!.location!.lat!,
-              placeDetails.result!.geometry!.location!.lng!);
-        }
-      } else if (response.body['location'] != null) {
-        latLng = LatLng(
-          (response.body['location']['latitude'] as num).toDouble(),
-          (response.body['location']['longitude'] as num).toDouble(),
-        );
-      }
+    if(response?.statusCode == 200) {
+      /*PlaceDetailsModel placeDetails = PlaceDetailsModel.fromJson(response?.body);
+      if(placeDetails.status == 'OK') {
+        latLng = LatLng(placeDetails.result!.geometry!.location!.lat!, placeDetails.result!.geometry!.location!.lng!);
+      }*/
+      final data = response?.body;
+      final location = data['location'];
+      final double lat = location['latitude'];
+      final double lng = location['longitude'];
+      latLng = LatLng(lat, lng);
     }
     return latLng;
   }
 
   @override
   Future<String> getAddressFromGeocode(LatLng latLng) async {
-    try {
-      List<geo.Placemark> placemarks =
-          await geo.placemarkFromCoordinates(latLng.latitude, latLng.longitude);
-      if (placemarks.isNotEmpty) {
-        geo.Placemark place = placemarks[0];
-        return '${place.street != null && place.street!.isNotEmpty ? '${place.street}, ' : ''}${place.subLocality != null && place.subLocality!.isNotEmpty ? '${place.subLocality}, ' : ''}${place.locality != null && place.locality!.isNotEmpty ? '${place.locality}, ' : ''}${place.country != null && place.country!.isNotEmpty ? '${place.country}' : ''}';
-      }
-    } catch (e) {
-      debugPrint('Native geocoding error: $e');
-    }
-
-    // OpenStreetMap (Nominatim) Fallback (Free, No Key, No Backend required)
-    try {
-      final response = await http.get(
-        Uri.parse(
-            'https://nominatim.openstreetmap.org/reverse?format=json&lat=${latLng.latitude}&lon=${latLng.longitude}&accept-language=ar'),
-        headers: {'User-Agent': 'WassetUserApp'},
-      );
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        if (data != null && data['display_name'] != null) {
-          return data['display_name'];
-        }
-      }
-    } catch (e) {
-      debugPrint('OSM geocoding error: $e');
-    }
-
-    return 'Unknown Location Found';
+    return await locationRepoInterface.getAddressFromGeocode(latLng);
   }
 
   @override
   Future<List<PredictionModel>> searchLocation(String text) async {
     List<PredictionModel> predictionList = [];
     Response response = await locationRepoInterface.searchLocation(text);
-    if (response.statusCode == 200) {
-      dynamic body = response.body;
-      List<dynamic>? predictions;
-
-      if (body is Map && body['predictions'] != null) {
-        predictions = body['predictions'];
-      } else if (body is Map &&
-          body['data'] != null &&
-          body['data']['predictions'] != null) {
-        predictions = body['data']['predictions'];
-      }
-
-      if (predictions != null) {
-        predictionList = [];
-        for (var prediction in predictions) {
-          predictionList.add(PredictionModel.fromJson(prediction));
-        }
-      } else {
-        if (body is Map && body['error_message'] != null) {
-          showCustomSnackBar(body['error_message']);
-        } else if (body is Map &&
-            body['error'] != null &&
-            body['error']['message'] != null) {
-          showCustomSnackBar(body['error']['message']);
-        }
-      }
+    if (response.statusCode == 200 /*&& response.body['status'] == 'OK'*/) {
+      predictionList = [];
+      response.body['suggestions'].forEach((prediction) => predictionList.add(PredictionModel.fromJson(prediction)));
     } else {
-      ApiChecker.checkApi(response);
+      showCustomSnackBar(response.body['error_message'] ?? response.bodyString);
     }
     return predictionList;
   }
@@ -189,33 +109,32 @@ class LocationService implements LocationServiceInterface {
   @override
   void checkLocationPermission(Function onTap) async {
     LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
+    if(permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
     }
-    if (permission == LocationPermission.denied) {
+    if(permission == LocationPermission.denied) {
       showCustomSnackBar('you_have_to_allow'.tr);
-    } else if (permission == LocationPermission.deniedForever) {
+    }else if(permission == LocationPermission.deniedForever) {
       Get.dialog(const PermissionDialog());
-    } else {
+    }else {
       onTap();
     }
   }
 
   @override
-  void handleRoute(bool fromSignUp, String? route, bool canRoute,
-      {int? restaurantId, bool isDesktop = false}) {
-    if (fromSignUp) {
+  void handleRoute(bool fromSignUp, String? route, bool canRoute, {int? restaurantId, bool isDesktop = false}) {
+    if(fromSignUp) {
       Get.offAllNamed(RouteHelper.getInterestRoute());
-    } else {
-      if (route != null && canRoute) {
+    }else {
+      if(route != null && canRoute) {
         Get.offAllNamed(route);
       } else {
-        if (restaurantId != null) {
+        if(restaurantId != null) {
           Get.offAllNamed(RouteHelper.getRestaurantRoute(restaurantId));
-        } else if (isDesktop) {
+        } else if(isDesktop) {
           AddressHelper.getAddressFromSharedPref();
           Get.back();
-          if (Get.isDialogOpen!) {
+          if(Get.isDialogOpen!) {
             Get.back();
           }
         } else {
@@ -226,19 +145,17 @@ class LocationService implements LocationServiceInterface {
   }
 
   @override
-  void handleMapAnimation(
-      GoogleMapController? mapController, Position myPosition) {
+  void handleMapAnimation(GoogleMapController? mapController, Position myPosition) {
     if (mapController != null) {
       mapController.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(
-            target: LatLng(myPosition.latitude, myPosition.longitude),
-            zoom: 16),
+        CameraPosition(target: LatLng(myPosition.latitude, myPosition.longitude), zoom: 16),
       ));
     }
   }
 
   @override
   Future<void> updateZone() async {
-    await locationRepoInterface.updateZone();
+     await locationRepoInterface.updateZone();
   }
+
 }

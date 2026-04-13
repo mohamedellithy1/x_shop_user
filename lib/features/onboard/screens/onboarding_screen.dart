@@ -19,187 +19,147 @@ class OnBoardingScreen extends StatelessWidget {
     return GetBuilder<OnBoardingController>(builder: (onBoardingController) {
       return Scaffold(
         appBar: AppBar(
-          backgroundColor:
-              Theme.of(context).primaryColor.withValues(alpha: 0.05),
+          backgroundColor: Theme.of(context).primaryColor.withValues(alpha: 0.05),
           actions: [
-            onBoardingController.selectedIndex == 2
-                ? const SizedBox()
-                : Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: Dimensions.paddingSizeSmall,
-                        vertical: Dimensions.paddingSizeExtraSmall),
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.circular(Dimensions.radiusExtraLarge),
-                      border: Border.all(color: Theme.of(context).primaryColor),
-                    ),
-                    child: InkWell(
-                      onTap: () {
-                        _configureToRouteInitialPage();
-                      },
-                      child: Text('skip'.tr,
-                          style: robotoBold.copyWith(
-                              color: Theme.of(context).primaryColor)),
-                    ),
-                  ),
+            onBoardingController.selectedIndex == 2 ? const SizedBox() : Container(
+              padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: Dimensions.paddingSizeExtraSmall),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(Dimensions.radiusExtraLarge),
+                border: Border.all(color: Theme.of(context).primaryColor),
+              ),
+              child: InkWell(
+                onTap: () {
+                  _configureToRouteInitialPage();
+                },
+                child: Text('skip'.tr, style: robotoBold.copyWith(color: Theme.of(context).primaryColor)),
+              ),
+            ),
             const SizedBox(width: 30),
           ],
         ),
-        body: onBoardingController.onBoardingList != null
-            ? Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+        body: onBoardingController.onBoardingList != null ? Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.7,
+            child: PageView.builder(
+              controller: _pageController,
+              itemCount: onBoardingController.onBoardingList!.length,
+              itemBuilder: (context, index) {
+                return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+
+                  Stack(alignment: Alignment.bottomCenter, children: [
+
                     SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.7,
-                      child: PageView.builder(
-                        controller: _pageController,
-                        itemCount: onBoardingController.onBoardingList!.length,
-                        itemBuilder: (context, index) {
-                          return Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Stack(
-                                    alignment: Alignment.bottomCenter,
-                                    children: [
-                                      SizedBox(
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.55,
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        child: CustomAssetImageWidget(
-                                          onBoardingController
-                                              .onBoardingList![index]
-                                              .frameImageUrl,
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          fit: BoxFit.fill,
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                      ),
-                                      Positioned(
-                                        bottom: 120,
-                                        child: CustomAssetImageWidget(
-                                          onBoardingController
-                                              .onBoardingList![index].imageUrl,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.60,
-                                          fit: BoxFit.fill,
-                                        ),
-                                      ),
-                                    ]),
-                                Text(
-                                  onBoardingController
-                                      .onBoardingList![index].title,
-                                  style: robotoBold.copyWith(
-                                      fontSize: Dimensions.fontSizeExtraLarge),
-                                  textAlign: TextAlign.center,
-                                ),
-                                const SizedBox(
-                                    height: Dimensions.paddingSizeSmall),
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.75,
-                                  child: Text(
-                                    onBoardingController
-                                        .onBoardingList![index].description,
-                                    style: robotoRegular.copyWith(
-                                        color: Theme.of(context).disabledColor),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              ]);
-                        },
-                        onPageChanged: (index) {
-                          onBoardingController.changeSelectIndex(index);
-                        },
+                      height: MediaQuery.of(context).size.height * 0.55, width: MediaQuery.of(context).size.width,
+                      child: CustomAssetImageWidget(
+                        onBoardingController.onBoardingList![index].frameImageUrl,
+                        width: MediaQuery.of(context).size.width,
+                        fit: BoxFit.fill,
+                        color: Theme.of(context).primaryColor,
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: _pageIndicators(onBoardingController, context),
+
+                    Positioned(
+                      bottom: 120,
+                      child: CustomAssetImageWidget(
+                        onBoardingController.onBoardingList![index].imageUrl,
+                        width: MediaQuery.of(context).size.width * 0.60,
+                        fit: BoxFit.fill,
+                      ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: Dimensions.paddingSizeDefault,
-                          vertical: Dimensions.paddingSizeExtraLarge),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Stack(children: [
-                              Center(
-                                child: SizedBox(
-                                  height: 50,
-                                  width: 50,
-                                  child: CircularProgressIndicator(
-                                    value: (onBoardingController.selectedIndex +
-                                            1) /
-                                        onBoardingController
-                                            .onBoardingList!.length,
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                        Theme.of(context).primaryColor),
-                                    backgroundColor: Theme.of(context)
-                                        .primaryColor
-                                        .withValues(alpha: 0.3),
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                top: 7,
-                                left: 7,
-                                right: 7,
-                                bottom: 7,
-                                child: InkWell(
-                                  splashColor: Colors.transparent,
-                                  onTap: () {
-                                    if (onBoardingController.selectedIndex !=
-                                        2) {
-                                      _pageController.nextPage(
-                                          duration: const Duration(seconds: 1),
-                                          curve: Curves.ease);
-                                    } else {
-                                      _configureToRouteInitialPage();
-                                    }
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(context).primaryColor,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: Icon(Icons.arrow_forward_ios,
-                                        size: 15,
-                                        color: Theme.of(context).cardColor),
-                                  ),
-                                ),
-                              ),
-                            ]),
-                          ]),
+
+                  ]),
+
+                  Text(
+                    onBoardingController.onBoardingList![index].title,
+                    style: robotoBold.copyWith(fontSize: Dimensions.fontSizeExtraLarge),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: Dimensions.paddingSizeSmall),
+
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.75,
+                    child: Text(
+                      onBoardingController.onBoardingList![index].description,
+                      style: robotoRegular.copyWith(color: Theme.of(context).disabledColor),
+                      textAlign: TextAlign.center,
                     ),
-                  ])
-            : const Center(child: CircularProgressIndicator()),
+                  ),
+
+
+                ]);
+              },
+              onPageChanged: (index) {
+                onBoardingController.changeSelectIndex(index);
+              },
+
+            ),
+          ),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: _pageIndicators(onBoardingController, context),
+          ),
+
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault, vertical: Dimensions.paddingSizeExtraLarge),
+            child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+
+              Stack(children: [
+
+                Center(
+                  child: SizedBox(
+                    height: 50, width: 50,
+                    child: CircularProgressIndicator(
+                      value: (onBoardingController.selectedIndex + 1) / onBoardingController.onBoardingList!.length,
+                      valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
+                      backgroundColor: Theme.of(context).primaryColor.withValues(alpha: 0.3),
+                    ),
+                  ),
+                ),
+
+                Positioned(
+                  top: 7, left: 7, right: 7, bottom: 7,
+                  child: InkWell(
+                    splashColor: Colors.transparent,
+                    onTap: () {
+                      if(onBoardingController.selectedIndex != 2) {
+                        _pageController.nextPage(duration: const Duration(seconds: 1), curve: Curves.ease);
+                      }else {
+                        _configureToRouteInitialPage();
+                      }
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(Icons.arrow_forward_ios, size: 15, color: Theme.of(context).cardColor),
+                    ),
+                  ),
+                ),
+
+              ]),
+
+            ]),
+          ),
+
+        ]) : const Center(child: CircularProgressIndicator()),
       );
     });
   }
 
-  List<Widget> _pageIndicators(
-      OnBoardingController onBoardingController, BuildContext context) {
+  List<Widget> _pageIndicators(OnBoardingController onBoardingController, BuildContext context) {
     List<Container> indicators = [];
 
     for (int i = 0; i < onBoardingController.onBoardingList!.length; i++) {
       indicators.add(
         Container(
-          width: i == onBoardingController.selectedIndex ? 24 : 7,
-          height: 7,
+          width: i == onBoardingController.selectedIndex ? 24 : 7, height: 7,
           margin: const EdgeInsets.only(right: 10),
           decoration: BoxDecoration(
-            color: i == onBoardingController.selectedIndex
-                ? Theme.of(context).primaryColor
-                : Theme.of(context).primaryColor.withValues(alpha: 0.40),
-            borderRadius: i == onBoardingController.selectedIndex
-                ? BorderRadius.circular(50)
-                : BorderRadius.circular(25),
+            color: i == onBoardingController.selectedIndex ? Theme.of(context).primaryColor : Theme.of(context).primaryColor.withValues(alpha: 0.40),
+            borderRadius: i == onBoardingController.selectedIndex ? BorderRadius.circular(50) : BorderRadius.circular(25),
           ),
         ),
       );
@@ -208,13 +168,12 @@ class OnBoardingScreen extends StatelessWidget {
   }
 
   void _configureToRouteInitialPage() async {
-    Get.find<MarketSplashController>(tag: 'xmarket').disableIntro();
-    await Get.find<MarketAuthController>().guestLogin();
+    Get.find<SplashController>().disableIntro();
+    await Get.find<AuthController>().guestLogin();
     if (AddressHelper.getAddressFromSharedPref() != null) {
       Get.offNamed(RouteHelper.getInitialRoute(fromSplash: true));
     } else {
-      Get.find<MarketSplashController>(tag: 'xmarket')
-          .navigateToLocationScreen('splash', offNamed: true);
+      Get.find<SplashController>().navigateToLocationScreen('splash', offNamed: true);
     }
   }
 }

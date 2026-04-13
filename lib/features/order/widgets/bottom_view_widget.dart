@@ -5,7 +5,6 @@ import 'package:stackfood_multivendor/features/order/widgets/cancellation_dialog
 import 'package:stackfood_multivendor/features/order/widgets/subscription_pause_dialog.dart';
 import 'package:stackfood_multivendor/features/review/domain/models/rate_review_model.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
 import 'package:stackfood_multivendor/features/order/domain/models/order_details_model.dart';
 import 'package:stackfood_multivendor/features/order/domain/models/order_model.dart';
 import 'package:stackfood_multivendor/helper/address_helper.dart';
@@ -13,6 +12,7 @@ import 'package:stackfood_multivendor/helper/price_converter.dart';
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 import 'package:stackfood_multivendor/helper/route_helper.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
+import 'package:stackfood_multivendor/util/images.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
 import 'package:stackfood_multivendor/common/widgets/confirmation_dialog_widget.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_button_widget.dart';
@@ -26,18 +26,12 @@ class BottomViewWidget extends StatelessWidget {
   final int? orderId;
   final double total;
   final String? contactNumber;
-  const BottomViewWidget(
-      {super.key,
-      required this.orderController,
-      required this.order,
-      this.orderId,
-      required this.total,
-      this.contactNumber});
+  const BottomViewWidget({super.key, required this.orderController, required this.order, this.orderId, required this.total, this.contactNumber });
 
   @override
   Widget build(BuildContext context) {
+
     bool isDesktop = ResponsiveHelper.isDesktop(context);
-    final MarketThemeController themeController = Get.find<MarketThemeController>(tag: 'xmarket');
 
     bool subscription = order.subscription != null;
     bool pending = order.orderStatus == OrderStatus.pending.name;
@@ -51,326 +45,169 @@ class BottomViewWidget extends StatelessWidget {
     bool digitalPay = order.paymentMethod == 'digital_payment';
     bool offlinePay = order.paymentMethod == 'offline_payment';
 
-    return Container(
-      width: double.infinity,
-      color: themeController.darkTheme ? Colors.black : Colors.white,
-      child: Column(children: [
-        !orderController.showCancelled
-            ? Container(
-                padding: EdgeInsets.all(
-                    !isDesktop ? Dimensions.paddingSizeDefault : 0),
-                child: Center(
-                  child: SizedBox(
-                    width: Dimensions.webMaxWidth + 20,
-                    child: Row(children: [
-                      ((!subscription ||
-                                      (order.subscription!.status !=
-                                              'canceled' &&
-                                          order.subscription!.status !=
-                                              'completed')) &&
-                                  (accepted ||
-                                      confirmed ||
-                                      processing ||
-                                      order.orderStatus == 'handover' ||
-                                      pickedUp)) &&
-                              order.orderType == 'delivery'
-                          ? Expanded(
-                              child: CustomButtonWidget(
-                                color: Colors.orange,
-                                buttonText: subscription
-                                    ? 'track_subscription'.tr
-                                    : 'track_order'.tr,
-                                margin: const EdgeInsets.only(
-                                    right: Dimensions.paddingSizeSmall),
-                                onPressed: () async {
-                                  orderController.cancelTimer();
-                                  await Get.toNamed(
-                                      RouteHelper.getOrderTrackingRoute(
-                                          order.id, contactNumber));
-                                  orderController.callTrackOrderApi(
-                                      orderModel: order,
-                                      orderId: orderId.toString(),
-                                      contactNumber: contactNumber);
-                                },
-                              ),
-                            )
-                          : const SizedBox(),
-                      // (!offlinePay &&
-                      //         pending &&
-                      //         order.paymentStatus == 'unpaid' &&
-                      //         digitalPay &&
-                      //         Get.find<MarketSplashController>(tag: 'xmarket')
-                      //             .configModel!
-                      //             .cashOnDelivery!)
-                      //     ? Expanded(
-                      //         child: CustomButtonWidget(
-                      //           color: Colors.orange,
-                      //           buttonText: 'switch_to_cash_on_delivery'.tr,
-                      //           margin: const EdgeInsets.only(
-                      //               right: Dimensions.paddingSizeSmall),
-                      //           onPressed: () {
-                      //             Get.dialog(ConfirmationDialogWidget(
-                      //                 icon: XmarketImages.warning,
-                      //                 description: 'are_you_sure_to_switch'.tr,
-                      //                 onYesPressed: () {
-                      //                   double maxCodOrderAmount = AddressHelper
-                      //                               .getAddressFromSharedPref()!
-                      //                           .zoneData!
-                      //                           .firstWhere((data) =>
-                      //                               data.id ==
-                      //                               order.restaurant!.zoneId)
-                      //                           .maxCodOrderAmount ??
-                      //                       0;
+    return Column(children: [
+      !orderController.showCancelled ? Container(
+        padding: EdgeInsets.all(!isDesktop ? Dimensions.paddingSizeDefault : 0),
+        child: Center(
+          child: SizedBox(
+            width: Dimensions.webMaxWidth + 20,
+            child: Row(children: [
+              ((!subscription || (order.subscription!.status != 'canceled' && order.subscription!.status != 'completed')) && ((pending && !digitalPay) || accepted || confirmed
+              || processing || order.orderStatus == 'handover'|| pickedUp)) && order.orderType == 'delivery' ? Expanded(
+                child: CustomButtonWidget(
+                  buttonText: subscription ? 'track_subscription'.tr : 'track_order'.tr,
+                  margin: const EdgeInsets.only(right: Dimensions.paddingSizeSmall),
+                  onPressed: () async {
+                    orderController.cancelTimer();
+                    await Get.toNamed(RouteHelper.getOrderTrackingRoute(order.id, contactNumber));
+                    orderController.callTrackOrderApi(orderModel: order, orderId: orderId.toString(), contactNumber: contactNumber);
+                  },
+                ),
+              ) : const SizedBox(),
 
-                      //                   if (maxCodOrderAmount > total) {
-                      //                     orderController
-                      //                         .switchToCOD(
-                      //                             order.id.toString(), null)
-                      //                         .then((isSuccess) {
-                      //                       Get.back();
-                      //                       if (isSuccess) {
-                      //                         Get.back();
-                      //                       }
-                      //                     });
-                      //                   } else {
-                      //                     if (Get.isDialogOpen!) {
-                      //                       Get.back();
-                      //                     }
-                      //                     showCustomSnackBar(
-                      //                         '${'you_cant_order_more_then'.tr} ${PriceConverter.convertPrice(maxCodOrderAmount)} ${'in_cash_on_delivery'.tr}');
-                      //                   }
-                      //                 }));
-                      //           },
-                      //         ),
-                      //       )
-                      //     : const SizedBox(),
-                      (subscription
-                              ? (order.subscription!.status == 'active' ||
-                                  order.subscription!.status == 'paused')
-                              : (pending))
-                          ? Expanded(
-                              child: CustomButtonWidget(
-                              buttonText: subscription
-                                  ? 'cancel_subscription'.tr
-                                  : 'cancel_order'.tr,
-                              color: Theme.of(context)
-                                  .disabledColor
-                                  .withValues(alpha: 0.2),
-                              textColor:
-                                  Theme.of(context).textTheme.bodyLarge?.color,
-                              onPressed: () {
-                                if (subscription) {
-                                  Get.dialog(SubscriptionPauseDialog(
-                                      subscriptionID: order.subscriptionId,
-                                      isPause: false,
-                                      orderId: orderId.toString(),
-                                      contactNumber: contactNumber));
-                                } else {
-                                  orderController.setOrderCancelReason('');
-                                  Get.dialog(
-                                      CancellationDialogue(orderId: order.id));
-                                }
-                              },
-                            ))
-                          : const SizedBox(),
-                    ]),
-                  ),
+              (!offlinePay && pending && order.paymentStatus == 'unpaid' && digitalPay && Get.find<SplashController>().configModel!.cashOnDelivery!) ? Expanded(
+                child: CustomButtonWidget(
+                  buttonText: 'switch_to_cash_on_delivery'.tr,
+                  margin: const EdgeInsets.only(right: Dimensions.paddingSizeSmall),
+                  onPressed: () {
+                    Get.dialog(ConfirmationDialogWidget(
+                        icon: Images.warning, description: 'are_you_sure_to_switch'.tr,
+                        onYesPressed: () {
+                          double maxCodOrderAmount = AddressHelper.getAddressFromSharedPref()!.zoneData!.firstWhere((data) => data.id == order.restaurant!.zoneId).maxCodOrderAmount
+                              ?? 0;
+
+                          if(maxCodOrderAmount > total){
+                            orderController.switchToCOD(order.id.toString(), null).then((isSuccess) {
+                              Get.back();
+                              if(isSuccess) {
+                                Get.back();
+                              }
+                            });
+                          }else{
+                            if(Get.isDialogOpen!) {
+                              Get.back();
+                            }
+                            showCustomSnackBar('${'you_cant_order_more_then'.tr} ${PriceConverter.convertPrice(maxCodOrderAmount)} ${'in_cash_on_delivery'.tr}');
+                          }
+                        }
+                    ));
+                  },
                 ),
-              )
-            : Center(
-                child: Container(
-                  width: Dimensions.webMaxWidth,
-                  height: 50,
-                  margin: const EdgeInsets.all(Dimensions.paddingSizeSmall),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                        width: 2, color: Theme.of(context).primaryColor),
-                    borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                  ),
-                  child: Text('order_cancelled'.tr,
-                      style: robotoMedium.copyWith(
-                          color: Theme.of(context).primaryColor)),
-                ),
-              ),
-        !orderController.showCancelled &&
-                subscription &&
-                (order.subscription!.status == 'active' ||
-                    order.subscription!.status == 'paused')
-            ? CustomButtonWidget(
-                color: Colors.orange,
-                buttonText: 'pause_subscription'.tr,
-                margin: const EdgeInsets.all(Dimensions.paddingSizeSmall),
-                onPressed: () async {
-                  Get.dialog(SubscriptionPauseDialog(
-                      subscriptionID: order.subscriptionId,
-                      isPause: true,
-                      orderId: orderId.toString(),
-                      contactNumber: contactNumber));
+              ): const SizedBox(),
+
+              (subscription ? (order.subscription!.status == 'active' || order.subscription!.status == 'paused') : (pending)) ? Expanded(child: CustomButtonWidget(
+                buttonText: subscription ? 'cancel_subscription'.tr : 'cancel_order'.tr,
+                color: Theme.of(context).disabledColor.withValues(alpha: 0.2),
+                textColor: Theme.of(context).textTheme.bodyLarge?.color,
+                onPressed: () {
+                  if(subscription) {
+                    Get.dialog(SubscriptionPauseDialog(subscriptionID: order.subscriptionId, isPause: false, orderId: orderId.toString(), contactNumber: contactNumber));
+                  }else {
+                    orderController.setOrderCancelReason('');
+                    Get.dialog(CancellationDialogue(orderId: order.id));
+                  }
                 },
-              )
-            : const SizedBox(),
-        (!subscription &&
-                    delivered &&
-                    orderController.orderDetails![0].itemCampaignId == null) ||
-                !subscription &&
-                    Get.find<MarketSplashController>(tag: 'xmarket')
-                        .configModel!
-                        .repeatOrderOption! &&
-                    (delivered ||
-                        cancelled ||
-                        order.orderStatus == 'failed' ||
-                        order.orderStatus == 'refund_request_canceled')
-            ? orderController.orderDetails![0].itemCampaignId == null
-                ? Center(
-                    child: SizedBox(
-                      width: Dimensions.webMaxWidth,
-                      child: !orderController.isLoading
-                          ? Get.find<MarketAuthController>().isLoggedIn()
-                              ? Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: Dimensions.paddingSizeDefault,
-                                      vertical: Dimensions.paddingSizeDefault),
-                                  child: Row(
-                                    children: [
-                                      (!subscription &&
-                                              delivered &&
-                                              orderController.orderDetails![0]
-                                                      .itemCampaignId ==
-                                                  null)
-                                          ? Expanded(
-                                              child: CustomButtonWidget(
-                                                buttonText: 'review'.tr,
-                                                onPressed: () async {
-                                                  List<OrderDetailsModel>
-                                                      orderDetailsList = [];
-                                                  List<int?>
-                                                      orderDetailsIdList = [];
-                                                  for (var orderDetail
-                                                      in orderController
-                                                          .orderDetails!) {
-                                                    if (!orderDetailsIdList
-                                                        .contains(orderDetail
-                                                            .foodDetails!.id)) {
-                                                      orderDetailsList
-                                                          .add(orderDetail);
-                                                      orderDetailsIdList.add(
-                                                          orderDetail
-                                                              .foodDetails!.id);
-                                                    }
-                                                  }
-                                                  orderController.cancelTimer();
-                                                  RateReviewModel
-                                                      rateReviewModel =
-                                                      RateReviewModel(
-                                                          orderDetailsList:
-                                                              orderDetailsList,
-                                                          deliveryMan: order
-                                                              .deliveryMan);
-                                                  await Get.toNamed(RouteHelper
-                                                      .getReviewRoute(
-                                                          rateReviewModel));
-                                                  orderController
-                                                      .callTrackOrderApi(
-                                                          orderModel: order,
-                                                          orderId: orderId
-                                                              .toString(),
-                                                          contactNumber:
-                                                              contactNumber);
-                                                },
-                                              ),
-                                            )
-                                          : const SizedBox(),
-                                      SizedBox(
-                                          width: cancelled ||
-                                                  order.orderStatus == 'failed'
-                                              ? 0
-                                              : Dimensions.paddingSizeSmall),
-                                      !subscription &&
-                                              Get.find<MarketSplashController>(
-                                                      tag: 'xmarket')
-                                                  .configModel!
-                                                  .repeatOrderOption! &&
-                                              (delivered ||
-                                                  cancelled ||
-                                                  order.orderStatus ==
-                                                      'failed' ||
-                                                  order.orderStatus ==
-                                                      'refund_request_canceled')
-                                          ? orderController.orderDetails![0]
-                                                      .itemCampaignId ==
-                                                  null
-                                              ? Expanded(
-                                                  child: CustomButtonWidget(
-                                                    buttonText: 'reorder'.tr,
-                                                    onPressed: () =>
-                                                        orderController.reOrder(
-                                                            orderController
-                                                                .orderDetails!,
-                                                            order.restaurant!
-                                                                .zoneId),
-                                                  ),
-                                                )
-                                              : const SizedBox()
-                                          : const SizedBox(),
-                                    ],
-                                  ),
-                                )
-                              : const SizedBox()
-                          : const Center(child: CircularProgressIndicator()),
-                    ),
-                  )
-                : const SizedBox()
-            : const SizedBox(),
-        // (!offlinePay &&
-        //         (order.orderStatus == 'failed' || cancelled) &&
-        //         !cod &&
-        //         Get.find<MarketSplashController>(tag: 'xmarket')
-        //             .configModel!
-        //             .cashOnDelivery!)
-        //     ? Center(
-        //         child: Container(
-        //           width: Dimensions.webMaxWidth,
-        //           padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
-        //           child: CustomButtonWidget(
-        //             color: Colors.orange,
-        //             buttonText: 'switch_to_cash_on_delivery'.tr,
-        //             onPressed: () {
-        //               Get.dialog(ConfirmationDialogWidget(
-        //                   icon: XmarketImages.warning,
-        //                   description: 'are_you_sure_to_switch'.tr,
-        //                   onYesPressed: () {
-        //                     double? maxCodOrderAmount =
-        //                         AddressHelper.getAddressFromSharedPref()!
-        //                             .zoneData!
-        //                             .firstWhere((data) =>
-        //                                 data.id == order.restaurant!.zoneId)
-        //                             .maxCodOrderAmount;
+              )) : const SizedBox(),
 
-        //                     if (maxCodOrderAmount == null ||
-        //                         maxCodOrderAmount > total) {
-        //                       orderController
-        //                           .switchToCOD(order.id.toString(), null)
-        //                           .then((isSuccess) {
-        //                         Get.back();
-        //                         if (isSuccess) {
-        //                           Get.back();
-        //                         }
-        //                       });
-        //                     } else {
-        //                       if (Get.isDialogOpen!) {
-        //                         Get.back();
-        //                       }
-        //                       showCustomSnackBar(
-        //                           '${'you_cant_order_more_then'.tr} ${PriceConverter.convertPrice(maxCodOrderAmount)} ${'in_cash_on_delivery'.tr}');
-        //                     }
-        //                   }));
-        //             },
-        //           ),
-        //         ),
-        //       )
-        //     : const SizedBox(),
-      ]),
-    );
+            ]),
+          ),
+        ),
+      ) : Center(
+        child: Container(
+          width: Dimensions.webMaxWidth,
+          height: 50,
+          margin: const EdgeInsets.all(Dimensions.paddingSizeSmall),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            border: Border.all(width: 2, color: Theme.of(context).primaryColor),
+            borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+          ),
+          child: Text('order_cancelled'.tr, style: robotoMedium.copyWith(color: Theme.of(context).primaryColor)),
+        ),
+      ),
+
+      !orderController.showCancelled && subscription && (order.subscription!.status == 'active' || order.subscription!.status == 'paused') ? CustomButtonWidget(
+        buttonText: 'pause_subscription'.tr,
+        margin: const EdgeInsets.all(Dimensions.paddingSizeSmall),
+        onPressed: () async {
+          Get.dialog(SubscriptionPauseDialog(subscriptionID: order.subscriptionId, isPause: true, orderId: orderId.toString(), contactNumber: contactNumber));
+        },
+      ) : const SizedBox(),
+
+      (!subscription && delivered && orderController.orderDetails![0].itemCampaignId == null) || !subscription && Get.find<SplashController>().configModel!.repeatOrderOption! && (delivered || cancelled || order.orderStatus == 'failed' || order.orderStatus == 'refund_request_canceled')
+          ? orderController.orderDetails![0].itemCampaignId == null ? Center(
+        child: SizedBox(
+          width: Dimensions.webMaxWidth,
+          child: !orderController.isLoading ? Get.find<AuthController>().isLoggedIn() ? Padding(
+            padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault, vertical: Dimensions.paddingSizeDefault),
+            child: Row(
+              children: [
+                (!subscription && delivered && orderController.orderDetails![0].itemCampaignId == null) ? Expanded(
+                  child: CustomButtonWidget(
+                    buttonText: 'review'.tr,
+                    onPressed: () async {
+                      List<OrderDetailsModel> orderDetailsList = [];
+                      List<int?> orderDetailsIdList = [];
+                      for (var orderDetail in orderController.orderDetails!) {
+                        if(!orderDetailsIdList.contains(orderDetail.foodDetails!.id)) {
+                          orderDetailsList.add(orderDetail);
+                          orderDetailsIdList.add(orderDetail.foodDetails!.id);
+                        }
+                      }
+                      orderController.cancelTimer();
+                      RateReviewModel rateReviewModel = RateReviewModel(orderDetailsList: orderDetailsList, deliveryMan: order.deliveryMan);
+                      await Get.toNamed(RouteHelper.getReviewRoute(rateReviewModel));
+                      orderController.callTrackOrderApi(orderModel: order, orderId: orderId.toString(), contactNumber: contactNumber);
+                    },
+                  ),
+                ) : const SizedBox(),
+                SizedBox(width: cancelled || order.orderStatus == 'failed' ? 0 : Dimensions.paddingSizeSmall),
+
+                !subscription && Get.find<SplashController>().configModel!.repeatOrderOption! && (delivered || cancelled || order.orderStatus == 'failed' || order.orderStatus == 'refund_request_canceled')
+                ? orderController.orderDetails![0].itemCampaignId == null ? Expanded(
+                  child: CustomButtonWidget(
+                    buttonText: 'reorder'.tr,
+                    onPressed: () => orderController.reOrder(orderController.orderDetails!, order.restaurant!.zoneId),
+                  ),
+                ) : const SizedBox() : const SizedBox(),
+              ],
+            ),
+          ) : const SizedBox() : const Center(child: CircularProgressIndicator()),
+        ),
+      ) : const SizedBox() : const SizedBox(),
+
+
+      (!offlinePay && (order.orderStatus == 'failed' || cancelled) && !cod && Get.find<SplashController>().configModel!.cashOnDelivery!) ? Center(
+        child: Container(
+          width: Dimensions.webMaxWidth,
+          padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
+          child: CustomButtonWidget(
+            buttonText: 'switch_to_cash_on_delivery'.tr,
+            onPressed: () {
+              Get.dialog(ConfirmationDialogWidget(
+                  icon: Images.warning, description: 'are_you_sure_to_switch'.tr,
+                  onYesPressed: () {
+                    double? maxCodOrderAmount = AddressHelper.getAddressFromSharedPref()!.zoneData!.firstWhere((data) => data.id == order.restaurant!.zoneId).maxCodOrderAmount;
+
+                    if(maxCodOrderAmount == null || maxCodOrderAmount > total){
+                      orderController.switchToCOD(order.id.toString(), null).then((isSuccess) {
+                        Get.back();
+                        if(isSuccess) {
+                          Get.back();
+                        }
+                      });
+                    }else{
+                      if(Get.isDialogOpen!) {
+                        Get.back();
+                      }
+                      showCustomSnackBar('${'you_cant_order_more_then'.tr} ${PriceConverter.convertPrice(maxCodOrderAmount)} ${'in_cash_on_delivery'.tr}');
+                    }
+                  }
+              ));
+            },
+          ),
+        ),
+      ) : const SizedBox(),
+    ]);
   }
 }

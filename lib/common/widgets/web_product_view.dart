@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:stackfood_multivendor/common/models/product_model.dart';
 import 'package:stackfood_multivendor/common/models/restaurant_model.dart';
 import 'package:stackfood_multivendor/common/widgets/no_data_screen_widget.dart';
 import 'package:stackfood_multivendor/common/widgets/web_product_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/web_restaurant_widget.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
+import 'package:stackfood_multivendor/common/widgets/web_restaurant_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class WebProductView extends StatelessWidget {
   final List<Product?>? products;

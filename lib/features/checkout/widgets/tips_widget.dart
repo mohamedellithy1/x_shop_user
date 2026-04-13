@@ -1,4 +1,3 @@
-import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
 import 'package:stackfood_multivendor/util/app_constants.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
@@ -25,15 +24,15 @@ class TipsWidget extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: (index == 0 || index == AppConstants.tips.length -1) ? 6 : 5, horizontal: Dimensions.paddingSizeSmall),
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: isSelected ? Theme.of(context).primaryColor : (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.grey[800] : Theme.of(context).cardColor),
+              color: isSelected ? Theme.of(context).primaryColor : Theme.of(context).cardColor,
               borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-              border: Border.all(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white10 : Theme.of(context).disabledColor),
+              border: Border.all(color: Theme.of(context).disabledColor),
             ),
             child: Column(children: [
               Text(
                 title, textDirection: TextDirection.ltr,
                 style: robotoRegular.copyWith(
-                  color: isSelected ? Colors.white : (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white.withValues(alpha: 0.8) : Theme.of(context).textTheme.bodyMedium!.color!),
+                  color: isSelected ? Theme.of(context).cardColor : Theme.of(context).textTheme.bodyMedium!.color!,
                 ),
               ),
             ]),
@@ -41,9 +40,9 @@ class TipsWidget extends StatelessWidget {
         ),
         const SizedBox(height: Dimensions.paddingSizeExtraSmall),
 
-        // isSuggested ? Text(
-        //   'most_tipped'.tr, style: robotoRegular.copyWith(color: Theme.of(context).primaryColor, fontSize: 10),
-        // ) : const SizedBox(),
+        isSuggested ? Text(
+          'most_tipped'.tr, style: robotoRegular.copyWith(color: Theme.of(context).primaryColor, fontSize: 10),
+        ) : const SizedBox(),
       ]),
     );
   }

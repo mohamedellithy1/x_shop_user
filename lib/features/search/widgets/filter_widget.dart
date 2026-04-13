@@ -120,7 +120,7 @@ class _FilterWidgetState extends State<FilterWidget> {
                 Text('filter_by'.tr, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge)),
                 const SizedBox(height: Dimensions.paddingSizeSmall),
 
-                Get.find<MarketSplashController>(tag: 'xmarket').configModel!.toggleVegNonVeg! ? CustomCheckBoxWidget(
+                Get.find<SplashController>().configModel!.toggleVegNonVeg! ? CustomCheckBoxWidget(
                   title: 'veg'.tr,
                   value: widget.isRestaurant ? searchController.restaurantVeg : searchController.veg,
                   onClick: () {
@@ -137,7 +137,7 @@ class _FilterWidgetState extends State<FilterWidget> {
                     }
                   },
                 ) : const SizedBox(),
-                Get.find<MarketSplashController>(tag: 'xmarket').configModel!.toggleVegNonVeg! ? CustomCheckBoxWidget(
+                Get.find<SplashController>().configModel!.toggleVegNonVeg! ? CustomCheckBoxWidget(
                   title: 'non_veg'.tr,
                   value: widget.isRestaurant ? searchController.restaurantNonVeg : searchController.nonVeg,
                   onClick: () {

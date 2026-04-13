@@ -1,14 +1,13 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:get/get.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:stackfood_multivendor/common/widgets/code_picker_widget.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_asset_image_widget.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
+import 'package:stackfood_multivendor/common/widgets/code_picker_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomTextFieldWidget extends StatefulWidget {
   final String titleText;
@@ -51,11 +50,10 @@ class CustomTextFieldWidget extends StatefulWidget {
   final Function()? suffixOnPressed;
   final Function()? onTap;
   final int? maxLength;
-  final bool showFlag;
 
   const CustomTextFieldWidget({
     super.key,
-    this.titleText = '',
+    this.titleText = 'Write something...',
     this.hintText = '',
     this.controller,
     this.focusNode,
@@ -95,7 +93,6 @@ class CustomTextFieldWidget extends StatefulWidget {
     this.suffixImage,
     this.onTap,
     this.maxLength,
-    this.showFlag = true,
   });
 
   @override
@@ -128,17 +125,10 @@ class CustomTextFieldWidgetState extends State<CustomTextFieldWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        widget.showTitle
-            ? Text(widget.titleText,
-                style:
-                    robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall))
-            : const SizedBox(),
-        SizedBox(
-            height: widget.showTitle
-                ? ResponsiveHelper.isDesktop(context)
-                    ? Dimensions.paddingSizeDefault
-                    : Dimensions.paddingSizeExtraSmall
-                : 0),
+
+        widget.showTitle ? Text(widget.titleText, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall)) : const SizedBox(),
+        SizedBox(height: widget.showTitle ? ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeDefault : Dimensions.paddingSizeExtraSmall : 0),
+
         InkWell(
           focusColor: Colors.transparent,
           splashColor: Colors.transparent,
@@ -151,268 +141,120 @@ class CustomTextFieldWidgetState extends State<CustomTextFieldWidget> {
             focusNode: widget.focusNode,
             textAlign: widget.textAlign,
             validator: widget.validator,
-            style: robotoRegular.copyWith(
-                fontSize: Dimensions.fontSizeLarge,
-                color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
-                    ? Colors.white
-                    : Colors.black),
+            style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge),
             textInputAction: widget.inputAction,
-            keyboardType:
-                widget.isAmount ? TextInputType.number : widget.inputType,
+            keyboardType: widget.isAmount ? TextInputType.number : widget.inputType,
             cursorColor: Theme.of(context).primaryColor,
             textCapitalization: widget.capitalization,
             enabled: widget.isEnabled,
             autofocus: false,
             obscureText: widget.isPassword ? _obscureText : false,
-            inputFormatters: widget.inputType == TextInputType.phone
-                ? <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(RegExp('[0-9]'))
-                  ]
-                : widget.isAmount
-                    ? [FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*'))]
-                    : widget.isNumber
-                        ? [FilteringTextInputFormatter.allow(RegExp(r'\d'))]
-                        : null,
+            inputFormatters: widget.inputType == TextInputType.phone ? <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp('[0-9]'))]
+                : widget.isAmount ? [FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*'))] : widget.isNumber ? [FilteringTextInputFormatter.allow(RegExp(r'\d'))] : null,
             decoration: InputDecoration(
               errorMaxLines: 2,
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-                borderSide: BorderSide(
-                    style: widget.showBorder
-                        ? BorderStyle.solid
-                        : BorderStyle.none,
-                    width: 0.3,
-                    color: Theme.of(context).disabledColor),
+                borderSide: BorderSide(style: widget.showBorder ? BorderStyle.solid : BorderStyle.none, width: 0.3, color: Theme.of(context).disabledColor),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-                borderSide: BorderSide(
-                    style: widget.showBorder
-                        ? BorderStyle.solid
-                        : BorderStyle.none,
-                    width: 1,
-                    color: Theme.of(context).primaryColor),
+                borderSide: BorderSide(style: widget.showBorder ? BorderStyle.solid : BorderStyle.none, width: 1, color: Theme.of(context).primaryColor),
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-                borderSide: BorderSide(
-                    style: widget.showBorder
-                        ? BorderStyle.solid
-                        : BorderStyle.none,
-                    width: 0.3,
-                    color: Theme.of(context).primaryColor),
+                borderSide: BorderSide(style: widget.showBorder ? BorderStyle.solid : BorderStyle.none, width: 0.3, color: Theme.of(context).primaryColor),
               ),
               errorBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-                borderSide: BorderSide(
-                    style: widget.showBorder
-                        ? BorderStyle.solid
-                        : BorderStyle.none,
-                    color: Theme.of(context).colorScheme.error),
+                borderSide: BorderSide(style: widget.showBorder ? BorderStyle.solid : BorderStyle.none, color: Theme.of(context).colorScheme.error),
               ),
               focusedErrorBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-                borderSide: BorderSide(
-                    style: widget.showBorder
-                        ? BorderStyle.solid
-                        : BorderStyle.none,
-                    color: Theme.of(context).colorScheme.error),
+                borderSide: BorderSide(style: widget.showBorder ? BorderStyle.solid : BorderStyle.none, color: Theme.of(context).colorScheme.error),
               ),
               disabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-                borderSide: BorderSide(
-                    style: widget.showBorder
-                        ? BorderStyle.solid
-                        : BorderStyle.none,
-                    width: 0.3,
-                    color: Theme.of(context).disabledColor),
+                borderSide: BorderSide(style: widget.showBorder ? BorderStyle.solid : BorderStyle.none, width: 0.3, color: Theme.of(context).disabledColor),
               ),
               isDense: true,
-              hintText:
-                  widget.hintText.isEmpty ? widget.titleText : widget.hintText,
-              fillColor: !widget.isEnabled
-                  ? (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
-                      ? Colors.white10
-                      : Theme.of(context).disabledColor.withValues(alpha: 0.1))
-                  : (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
-                      ? const Color(0xFF1b1b1b)
-                      : Theme.of(context).cardColor),
-              hintStyle: robotoRegular.copyWith(
-                  fontSize: Dimensions.fontSizeLarge,
-                  color:
-                      Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
-                          ? Colors.white
-                          : Theme.of(context).hintColor.withValues(alpha: 0.7)),
+              hintText: widget.hintText.isEmpty ? widget.titleText : widget.hintText,
+              fillColor: !widget.isEnabled ? Theme.of(context).disabledColor.withValues(alpha: 0.1) : Theme.of(context).cardColor,
+              hintStyle: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).hintColor.withValues(alpha: 0.7)),
               filled: true,
-              labelStyle: widget.showLabelText
-                  ? robotoRegular.copyWith(
-                      fontSize: Dimensions.fontSizeDefault,
-                      color: Get.find<MarketThemeController>(tag: 'xmarket')
-                              .darkTheme
-                          ? Colors.white
-                          : Theme.of(context).hintColor)
-                  : null,
-              errorStyle:
-                  robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
-              label: widget.showLabelText
-                  ? Text.rich(TextSpan(children: [
-                      TextSpan(
-                        text: widget.labelText ?? '',
-                        style: robotoRegular.copyWith(
-                          fontSize:
-                              widget.levelTextSize ?? Dimensions.fontSizeLarge,
-                          color: ((widget.focusNode?.hasFocus == true ||
-                                      widget.controller!.text.isNotEmpty) &&
-                                  widget.isEnabled)
-                              ? (Get.find<MarketThemeController>(tag: 'xmarket')
-                                      .darkTheme
-                                  ? Colors.white
-                                  : Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
-                                      ?.color)
-                              : (Get.find<MarketThemeController>(tag: 'xmarket')
-                                      .darkTheme
-                                  ? Colors.white
-                                  : Theme.of(context)
-                                      .hintColor
-                                      .withValues(alpha: .75)),
-                        ),
+              labelStyle : widget.showLabelText ? robotoRegular.copyWith(
+                  fontSize: Dimensions.fontSizeDefault,
+                  color: Theme.of(context).hintColor):null,
+              errorStyle: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
+              label: widget.showLabelText ? Text.rich(TextSpan(children: [
+                TextSpan(
+                  text: widget.labelText ?? '',
+                  style: robotoRegular.copyWith(
+                    fontSize: widget.levelTextSize ?? Dimensions.fontSizeLarge,
+                    color: ((widget.focusNode?.hasFocus == true || widget.controller!.text.isNotEmpty ) &&  widget.isEnabled) ? Theme.of(context).textTheme.bodyLarge?.color :  Theme.of(context).hintColor.withValues(alpha: .75),
+                  ),
+                ),
+                if(widget.required && widget.labelText != null)
+                  TextSpan(text : ' *', style: robotoRegular.copyWith(color: Theme.of(context).colorScheme.error, fontSize: Dimensions.fontSizeLarge)),
+                if(widget.isEnabled == false)
+                  TextSpan(text: widget.fromUpdateProfile || widget.fromDeliveryRegistration ? '' : ' (${'non_changeable'.tr})', style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).colorScheme.error)),
+              ])) : null,
+              prefixIcon: (widget.isPhone || widget.countryDialCode != null) ? SizedBox(width: 95, child: Row(children: [
+                Container(
+                  width: 85, height: 45,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(Dimensions.radiusSmall),
+                      bottomLeft: Radius.circular(Dimensions.radiusSmall),
+                    ),
+                  ),
+                  margin: const EdgeInsets.only(right: 0),
+                  padding: const EdgeInsets.only(left: 5),
+                  child: Center(
+                    child: CodePickerWidget(
+                      flagWidth: 25,
+                      padding: EdgeInsets.zero,
+                      onChanged: widget.onCountryChanged,
+                      initialSelection: widget.countryDialCode,
+                      favorite: [widget.countryDialCode ?? ''],
+                      enabled: Get.find<SplashController>().configModel?.countryPickerStatus,
+                      dialogBackgroundColor: Theme.of(context).cardColor,
+                      textStyle: robotoRegular.copyWith(
+                        fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).textTheme.bodyMedium!.color,
                       ),
-                      if (widget.required && widget.labelText != null)
-                        TextSpan(
-                            text: ' *',
-                            style: robotoRegular.copyWith(
-                                color: Theme.of(context).colorScheme.error,
-                                fontSize: Dimensions.fontSizeLarge)),
-                      if (widget.isEnabled == false)
-                        TextSpan(
-                            text: widget.fromUpdateProfile ||
-                                    widget.fromDeliveryRegistration
-                                ? ''
-                                : ' (${'non_changeable'.tr})',
-                            style: robotoRegular.copyWith(
-                                fontSize: Dimensions.fontSizeLarge,
-                                color: Theme.of(context).colorScheme.error)),
-                    ]))
-                  : null,
-              prefixIcon: widget.prefixIcon != null
-                  ? Icon(widget.prefixIcon,
-                      size: widget.iconSize,
-                      color: widget.focusNode?.hasFocus == true
-                          ? (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Theme.of(context).textTheme.bodyLarge?.color)
-                          : (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Theme.of(context).hintColor.withValues(alpha: 0.7)))
-                  : (widget.isPhone || widget.countryDialCode != null)
-                      ? SizedBox(
-                          width: 95,
-                          child: Row(children: [
-                            Container(
-                              width: 85,
-                              height: 45,
-                              decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                  topLeft:
-                                      Radius.circular(Dimensions.radiusSmall),
-                                  bottomLeft:
-                                      Radius.circular(Dimensions.radiusSmall),
-                                ),
-                              ),
-                              margin: const EdgeInsets.only(right: 0),
-                              padding: const EdgeInsets.only(left: 5),
-                              child: Center(
-                                child: CodePickerWidget(
-                                  flagWidth: 25,
-                                  showFlagMain: widget.showFlag,
-                                  padding: EdgeInsets.zero,
-                                  onChanged: widget.onCountryChanged,
-                                  initialSelection: widget.countryDialCode,
-                                  favorite: [widget.countryDialCode ?? ''],
-                                  enabled: Get.find<MarketSplashController>(
-                                          tag: 'xmarket')
-                                      .configModel
-                                      ?.countryPickerStatus,
-                                  dialogBackgroundColor:
-                                      Theme.of(context).cardColor,
-                                  hideMainText: true,
-                                  textStyle: robotoRegular.copyWith(
-                                    fontSize: Dimensions.fontSizeDefault,
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium!
-                                        .color,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              height: 20,
-                              width: 2,
-                              color: Theme.of(context).disabledColor,
-                            )
-                          ]),
-                        )
-                      : widget.prefixImage != null
-                          ? Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: widget.prefixSize),
-                              child: CustomAssetImageWidget(widget.prefixImage!,
-                                  height: 25,
-                                  width: 25,
-                                  fit: BoxFit.scaleDown,
-                                  color: widget.focusNode?.hasFocus == true
-                                      ? (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Theme.of(context).textTheme.bodyLarge?.color)
-                                      : (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Theme.of(context).hintColor.withValues(alpha: 0.7))),
-                            )
-                          : null,
-              suffixIcon: widget.suffixIcon != null
-                  ? Icon(widget.suffixIcon,
-                      size: widget.iconSize,
-                      color: widget.focusNode?.hasFocus == true
-                          ? (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Theme.of(context).textTheme.bodyLarge?.color)
-                          : (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Theme.of(context).hintColor.withValues(alpha: 0.7)))
-                  : widget.isPassword
-                      ? IconButton(
-                          icon: Icon(
-                              _obscureText
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                              color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Theme.of(context).hintColor.withValues(alpha: 0.3)),
-                          onPressed: _toggle,
-                        )
-                      : widget.suffixImage != null
-                          ? InkWell(
-                              onTap: widget.suffixOnPressed,
-                              child: Padding(
-                                padding: EdgeInsets.all(
-                                    ResponsiveHelper.isDesktop(context)
-                                        ? Dimensions.paddingSizeSmall
-                                        : Dimensions.paddingSizeDefault),
-                                child: Image.asset(
-                                  widget.suffixImage!,
-                                  height: 10,
-                                  width: 10,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            )
-                          : widget.suffixChild,
+                    ),
+                  ),
+                ),
+
+                Container(
+                  height: 20, width: 2,
+                  color: Theme.of(context).disabledColor,
+                )
+              ]),
+              ) : widget.prefixImage != null && widget.prefixIcon == null ? Padding(
+                padding: EdgeInsets.symmetric(horizontal: widget.prefixSize),
+                child: CustomAssetImageWidget(widget.prefixImage!, height: 25, width: 25, fit: BoxFit.scaleDown, color: widget.focusNode?.hasFocus == true ? Theme.of(context).textTheme.bodyLarge?.color : Theme.of(context).hintColor.withValues(alpha: 0.7)),
+              ) : widget.prefixImage == null && widget.prefixIcon != null ? Icon(widget.prefixIcon, size: widget.iconSize, color: widget.focusNode?.hasFocus == true ? Theme.of(context).textTheme.bodyLarge?.color : Theme.of(context).hintColor.withValues(alpha: 0.7)) : null,
+              suffixIcon: widget.isPassword ? IconButton(
+                icon: Icon(_obscureText ? Icons.visibility_off : Icons.visibility, color: Theme.of(context).hintColor.withValues(alpha: 0.3)),
+                onPressed: _toggle,
+              ) : widget.suffixImage != null ? InkWell(
+                onTap: widget.suffixOnPressed, child: Padding(
+                  padding: EdgeInsets.all(ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeSmall : Dimensions.paddingSizeDefault),
+                  child: Image.asset(widget.suffixImage!, height: 10, width: 10, fit: BoxFit.cover,),
+                ),
+              ) : widget.suffixChild,
             ),
-            onFieldSubmitted: (text) => widget.nextFocus != null
-                ? FocusScope.of(context).requestFocus(widget.nextFocus)
-                : widget.onSubmit != null
-                    ? widget.onSubmit!(text)
-                    : null,
+            onFieldSubmitted: (text) => widget.nextFocus != null ? FocusScope.of(context).requestFocus(widget.nextFocus)
+                : widget.onSubmit != null ? widget.onSubmit!(text) : null,
             onChanged: widget.onChanged as void Function(String)?,
             onTap: widget.onTap,
             maxLength: widget.maxLength,
           ),
         ),
-        widget.divider
-            ? const Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: Dimensions.paddingSizeLarge),
-                child: Divider())
-            : const SizedBox(),
+
+        widget.divider ? const Padding(padding: EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeLarge), child: Divider()) : const SizedBox(),
+
       ],
     );
   }
@@ -423,3 +265,4 @@ class CustomTextFieldWidgetState extends State<CustomTextFieldWidget> {
     });
   }
 }
+

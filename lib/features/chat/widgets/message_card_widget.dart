@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_card.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_image_widget.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
 
@@ -37,7 +36,7 @@ class MessageCardWidget extends StatelessWidget {
 
               Row(
                 children: [
-                  Text(userType, style: robotoMedium.copyWith(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black)),
+                  Text(userType, style: robotoMedium),
                   const SizedBox(width: Dimensions.paddingSizeExtraSmall),
 
                   Container(
@@ -47,7 +46,7 @@ class MessageCardWidget extends StatelessWidget {
                       borderRadius: BorderRadius.circular(Dimensions.radiusExtraLarge),
                     ),
                     child: Text(
-                      'admin'.tr, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black),
+                      'admin'.tr, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor),
                     ),
                   ),
                 ],
@@ -55,13 +54,13 @@ class MessageCardWidget extends StatelessWidget {
 
               Align(
                 alignment: Alignment.centerRight,
-                child: Text(time, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white70 : Colors.black)),
+                child: Text(time, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor)),
               ),
             ]),
             const SizedBox(height: Dimensions.paddingSizeExtraSmall),
 
             Text(
-              message, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white70 : Colors.black),
+              message, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor),
               maxLines: 1, overflow: TextOverflow.ellipsis,
             ),
             const SizedBox(height: Dimensions.paddingSizeExtraSmall),
@@ -74,7 +73,7 @@ class MessageCardWidget extends StatelessWidget {
                   color: Theme.of(context).primaryColor,
                   shape: BoxShape.circle,
                 ),
-                child: Text(count.toString(), style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black)),
+                child: Text(count.toString(), style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).cardColor)),
               ) : const SizedBox(height: 15),
             ),
 

@@ -45,7 +45,7 @@ class ReviewRepository implements ReviewRepositoryInterface {
           reviewedProductList = [];
           reviewedProductList.addAll(ProductModel.fromJson(jsonDecode(cacheResponseData)).products!);
         }
-          }
+    }
     return reviewedProductList;
   }
 

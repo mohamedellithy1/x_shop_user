@@ -1,18 +1,16 @@
+import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 
 class CustomLoaderWidget extends StatelessWidget {
-  final double size;
-  const CustomLoaderWidget({super.key, this.size = 150});
+  const CustomLoaderWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Lottie.asset(
-        'assets/image/loading_gray.json',
-        width: size,
-        height: size,
-      ),
-    );
+    return Center(child: Container(
+      height: 100, width: 100,
+      decoration: BoxDecoration(color: Theme.of(context).cardColor, borderRadius: BorderRadius.circular(Dimensions.radiusSmall)),
+      alignment: Alignment.center,
+      child: const CircularProgressIndicator(),
+    ));
   }
 }

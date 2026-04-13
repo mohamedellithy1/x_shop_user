@@ -1,12 +1,12 @@
-// import 'package:stackfood_multivendor/flutter_facebook_auth.dart';
-import 'package:get/get.dart';
 import 'package:stackfood_multivendor/common/models/response_model.dart';
 import 'package:stackfood_multivendor/features/auth/domain/models/auth_response_model.dart';
 import 'package:stackfood_multivendor/features/auth/domain/models/signup_body_model.dart';
 import 'package:stackfood_multivendor/features/auth/domain/models/social_log_in_body_model.dart';
 import 'package:stackfood_multivendor/features/auth/domain/reposotories/auth_repo_interface.dart';
 import 'package:stackfood_multivendor/features/auth/domain/services/auth_service_interface.dart';
-// import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService implements AuthServiceInterface{
   final AuthRepoInterface authRepoInterface;
@@ -130,12 +130,12 @@ class AuthService implements AuthServiceInterface{
     return authRepoInterface.isGuestLoggedIn();
   }
 
-  // @override
-  // Future<void> socialLogout() async {
-  //   final GoogleSignIn googleSignIn = GoogleSignIn.instance;
-  //   googleSignIn.disconnect();
-  //   await FacebookAuth.instance.logOut();
-  // }
+  @override
+  Future<void> socialLogout() async {
+    final GoogleSignIn googleSignIn = GoogleSignIn.instance;
+    googleSignIn.disconnect();
+    await FacebookAuth.instance.logOut();
+  }
 
   @override
   Future<bool> clearSharedData({bool removeToken = true}) async {

@@ -1,29 +1,23 @@
-import 'package:get/get.dart';
 import 'package:stackfood_multivendor/features/language/domain/models/language_model.dart';
-import 'package:stackfood_multivendor/util/xmarket_images.dart';
-// import 'package:stackfood_multivendor/util_images.dart';
+import 'package:stackfood_multivendor/util/images.dart';
+import 'package:get/get.dart';
 
 class AppConstants {
-  static const String appName = 'XShop';
+  static const String appName = 'Taswiqa';
   static const double appVersion = 8.6;
 
   ///Flutter SDK: 3.38.2
 
-  static const String fontFamily = 'Cairo';
-  static const bool payInWevView = true;
-  static const String webHostedUrl = 'https://stackfood-web.6amtech.com';
+  static const String fontFamily = 'Roboto';
+  static const bool payInWevView = false;
+  static const String webHostedUrl = 'https://api.wovenex.online';
   static const bool useReactWebsite = false;
   static const String googleServerClientId =
-      '709395535688-4jh0evi7lvbtpso9r9k71jjm2relhcr7.apps.googleusercontent.com';
+      '491987943015-agln6biv84krpnngdphj87jkko7r9lb8.apps.googleusercontent.com';
 
-  static const String baseUrl = 'https://xshop.x-ride.support';
-  static const String discordWebhookUri =
-      'https://discord.com/api/webhooks/1478402200463085783/1IPatnumfFOTdIfG9WhqZEFwc3qYODTs0Xx8GpeKRSTqFaxTOxcgT-NF3M8zEC3lfKHi';
+  static const String baseUrl = 'https://api.wovenex.online';
   static const String categoryUri = '/api/v1/categories';
-  static const String xMarketCategoryUri =
-      '/api/v1/categories/get-categories/8';
   static const String bannerUri = '/api/v1/banners';
-  static const String sendTokenToXMarket = '/api/v1/auth/sso-login';
   static const String restaurantProductUri = '/api/v1/products/latest';
   static const String popularProductUri = '/api/v1/products/popular';
   static const String reviewedProductUri = '/api/v1/products/most-reviewed';
@@ -143,8 +137,6 @@ class AppConstants {
   static const String mostTipsUri = '/api/v1/most-tips';
   static const String orderAgainUri = '/api/v1/customer/order-again';
   static const String guestLoginUri = '/api/v1/auth/guest/request';
-  static const String changeLanguage = '/api/customer/change-language';
-
   static const String offlineMethodListUri =
       '/api/v1/offline_payment_method_list';
   static const String offlinePaymentSaveInfoUri =
@@ -181,7 +173,7 @@ class AppConstants {
       '/api/v1/customer/cart/add-multiple';
 
   /// Shared Key
-  static const String theme = 'xmarket_theme';
+  static const String theme = 'theme';
   static const String token = 'multivendor_token';
   static const String countryCode = 'country_code';
   static const String languageCode = 'language_code';
@@ -226,7 +218,7 @@ class AppConstants {
   ];
 
   /// Delivery Tips
-  static List<String> tips = ['0', '10', '15', '20', '40', 'custom'];
+  static List<String> tips = ['0', '15', '10', '20', '40', 'custom'];
 
   static List<String> deliveryInstructionList = [
     'Deliver to front door',
@@ -241,25 +233,15 @@ class AppConstants {
   /// Languages
   static List<LanguageModel> languages = [
     LanguageModel(
-        imageUrl: XmarketImages.arabic,
-        languageName: 'عربى',
-        countryCode: 'SA',
-        languageCode: 'ar'),
-    LanguageModel(
-        imageUrl: XmarketImages.english,
+        imageUrl: Images.english,
         languageName: 'English',
         countryCode: 'US',
         languageCode: 'en'),
     LanguageModel(
-        imageUrl: XmarketImages.spanish,
-        languageName: 'Spanish',
-        countryCode: 'ES',
-        languageCode: 'es'),
-    LanguageModel(
-        imageUrl: XmarketImages.bengali,
-        languageName: 'Bengali',
-        countryCode: 'BN',
-        languageCode: 'bn'),
+        imageUrl: Images.arabic,
+        languageName: 'عربى',
+        countryCode: 'SA',
+        languageCode: 'ar'),
   ];
 
   static List<String> joinDropdown = [

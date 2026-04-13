@@ -1,4 +1,4 @@
-
+import 'package:stackfood_multivendor/features/wallet/domain/models/fund_bonus_model.dart';
 
 class RestaurantModel {
   int? totalSize;
@@ -699,28 +699,6 @@ class CuisineModel {
     if (cuisines != null) {
       data['Cuisines'] = cuisines!.map((v) => v.toJson()).toList();
     }
-    return data;
-  }
-}
-
-class Translations {
-  String? locale;
-  String? name;
-  String? description;
-
-  Translations({this.locale, this.name, this.description});
-
-  Translations.fromJson(Map<String, dynamic> json) {
-    locale = json['locale'];
-    name = json['name'];
-    description = json['description'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['locale'] = locale;
-    data['name'] = name;
-    data['description'] = description;
     return data;
   }
 }

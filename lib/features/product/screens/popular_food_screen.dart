@@ -14,11 +14,7 @@ class PopularFoodScreen extends StatefulWidget {
   final bool isPopular;
   final bool fromIsRestaurantFood;
   final int? restaurantId;
-  const PopularFoodScreen(
-      {super.key,
-      required this.isPopular,
-      required this.fromIsRestaurantFood,
-      this.restaurantId});
+  const PopularFoodScreen({super.key, required this.isPopular, required this.fromIsRestaurantFood, this.restaurantId});
 
   @override
   State<PopularFoodScreen> createState() => _PopularFoodScreenState();
@@ -31,81 +27,56 @@ class _PopularFoodScreenState extends State<PopularFoodScreen> {
   void initState() {
     super.initState();
 
-    if (widget.isPopular) {
-      Get.find<ProductController>().getPopularProductList(
-          true, Get.find<ProductController>().popularType, false);
-    } else if (widget.fromIsRestaurantFood) {
-      Get.find<RestaurantController>()
-          .getRestaurantRecommendedItemList(widget.restaurantId, false);
+    if(widget.isPopular) {
+      Get.find<ProductController>().getPopularProductList(true, Get.find<ProductController>().popularType, false);
+    } else if(widget.fromIsRestaurantFood) {
+      Get.find<RestaurantController>().getRestaurantRecommendedItemList(widget.restaurantId, false);
     } else {
-      Get.find<ReviewController>().getReviewedProductList(
-          true, Get.find<ReviewController>().reviewType, false);
+      Get.find<ReviewController>().getReviewedProductList(true, Get.find<ReviewController>().reviewType, false);
     }
   }
-
   @override
   Widget build(BuildContext context) {
+
     return GetBuilder<ProductController>(builder: (productController) {
       return GetBuilder<ReviewController>(builder: (reviewController) {
         return Scaffold(
-            appBar: CustomAppBarWidget(
-              title: widget.isPopular
-                  ? widget.fromIsRestaurantFood
-                      ? 'popular_in_this_restaurant'.tr
-                      : 'popular_foods_nearby'.tr
-                  : 'best_reviewed_food'.tr,
-              showCart: true,
-              type: widget.isPopular
-                  ? productController.popularType
-                  : reviewController.reviewType,
-              onVegFilterTap: widget.fromIsRestaurantFood
-                  ? null
-                  : (String type) {
-                      if (widget.isPopular) {
-                        productController.getPopularProductList(
-                            true, type, true);
-                      } else {
-                        reviewController.getReviewedProductList(
-                            true, type, true);
-                      }
-                    },
-            ),
-            endDrawer: const MenuDrawerWidget(),
-            endDrawerEnableOpenDragGesture: false,
-            body: SingleChildScrollView(
-              controller: scrollController,
-              child: Column(children: [
-                WebScreenTitleWidget(
-                    title: widget.isPopular
-                        ? widget.fromIsRestaurantFood
-                            ? 'popular_in_this_restaurant'.tr
-                            : 'popular_foods_nearby'.tr
-                        : 'best_reviewed_food'.tr),
-                Center(
-                    child: SizedBox(
-                  width: Dimensions.webMaxWidth,
-                  child: GetBuilder<ProductController>(
-                      builder: (productController) {
-                    return GetBuilder<RestaurantController>(
-                        builder: (restaurantController) {
+          appBar: CustomAppBarWidget(
+            title: widget.isPopular ? widget.fromIsRestaurantFood? 'popular_in_this_restaurant'.tr : 'popular_foods_nearby'.tr : 'best_reviewed_food'.tr,
+            showCart: true,
+            type: widget.isPopular ? productController.popularType : reviewController.reviewType,
+            onVegFilterTap: widget.fromIsRestaurantFood ? null : (String type) {
+              if(widget.isPopular) {
+                productController.getPopularProductList(true, type, true);
+              }else {
+                reviewController.getReviewedProductList(true, type, true);
+              }
+            },
+          ),
+          endDrawer: const MenuDrawerWidget(), endDrawerEnableOpenDragGesture: false,
+          body: SingleChildScrollView(controller: scrollController, child: FooterViewWidget(
+            child: Column(children: [
+
+              WebScreenTitleWidget(title: widget.isPopular ? widget.fromIsRestaurantFood? 'popular_in_this_restaurant'.tr : 'popular_foods_nearby'.tr : 'best_reviewed_food'.tr),
+
+              Center(child: SizedBox(
+                width: Dimensions.webMaxWidth,
+                child: GetBuilder<ProductController>(builder: (productController) {
+                  return GetBuilder<RestaurantController>(
+                    builder: (restaurantController) {
+
                       return ProductViewWidget(
-                        isRestaurant: false,
-                        restaurants: null,
-                        products: widget.isPopular
-                            ? productController.popularProductList
-                            : widget.fromIsRestaurantFood
-                                ? restaurantController
-                                    .recommendedProductModel?.products
-                                : reviewController.reviewedProductList,
-                        useGridCard: true,
-                        padding:
-                            const EdgeInsets.all(Dimensions.paddingSizeDefault),
+                        isRestaurant: false, restaurants: null,
+                        products: widget.isPopular ? productController.popularProductList : widget.fromIsRestaurantFood ? restaurantController.recommendedProductModel?.products : reviewController.reviewedProductList,
+                        padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
                       );
-                    });
-                  }),
-                )),
-              ]),
-            ));
+                    }
+                  );
+                }),
+              )),
+            ]),
+          )),
+        );
       });
     });
   }

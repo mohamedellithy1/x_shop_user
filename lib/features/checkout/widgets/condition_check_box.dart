@@ -1,9 +1,9 @@
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
 import 'package:stackfood_multivendor/helper/route_helper.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CheckoutCondition extends StatelessWidget {
   const CheckoutCondition({super.key});
@@ -11,7 +11,7 @@ class CheckoutCondition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    bool activeRefund = Get.find<MarketSplashController>(tag: 'xmarket').configModel!.refundPolicyStatus!;
+    bool activeRefund = Get.find<SplashController>().configModel!.refundPolicyStatus!;
 
     return Row(children: [
       Expanded(

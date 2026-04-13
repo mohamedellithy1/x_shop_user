@@ -1,4 +1,3 @@
-
 import 'package:stackfood_multivendor/common/models/product_model.dart';
 
 class OnlineCartModel {
@@ -15,7 +14,6 @@ class OnlineCartModel {
   String? createdAt;
   String? updatedAt;
   Product? product;
-  double? requestedWeight;
 
   OnlineCartModel(
       {this.id,
@@ -30,8 +28,7 @@ class OnlineCartModel {
         this.variation,
         this.createdAt,
         this.updatedAt,
-        this.product,
-        this.requestedWeight});
+        this.product});
 
   OnlineCartModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -52,7 +49,6 @@ class OnlineCartModel {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     product = json['item'] != null ? Product.fromJson(json['item']) : null;
-    requestedWeight = json['requested_weight'] != null ? double.tryParse(json['requested_weight'].toString()) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -74,7 +70,6 @@ class OnlineCartModel {
     if (product != null) {
       data['item'] = product!.toJson();
     }
-    data['requested_weight'] = requestedWeight;
     return data;
   }
 }

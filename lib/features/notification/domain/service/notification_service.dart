@@ -11,10 +11,10 @@ class NotificationService implements NotificationServiceInterface {
   @override
   Future<List<NotificationModel>?> getList({DataSourceEnum? source}) async {
     List<NotificationModel>? notificationList = await notificationRepositoryInterface.getList(source: source);
-    notificationList?.sort((a, b) {
-      return DateConverter.isoStringToLocalDate(a.updatedAt!).compareTo(DateConverter.isoStringToLocalDate(b.updatedAt!));
-    });
     if(notificationList != null) {
+      notificationList.sort((a, b) {
+        return DateConverter.isoStringToLocalDate(a.updatedAt!).compareTo(DateConverter.isoStringToLocalDate(b.updatedAt!));
+      });
       Iterable iterable = notificationList.reversed;
       notificationList = iterable.toList() as List<NotificationModel>?;
     }

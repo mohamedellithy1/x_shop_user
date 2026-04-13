@@ -1,18 +1,17 @@
-import 'package:get/get.dart';
 import 'package:stackfood_multivendor/common/enums/data_source_enum.dart';
 import 'package:stackfood_multivendor/common/models/response_model.dart';
-import 'package:stackfood_multivendor/features/address/controllers/market_address_controller.dart';
+import 'package:stackfood_multivendor/features/address/controllers/address_controller.dart';
 import 'package:stackfood_multivendor/features/address/domain/models/address_model.dart';
 import 'package:stackfood_multivendor/features/address/domain/reposotories/address_repo_interface.dart';
+import 'package:get/get.dart';
 import 'package:stackfood_multivendor/features/address/domain/services/address_service_interface.dart';
 
-class AddressService implements AddressServiceInterface {
+class AddressService implements AddressServiceInterface{
   final AddressRepoInterface addressRepoInterface;
   AddressService({required this.addressRepoInterface});
 
   @override
-  List<AddressModel> filterAddresses(
-      List<AddressModel> addresses, String queryText) {
+  List<AddressModel> filterAddresses(List<AddressModel> addresses, String queryText) {
     List<AddressModel> addressList = [];
     if (queryText.isEmpty) {
       addressList.addAll(addresses);
@@ -27,21 +26,18 @@ class AddressService implements AddressServiceInterface {
   }
 
   @override
-  Future<List<AddressModel>?> getList(
-      {bool isLocal = false, DataSourceEnum? source}) async {
+  Future<List<AddressModel>?> getList({bool isLocal = false, DataSourceEnum? source}) async {
     return await addressRepoInterface.getList(source: source);
   }
 
   @override
-  Future<ResponseModel> add(AddressModel addressModel, bool fromCheckout,
-      int? restaurantZoneId) async {
+  Future<ResponseModel> add(AddressModel addressModel, bool fromCheckout, int? restaurantZoneId) async {
     ResponseModel responseModel = await addressRepoInterface.add(addressModel);
-    if (fromCheckout && !responseModel.zoneIds!.contains(restaurantZoneId)) {
-      responseModel = ResponseModel(
-          false, 'your_selected_location_is_from_different_zone'.tr);
+    if(fromCheckout && !responseModel.zoneIds!.contains(restaurantZoneId)) {
+      responseModel = ResponseModel(false, 'your_selected_location_is_from_different_zone'.tr);
     }
     if (responseModel.isSuccess) {
-      Get.find<MarketAddressController>(tag: 'xmarket').getAddressList();
+      Get.find<AddressController>().getAddressList();
       //Get.find<CheckoutController>().setAddressIndex(0);
     }
     return responseModel;
@@ -53,8 +49,8 @@ class AddressService implements AddressServiceInterface {
   }
 
   @override
-  Future<ResponseModel> update(
-      Map<String, dynamic> body, int? addressId) async {
+  Future<ResponseModel> update(Map<String, dynamic> body, int? addressId) async {
     return await addressRepoInterface.update(body, addressId!);
   }
+
 }

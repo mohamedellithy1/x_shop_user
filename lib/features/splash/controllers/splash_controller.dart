@@ -4,7 +4,7 @@ import 'package:stackfood_multivendor/api/api_client.dart';
 import 'package:stackfood_multivendor/common/enums/data_source_enum.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_loader_widget.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
-import 'package:stackfood_multivendor/features/address/controllers/market_address_controller.dart';
+import 'package:stackfood_multivendor/features/address/controllers/address_controller.dart';
 import 'package:stackfood_multivendor/features/address/domain/models/address_model.dart';
 import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
 import 'package:stackfood_multivendor/features/location/controllers/location_controller.dart';
@@ -12,22 +12,20 @@ import 'package:stackfood_multivendor/features/location/widgets/pick_map_dialog.
 import 'package:stackfood_multivendor/features/notification/domain/models/notification_body_model.dart';
 import 'package:stackfood_multivendor/features/splash/domain/models/config_model.dart';
 import 'package:stackfood_multivendor/features/splash/domain/models/deep_link_body.dart';
-import 'package:stackfood_multivendor/common/models/product_model.dart';
-import 'package:stackfood_multivendor/common/models/restaurant_model.dart';
 import 'package:stackfood_multivendor/features/splash/domain/services/splash_service_interface.dart';
 import 'package:stackfood_multivendor/helper/address_helper.dart';
-// import 'package:stackfood_multivendor/helper/maintance_helper.dart';
+import 'package:stackfood_multivendor/helper/maintance_helper.dart';
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 import 'package:stackfood_multivendor/helper/route_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// import 'package:stackfood_multivendor/helper/splash_route_helper.dart';
+import 'package:stackfood_multivendor/helper/splash_route_helper.dart';
 import 'package:universal_html/html.dart' as html;
 
-class MarketSplashController extends GetxController implements GetxService {
+class SplashController extends GetxController implements GetxService {
   final SplashServiceInterface splashServiceInterface;
 
-  MarketSplashController({required this.splashServiceInterface});
+  SplashController({required this.splashServiceInterface});
 
   ConfigModel? _configModel;
   ConfigModel? get configModel => _configModel;
@@ -41,8 +39,6 @@ class MarketSplashController extends GetxController implements GetxService {
   bool _savedCookiesData = false;
   bool get savedCookiesData => _savedCookiesData;
 
-  // bool _isNavigatedFromSplash = false; // ✅ Prevent double navigation
-
   String? _htmlText;
   String? get htmlText => _htmlText;
 
@@ -54,72 +50,51 @@ class MarketSplashController extends GetxController implements GetxService {
 
   DateTime get currentTime => DateTime.now();
 
-  Future<void> getConfigData(
-      {bool handleMaintenanceMode = false,
-      DataSourceEnum source = DataSourceEnum.local,
-      NotificationBodyModel? notificationBody,
-      bool fromMainFunction = false,
-      bool fromDemoReset = false}) async {
+  Future<void> getConfigData({bool handleMaintenanceMode = false, DataSourceEnum source = DataSourceEnum.local, NotificationBodyModel? notificationBody, bool fromMainFunction = false, bool fromDemoReset = false}) async {
     _hasConnection = true;
     _savedCookiesData = getCookiesData();
     Response response;
-    if (source == DataSourceEnum.local) {
-      response = await splashServiceInterface.getConfigData(
-          source: DataSourceEnum.local);
-      _handleConfigResponse(
-          response, handleMaintenanceMode, fromMainFunction, fromDemoReset,
-          notificationBody: notificationBody, linkBody: null);
-      getConfigData(
-          handleMaintenanceMode: handleMaintenanceMode,
-          source: DataSourceEnum.client,
-          notificationBody: notificationBody);
+    if(source == DataSourceEnum.local) {
+      response = await splashServiceInterface.getConfigData(source: DataSourceEnum.local);
+      _handleConfigResponse(response, handleMaintenanceMode, fromMainFunction, fromDemoReset, notificationBody: notificationBody, linkBody: null);
+      getConfigData(handleMaintenanceMode: handleMaintenanceMode, source: DataSourceEnum.client);
     } else {
-      response = await splashServiceInterface.getConfigData(
-          source: DataSourceEnum.client);
-      _handleConfigResponse(
-          response, handleMaintenanceMode, fromMainFunction, fromDemoReset,
-          notificationBody: notificationBody, linkBody: null);
+      response = await splashServiceInterface.getConfigData(source: DataSourceEnum.client);
+      _handleConfigResponse(response, handleMaintenanceMode, fromMainFunction, fromDemoReset, notificationBody: notificationBody, linkBody: null);
     }
+
   }
 
-  void _handleConfigResponse(Response response, bool handleMaintenanceMode,
-      bool fromMainFunction, bool fromDemoReset,
-      {required NotificationBodyModel? notificationBody,
-      required DeepLinkBody? linkBody}) {
-    if (response.statusCode == 200) {
+  void _handleConfigResponse(Response response, bool handleMaintenanceMode, bool fromMainFunction, bool fromDemoReset, {required NotificationBodyModel? notificationBody, required DeepLinkBody? linkBody}) {
+    if(response.statusCode == 200) {
       _configModel = splashServiceInterface.prepareConfigData(response);
-      debugPrint('Config: x_shop: ${_configModel?.xShop}');
-      if (_configModel != null) {
-        if (!GetPlatform.isWeb) {
-//           bool isMaintenanceMode = _configModel!.maintenanceMode!;
-//           bool isInMaintenance = MaintenanceHelper.isMaintenanceEnable();
+      if(_configModel != null) {
+        if(!GetPlatform.isWeb){
+          bool isMaintenanceMode = _configModel!.maintenanceMode!;
+          bool isInMaintenance = MaintenanceHelper.isMaintenanceEnable();
 
-//           if (isInMaintenance && handleMaintenanceMode) {
-//             Get.offNamed(RouteHelper.getUpdateRoute(false));
-//           } else if (handleMaintenanceMode &&
-//               ((Get.currentRoute.contains(RouteHelper.update) &&
-//                       !isMaintenanceMode) ||
-//                   !isInMaintenance)) {
-//             Get.offNamed(RouteHelper.getInitialRoute());
-//           }
+          if (isInMaintenance && handleMaintenanceMode) {
+            Get.offNamed(RouteHelper.getUpdateRoute(false));
+          } else if (handleMaintenanceMode && ((Get.currentRoute.contains(RouteHelper.update) && !isMaintenanceMode) || !isInMaintenance)) {
+            Get.offNamed(RouteHelper.getInitialRoute());
+          }
         }
-//         if (fromMainFunction) {
-//           _mainConfigRouting();
-//         } else if (fromDemoReset) {
-//           Get.offAllNamed(RouteHelper.getInitialRoute(fromSplash: true));
-//         } else if (!_isNavigatedFromSplash) {
-//           _isNavigatedFromSplash = true;
-//           route(notificationBody: notificationBody, linkBody: linkBody);
-//         }
+        if(fromMainFunction) {
+          _mainConfigRouting();
+        } else if (fromDemoReset) {
+          Get.offAllNamed(RouteHelper.getInitialRoute(fromSplash: true));
+        } else {
+          route(notificationBody: notificationBody, linkBody: linkBody);
+        }
         _onRemoveLoader();
       }
     } else {
-      if (response.statusText == ApiClient.noInternetMessage) {
+      if(response.statusText == ApiClient.noInternetMessage) {
         _hasConnection = false;
       }
     }
 
-    update(['xmarket']);
+    update();
   }
 
   void _onRemoveLoader() {
@@ -129,9 +104,8 @@ class MarketSplashController extends GetxController implements GetxService {
     }
   }
 
-/*
   Future<void> _mainConfigRouting() async {
-    if (GetPlatform.isWeb) {
+    if(GetPlatform.isWeb) {
       bool isInMaintenance = MaintenanceHelper.isMaintenanceEnable();
 
       if (isInMaintenance) {
@@ -139,7 +113,6 @@ class MarketSplashController extends GetxController implements GetxService {
       }
     }
   }
-*/
 
   Future<bool> initSharedData() {
     return splashServiceInterface.initSharedData();
@@ -160,7 +133,7 @@ class MarketSplashController extends GetxController implements GetxService {
   void saveCookiesData(bool data) {
     splashServiceInterface.saveCookiesData(data);
     _savedCookiesData = true;
-    update(['xmarket']);
+    update();
   }
 
   bool getCookiesData() {
@@ -178,108 +151,76 @@ class MarketSplashController extends GetxController implements GetxService {
   Future<bool> subscribeMail(String email) async {
     _isLoading = true;
     bool isSuccess = false;
-    update(['xmarket']);
+    update();
     isSuccess = await splashServiceInterface.subscribeMail(email);
     _isLoading = false;
-    update(['xmarket']);
+    update();
     return isSuccess;
   }
 
-  Future<void> navigateToLocationScreen(String page,
-      {bool offNamed = false, bool offAll = false}) async {
+  Future<void> navigateToLocationScreen(String page, {bool offNamed = false, bool offAll = false}) async {
     int? restaurantId;
-    if (Get.currentRoute.startsWith(RouteHelper.restaurant)) {
-      restaurantId =
-          Get.parameters['id'] != 'null' && Get.parameters['id'] != null
-              ? int.parse(Get.parameters['id']!)
-              : null;
+    if(Get.currentRoute.startsWith(RouteHelper.restaurant)) {
+      restaurantId = Get.parameters['id'] != 'null' && Get.parameters['id'] != null ? int.parse(Get.parameters['id']!) : null;
     }
     bool fromSignup = page == RouteHelper.signUp;
     bool fromHome = page == 'home';
-    if (!fromHome && AddressHelper.getAddressFromSharedPref() != null) {
+    if(!fromHome && AddressHelper.getAddressFromSharedPref() != null) {
       Get.dialog(const CustomLoaderWidget(), barrierDismissible: false);
-      Get.find<MarketLocationController>().autoNavigate(
-          AddressHelper.getAddressFromSharedPref(),
-          fromSignup,
-          null,
-          false,
-          ResponsiveHelper.isDesktop(Get.context));
-    } else if (Get.find<MarketAuthController>().isLoggedIn()) {
+      Get.find<LocationController>().autoNavigate(
+          AddressHelper.getAddressFromSharedPref(), fromSignup, null, false, ResponsiveHelper.isDesktop(Get.context)
+      );
+    }else if(Get.find<AuthController>().isLoggedIn()) {
       Get.dialog(const CustomLoaderWidget(), barrierDismissible: false);
-      await Get.find<MarketAddressController>(tag: 'xmarket').getAddressList();
+      await Get.find<AddressController>().getAddressList();
       Get.back();
-      if (Get.find<MarketAddressController>(tag: 'xmarket').addressList !=
-              null &&
-          Get.find<MarketAddressController>(tag: 'xmarket')
-              .addressList!
-              .isEmpty) {
-        if (ResponsiveHelper.isDesktop(Get.context)) {
-          showGeneralDialog(
-              context: Get.context!,
-              pageBuilder: (context, animation, secondaryAnimation) {
-                return SizedBox(
-                  height: 300,
-                  width: 300,
-                  child: PickMapDialog(
-                    fromSignUp: (page == RouteHelper.signUp),
-                    canRoute: false,
-                    fromAddAddress: false,
-                    route: page,
-                    restaurantId: restaurantId,
-                    // canTakeCurrentLocation: !AuthHelper.isLoggedIn(),
-                  ),
-                );
-              });
+      if(Get.find<AddressController>().addressList != null && Get.find<AddressController>().addressList!.isEmpty) {
+        if(ResponsiveHelper.isDesktop(Get.context)) {
+          showGeneralDialog(context: Get.context!, pageBuilder: (_,__,___) {
+            return SizedBox(
+              height: 300, width: 300,
+              child: PickMapDialog(
+                fromSignUp: (page == RouteHelper.signUp), canRoute: false, fromAddAddress: false, route: page, restaurantId: restaurantId,
+                // canTakeCurrentLocation: !AuthHelper.isLoggedIn(),
+              ),
+            );
+          });
         } else {
           Get.toNamed(RouteHelper.getPickMapRoute(page, false));
         }
-      } else {
-        if (ResponsiveHelper.isDesktop(Get.context)) {
+      }else {
+        if(ResponsiveHelper.isDesktop(Get.context)) {
           Get.back();
-          showGeneralDialog(
-              context: Get.context!,
-              pageBuilder: (context, animation, secondaryAnimation) {
-                return SizedBox(
-                  height: 300,
-                  width: 300,
-                  child: PickMapDialog(
-                    fromSignUp: (page == RouteHelper.signUp),
-                    canRoute: false,
-                    fromAddAddress: false,
-                    route: page,
-                    restaurantId: restaurantId,
-                    // canTakeCurrentLocation: !AuthHelper.isLoggedIn(),
-                  ),
-                );
-              });
+          showGeneralDialog(context: Get.context!, pageBuilder: (_,__,___) {
+            return SizedBox(
+              height: 300, width: 300,
+              child: PickMapDialog(
+                fromSignUp: (page == RouteHelper.signUp), canRoute: false, fromAddAddress: false, route: page, restaurantId: restaurantId,
+                // canTakeCurrentLocation: !AuthHelper.isLoggedIn(),
+              ),
+            );
+          });
         } else {
-          if (offNamed) {
+          if(offNamed) {
             Get.offNamed(RouteHelper.getAccessLocationRoute(page));
-          } else if (offAll) {
+          }else if(offAll) {
             Get.offAllNamed(RouteHelper.getAccessLocationRoute(page));
-          } else {
+          }else {
             Get.toNamed(RouteHelper.getAccessLocationRoute(page));
           }
         }
       }
-    } else {
-      if (ResponsiveHelper.isDesktop(Get.context)) {
-        showGeneralDialog(
-            context: Get.context!,
-            pageBuilder: (context, animation, secondaryAnimation) {
-              return SizedBox(
-                height: 300,
-                width: 300,
-                child: PickMapDialog(
-                  fromSignUp: (page == RouteHelper.signUp),
-                  canRoute: false,
-                  fromAddAddress: false,
-                  route: page,
-                  restaurantId: restaurantId,
-                  // canTakeCurrentLocation: !fromHome,
-                ),
-              );
-            });
+    }else {
+      if(ResponsiveHelper.isDesktop(Get.context)) {
+        showGeneralDialog(context: Get.context!, pageBuilder: (_,__,___) {
+          return SizedBox(
+            height: 300, width: 300,
+            child: PickMapDialog(
+              fromSignUp: (page == RouteHelper.signUp), canRoute: false, fromAddAddress: false, route: page, restaurantId: restaurantId,
+              // canTakeCurrentLocation: !fromHome,
+            ),
+          );
+        });
       } else {
         _checkPermission(page);
       }
@@ -287,23 +228,20 @@ class MarketSplashController extends GetxController implements GetxService {
   }
 
   void _checkPermission(String page) async {
+
     LocationPermission permission = await Geolocator.checkPermission();
 
-    if (permission == LocationPermission.denied) {
+    if(permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
     }
-    if (permission == LocationPermission.denied ||
-        permission == LocationPermission.deniedForever) {
+    if(permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
       Get.toNamed(RouteHelper.getPickMapRoute(page, false));
     } else {
-      if (await _locationCheck()) {
+      if(await _locationCheck()) {
         Get.dialog(const CustomLoaderWidget(), barrierDismissible: false);
-        await Get.find<MarketLocationController>()
-            .getCurrentLocation(false)
-            .then((value) {
+        await Get.find<LocationController>().getCurrentLocation(false).then((value) {
           if (value.latitude != null) {
-            _onPickAddressButtonPressed(
-                Get.find<MarketLocationController>(), page);
+            _onPickAddressButtonPressed(Get.find<LocationController>(), page);
           }
         });
       } else {
@@ -326,18 +264,14 @@ class MarketSplashController extends GetxController implements GetxService {
     return serviceEnabled;
   }
 
-  void _onPickAddressButtonPressed(
-      MarketLocationController locationController, String page) {
-    if (locationController.pickPosition.latitude != 0 &&
-        locationController.pickAddress!.isNotEmpty) {
+  void _onPickAddressButtonPressed(LocationController locationController, String page) {
+    if(locationController.pickPosition.latitude != 0 && locationController.pickAddress!.isNotEmpty) {
       AddressModel address = AddressModel(
         latitude: locationController.pickPosition.latitude.toString(),
         longitude: locationController.pickPosition.longitude.toString(),
-        addressType: 'others',
-        address: locationController.pickAddress,
+        addressType: 'others', address: locationController.pickAddress,
       );
-      locationController.saveAddressAndNavigate(
-          address, false, page, false, ResponsiveHelper.isDesktop(Get.context));
+      locationController.saveAddressAndNavigate(address, false, page, false, ResponsiveHelper.isDesktop(Get.context));
     } else {
       showCustomSnackBar('pick_an_address'.tr);
     }
@@ -346,38 +280,11 @@ class MarketSplashController extends GetxController implements GetxService {
   void saveReferBottomSheetStatus(bool data) {
     splashServiceInterface.saveReferBottomSheetStatus(data);
     _showReferBottomSheet = data;
-    update(['xmarket']);
+    update();
   }
 
-  void getReferBottomSheetStatus() {
+  void getReferBottomSheetStatus(){
     _showReferBottomSheet = splashServiceInterface.getReferBottomSheetStatus();
   }
 
-  List<Product> filterXMarketProducts(List<Product>? list) {
-    if (list == null || list.isEmpty) return [];
-
-    const String xMarketName = 'X Market';
-    const int xMarketId = 8;
-
-    // Debug: print all unique restaurant names
-    final names =
-        list.map((p) => '${p.restaurantName} (id:${p.restaurantId})').toSet();
-    print(
-        '📦 [filterXMarketProducts] Input: ${list.length} products from restaurants: $names');
-
-    final filtered = list
-        .where((p) =>
-            p.restaurantName?.trim() == xMarketName ||
-            p.restaurantId == xMarketId)
-        .toList();
-
-    print(
-        '📦 [filterXMarketProducts] Output: ${filtered.length} X Market products');
-    return filtered;
-  }
-
-  List<Restaurant> filterXMarketRestaurants(List<Restaurant>? list) {
-    const String xMarketName = 'X Market';
-    return list?.where((r) => r.name?.trim() == xMarketName).toList() ?? [];
-  }
 }

@@ -1,67 +1,36 @@
-import 'package:flutter/foundation.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stackfood_multivendor/util/xmarket_images.dart';
 
-void customPrint(String message) {
-  if (kDebugMode) {
-    print(message);
+void showCustomSnackBar(String? message, {bool isError = true, bool getXSnackBar = true, int? showDuration}) {
+  if(message != null && message.isNotEmpty) {
+    if(getXSnackBar) {
+      Get.closeCurrentSnackbar();
+      Get.showSnackbar(GetSnackBar(
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.transparent,
+        duration: const Duration(seconds: 2),
+        overlayBlur: 0.0,
+        margin: const EdgeInsets.only(bottom: 40, left: 20, right: 20),
+        messageText: CustomToast(text: message, isError: isError),
+        borderRadius: 10,
+        padding: const EdgeInsets.all(0),
+        snackStyle: SnackStyle.FLOATING,
+        isDismissible: true,
+        forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+        reverseAnimationCurve: Curves.fastEaseInToSlowEaseOut,
+        animationDuration: const Duration(milliseconds: 500),
+      ));
+    }else {
+      ScaffoldMessenger.of(Get.context!).showSnackBar(SnackBar(
+        dismissDirection: DismissDirection.endToStart,
+        elevation: 0.0,
+        backgroundColor: Colors.transparent,
+        padding: EdgeInsets.zero,
+        content: CustomToast(text: message, isError: isError),
+        duration: Duration(seconds: showDuration ?? 2),
+        behavior: SnackBarBehavior.floating,
+      ));
+    }
   }
-}
-
-void showCustomSnackBar(
-  String message, {
-  String? subtitle, // ده ال subtitle اختياري
-  int seconds = 3,
-}) {
-  if (Get.context == null) return;
-
-  Get.closeCurrentSnackbar();
-  Get.showSnackbar(GetSnackBar(
-    snackPosition: SnackPosition.TOP,
-    margin: const EdgeInsets.all(16),
-    borderRadius: 12,
-    duration: Duration(seconds: seconds),
-    backgroundColor: Color(0xCC2C2C2E),
-    dismissDirection: DismissDirection.horizontal,
-    icon: Icon(
-      Icons.info_outline,
-      color: Colors.white,
-      size: 24,
-    ),
-    messageText: Row(
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                message,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-              if (subtitle != null)
-                Text(
-                  subtitle,
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 14,
-                  ),
-                ),
-            ],
-          ),
-        ),
-        CircleAvatar(
-          radius: 30, // حجم الدايرة
-          backgroundColor: Colors.transparent,
-          backgroundImage: AssetImage(
-            XmarketImages.splashLogo,
-          ),
-        )
-      ],
-    ),
-  ));
 }

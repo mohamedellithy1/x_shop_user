@@ -17,21 +17,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
-import 'package:stackfood_multivendor/common/widgets/skeleton.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
 
 class WalletScreen extends StatefulWidget {
   final String? fundStatus;
   final String? token;
   final bool fromMenuPage;
   final bool fromNotification;
-  const WalletScreen(
-      {super.key,
-      this.fundStatus,
-      this.token,
-      this.fromMenuPage = false,
-      this.fromNotification = false});
+  const WalletScreen({super.key, this.fundStatus, this.token, this.fromMenuPage = false, this.fromNotification = false});
 
   @override
   State<WalletScreen> createState() => _WalletScreenState();
@@ -46,61 +39,56 @@ class _WalletScreenState extends State<WalletScreen> {
     super.initState();
 
     _initCall();
+
   }
 
-  void _initCall() {
-    if (Get.find<MarketAuthController>().isLoggedIn()) {
-      Get.find<MarketWalletController>().insertFilterList();
-      Get.find<MarketWalletController>()
-          .setWalletFilerType('all', isUpdate: false);
+  void _initCall(){
+    if(Get.find<AuthController>().isLoggedIn()){
 
-      if ((widget.fundStatus == 'success' ||
-              widget.fundStatus == 'fail' ||
-              widget.fundStatus == 'cancel') &&
-          Get.find<MarketWalletController>().getWalletAccessToken() !=
-              widget.token) {
-        Future.delayed(const Duration(seconds: 2), () {
-          showCustomSnackBar(
-            widget.fundStatus == 'success'
-                ? 'fund_successfully_added_to_wallet'.tr
-                : 'fund_not_added_to_wallet'.tr,
-          );
+      Get.find<WalletController>().insertFilterList();
+      Get.find<WalletController>().setWalletFilerType('all', isUpdate: false);
+
+      if((widget.fundStatus == 'success' || widget.fundStatus == 'fail' || widget.fundStatus == 'cancel') && Get.find<WalletController>().getWalletAccessToken() != widget.token){
+        Future.delayed(const Duration(seconds: 2), (){
+
+          Get.showSnackbar(GetSnackBar(
+            backgroundColor: widget.fundStatus == 'fail' ? Colors.red : Colors.green,
+            message: widget.fundStatus == 'success' ? 'fund_successfully_added_to_wallet'.tr : 'fund_not_added_to_wallet'.tr,
+            maxWidth: 500,
+            duration: const Duration(seconds: 3),
+            snackStyle: SnackStyle.FLOATING,
+            margin:  const EdgeInsets.all(Dimensions.paddingSizeOverLarge),
+            borderRadius: Dimensions.radiusExtraLarge,
+            isDismissible: true,
+            dismissDirection: DismissDirection.horizontal,
+          ));
         }).then((value) {
-          Get.find<MarketWalletController>()
-              .setWalletAccessToken(widget.token ?? '');
+          Get.find<WalletController>().setWalletAccessToken(widget.token ?? '');
         });
       }
-      Get.find<MarketProfileController>().getUserInfo();
-      Get.find<MarketWalletController>().getWalletBonusList(isUpdate: false);
-      Get.find<MarketWalletController>().getWalletTransactionList(
-          '1', false, Get.find<MarketWalletController>().type);
+      Get.find<ProfileController>().getUserInfo();
+      Get.find<WalletController>().getWalletBonusList(isUpdate: false);
+      Get.find<WalletController>().getWalletTransactionList('1', false, Get.find<WalletController>().type);
 
-      Get.find<MarketWalletController>().setOffset(1);
+      Get.find<WalletController>().setOffset(1);
 
       scrollController.addListener(() {
-        if (scrollController.position.pixels ==
-                scrollController.position.maxScrollExtent &&
-            Get.find<MarketWalletController>().transactionList != null &&
-            !Get.find<MarketWalletController>().isLoading) {
-          int pageSize =
-              (Get.find<MarketWalletController>().popularPageSize! / 10).ceil();
-          if (Get.find<MarketWalletController>().offset < pageSize) {
-            Get.find<MarketWalletController>()
-                .setOffset(Get.find<MarketWalletController>().offset + 1);
+        if (scrollController.position.pixels == scrollController.position.maxScrollExtent
+            && Get.find<WalletController>().transactionList != null
+            && !Get.find<WalletController>().isLoading) {
+          int pageSize = (Get.find<WalletController>().popularPageSize! / 10).ceil();
+          if (Get.find<WalletController>().offset < pageSize) {
+            Get.find<WalletController>().setOffset(Get.find<WalletController>().offset + 1);
             if (kDebugMode) {
               print('end of the page');
             }
-            Get.find<MarketWalletController>().showBottomLoader();
-            Get.find<MarketWalletController>().getWalletTransactionList(
-                Get.find<MarketWalletController>().offset.toString(),
-                false,
-                Get.find<MarketWalletController>().type);
+            Get.find<WalletController>().showBottomLoader();
+            Get.find<WalletController>().getWalletTransactionList(Get.find<WalletController>().offset.toString(), false, Get.find<WalletController>().type);
           }
         }
       });
     }
   }
-
   @override
   void dispose() {
     super.dispose();
@@ -110,22 +98,22 @@ class _WalletScreenState extends State<WalletScreen> {
 
   @override
   Widget build(BuildContext context) {
-    bool isLoggedIn = Get.find<MarketAuthController>().isLoggedIn();
+    bool isLoggedIn = Get.find<AuthController>().isLoggedIn();
     return PopScope(
       canPop: widget.fromNotification ? Navigator.canPop(context) : false,
       onPopInvokedWithResult: (didPop, result) async {
-        if (widget.fromNotification) {
-          if (widget.fromNotification) {
+        if(widget.fromNotification) {
+          if(widget.fromNotification) {
             Get.offAllNamed(RouteHelper.getInitialRoute());
-          } else {
+          }else {
             return;
           }
-        } else {
-          if (widget.fromMenuPage) {
+        }else {
+          if(widget.fromMenuPage){
             Future.delayed(const Duration(milliseconds: 10), () {
               Get.back();
             });
-          } else {
+          }else{
             Future.delayed(const Duration(milliseconds: 10), () {
               Get.offAllNamed(RouteHelper.getInitialRoute());
             });
@@ -134,156 +122,102 @@ class _WalletScreenState extends State<WalletScreen> {
       },
       child: Scaffold(
         backgroundColor: Theme.of(context).cardColor,
-        appBar: CustomAppBarWidget(
-            title: 'wallet'.tr,
-            isBackButtonExist: true,
-            onBackPressed: () {
-              if (Navigator.canPop(context)) {
+        appBar: CustomAppBarWidget(title: 'wallet'.tr, isBackButtonExist: true, onBackPressed: (){
+          if(widget.fromNotification) {
+            if(widget.fromNotification) {
+              Get.offAllNamed(RouteHelper.getInitialRoute());
+            }else {
+              Get.back();
+            }
+          }else {
+            if(widget.fromMenuPage){
+              Future.delayed(const Duration(milliseconds: 10), () {
                 Get.back();
-              } else {
+              });
+            }else{
+              Future.delayed(const Duration(milliseconds: 10), () {
                 Get.offAllNamed(RouteHelper.getInitialRoute());
-              }
-            }),
-        endDrawer: const MenuDrawerWidget(),
-        endDrawerEnableOpenDragGesture: false,
+              });
+            }
+          }
+        }),
+        endDrawer: const MenuDrawerWidget(), endDrawerEnableOpenDragGesture: false,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        body: GetBuilder<MarketProfileController>(builder: (profileController) {
-          return isLoggedIn
-              ? profileController.userInfoModel != null
-                  ? SafeArea(
-                      child: RefreshIndicator(
-                        color: Colors.orange,
-                        onRefresh: () async {
-                          Get.find<MarketWalletController>()
-                              .setWalletFilerType('all');
-                          Get.find<MarketWalletController>()
-                              .getWalletTransactionList('1', true, 'all');
-                          Get.find<MarketProfileController>().getUserInfo();
-                        },
-                        child: SingleChildScrollView(
-                          controller: scrollController,
-                          child: Column(
-                            children: [
-                              WebScreenTitleWidget(title: 'wallet'.tr),
-                              SizedBox(
-                                width: Dimensions.webMaxWidth,
-                                child: GetBuilder<MarketWalletController>(
-                                    builder: (walletController) {
-                                  return ResponsiveHelper.isDesktop(context)
-                                      ? Padding(
-                                          padding: const EdgeInsets.only(
-                                              top: Dimensions
-                                                  .paddingSizeDefault),
-                                          child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Expanded(
-                                                    flex: 4,
-                                                    child: Column(
-                                                      children: [
-                                                        Container(
-                                                          decoration:
-                                                              ResponsiveHelper
-                                                                      .isDesktop(
-                                                                          context)
-                                                                  ? BoxDecoration(
-                                                                      color: Theme.of(
-                                                                              context)
-                                                                          .cardColor,
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              Dimensions.radiusSmall),
-                                                                      boxShadow: [
-                                                                        BoxShadow(
-                                                                            color:
-                                                                                Colors.grey.withValues(alpha: 0.1),
-                                                                            spreadRadius: 1,
-                                                                            blurRadius: 10,
-                                                                            offset: const Offset(0, 1))
-                                                                      ],
-                                                                    )
-                                                                  : null,
-                                                          padding: const EdgeInsets
-                                                              .all(Dimensions
-                                                                  .paddingSizeLarge),
-                                                          child: WalletCardWidget(
-                                                              tooltipController:
-                                                                  tooltipController),
-                                                        ),
-                                                      ],
-                                                    )),
-                                                const SizedBox(
-                                                    width: Dimensions
-                                                        .paddingSizeDefault),
-                                                Expanded(
-                                                    flex: 6,
-                                                    child: Column(children: [
-                                                      const WebBonusBannerViewWidget(),
-                                                      Container(
-                                                        decoration:
-                                                            ResponsiveHelper
-                                                                    .isDesktop(
-                                                                        context)
-                                                                ? BoxDecoration(
-                                                                    color: Colors
-                                                                        .black,
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            Dimensions.radiusSmall),
-                                                                    boxShadow: [
-                                                                      BoxShadow(
-                                                                          color: Colors.grey.withValues(
-                                                                              alpha:
-                                                                                  0.1),
-                                                                          spreadRadius:
-                                                                              1,
-                                                                          blurRadius:
-                                                                              10,
-                                                                          offset: const Offset(
-                                                                              0,
-                                                                              1))
-                                                                    ],
-                                                                  )
-                                                                : null,
-                                                        padding: const EdgeInsets
-                                                            .all(Dimensions
-                                                                .paddingSizeLarge),
-                                                        child:
-                                                            const WalletHistoryWidget(),
-                                                      ),
-                                                    ])),
-                                              ]),
-                                        )
-                                      : Column(children: [
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: Dimensions
-                                                    .paddingSizeLarge),
-                                            child: WalletCardWidget(
-                                                tooltipController:
-                                                    tooltipController),
-                                          ),
-                                          const BonusBannerWidget(),
-                                          const Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: Dimensions
-                                                    .paddingSizeLarge),
-                                            child: WalletHistoryWidget(),
-                                          )
-                                        ]);
-                                }),
-                              ),
-                            ],
-                          ),
-                        ),
+        body: GetBuilder<ProfileController>(builder: (profileController) {
+          return isLoggedIn ? profileController.userInfoModel != null ? SafeArea(
+            child: RefreshIndicator(
+              onRefresh: () async{
+                Get.find<WalletController>().setWalletFilerType('all');
+                Get.find<WalletController>().getWalletTransactionList('1', true, 'all');
+                Get.find<ProfileController>().getUserInfo();
+              },
+              child: SingleChildScrollView(
+                controller: scrollController,
+                child: Column(
+                  children: [
+                    WebScreenTitleWidget(title: 'wallet'.tr),
+
+                    FooterViewWidget(
+                      child: SizedBox(width: Dimensions.webMaxWidth,
+                        child: GetBuilder<WalletController>(builder: (walletController) {
+                          return ResponsiveHelper.isDesktop(context) ? Padding(
+                            padding: const EdgeInsets.only(top: Dimensions.paddingSizeDefault),
+                            child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+
+                              Expanded(flex: 4, child: Column(children: [
+                                Container(
+                                  decoration: ResponsiveHelper.isDesktop(context) ? BoxDecoration(
+                                    color: Theme.of(context).cardColor,
+                                    borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                                    boxShadow: [BoxShadow(color: Colors.grey.withValues(alpha: 0.1), spreadRadius: 1, blurRadius: 10, offset: const Offset(0, 1))],
+                                  ) : null,
+                                  padding: const EdgeInsets.all(Dimensions.paddingSizeLarge),
+                                  child: WalletCardWidget(tooltipController: tooltipController),
+                                ),
+                              ],
+                              )),
+                              const SizedBox(width: Dimensions.paddingSizeDefault),
+
+                              Expanded (flex: 6, child: Column(children: [
+                                const WebBonusBannerViewWidget(),
+
+                                Container(
+                                  decoration: ResponsiveHelper.isDesktop(context) ? BoxDecoration(
+                                    color: Theme.of(context).cardColor,
+                                    borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                                    boxShadow: [BoxShadow(color: Colors.grey.withValues(alpha: 0.1), spreadRadius: 1, blurRadius: 10, offset: const Offset(0, 1))],
+                                  ) : null,
+                                  padding: const EdgeInsets.all(Dimensions.paddingSizeLarge),
+                                  child: const WalletHistoryWidget(),
+                                ),
+                              ])),
+
+                            ]),
+                          ) : Column(children: [
+
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeLarge),
+                              child: WalletCardWidget(tooltipController: tooltipController),
+                            ),
+                            const BonusBannerWidget(),
+
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeLarge),
+                              child: WalletHistoryWidget(),
+                            )
+
+                          ]);
+                        }),
                       ),
                     )
-                  : const Center(child: CircularProgressIndicator())
-              : NotLoggedInScreen(callBack: (value) {
-                  _initCall();
-                  setState(() {});
-                });
+                  ],
+                ),
+              ),
+            ),
+          ) : const Center(child: CircularProgressIndicator()) : NotLoggedInScreen(callBack: (value){
+            _initCall();
+            setState(() {});
+          });
         }),
       ),
     );
@@ -291,7 +225,7 @@ class _WalletScreenState extends State<WalletScreen> {
 }
 
 class WalletShimmer extends StatelessWidget {
-  final MarketWalletController walletController;
+  final WalletController walletController;
   const WalletShimmer({super.key, required this.walletController});
 
   @override
@@ -300,70 +234,37 @@ class WalletShimmer extends StatelessWidget {
       key: UniqueKey(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisSpacing: 50,
-        mainAxisSpacing: ResponsiveHelper.isDesktop(context)
-            ? Dimensions.paddingSizeLarge
-            : 0.01,
+        mainAxisSpacing: ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeLarge : 0.01,
         childAspectRatio: ResponsiveHelper.isDesktop(context) ? 5 : 4.1,
         crossAxisCount: ResponsiveHelper.isMobile(context) ? 1 : 2,
       ),
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
+      physics:  const NeverScrollableScrollPhysics(),
+      shrinkWrap:  true,
       itemCount: 10,
-      padding:
-          EdgeInsets.only(top: ResponsiveHelper.isDesktop(context) ? 28 : 25),
+      padding: EdgeInsets.only(top: ResponsiveHelper.isDesktop(context) ? 28 : 25),
       itemBuilder: (context, index) {
         return Padding(
-          padding:
-              const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeSmall),
+          padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeSmall),
           child: Shimmer(
             duration: const Duration(seconds: 2),
             enabled: walletController.transactionList == null,
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                              height: 10,
-                              width: 50,
-                              decoration: BoxDecoration(
-                                  color: Colors.grey[300],
-                                  borderRadius: BorderRadius.circular(2))),
-                          const SizedBox(height: 10),
-                          Container(
-                              height: 10,
-                              width: 70,
-                              decoration: BoxDecoration(
-                                  color: Colors.grey[300],
-                                  borderRadius: BorderRadius.circular(2))),
-                        ]),
-                    Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Container(
-                              height: 10,
-                              width: 50,
-                              decoration: BoxDecoration(
-                                  color: Colors.grey[300],
-                                  borderRadius: BorderRadius.circular(2))),
-                          const SizedBox(height: 10),
-                          Container(
-                              height: 10,
-                              width: 70,
-                              decoration: BoxDecoration(
-                                  color: Colors.grey[300],
-                                  borderRadius: BorderRadius.circular(2))),
-                        ]),
-                  ],
-                ),
-                Padding(
-                    padding:
-                        const EdgeInsets.only(top: Dimensions.paddingSizeLarge),
-                    child: Divider(color: Theme.of(context).disabledColor)),
-              ],
+            child: Column(children: [
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Container(height: 10, width: 50, decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(2))),
+                    const SizedBox(height: 10),
+                    Container(height: 10, width: 70, decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(2))),
+                  ]),
+                  Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+                    Container(height: 10, width: 50, decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(2))),
+                    const SizedBox(height: 10),
+                    Container(height: 10, width: 70, decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(2))),
+                  ]),
+                ],
+              ),
+              Padding(padding: const EdgeInsets.only(top: Dimensions.paddingSizeLarge), child: Divider(color: Theme.of(context).disabledColor)),
+            ],
             ),
           ),
         );

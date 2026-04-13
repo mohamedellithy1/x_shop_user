@@ -79,7 +79,7 @@ class _DemoResetDialogWidgetState extends State<DemoResetDialogWidget> {
               setState(() {
                 _isLoading = true;
               });
-              await Get.find<MarketSplashController>(tag: 'xmarket').getConfigData(fromDemoReset: true);
+              await Get.find<SplashController>().getConfigData(fromDemoReset: true);
 
               setState(() {
                 _isLoading = false;

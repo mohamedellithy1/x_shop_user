@@ -9,7 +9,7 @@ import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:get/get.dart';
 
 class CategoryPopUpWidget extends StatelessWidget {
-  final MarketCategoryController categoryController;
+  final CategoryController categoryController;
   const CategoryPopUpWidget({super.key, required this.categoryController});
 
   @override
@@ -84,7 +84,7 @@ class CategoryPopUpWidget extends StatelessWidget {
 }
 
 class CategoryShimmer extends StatelessWidget {
-  final MarketCategoryController categoryController;
+  final CategoryController categoryController;
   const CategoryShimmer({super.key, required this.categoryController});
 
   @override

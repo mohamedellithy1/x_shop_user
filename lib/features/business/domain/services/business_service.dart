@@ -1,14 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
+import 'package:stackfood_multivendor/features/dashboard/controllers/dashboard_controller.dart';
+import 'package:stackfood_multivendor/features/order/domain/models/order_model.dart';
 import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
 import 'package:stackfood_multivendor/features/business/domain/models/business_plan_body.dart';
 import 'package:stackfood_multivendor/features/business/domain/reposotories/business_repo_interface.dart';
 import 'package:stackfood_multivendor/features/business/widgets/business_payment_method_bottom_sheet_widget.dart';
-import 'package:stackfood_multivendor/features/dashboard/controllers/dashboard_controller.dart';
-import 'package:stackfood_multivendor/features/order/domain/models/order_model.dart';
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 import 'package:stackfood_multivendor/helper/route_helper.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'business_service_interface.dart';
 import 'package:universal_html/html.dart' as html;
 
@@ -69,7 +69,7 @@ class BusinessService implements BusinessServiceInterface{
     if(GetPlatform.isWeb) {
       html.window.open(redirectUrl,"_self");
     } else{
-      Get.toNamed(RouteHelper.getPaymentRoute(OrderModel(), digitalPaymentName, subscriptionUrl: redirectUrl, guestId: Get.find<MarketAuthController>().getGuestId(), restaurantId: restaurantId, packageId: packageId));
+      Get.toNamed(RouteHelper.getPaymentRoute(OrderModel(), digitalPaymentName, subscriptionUrl: redirectUrl, guestId: Get.find<AuthController>().getGuestId(), restaurantId: restaurantId, packageId: packageId));
     }
   }
 

@@ -6,7 +6,7 @@ import 'package:stackfood_multivendor/common/widgets/custom_asset_image_widget.d
 import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
 import 'package:stackfood_multivendor/features/favourite/controllers/favourite_controller.dart';
 import 'package:stackfood_multivendor/helper/auth_helper.dart';
-import 'package:stackfood_multivendor/util/xmarket_images.dart';
+import 'package:stackfood_multivendor/util/images.dart';
 
 class CustomFavouriteWidget extends StatefulWidget {
   final Restaurant? restaurant;
@@ -15,22 +15,15 @@ class CustomFavouriteWidget extends StatefulWidget {
   final bool isWished;
   final double? size;
   final int? restaurantId;
-  const CustomFavouriteWidget(
-      {super.key,
-      this.restaurant,
-      this.product,
-      this.isRestaurant = false,
-      required this.isWished,
-      this.size = 25,
-      this.restaurantId});
+  const CustomFavouriteWidget({super.key, this.restaurant, this.product, this.isRestaurant = false, required this.isWished, this.size = 25, this.restaurantId});
 
   @override
   State<CustomFavouriteWidget> createState() => _CustomFavouriteWidgetState();
 }
 
-class _CustomFavouriteWidgetState extends State<CustomFavouriteWidget>
-    with SingleTickerProviderStateMixin {
+class _CustomFavouriteWidgetState extends State<CustomFavouriteWidget> with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
+
 
   @override
   void initState() {
@@ -54,44 +47,28 @@ class _CustomFavouriteWidgetState extends State<CustomFavouriteWidget>
     return GetBuilder<FavouriteController>(builder: (favouriteController) {
       return InkWell(
         splashColor: Colors.transparent,
-        onTap: favouriteController.isDisable
-            ? null
-            : () {
-                if (AuthHelper.isLoggedIn()) {
-                  _decideWished(widget.isWished, favouriteController);
-                } else {
-                  showCustomSnackBar('you_are_not_logged_in'.tr);
-                }
-                _controller.reverse().then((value) => _controller.forward());
-              },
+        onTap: favouriteController.isDisable ? null : () {
+          if(AuthHelper.isLoggedIn()) {
+            _decideWished(widget.isWished, favouriteController);
+          }else {
+            showCustomSnackBar('you_are_not_logged_in'.tr);
+          }
+          _controller.reverse().then((value) => _controller.forward());
+        },
         child: ScaleTransition(
-          scale: Tween(begin: 0.7, end: 1.0).animate(
-              CurvedAnimation(parent: _controller, curve: Curves.easeOut)),
-          child: widget.isWished
-              ? CustomAssetImageWidget(XmarketImages.favouriteIcon,
-                  height: widget.size, width: widget.size)
-              : Icon(
-                  Icons.favorite_border,
-                  size: widget.size,
-                  color: Theme.of(context).primaryColor,
-                ),
+          scale: Tween(begin: 0.7, end: 1.0).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut)),
+          child: CustomAssetImageWidget(widget.isWished ? Images.favouriteIcon : Images.unFavouriteIcon, height: widget.size, width: widget.size),
         ),
       );
     });
   }
 
   void _decideWished(bool isWished, FavouriteController favouriteController) {
-    if (widget.isRestaurant) {
-      isWished
-          ? favouriteController.removeFromFavouriteList(
-              widget.restaurantId ?? widget.restaurant?.id, true)
-          : favouriteController.addToFavouriteList(
-              null, widget.restaurantId ?? widget.restaurant?.id, true);
-    } else {
-      isWished
-          ? favouriteController.removeFromFavouriteList(
-              widget.product?.id, false)
-          : favouriteController.addToFavouriteList(widget.product, null, false);
+    if(widget.isRestaurant) {
+      isWished ? favouriteController.removeFromFavouriteList(widget.restaurantId ?? widget.restaurant?.id, true)
+       : favouriteController.addToFavouriteList(null, widget.restaurantId ?? widget.restaurant?.id, true);
+    }else {
+      isWished ? favouriteController.removeFromFavouriteList(widget.product?.id, false) : favouriteController.addToFavouriteList(widget.product, null, false);
     }
   }
 }

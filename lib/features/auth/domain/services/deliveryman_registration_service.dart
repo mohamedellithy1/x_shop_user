@@ -1,45 +1,40 @@
-import 'package:flutter/foundation.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:stackfood_multivendor/api/api_client.dart';
+import 'package:stackfood_multivendor/features/dashboard/controllers/dashboard_controller.dart';
+import 'package:stackfood_multivendor/features/splash/domain/models/config_model.dart';
 import 'package:stackfood_multivendor/features/auth/domain/models/vehicle_model.dart';
 import 'package:stackfood_multivendor/features/auth/domain/models/zone_model.dart';
 import 'package:stackfood_multivendor/features/auth/domain/reposotories/deliveryman_registration_repo_interface.dart';
 import 'package:stackfood_multivendor/features/auth/domain/services/deliveryman_registration_service_interface.dart';
-import 'package:stackfood_multivendor/features/dashboard/controllers/dashboard_controller.dart';
-import 'package:stackfood_multivendor/features/splash/domain/models/config_model.dart';
 import 'package:stackfood_multivendor/helper/route_helper.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
-class DeliverymanRegistrationService
-    implements DeliverymanRegistrationServiceInterface {
-  final DeliverymanRegistrationRepoInterface
-      deliverymanRegistrationRepoInterface;
-  DeliverymanRegistrationService(
-      {required this.deliverymanRegistrationRepoInterface});
+class DeliverymanRegistrationService implements DeliverymanRegistrationServiceInterface{
+  final DeliverymanRegistrationRepoInterface deliverymanRegistrationRepoInterface;
+  DeliverymanRegistrationService({required this.deliverymanRegistrationRepoInterface});
 
   @override
-  Future<List<ZoneModel>?> getZoneList(bool forDeliveryRegistration) async {
-    return await deliverymanRegistrationRepoInterface.getList(
-        forDeliveryRegistration: forDeliveryRegistration);
+  Future<List<ZoneModel>?> getZoneList(bool forDeliveryRegistration) async{
+    return await deliverymanRegistrationRepoInterface.getList(forDeliveryRegistration: forDeliveryRegistration);
   }
 
   @override
   Future<XFile?> picImageFromGallery() async {
-    return await ImagePicker().pickImage(
-        source: ImageSource.gallery,
-        imageQuality: 80,
-        maxWidth: 1000,
-        maxHeight: 1000);
-  }
-
-  @override
-  Future<XFile?> picImageFromCamera() async {
-    return await ImagePicker().pickImage(
-        source: ImageSource.camera,
-        imageQuality: 80,
-        maxWidth: 1000,
-        maxHeight: 1000);
+    XFile? pLogo;
+    XFile? pickLogo = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if(pickLogo != null) {
+      await pickLogo.length().then((value) {
+        if(value > 2000000) {
+          pLogo = null;
+          showCustomSnackBar('please_upload_lower_size_file'.tr);
+        }else {
+          pLogo = pickLogo;
+        }
+      });
+    }
+    return pLogo;
   }
 
   @override
@@ -50,7 +45,7 @@ class DeliverymanRegistrationService
   @override
   List<int?>? setVehicleIdList(List<VehicleModel>? vehicles) {
     List<int?>? vehicleIds;
-    if (vehicles != null) {
+    if(vehicles != null) {
       vehicleIds = [];
       for (var vehicle in vehicles) {
         vehicleIds.add(vehicle.id);
@@ -60,11 +55,10 @@ class DeliverymanRegistrationService
   }
 
   @override
-  int setIdentityTypeIndex(
-      List<String> identityTypeList, String? identityType) {
+  int setIdentityTypeIndex(List<String> identityTypeList, String? identityType) {
     int index = 0;
-    for (int i = 0; i < identityTypeList.length; i++) {
-      if (identityTypeList[i] == identityType) {
+    for(int i=0; i<identityTypeList.length; i++) {
+      if(identityTypeList[i] == identityType) {
         index = i;
         break;
       }
@@ -75,55 +69,58 @@ class DeliverymanRegistrationService
   @override
   Future<FilePickerResult?> picFile(MediaData mediaData) async {
     List<String> permission = [];
-    if (mediaData.image == 1) {
+    if(mediaData.image == 1) {
       permission.add('jpg');
     }
-    if (mediaData.pdf == 1) {
+    if(mediaData.pdf == 1) {
       permission.add('pdf');
     }
-    if (mediaData.docs == 1) {
+    if(mediaData.docs == 1) {
       permission.add('doc');
     }
 
     FilePickerResult? result;
 
-    if (GetPlatform.isWeb) {
+    if(GetPlatform.isWeb){
       result = await FilePicker.platform.pickFiles(
         withReadStream: true,
       );
-    } else {
+    }else{
       result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: permission,
         allowMultiple: false,
       );
     }
-    if (result != null && result.files.isNotEmpty) {
-      return result;
+    if(result != null && result.files.isNotEmpty) {
+      if(result.files.single.size > 2000000) {
+        showCustomSnackBar('please_upload_lower_size_file'.tr);
+        result = null;
+      } else {
+        return result;
+      }
     }
     return result;
   }
 
   @override
-  List<MultipartBody> prepareIdentityImage(
-      XFile? pickedImage, List<XFile> pickedIdentities) {
+  List<MultipartBody> prepareIdentityImage(XFile? pickedImage, List<XFile> pickedIdentities) {
     List<MultipartBody> multiParts = [];
     multiParts.add(MultipartBody('image', pickedImage));
-    for (XFile file in pickedIdentities) {
+    for(XFile file in pickedIdentities) {
       multiParts.add(MultipartBody('identity_image[]', file));
     }
     return multiParts;
   }
 
   @override
-  List<MultipartDocument> prepareMultipartDocuments(
-      List<String> inputTypeList, List<FilePickerResult> additionalDocuments) {
+  List<MultipartDocument> prepareMultipartDocuments(List<String> inputTypeList, List<FilePickerResult> additionalDocuments) {
     List<MultipartDocument> multiPartsDocuments = [];
     List<String> dataName = [];
-    for (String data in inputTypeList) {
+    for(String data in inputTypeList) {
       dataName.add('additional_documents[$data]');
     }
-    for (FilePickerResult file in additionalDocuments) {
+    for(FilePickerResult file in additionalDocuments) {
       int index = additionalDocuments.indexOf(file);
       multiPartsDocuments.add(MultipartDocument('${dataName[index]}[]', file));
     }
@@ -131,21 +128,13 @@ class DeliverymanRegistrationService
   }
 
   @override
-  Future<void> registerDeliveryMan(
-      Map<String, String> data,
-      List<MultipartBody> multiParts,
-      List<MultipartDocument> additionalDocument) async {
-    debugPrint('==== Registration Request Data: ${data.toString()}');
-    Response response = await deliverymanRegistrationRepoInterface
-        .registerDeliveryMan(data, multiParts, additionalDocument);
-    debugPrint('==== Registration Response Status: ${response.statusCode}');
-    debugPrint('==== Registration Response Body: ${response.body.toString()}');
-
+  Future<void> registerDeliveryMan(Map<String, String> data, List<MultipartBody> multiParts, List<MultipartDocument> additionalDocument) async {
+    Response response = await deliverymanRegistrationRepoInterface.registerDeliveryMan(data, multiParts, additionalDocument);
     if (response.statusCode == 200) {
-      Get.find<DashboardController>()
-          .saveRegistrationSuccessfulSharedPref(true);
+      Get.find<DashboardController>().saveRegistrationSuccessfulSharedPref(true);
       Get.offAllNamed(RouteHelper.getInitialRoute());
       // showCustomSnackBar('delivery_man_registration_successful'.tr, isError: false);
     }
   }
+
 }

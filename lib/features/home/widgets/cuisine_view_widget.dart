@@ -1,7 +1,4 @@
-import 'package:get/get_connect/http/src/utils/utils.dart';
-import 'package:lottie/lottie.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_ink_well_widget.dart';
-import 'package:stackfood_multivendor/features/coupon/screens/coupon_screen.dart';
 import 'package:stackfood_multivendor/features/home/widgets/arrow_icon_button_widget.dart';
 import 'package:stackfood_multivendor/features/home/widgets/cuisine_card_widget.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
@@ -9,7 +6,7 @@ import 'package:stackfood_multivendor/features/cuisine/controllers/cuisine_contr
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 import 'package:stackfood_multivendor/helper/route_helper.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
-// import 'package:stackfood_multivendor/util_images.dart';
+import 'package:stackfood_multivendor/util/images.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,110 +18,59 @@ class CuisineViewWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CuisineController>(builder: (cuisineController) {
-      return (cuisineController.cuisineModel != null &&
-              cuisineController.cuisineModel!.cuisines!.isEmpty)
-          ? const SizedBox()
-          : Container(
-              width: Dimensions.webMaxWidth,
-              margin: EdgeInsets.symmetric(
-                  vertical: ResponsiveHelper.isMobile(context)
-                      ? Dimensions.paddingSizeDefault
-                      : Dimensions.paddingSizeLarge),
-              decoration: BoxDecoration(
-                // image: DecorationImage(
-                //   image: const AssetImage(Images.cuisineBgPng),
-                //   colorFilter: ColorFilter.mode(Theme.of(context).primaryColor.withValues(alpha: 0.1), BlendMode.color),
-                //   fit: BoxFit.cover,
-                // ),
-                borderRadius: BorderRadius.all(Radius.circular(
-                    ResponsiveHelper.isMobile(context)
-                        ? 0
-                        : Dimensions.radiusSmall)),
+        return (cuisineController.cuisineModel != null && cuisineController.cuisineModel!.cuisines!.isEmpty) ? const SizedBox() : Container(
+          width: Dimensions.webMaxWidth,
+          margin: EdgeInsets.symmetric(vertical: ResponsiveHelper.isMobile(context)  ? Dimensions.paddingSizeDefault : Dimensions.paddingSizeLarge),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: const AssetImage(Images.cuisineBgPng),
+              colorFilter: ColorFilter.mode(Theme.of(context).primaryColor.withValues(alpha: 0.1), BlendMode.color),
+              fit: BoxFit.cover,
+            ),
+            borderRadius: BorderRadius.all(Radius.circular(ResponsiveHelper.isMobile(context) ? 0 : Dimensions.radiusSmall)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(padding: const EdgeInsets.all(Dimensions.paddingSizeLarge),
+                child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                  Text('cuisine'.tr, style: robotoBold.copyWith(fontSize: Dimensions.fontSizeLarge, fontWeight: FontWeight.w600)),
+                  ArrowIconButtonWidget(onTap: () => Get.toNamed(RouteHelper.getCuisineRoute())),
+                ]),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(Dimensions.paddingSizeLarge),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('to_more_cuisines'.tr,
-                              style: robotoBold.copyWith(
-                                  fontSize: Dimensions.fontSizeLarge,
-                                  fontWeight: FontWeight.w600)),
-                          ArrowIconButtonWidget(
-                              onTap: () =>
-                                  Get.toNamed(RouteHelper.getCuisineRoute())),
-                        ]),
-                  ),
-                  const SizedBox(height: Dimensions.paddingSizeLarge),
-                  cuisineController.cuisineModel != null
-                      ? GridView.builder(
-                          padding: const EdgeInsets.only(
-                              left: Dimensions.paddingSizeLarge,
-                              right: Dimensions.paddingSizeLarge),
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount:
-                              cuisineController.cuisineModel!.cuisines!.length,
-                          shrinkWrap: true,
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: ResponsiveHelper.isMobile(context)
-                                ? 3
-                                : ResponsiveHelper.isDesktop(context)
-                                    ? 7
-                                    : 6,
-                            mainAxisSpacing: Dimensions.paddingSizeSmall,
-                            crossAxisSpacing: Dimensions.paddingSizeSmall,
-                            childAspectRatio: 0.85,
-                          ),
-                          itemBuilder: (context, index) {
-                            return CustomInkWellWidget(
-                              onTap: () => Get.toNamed(
-                                  RouteHelper.getCuisineRestaurantRoute(
-                                      cuisineController
-                                          .cuisineModel!.cuisines![index].id,
-                                      cuisineController.cuisineModel!
-                                          .cuisines![index].name)),
-                              radius: Dimensions.radiusDefault,
-                              child: CuisineCardWidget(
-                                // fromCuisinesPage: g,
-                                image:
-                                    '${cuisineController.cuisineModel!.cuisines![index].imageFullUrl}',
-                                name: cuisineController
-                                        .cuisineModel!.cuisines![index].name ??
-                                    '',
-                              ),
-                            );
-                          },
-                        )
-                      : const CuisineShimmer(),
-                  // InkWell(
-                  //   onTap: () => Get.to(() => CouponScreen(
-                  //            fromCheckout: false,
-                  //           )),
-                  //   child: SizedBox(
-                  //     width: MediaQuery.of(context).size.width * 0.5,
-                  //     child: Row(
-                  //       children: [
-                        
-                  //         Lottie.asset("assets/image/offer.json",
-                  //             width: MediaQuery.of(context).size.width * 0.17),
-                  //           Text("عروض و خصومات",style: robotoBold.copyWith(
-                  //           fontSize: Dimensions.fontSizeLarge,
-                  //           fontWeight: FontWeight.w600,
-                  //         ),),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-                ],
-              ),
-            );
-    });
+
+              cuisineController.cuisineModel != null ? GridView.builder(
+                padding: const EdgeInsets.only(left: Dimensions.paddingSizeLarge, right: Dimensions.paddingSizeLarge),
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: cuisineController.cuisineModel!.cuisines!.length > 7  ? 8 : cuisineController.cuisineModel!.cuisines!.length,
+                shrinkWrap: true,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: ResponsiveHelper.isMobile(context) ? 4 : ResponsiveHelper.isDesktop(context) ? 7 : 6,
+                  mainAxisSpacing: Dimensions.paddingSizeLarge,  crossAxisSpacing: Dimensions.paddingSizeLarge,
+                ),
+                itemBuilder: (context, index) {
+                  return CustomInkWellWidget(
+                    onTap: () =>  Get.toNamed(RouteHelper.getCuisineRestaurantRoute(cuisineController.cuisineModel!.cuisines![index].id, cuisineController.cuisineModel!.cuisines![index].name)),
+                    radius: Dimensions.radiusDefault,
+                    child: CuisineCardWidget(
+                      image: '${cuisineController.cuisineModel!.cuisines![index].imageFullUrl}',
+                      name: cuisineController.cuisineModel!.cuisines![index].name ?? '',
+                    ),
+                  );
+
+                },
+              )  : const CuisineShimmer(),
+
+              const SizedBox(height: Dimensions.paddingSizeLarge),
+            ],
+          ),
+        );
+      }
+    );
   }
 }
+
+
 
 class CuisineShimmer extends StatelessWidget {
   const CuisineShimmer({super.key});
@@ -132,91 +78,62 @@ class CuisineShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-      padding: const EdgeInsets.only(
-          left: Dimensions.paddingSizeDefault,
-          right: Dimensions.paddingSizeDefault,
-          bottom: Dimensions.paddingSizeDefault),
+      padding: const EdgeInsets.only(left: Dimensions.paddingSizeDefault, right: Dimensions.paddingSizeDefault, bottom: Dimensions.paddingSizeDefault),
       physics: const NeverScrollableScrollPhysics(),
       itemCount: 6,
       shrinkWrap: true,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        mainAxisSpacing: Dimensions.paddingSizeDefault,
-        crossAxisSpacing: Dimensions.paddingSizeDefault,
+        crossAxisCount: 3, mainAxisSpacing: Dimensions.paddingSizeDefault, crossAxisSpacing: Dimensions.paddingSizeDefault,
       ),
       itemBuilder: (context, index) {
         return ClipRRect(
-          borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(Dimensions.paddingSizeSmall),
-              bottomRight: Radius.circular(Dimensions.paddingSizeSmall)),
+          borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(Dimensions.paddingSizeSmall), bottomRight: Radius.circular(Dimensions.paddingSizeSmall)),
           child: Stack(
             children: [
-              Positioned(
-                bottom: -55,
-                left: 0,
-                right: 0,
+              Positioned(bottom: -55,left: 0,right: 0,
                 child: Transform.rotate(
                   angle: 40,
                   child: Container(
-                    height: 120,
-                    width: 120,
+                    height: 120, width: 120,
                     color: Theme.of(context).cardColor,
                   ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.grey[
-                          Get.find<MarketThemeController>(tag: 'xmarket')
-                                  .darkTheme
-                              ? 950
-                              : 200],
-                      borderRadius: BorderRadius.circular(50)),
+                child: Container(decoration: BoxDecoration(color: Colors.grey[Get.find<ThemeController>().darkTheme ? 950 : 200], borderRadius: BorderRadius.circular(50)),
                   child: ClipRRect(
-                      borderRadius: BorderRadius.circular(50),
-                      child: Shimmer(
-                        child: Container(
-                          height: 100,
-                          width: 100,
-                          color: Colors.grey[
-                              Get.find<MarketThemeController>(tag: 'xmarket')
-                                      .darkTheme
-                                  ? 900
-                                  : 200],
-                        ),
-                      )),
+                    borderRadius: BorderRadius.circular(50),
+                    child: Shimmer(
+                      child: Container(
+                        height: 100, width: 100,
+                        color: Colors.grey[Get.find<ThemeController>().darkTheme ? 900 : 200],
+                      ),
+                    )
+                  ),
                 ),
               ),
+
               Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
+                bottom: 0, left: 0, right: 0,
                 child: Container(
                   alignment: Alignment.center,
-                  height: 30,
-                  width: 120,
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: Dimensions.paddingSizeExtraSmall),
+                  height: 30, width: 120,
+                  padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeExtraSmall),
                   decoration: BoxDecoration(
-                    color: Colors.grey[
-                        Get.find<MarketThemeController>(tag: 'xmarket')
-                                .darkTheme
-                            ? 800
-                            : 100],
-                    borderRadius: const BorderRadius.only(
-                        bottomLeft:
-                            Radius.circular(Dimensions.paddingSizeSmall),
-                        bottomRight:
-                            Radius.circular(Dimensions.paddingSizeSmall)),
+                    color: Colors.grey[Get.find<ThemeController>().darkTheme ? 800 : 100],
+                    borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(Dimensions.paddingSizeSmall), bottomRight: Radius.circular(Dimensions.paddingSizeSmall)),
                   ),
                 ),
               ),
             ],
           ),
         );
+
       },
     );
   }
 }
+
+
+

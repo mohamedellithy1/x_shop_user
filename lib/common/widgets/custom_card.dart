@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 
 class CustomCard extends StatelessWidget {
@@ -12,50 +11,20 @@ class CustomCard extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final bool isBorder;
   final Color? borderColor;
-  const CustomCard(
-      {super.key,
-      this.child,
-      this.width,
-      this.height,
-      this.borderRadius,
-      this.margin,
-      this.padding,
-      this.isBorder = true,
-      this.borderColor});
+  const CustomCard({super.key, this.child, this.width, this.height, this.borderRadius, this.margin, this.padding, this.isBorder = true, this.borderColor});
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<MarketThemeController>(
-        init: Get.find<MarketThemeController>(tag: 'xmarket'),
-        builder: (marketThemeController) {
-          return Container(
-            width: width ?? double.infinity,
-            height: height,
-            margin: margin,
-            padding: padding,
-            decoration: BoxDecoration(
-              color: marketThemeController.darkTheme ? const Color(0xFF1b1b1b) : Theme.of(context).cardColor,
-              borderRadius:
-                  BorderRadius.circular(borderRadius ?? Dimensions.radiusDefault),
-              border: Border.all(
-                  color: (marketThemeController.darkTheme
-                          ? Colors.white
-                          : Colors.black)
-                      .withValues(alpha: 0.4),
-                  width: .1),
-              // border: isBorder ? Border.all(color: Get.isDarkMode ? borderColor ?? Color(0xff171515) : borderColor ?? Color(0xffF2F2F2), width: 1) : null,
-              boxShadow: [
-                BoxShadow(
-                    color: marketThemeController.darkTheme
-                        ? Colors.white.withValues(alpha: 0.05)
-                        : Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 20,
-                    spreadRadius: 0,
-                    offset: const Offset(0, 5))
-              ],
-            ),
-            child: child,
-          );
-        });
+    return Container(
+      width: width ?? double.infinity, height: height,
+      margin: margin, padding: padding,
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(borderRadius ?? Dimensions.radiusDefault),
+        border: isBorder ? Border.all(color: Get.isDarkMode ? borderColor ?? Color(0xff171515) : borderColor ?? Color(0xffF2F2F2), width: 1) : null,
+        boxShadow: [BoxShadow(color: Get.isDarkMode ? Colors.white.withValues(alpha: 0.05) : Colors.black.withValues(alpha: 0.05), blurRadius: 20, spreadRadius: 0, offset: const Offset(0, 5))],
+      ),
+      child: child,
+    );
   }
 }

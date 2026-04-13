@@ -4,8 +4,8 @@ import 'package:stackfood_multivendor/features/location/controllers/location_con
 import 'package:stackfood_multivendor/helper/address_helper.dart';
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
+import 'package:stackfood_multivendor/util/images.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
-import 'package:stackfood_multivendor/util/xmarket_images.dart';
 
 class BadWeatherWidget extends StatefulWidget {
   const BadWeatherWidget({super.key});
@@ -15,8 +15,7 @@ class BadWeatherWidget extends StatefulWidget {
 }
 
 class _BadWeatherWidgetState extends State<BadWeatherWidget> {
-  final MarketLocationController _locationController =
-      Get.find<MarketLocationController>();
+  final LocationController _locationController = Get.find<LocationController>();
   late Future<BadWeatherAlertData?> _alertDataFuture;
 
   @override
@@ -29,22 +28,18 @@ class _BadWeatherWidgetState extends State<BadWeatherWidget> {
     final address = AddressHelper.getAddressFromSharedPref();
     if (address == null) return null;
 
-    await _locationController.getZone(
-        address.latitude, address.longitude, false);
+    await _locationController.getZone(address.latitude, address.longitude, false);
 
     final zoneData = address.zoneData?.firstWhereOrNull(
-      (data) =>
-          data.id == address.zoneId &&
-          data.increasedDeliveryFeeStatus == 1 &&
-          data.increaseDeliveryFeeMessage?.isNotEmpty == true,
+      (data) => data.id == address.zoneId &&
+      data.increasedDeliveryFeeStatus == 1 &&
+      data.increaseDeliveryFeeMessage?.isNotEmpty == true,
     );
 
-    return zoneData != null
-        ? BadWeatherAlertData(
-            showAlert: zoneData.increasedDeliveryFeeStatus == 1,
-            message: zoneData.increaseDeliveryFeeMessage ?? '',
-          )
-        : null;
+    return zoneData != null ? BadWeatherAlertData(
+      showAlert: zoneData.increasedDeliveryFeeStatus == 1,
+      message: zoneData.increaseDeliveryFeeMessage ?? '',
+    ) : null;
   }
 
   @override
@@ -57,9 +52,7 @@ class _BadWeatherWidgetState extends State<BadWeatherWidget> {
         }
 
         final alertData = snapshot.data;
-        if (alertData == null ||
-            !alertData.showAlert ||
-            alertData.message.isEmpty) {
+        if (alertData == null || !alertData.showAlert || alertData.message.isEmpty) {
           return const SizedBox();
         }
 
@@ -74,25 +67,23 @@ class _BadWeatherWidgetState extends State<BadWeatherWidget> {
         borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
         color: Theme.of(context).primaryColor.withValues(alpha: 0.7),
       ),
-      padding: const EdgeInsets.symmetric(
-          horizontal: Dimensions.paddingSizeDefault,
-          vertical: Dimensions.paddingSizeSmall),
+      padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault, vertical: Dimensions.paddingSizeSmall),
       margin: EdgeInsets.symmetric(
-        horizontal: ResponsiveHelper.isDesktop(context)
-            ? 0
-            : Dimensions.paddingSizeDefault,
+        horizontal: ResponsiveHelper.isDesktop(context) ? 0 : Dimensions.paddingSizeDefault,
         vertical: Dimensions.paddingSizeSmall,
       ),
       child: Row(children: [
-        Image.asset(XmarketImages.weather, height: 50, width: 50),
+
+        Image.asset(Images.weather, height: 50, width: 50),
         const SizedBox(width: Dimensions.paddingSizeSmall),
+
         Expanded(
           child: Text(
             message,
-            style: robotoMedium.copyWith(
-                fontSize: Dimensions.fontSizeDefault, color: Colors.white),
+            style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault, color: Colors.white),
           ),
         ),
+
       ]),
     );
   }

@@ -5,10 +5,10 @@ import 'package:stackfood_multivendor/features/wallet/domain/services/wallet_ser
 import 'package:stackfood_multivendor/util/app_constants.dart';
 import 'package:get/get.dart';
 
-class MarketWalletController extends GetxController implements GetxService {
+class WalletController extends GetxController implements GetxService {
   final WalletServiceInterface walletServiceInterface;
 
-  MarketWalletController({required this.walletServiceInterface});
+  WalletController({required this.walletServiceInterface});
 
   List<Transaction>? _transactionList;
   List<Transaction>? get transactionList => _transactionList;

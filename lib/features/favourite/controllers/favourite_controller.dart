@@ -40,7 +40,7 @@ class FavouriteController extends GetxController implements GetxService {
         _wishProductList!.add(product);
         _wishProductIdList.add(product!.id);
       }
-      showCustomSnackBar(response.body['message']);
+      showCustomSnackBar(response.body['message'], isError: false);
     }
     _isDisable = false;
     update();
@@ -61,7 +61,7 @@ class FavouriteController extends GetxController implements GetxService {
         _wishProductIdList.removeAt(idIndex);
         _wishProductList?.removeAt(idIndex);
       }
-      showCustomSnackBar(response.body['message']);
+      showCustomSnackBar(response.body['message'], isError: true);
     }
     _isDisable = false;
     update();
@@ -126,7 +126,7 @@ class FavouriteController extends GetxController implements GetxService {
       _wishRestIdList = [];
       getFavouriteList(fromFavScreen: true);
       Get.back();
-      showCustomSnackBar(response.body['message']);
+      showCustomSnackBar(response.body['message'], isError: false);
     }
     _isLoading = false;
     update();

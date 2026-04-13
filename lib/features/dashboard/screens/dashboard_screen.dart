@@ -1,8 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:stackfood_multivendor/theme/dark_theme.dart';
-import 'package:stackfood_multivendor/theme/light_theme.dart';
-
 import 'package:flutter/services.dart';
 import 'package:stackfood_multivendor/features/cart/screens/cart_screen.dart';
 import 'package:stackfood_multivendor/features/checkout/widgets/congratulation_dialogue.dart';
@@ -28,16 +25,11 @@ import 'package:stackfood_multivendor/common/widgets/custom_dialog_widget.dart';
 import 'package:expandable_bottom_sheet/expandable_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
-
-final ThemeData darkTheme = dark;
-final ThemeData lightTheme = light;
 
 class DashboardScreen extends StatefulWidget {
   final int pageIndex;
   final bool fromSplash;
-  const DashboardScreen(
-      {super.key, required this.pageIndex, this.fromSplash = false});
+  const DashboardScreen({super.key, required this.pageIndex, this.fromSplash = false});
 
   @override
   DashboardScreenState createState() => DashboardScreenState();
@@ -56,29 +48,24 @@ class DashboardScreenState extends State<DashboardScreen> {
   void initState() {
     super.initState();
 
-    _isLogin = Get.find<MarketAuthController>().isLoggedIn();
+    _isLogin = Get.find<AuthController>().isLoggedIn();
 
     _showRegistrationSuccessBottomSheet();
 
-    // if (_isLogin) {
-    //   if (Get.find<MarketSplashController>(tag: 'xmarket').configModel!.loyaltyPointStatus! &&
-    //       Get.find<LoyaltyController>().getEarningPint().isNotEmpty &&
-    //       !ResponsiveHelper.isDesktop(Get.context)) {
-    //     Future.delayed(
-    //         const Duration(seconds: 1),
-    //         () => showAnimatedDialog(
-    //             Get.context!, const CongratulationDialogue()));
-    //   }
-    //   _suggestAddressBottomSheet();
-    //   Get.find<OrderController>().getRunningOrders(1, notify: false);
-    // }
+    if(_isLogin){
+      if(Get.find<SplashController>().configModel!.loyaltyPointStatus! && Get.find<LoyaltyController>().getEarningPint().isNotEmpty && !ResponsiveHelper.isDesktop(Get.context)){
+        Future.delayed(const Duration(seconds: 1), () => showAnimatedDialog(Get.context!, const CongratulationDialogue()));
+      }
+      _suggestAddressBottomSheet();
+      Get.find<OrderController>().getRunningOrders(1, notify: false);
+    }
 
     _pageIndex = widget.pageIndex;
 
     _pageController = PageController(initialPage: widget.pageIndex);
 
     _screens = [
-      const XMarketHomeScreen(),
+      const HomeScreen(),
       const FavouriteScreen(),
       const CartScreen(fromNav: true),
       const OrderScreen(),
@@ -88,48 +75,35 @@ class DashboardScreenState extends State<DashboardScreen> {
     Future.delayed(const Duration(seconds: 1), () {
       setState(() {});
     });
+
   }
 
   void _showRegistrationSuccessBottomSheet() {
-    bool canShowBottomSheet =
-        Get.find<DashboardController>().getRegistrationSuccessfulSharedPref();
-    if (canShowBottomSheet) {
+    bool canShowBottomSheet = Get.find<DashboardController>().getRegistrationSuccessfulSharedPref();
+    if(canShowBottomSheet) {
       Future.delayed(const Duration(seconds: 1), () {
-        ResponsiveHelper.isDesktop(Get.context)
-            ? Get.dialog(const Dialog(child: RegistrationSuccessBottomSheet()))
-                .then((value) {
-                Get.find<DashboardController>()
-                    .saveRegistrationSuccessfulSharedPref(false);
-                Get.find<DashboardController>()
-                    .saveIsRestaurantRegistrationSharedPref(false);
-                setState(() {});
-              })
-            : showModalBottomSheet(
-                context: Get.context!,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                builder: (con) => const RegistrationSuccessBottomSheet(),
-              ).then((value) {
-                Get.find<DashboardController>()
-                    .saveRegistrationSuccessfulSharedPref(false);
-                Get.find<DashboardController>()
-                    .saveIsRestaurantRegistrationSharedPref(false);
-                setState(() {});
-              });
+        ResponsiveHelper.isDesktop(Get.context) ? Get.dialog(const Dialog(child: RegistrationSuccessBottomSheet())).then((value) {
+          Get.find<DashboardController>().saveRegistrationSuccessfulSharedPref(false);
+          Get.find<DashboardController>().saveIsRestaurantRegistrationSharedPref(false);
+          setState(() {});
+        }) : showModalBottomSheet(
+          context: Get.context!, isScrollControlled: true, backgroundColor: Colors.transparent,
+          builder: (con) => const RegistrationSuccessBottomSheet(),
+        ).then((value) {
+          Get.find<DashboardController>().saveRegistrationSuccessfulSharedPref(false);
+          Get.find<DashboardController>().saveIsRestaurantRegistrationSharedPref(false);
+          setState(() {});
+        });
       });
     }
   }
 
   Future<void> _suggestAddressBottomSheet() async {
     active = await Get.find<DashboardController>().checkLocationActive();
-    if (widget.fromSplash &&
-        Get.find<DashboardController>().showLocationSuggestion &&
-        active) {
+    if(widget.fromSplash && Get.find<DashboardController>().showLocationSuggestion && active){
       Future.delayed(const Duration(seconds: 1), () {
         showModalBottomSheet(
-          context: Get.context!,
-          isScrollControlled: true,
-          backgroundColor: Colors.transparent,
+          context: Get.context!, isScrollControlled: true, backgroundColor: Colors.transparent,
           builder: (con) => const AddressBottomSheet(),
         ).then((value) {
           Get.find<DashboardController>().hideSuggestedLocation();
@@ -141,172 +115,128 @@ class DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<MarketThemeController>(
-        init: Get.find<MarketThemeController>(tag: 'xmarket'),
-        builder: (marketThemeController) {
-          return Theme(
-            data: marketThemeController.darkTheme ? darkTheme : lightTheme,
-            child: PopScope(
-              canPop: Navigator.canPop(context),
-              onPopInvokedWithResult: (didPop, result) async {
-                if (didPop) return;
-                debugPrint('$_canExit');
-                if (_pageIndex != 0) {
-                  _setPage(0);
-                } else {
-                  if (_canExit) {
-                    if (GetPlatform.isAndroid) {
-                      SystemNavigator.pop();
-                    } else if (GetPlatform.isIOS) {
-                      exit(0);
-                    }
-                  }
-                  if (!ResponsiveHelper.isDesktop(context)) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text('back_press_again_to_exit'.tr,
-                          style: const TextStyle(color: Colors.white)),
-                      behavior: SnackBarBehavior.floating,
-                      backgroundColor: Colors.green,
-                      duration: const Duration(seconds: 2),
-                      margin: const EdgeInsets.all(Dimensions.paddingSizeSmall),
-                    ));
-                  }
-                  _canExit = true;
+    bool keyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0;
+    return PopScope(
+      canPop: Navigator.canPop(context),
+      onPopInvokedWithResult: (didPop, result) async{
+        debugPrint('$_canExit');
+        if (_pageIndex != 0) {
+          _setPage(0);
+        } else {
+          if(_canExit) {
+            if (GetPlatform.isAndroid) {
+              SystemNavigator.pop();
+            } else if (GetPlatform.isIOS) {
+              exit(0);
+            }
+          }
+          if(!ResponsiveHelper.isDesktop(context)) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text('back_press_again_to_exit'.tr, style: const TextStyle(color: Colors.white)),
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: Colors.green,
+              duration: const Duration(seconds: 2),
+              margin: const EdgeInsets.all(Dimensions.paddingSizeSmall),
+            ));
+          }
+          _canExit = true;
 
-                  Timer(const Duration(seconds: 2), () {
-                    _canExit = false;
-                  });
-                }
+          Timer(const Duration(seconds: 2), () {
+            _canExit = false;
+          });
+        }
+      },
+      child: Scaffold(
+        key: _scaffoldKey,
+
+        floatingActionButton: GetBuilder<OrderController>(builder: (orderController) {
+          return ResponsiveHelper.isDesktop(context) || keyboardVisible ? const SizedBox() :
+          (orderController.showBottomSheet && orderController.runningOrderList != null && orderController.runningOrderList!.isNotEmpty && _isLogin)
+          ? const SizedBox.shrink() : Material(
+            elevation: 3,
+            shape: const CircleBorder(),
+            child: FloatingActionButton(
+              backgroundColor: Theme.of(context).cardColor,
+              onPressed: () {
+                Get.toNamed(RouteHelper.getCartRoute());
               },
-              child: Scaffold(
-                key: _scaffoldKey,
-                backgroundColor: marketThemeController.darkTheme ? Colors.black : Colors.white,
-                floatingActionButton: const SizedBox(),
-                floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-                bottomNavigationBar: ResponsiveHelper.isDesktop(context)
-                    ? const SizedBox()
-                    : GetBuilder<OrderController>(builder: (orderController) {
-                        return (orderController.showBottomSheet &&
-                                (orderController.runningOrderList != null &&
-                                    orderController.runningOrderList!.isNotEmpty &&
-                                    _isLogin))
-                            ? const SizedBox()
-                            : Padding(
-                                padding:
-                                    const EdgeInsets.all(Dimensions.paddingSizeDefault),
-                                child: Container(
-                                  height: 65,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    gradient: const LinearGradient(
-                                      colors: [Colors.orange, Colors.red],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        offset: const Offset(0, 4),
-                                        blurRadius: 3,
-                                        color: Colors.black.withOpacity(0.3),
-                                      )
-                                    ],
-                                  ),
-                                  child: Row(children: [
-                                    BottomNavItem(
-                                        iconData: Icons.home,
-                                        title: 'home'.tr,
-                                        isSelected: _pageIndex == 0,
-                                        onTap: () => _setPage(0)),
-                                    BottomNavItem(
-                                        iconData: Icons.favorite,
-                                        title: 'wishlist'.tr,
-                                        isSelected: _pageIndex == 1,
-                                        onTap: () => _setPage(1)),
-                                    Expanded(
-                                      child: InkWell(
-                                        onTap: () => _setPage(2),
-                                        child: CartWidget(
-                                          color: Colors.white,
-                                          size: 25,
-                                          iconColor: _pageIndex == 2
-                                              ? Colors.white
-                                              : Colors.white.withOpacity(0.7),
-                                          textColor: _pageIndex == 2
-                                              ? Colors.white
-                                              : Colors.white.withOpacity(0.7),
-                                        ),
-                                      ),
-                                    ),
-                                    BottomNavItem(
-                                        iconData: Icons.shopping_bag,
-                                        title: 'orders'.tr,
-                                        isSelected: _pageIndex == 3,
-                                        onTap: () => _setPage(3)),
-                                    BottomNavItem(
-                                        iconData: Icons.menu,
-                                        title: 'القائمة',
-                                        isSelected: _pageIndex == 4,
-                                        onTap: () => _setPage(4)),
-                                  ]),
-                                ),
-                              );
-                      }),
-                body: GetBuilder<OrderController>(builder: (orderController) {
-                  List<OrderModel> runningOrder =
-                      orderController.runningOrderList != null
-                          ? orderController.runningOrderList!
-                          : [];
-
-                  List<OrderModel> reversOrder = List.from(runningOrder.reversed);
-                  return ExpandableBottomSheet(
-                    background: PageView.builder(
-                      controller: _pageController,
-                      itemCount: _screens.length,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return _screens[index];
-                      },
-                    ),
-                    persistentContentHeight: 100,
-                    onIsContractedCallback: () {
-                      if (!orderController.showOneOrder) {
-                        orderController.showOrders();
-                      }
-                    },
-                    onIsExtendedCallback: () {
-                      if (orderController.showOneOrder) {
-                        orderController.showOrders();
-                      }
-                    },
-                    enableToggle: true,
-                    expandableContent: (ResponsiveHelper.isDesktop(context) ||
-                            !_isLogin ||
-                            orderController.runningOrderList == null ||
-                            orderController.runningOrderList!.isEmpty ||
-                            !orderController.showBottomSheet)
-                        ? const SizedBox()
-                        : Dismissible(
-                            key: UniqueKey(),
-                            onDismissed: (direction) {
-                              if (orderController.showBottomSheet) {
-                                orderController.showRunningOrders();
-                              }
-                            },
-                            child: RunningOrderViewWidget(
-                                reversOrder: reversOrder,
-                                onMoreClick: () {
-                                  if (orderController.showBottomSheet) {
-                                    orderController.showRunningOrders();
-                                  }
-                                  _setPage(3);
-                                }),
-                          ),
-                  );
-                }),
-              ),
+              child: CartWidget(color: _pageIndex == 2 ? Theme.of(context).primaryColor : Theme.of(context).disabledColor, size: 30),
             ),
           );
-        });
+        }),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+
+        bottomNavigationBar: ResponsiveHelper.isDesktop(context) ? const SizedBox() : GetBuilder<OrderController>(builder: (orderController) {
+          return (orderController.showBottomSheet && (orderController.runningOrderList != null && orderController.runningOrderList!.isNotEmpty && _isLogin)) ? const SizedBox() : SizedBox(
+            height: 70,
+            child: BottomAppBar(
+              elevation: 5,
+              notchMargin: 6,
+              clipBehavior: Clip.antiAlias,
+              shape: const CircularNotchedRectangle(),
+              shadowColor: Theme.of(context).disabledColor,
+              color: Theme.of(context).primaryColor,
+              child: Row(children: [
+                BottomNavItem(iconData: Icons.home, title: 'home'.tr, isSelected: _pageIndex == 0, onTap: () => _setPage(0)),
+                BottomNavItem(iconData: Icons.favorite, title: 'wishlist'.tr, isSelected: _pageIndex == 1, onTap: () => _setPage(1)),
+                const Expanded(child: SizedBox()),
+                BottomNavItem(iconData: Icons.shopping_bag, title: 'orders'.tr, isSelected: _pageIndex == 3, onTap: () => _setPage(3)),
+                BottomNavItem(iconData: Icons.menu, title: 'menu'.tr, isSelected: _pageIndex == 4, onTap: () => _setPage(4)),
+              ]),
+            ),
+          );
+        }),
+        body: GetBuilder<OrderController>(
+          builder: (orderController) {
+            List<OrderModel> runningOrder = orderController.runningOrderList != null ? orderController.runningOrderList! : [];
+
+            List<OrderModel> reversOrder =  List.from(runningOrder.reversed);
+            return ExpandableBottomSheet(
+              background: PageView.builder(
+                controller: _pageController,
+                itemCount: _screens.length,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return _screens[index];
+                },
+              ),
+              persistentContentHeight: 100,
+
+              onIsContractedCallback: () {
+                if(!orderController.showOneOrder) {
+                  orderController.showOrders();
+                }
+              },
+              onIsExtendedCallback: () {
+                if(orderController.showOneOrder) {
+                  orderController.showOrders();
+                }
+              },
+
+              enableToggle: true,
+
+              expandableContent: (ResponsiveHelper.isDesktop(context) || !_isLogin || orderController.runningOrderList == null
+                || orderController.runningOrderList!.isEmpty || !orderController.showBottomSheet) ? const SizedBox()
+                : Dismissible(
+                  key: UniqueKey(),
+                  onDismissed: (direction) {
+                    if(orderController.showBottomSheet){
+                      orderController.showRunningOrders();
+                    }
+                  },
+                  child: RunningOrderViewWidget(reversOrder: reversOrder, onMoreClick: () {
+                    if(orderController.showBottomSheet){
+                      orderController.showRunningOrders();
+                    }
+                    _setPage(3);
+                  }),
+              ),
+
+            );
+          }
+        ),
+      ),
+    );
   }
 
   void _setPage(int pageIndex) {

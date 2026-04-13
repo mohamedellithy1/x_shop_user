@@ -14,10 +14,10 @@ import 'package:stackfood_multivendor/features/verification/screens/verification
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 import 'package:stackfood_multivendor/helper/route_helper.dart';
 
-class MarketProfileController extends GetxController implements GetxService {
+class ProfileController extends GetxController implements GetxService {
   final ProfileServiceInterface profileServiceInterface;
 
-  MarketProfileController({required this.profileServiceInterface});
+  ProfileController({required this.profileServiceInterface});
 
   UserInfoModel? _userInfoModel;
   UserInfoModel? get userInfoModel => _userInfoModel;
@@ -62,7 +62,7 @@ class MarketProfileController extends GetxController implements GetxService {
     }
     if(responseModel.isSuccess && responseModel.updateProfileResponseModel != null && responseModel.updateProfileResponseModel!.verificationOn != null && responseModel.updateProfileResponseModel!.verificationOn! == 'phone'){
       if(responseModel.updateProfileResponseModel!.verificationMedium! == 'firebase') {
-        Get.find<MarketAuthController>().firebaseVerifyPhoneNumber(updateUserModel.phone!, token, '', fromSignUp: false, updateUserModel: updateUserModel);
+        Get.find<AuthController>().firebaseVerifyPhoneNumber(updateUserModel.phone!, token, '', fromSignUp: false, updateUserModel: updateUserModel);
       } else {
         if(ResponsiveHelper.isDesktop(Get.context)) {
           Get.dialog(VerificationScreen(
@@ -85,12 +85,12 @@ class MarketProfileController extends GetxController implements GetxService {
     } else if(responseModel.isSuccess && responseModel.updateProfileResponseModel == null){
       Get.back();
       _pickedFile = null;
-      showCustomSnackBar(responseModel.message!);
+      showCustomSnackBar(responseModel.message, isError: false);
       await getUserInfo();
     }  else if(!responseModel.isSuccess && responseModel.updateProfileResponseModel != null){
-      showCustomSnackBar(responseModel.updateProfileResponseModel!.message!);
+      showCustomSnackBar(responseModel.updateProfileResponseModel!.message);
     }else if(!responseModel.isSuccess){
-      showCustomSnackBar(responseModel.message!);
+      showCustomSnackBar(responseModel.message);
     }
   }
 
@@ -122,20 +122,20 @@ class MarketProfileController extends GetxController implements GetxService {
     Response response = await profileServiceInterface.deleteUser();
     _isLoading = false;
     if (response.statusCode == 200) {
-      await Get.find<MarketAuthController>().clearSharedData(removeToken: false);
-      await Get.find<MarketAuthController>().clearUserNumberAndPassword();
-      await Get.find<MarketCartController>().clearCartList();
-      if(Get.find<MarketAuthController>().isActiveRememberMe) {
-        Get.find<MarketAuthController>().toggleRememberMe();
+      await Get.find<AuthController>().clearSharedData(removeToken: false);
+      await Get.find<AuthController>().clearUserNumberAndPassword();
+      await Get.find<CartController>().clearCartList();
+      if(Get.find<AuthController>().isActiveRememberMe) {
+        Get.find<AuthController>().toggleRememberMe();
       }
-      if(Get.find<MarketAuthController>().isActiveRememberMeForOtp) {
-        Get.find<MarketAuthController>().toggleRememberMeForOtp();
+      if(Get.find<AuthController>().isActiveRememberMeForOtp) {
+        Get.find<AuthController>().toggleRememberMeForOtp();
       }
       Get.find<FavouriteController>().removeFavourites();
       setForceFullyUserEmpty();
-      showCustomSnackBar('your_account_remove_successfully'.tr);
+      showCustomSnackBar('your_account_remove_successfully'.tr, isError: false);
       _isLoading = false;
-      Get.find<MarketSplashController>(tag: 'xmarket').navigateToLocationScreen('splash', offNamed: true);
+      Get.find<SplashController>().navigateToLocationScreen('splash', offNamed: true);
     } else {
       _isLoading = false;
       Get.back();

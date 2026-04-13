@@ -27,9 +27,8 @@ class _CuisineScreenState extends State<CuisineScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
-      appBar: CustomAppBarWidget(title: 'متاجر'),
-      backgroundColor: Colors.white,
+      appBar: CustomAppBarWidget(title: 'cuisine'.tr),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       endDrawer: const MenuDrawerWidget(), endDrawerEnableOpenDragGesture: false,
       body: SingleChildScrollView(
         controller: scrollController,
@@ -38,7 +37,8 @@ class _CuisineScreenState extends State<CuisineScreen> {
           SizedBox(height: ResponsiveHelper.isDesktop(context) ? 0: Dimensions.paddingSizeLarge),
           WebScreenTitleWidget(title: 'cuisine'.tr),
 
-          Center(child:  SizedBox(
+          Center(child: FooterViewWidget(
+            child: SizedBox(
               width: Dimensions.webMaxWidth,
               child: Column(children: [
                 RefreshIndicator(
@@ -80,7 +80,7 @@ class _CuisineScreenState extends State<CuisineScreen> {
                 ),
               ]),
             ),
-          )
+          )),
         ]),
       ),
     );

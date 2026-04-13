@@ -46,7 +46,7 @@
 //       charge = charge + charge * (zoneData.increasedDeliveryFee!/100);
 //     }
 //
-//     if(restController.restaurant!.selfDeliverySystem == 0 && Get.find<MarketSplashController>(tag: 'xmarket').configModel!.freeDeliveryDistance != null && Get.find<MarketSplashController>(tag: 'xmarket').configModel!.freeDeliveryDistance! >= orderController.distance!){
+//     if(restController.restaurant!.selfDeliverySystem == 0 && Get.find<SplashController>().configModel!.freeDeliveryDistance != null && Get.find<SplashController>().configModel!.freeDeliveryDistance! >= orderController.distance!){
 //       deliveryCharge = 0;
 //       charge = 0;
 //     }

@@ -83,28 +83,6 @@ class Restaurant {
     name = json['name'];
   }
 
-  Null get isExtraPackagingActive => null;
-
-  Null get extraPackagingAmount => null;
-
-  Null get extraPackagingStatusIsMandatory => null;
-
-  get schedules => null;
-
-  Object? get zoneId => null;
-
-  get selfDeliverySystem => null;
-
-  get perKmShippingCharge => null;
-
-  get minimumShippingCharge => null;
-
-  get freeDeliveryDistanceStatus => null;
-
-  get dineInBookingDuration => null;
-
-  String? get dineInBookingDurationTimeFormat => null;
-
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;

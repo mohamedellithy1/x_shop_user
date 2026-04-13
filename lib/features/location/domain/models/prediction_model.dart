@@ -56,34 +56,14 @@ class PredictionModel {
   });
 
   PredictionModel.fromJson(Map<String, dynamic> json) {
-    if (json.containsKey('placePrediction')) {
-      description = json['placePrediction']['text']?['text'];
-      id = json['placePrediction']['placeId'];
-      placeId = json['placePrediction']['placeId'];
-      place = json['placePrediction']['place'];
-      reference = json['placePrediction']['text']?['text'];
-      types = List<String>.from(json['placePrediction']['types'] ?? []);
-      text = json['placePrediction']['text'] != null
-          ? TextModel.fromJson(json['placePrediction']['text'])
-          : null;
-      structuredFormat = json['placePrediction']['structuredFormat'] != null
-          ? StructuredFormat.fromJson(
-              json['placePrediction']['structuredFormat'])
-          : null;
-    } else {
-      description = json['description'];
-      id = json['id'];
-      placeId = json['place_id'];
-      reference = json['reference'];
-      types = json['types']?.cast<String>();
-      if (json['structured_formatting'] != null) {
-        structuredFormat = StructuredFormat(
-          mainText: MainText(text: json['structured_formatting']['main_text']),
-          secondaryText: SecondaryText(
-              text: json['structured_formatting']['secondary_text']),
-        );
-      }
-    }
+    description = json['placePrediction']['text']['text'];
+    id = json['placePrediction']['placeId'];
+    placeId = json['placePrediction']['placeId'];
+    place = json['placePrediction']['place'];
+    reference = json['placePrediction']['text']['text'];
+    types = List<String>.from(json['placePrediction']['types'] ?? []);
+    text = json['placePrediction']['text'] != null ? TextModel.fromJson(json['placePrediction']['text']) : null;
+    structuredFormat = json['placePrediction']['structuredFormat'] != null ? StructuredFormat.fromJson(json['placePrediction']['structuredFormat']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -148,11 +128,8 @@ class StructuredFormat {
   StructuredFormat({this.mainText, this.secondaryText});
 
   StructuredFormat.fromJson(Map<String, dynamic> json) {
-    mainText =
-        json['mainText'] != null ? MainText.fromJson(json['mainText']) : null;
-    secondaryText = json['secondaryText'] != null
-        ? SecondaryText.fromJson(json['secondaryText'])
-        : null;
+    mainText = json['mainText'] != null ? MainText.fromJson(json['mainText']) : null;
+    secondaryText = json['secondaryText'] != null ? SecondaryText.fromJson(json['secondaryText']) : null;
   }
 
   Map<String, dynamic> toJson() {

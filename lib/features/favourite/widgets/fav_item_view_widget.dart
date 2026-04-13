@@ -12,7 +12,6 @@ class FavItemViewWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: GetBuilder<FavouriteController>(builder: (favouriteController) {
         return RefreshIndicator(
           onRefresh: () async {
@@ -20,20 +19,14 @@ class FavItemViewWidget extends StatelessWidget {
           },
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
-            child: Center(
-                child: SizedBox(
-              width: Dimensions.webMaxWidth,
-              child: ProductViewWidget(
-                isRestaurant: isRestaurant,
-                products: favouriteController.wishProductList,
-                restaurants: favouriteController.wishRestList,
-                useGridCard: true,
-                noDataText: isRestaurant
-                    ? 'you_have_not_add_any_restaurant_to_wishlist'.tr
-                    : 'you_have_not_add_any_food_to_wishlist'.tr,
-                fromFavorite: true,
-              ),
-            )),
+            child: FooterViewWidget(
+              child: Center(child: SizedBox(
+                width: Dimensions.webMaxWidth, child: ProductViewWidget(
+                  isRestaurant: isRestaurant, products: favouriteController.wishProductList, restaurants: favouriteController.wishRestList,
+                  noDataText: isRestaurant ? 'you_have_not_add_any_restaurant_to_wishlist'.tr : 'you_have_not_add_any_food_to_wishlist'.tr, fromFavorite: true,
+                ),
+              )),
+            ),
           ),
         );
       }),

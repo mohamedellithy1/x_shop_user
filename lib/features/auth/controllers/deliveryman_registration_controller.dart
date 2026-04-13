@@ -1,24 +1,21 @@
+import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
+import 'package:stackfood_multivendor/api/api_client.dart';
+import 'package:stackfood_multivendor/features/splash/domain/models/config_model.dart';
+import 'package:stackfood_multivendor/features/auth/domain/models/zone_model.dart';
+import 'package:stackfood_multivendor/features/location/controllers/location_controller.dart';
+import 'package:stackfood_multivendor/features/location/domain/models/zone_response_model.dart';
+import 'package:stackfood_multivendor/features/auth/domain/models/vehicle_model.dart';
+import 'package:stackfood_multivendor/features/auth/domain/services/deliveryman_registration_service_interface.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:stackfood_multivendor/api/api_client.dart';
-import 'package:stackfood_multivendor/features/auth/domain/models/vehicle_model.dart';
-import 'package:stackfood_multivendor/features/auth/domain/models/zone_model.dart';
-import 'package:stackfood_multivendor/features/auth/domain/services/deliveryman_registration_service_interface.dart';
-import 'package:stackfood_multivendor/features/location/controllers/location_controller.dart';
-import 'package:stackfood_multivendor/features/location/domain/models/zone_response_model.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
-import 'package:stackfood_multivendor/features/splash/domain/models/config_model.dart';
 
-class DeliverymanRegistrationController extends GetxController
-    implements GetxService {
-  final DeliverymanRegistrationServiceInterface
-      deliverymanRegistrationServiceInterface;
+class DeliverymanRegistrationController extends GetxController implements GetxService {
+  final DeliverymanRegistrationServiceInterface deliverymanRegistrationServiceInterface;
 
-  DeliverymanRegistrationController(
-      {required this.deliverymanRegistrationServiceInterface});
+  DeliverymanRegistrationController({required this.deliverymanRegistrationServiceInterface});
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -28,24 +25,6 @@ class DeliverymanRegistrationController extends GetxController
 
   XFile? _pickedImage;
   XFile? get pickedImage => _pickedImage;
-
-  XFile? _nationalIdFront;
-  XFile? get nationalIdFront => _nationalIdFront;
-  XFile? _nationalIdBack;
-  XFile? get nationalIdBack => _nationalIdBack;
-
-  XFile? _drivingLicenseFront;
-  XFile? get drivingLicenseFront => _drivingLicenseFront;
-  XFile? _drivingLicenseBack;
-  XFile? get drivingLicenseBack => _drivingLicenseBack;
-
-  XFile? _vehicleLicenseFront;
-  XFile? get vehicleLicenseFront => _vehicleLicenseFront;
-  XFile? _vehicleLicenseBack;
-  XFile? get vehicleLicenseBack => _vehicleLicenseBack;
-
-  XFile? _vehicleFront;
-  XFile? get vehicleFront => _vehicleFront;
 
   List<XFile> _pickedIdentities = [];
   List<XFile> get pickedIdentities => _pickedIdentities;
@@ -68,7 +47,7 @@ class DeliverymanRegistrationController extends GetxController
   bool _spatialCheck = false;
   bool get spatialCheck => _spatialCheck;
 
-  final List<String> _identityTypeList = ['nid'];
+  final List<String> _identityTypeList = ['passport', 'driving_license', 'nid'];
   List<String> get identityTypeList => _identityTypeList;
 
   String? _selectedIdentityType;
@@ -145,14 +124,14 @@ class DeliverymanRegistrationController extends GetxController
 
   void setCountryDialCode(String? countryDialCode, {bool notify = true}) {
     _countryDialCode = countryDialCode;
-    if (notify) {
+    if(notify) {
       update();
     }
   }
 
   void setSelectedTabIndex(int index, {bool notify = true}) {
     _selectedTabIndex = index;
-    if (notify) {
+    if(notify) {
       update();
     }
   }
@@ -162,54 +141,33 @@ class DeliverymanRegistrationController extends GetxController
     update();
   }
 
-  void showHidePassView({bool isUpdate = true}) {
-    _showPassView = !_showPassView;
-    if (isUpdate) {
+  void showHidePassView({bool isUpdate = true}){
+    _showPassView = ! _showPassView;
+    if(isUpdate) {
       update();
     }
   }
-
-  void pickDmDocumentForRegistration(String type) async {
-    XFile? xFile =
-        await deliverymanRegistrationServiceInterface.picImageFromCamera();
-    if (type == 'national_id_front') {
-      _nationalIdFront = xFile;
-    } else if (type == 'national_id_back') {
-      _nationalIdBack = xFile;
-    } else if (type == 'driving_license_front') {
-      _drivingLicenseFront = xFile;
-    } else if (type == 'driving_license_back') {
-      _drivingLicenseBack = xFile;
-    } else if (type == 'vehicle_license_front') {
-      _vehicleLicenseFront = xFile;
-    } else if (type == 'vehicle_license_back') {
-      _vehicleLicenseBack = xFile;
-    } else if (type == 'vehicle_front') {
-      _vehicleFront = xFile;
-    }
-    update();
-    }
 
   void pickDmImage(bool isImage, bool isRemove) async {
-    if (isRemove) {
+    if(isRemove) {
       _pickedImage = null;
       _pickedIdentities = [];
-    } else {
+    }else {
       if (isImage) {
-        _pickedImage =
-            await deliverymanRegistrationServiceInterface.picImageFromCamera();
+        _pickedImage = await deliverymanRegistrationServiceInterface.picImageFromGallery();
       } else {
-        XFile? xFile =
-            await deliverymanRegistrationServiceInterface.picImageFromCamera();
-        _pickedIdentities.add(xFile!);
-            }
+        XFile? xFile = await deliverymanRegistrationServiceInterface.picImageFromGallery();
+        if(xFile != null) {
+          _pickedIdentities.add(xFile);
+        }
+      }
       update();
     }
   }
 
-  void dmStatusChange(double value, {bool isUpdate = true}) {
+  void dmStatusChange(double value, {bool isUpdate = true}){
     _dmStatus = value;
-    if (isUpdate) {
+    if(isUpdate) {
       update();
     }
   }
@@ -221,51 +179,40 @@ class DeliverymanRegistrationController extends GetxController
     _lowercaseCheck = false;
     _spatialCheck = false;
 
-    if (pass.length > 7) {
+    if(pass.length > 7){
       _lengthCheck = true;
     }
-    if (pass.contains(RegExp(r'[a-z]'))) {
+    if(pass.contains(RegExp(r'[a-z]'))){
       _lowercaseCheck = true;
     }
-    if (pass.contains(RegExp(r'[A-Z]'))) {
+    if(pass.contains(RegExp(r'[A-Z]'))){
       _uppercaseCheck = true;
     }
-    if (pass.contains(RegExp(r'[ .!@#$&*~^%]'))) {
+    if(pass.contains(RegExp(r'[ .!@#$&*~^%]'))){
       _spatialCheck = true;
     }
-    if (pass.contains(RegExp(r'[\d+]'))) {
+    if(pass.contains(RegExp(r'[\d+]'))){
       _numberCheck = true;
     }
-    if (isUpdate) {
+    if(isUpdate) {
       update();
     }
   }
 
   Future<void> getVehicleList() async {
     _vehicles = await deliverymanRegistrationServiceInterface.getVehicleList();
-    _vehicleIds =
-        deliverymanRegistrationServiceInterface.setVehicleIdList(_vehicles);
+    _vehicleIds = deliverymanRegistrationServiceInterface.setVehicleIdList(_vehicles);
     update();
   }
 
-  Future<List<ZoneModel>?> getZoneList(
-      {bool forDeliveryRegistration = false}) async {
+  Future<List<ZoneModel>?> getZoneList({bool forDeliveryRegistration = false}) async {
     _restaurantLocation = null;
     _zoneIds = null;
-    _zoneList = await deliverymanRegistrationServiceInterface
-        .getZoneList(forDeliveryRegistration);
+    _zoneList = await deliverymanRegistrationServiceInterface.getZoneList(forDeliveryRegistration);
     if (_zoneList != null && forDeliveryRegistration) {
       setLocation(LatLng(
-        double.parse(Get.find<MarketSplashController>(tag: 'xmarket')
-                .configModel!
-                .defaultLocation!
-                .lat ??
-            '0'),
-        double.parse(Get.find<MarketSplashController>(tag: 'xmarket')
-                .configModel!
-                .defaultLocation!
-                .lng ??
-            '0'),
+        double.parse(Get.find<SplashController>().configModel!.defaultLocation!.lat ?? '0'),
+        double.parse(Get.find<SplashController>().configModel!.defaultLocation!.lng ?? '0'),
       ));
     }
     update();
@@ -273,63 +220,46 @@ class DeliverymanRegistrationController extends GetxController
   }
 
   void setLocation(LatLng location) async {
-    ZoneResponseModel response =
-        await Get.find<MarketLocationController>().getZone(
-      location.latitude.toString(),
-      location.longitude.toString(),
-      false,
+    ZoneResponseModel response = await Get.find<LocationController>().getZone(
+      location.latitude.toString(), location.longitude.toString(), false,
     );
-    _restaurantAddress = await Get.find<MarketLocationController>()
-        .getAddressFromGeocode(LatLng(location.latitude, location.longitude));
-    if (response.isSuccess && response.zoneIds.isNotEmpty) {
+    _restaurantAddress = await Get.find<LocationController>().getAddressFromGeocode(LatLng(location.latitude, location.longitude));
+    if(response.isSuccess && response.zoneIds.isNotEmpty) {
       _restaurantLocation = location;
       _zoneIds = response.zoneIds;
-    } else {
+    }else {
       _restaurantLocation = null;
       _zoneIds = null;
     }
     update();
   }
 
-  void setDeliverymanAdditionalJoinUsPageData({bool isUpdate = true}) {
+  void setDeliverymanAdditionalJoinUsPageData({bool isUpdate = true}){
     _dataList = [];
     _additionalList = [];
-    if (Get.find<MarketSplashController>(tag: 'xmarket')
-            .configModel!
-            .deliverymanAdditionalJoinUsPageData !=
-        null) {
-      for (var data in Get.find<MarketSplashController>(tag: 'xmarket')
-          .configModel!
-          .deliverymanAdditionalJoinUsPageData!
-          .data!) {
-        int index = Get.find<MarketSplashController>(tag: 'xmarket')
-            .configModel!
-            .deliverymanAdditionalJoinUsPageData!
-            .data!
-            .indexOf(data);
+    if(Get.find<SplashController>().configModel!.deliverymanAdditionalJoinUsPageData != null) {
+      for (var data in Get.find<SplashController>().configModel!.deliverymanAdditionalJoinUsPageData!.data!) {
+        int index = Get.find<SplashController>().configModel!.deliverymanAdditionalJoinUsPageData!.data!.indexOf(data);
         _dataList!.add(data);
-        if (data.fieldType == 'text' ||
-            data.fieldType == 'number' ||
-            data.fieldType == 'email' ||
-            data.fieldType == 'phone') {
+        if(data.fieldType == 'text' || data.fieldType == 'number' || data.fieldType == 'email' || data.fieldType == 'phone'){
           _additionalList!.add(TextEditingController());
-        } else if (data.fieldType == 'date') {
+        } else if(data.fieldType == 'date') {
           _additionalList!.add(null);
-        } else if (data.fieldType == 'check_box') {
+        } else if(data.fieldType == 'check_box') {
           _additionalList!.add([]);
-          if (data.checkData != null) {
+          if(data.checkData != null) {
             for (var element in data.checkData!) {
               debugPrint(element);
               _additionalList![index].add(0);
             }
           }
-        } else if (data.fieldType == 'file') {
+        } else if(data.fieldType == 'file') {
           _additionalList!.add([]);
         }
       }
     }
 
-    if (isUpdate) {
+    if(isUpdate) {
       update();
     }
   }
@@ -339,7 +269,7 @@ class DeliverymanRegistrationController extends GetxController
     update();
   }
 
-  void removeDmImage() {
+  void removeDmImage(){
     _pickedImage = null;
     update();
   }
@@ -355,7 +285,7 @@ class DeliverymanRegistrationController extends GetxController
   }
 
   void setAdditionalCheckData(int index, int i, String date) {
-    if (_additionalList![index][i] == date) {
+    if(_additionalList![index][i] == date){
       _additionalList![index][i] = 0;
     } else {
       _additionalList![index][i] = date;
@@ -364,52 +294,19 @@ class DeliverymanRegistrationController extends GetxController
   }
 
   Future<void> pickFile(int index, MediaData mediaData) async {
-    FilePickerResult? result =
-        await deliverymanRegistrationServiceInterface.picFile(mediaData);
-    _additionalList![index].add(result);
-      update();
+    FilePickerResult? result = await deliverymanRegistrationServiceInterface.picFile(mediaData);
+    if(result != null) {
+      _additionalList![index].add(result);
+    }
+    update();
   }
 
-  Future<void> registerDeliveryMan(
-      Map<String, String> data,
-      List<FilePickerResult> additionalDocuments,
-      List<String> inputTypeList) async {
+  Future<void> registerDeliveryMan(Map<String, String> data, List<FilePickerResult> additionalDocuments, List<String> inputTypeList) async {
     _isLoading = true;
     update();
-    List<MultipartBody> multiParts = deliverymanRegistrationServiceInterface
-        .prepareIdentityImage(_pickedImage, _pickedIdentities);
-
-    if (_nationalIdFront != null) {
-      multiParts.add(MultipartBody('national_id_front', _nationalIdFront));
-    }
-    if (_nationalIdBack != null) {
-      multiParts.add(MultipartBody('national_id_back', _nationalIdBack));
-    }
-    if (_drivingLicenseFront != null) {
-      multiParts
-          .add(MultipartBody('driving_license_front', _drivingLicenseFront));
-    }
-    if (_drivingLicenseBack != null) {
-      multiParts
-          .add(MultipartBody('driving_license_back', _drivingLicenseBack));
-    }
-    if (_vehicleLicenseFront != null) {
-      multiParts
-          .add(MultipartBody('vehicle_license_front', _vehicleLicenseFront));
-    }
-    if (_vehicleLicenseBack != null) {
-      multiParts
-          .add(MultipartBody('vehicle_license_back', _vehicleLicenseBack));
-    }
-    if (_vehicleFront != null) {
-      multiParts.add(MultipartBody('vehicle_front', _vehicleFront));
-    }
-
-    List<MultipartDocument> multiPartsDocuments =
-        deliverymanRegistrationServiceInterface.prepareMultipartDocuments(
-            inputTypeList, additionalDocuments);
-    await deliverymanRegistrationServiceInterface.registerDeliveryMan(
-        data, multiParts, multiPartsDocuments);
+    List<MultipartBody> multiParts = deliverymanRegistrationServiceInterface.prepareIdentityImage(_pickedImage, _pickedIdentities);
+    List<MultipartDocument> multiPartsDocuments = deliverymanRegistrationServiceInterface.prepareMultipartDocuments(inputTypeList, additionalDocuments);
+    await deliverymanRegistrationServiceInterface.registerDeliveryMan(data, multiParts, multiPartsDocuments);
     _isLoading = false;
     update();
   }
@@ -420,22 +317,17 @@ class DeliverymanRegistrationController extends GetxController
     return finalResult;
   }
 
-  void resetDmRegistrationData() {
+  void resetDmRegistrationData(){
     _selectedTabIndex = 0;
     _pickedImage = null;
     _pickedIdentities = [];
-    _nationalIdFront = null;
-    _nationalIdBack = null;
-    _drivingLicenseFront = null;
-    _drivingLicenseBack = null;
-    _vehicleLicenseFront = null;
-    _vehicleLicenseBack = null;
-    _vehicleFront = null;
     _selectedIdentityType = null;
     _selectedDmType = null;
     _selectedDmTypeId = null;
     _selectedVehicleId = null;
     _selectedDeliveryZoneId = null;
+    _pickedImage = null;
+    _pickedIdentities = [];
     _dmStatus = 0.4;
     _showPassView = false;
     _lengthCheck = false;
@@ -444,4 +336,5 @@ class DeliverymanRegistrationController extends GetxController
     _lowercaseCheck = false;
     _spatialCheck = false;
   }
+
 }

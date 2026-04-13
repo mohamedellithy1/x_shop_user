@@ -15,7 +15,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.sixamtech.stackfooduser"
+    namespace = "com.Taswiq.Taswiq"
     compileSdk = 36
     ndkVersion = "28.2.13676358" // ✔ صح
 
@@ -30,11 +30,11 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.sixamtech.stackfooduser"
-        minSdk = flutter.minSdkVersion
+        applicationId = "com.Taswiq.Taswiq"
+        minSdk = 24
         targetSdk = 36
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
+        versionCode = 2
+        versionName = "1.0.2"
         multiDexEnabled = true
     }
     signingConfigs {
