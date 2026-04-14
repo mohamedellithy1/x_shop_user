@@ -171,7 +171,9 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
             width: 550,
             margin: EdgeInsets.only(top: GetPlatform.isWeb ? 0 : 30),
             decoration: BoxDecoration(
-              color: marketThemeController.darkTheme ? const Color(0xFF141313) : Theme.of(context).cardColor,
+              color: marketThemeController.darkTheme
+                  ? const Color(0xFF141313)
+                  : Theme.of(context).cardColor,
               borderRadius: ResponsiveHelper.isMobile(context)
                   ? const BorderRadius.vertical(
                       top: Radius.circular(Dimensions.radiusExtraLarge))
@@ -441,7 +443,16 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                               textDirection:
                                                                   TextDirection
                                                                       .ltr,
-                                                              style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge, color: marketThemeController.darkTheme ? Colors.white : Colors.black),
+                                                              style: robotoMedium.copyWith(
+                                                                  fontSize:
+                                                                      Dimensions
+                                                                          .fontSizeLarge,
+                                                                  color: marketThemeController
+                                                                          .darkTheme
+                                                                      ? Colors
+                                                                          .white
+                                                                      : Colors
+                                                                          .black),
                                                             ),
                                                             (!widget.isCampaign &&
                                                                     product!.stockType !=
@@ -587,10 +598,15 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                             Text(
                                                                 'description'
                                                                     .tr,
-                                                                style: robotoBold
-                                                                    .copyWith(
-                                                                        fontSize:
-                                                                            Dimensions.fontSizeLarge, color: marketThemeController.darkTheme ? Colors.white : Colors.black)),
+                                                                style: robotoBold.copyWith(
+                                                                    fontSize:
+                                                                        Dimensions
+                                                                            .fontSizeLarge,
+                                                                    color: marketThemeController.darkTheme
+                                                                        ? Colors
+                                                                            .white
+                                                                        : Colors
+                                                                            .black)),
                                                             (Get.find<MarketSplashController>(
                                                                         tag:
                                                                             'xmarket')
@@ -700,7 +716,12 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                               .tr,
                                                           style: robotoBold.copyWith(
                                                               fontSize: Dimensions
-                                                                  .fontSizeLarge, color: marketThemeController.darkTheme ? Colors.white : Colors.black)),
+                                                                  .fontSizeLarge,
+                                                              color: marketThemeController
+                                                                      .darkTheme
+                                                                  ? Colors.white
+                                                                  : Colors
+                                                                      .black)),
                                                       const SizedBox(
                                                           height: Dimensions
                                                               .paddingSizeExtraSmall),
@@ -743,7 +764,12 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                               .tr,
                                                           style: robotoBold.copyWith(
                                                               fontSize: Dimensions
-                                                                  .fontSizeLarge, color: marketThemeController.darkTheme ? Colors.white : Colors.black)),
+                                                                  .fontSizeLarge,
+                                                              color: marketThemeController
+                                                                      .darkTheme
+                                                                  ? Colors.white
+                                                                  : Colors
+                                                                      .black)),
                                                       const SizedBox(
                                                           height: Dimensions
                                                               .paddingSizeExtraSmall),
@@ -1171,9 +1197,19 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                                 BorderRadius.circular(
                                                                     Dimensions
                                                                         .radiusSmall),
-                                                            borderSide:
-                                                                BorderSide(
-                                                                    color: marketThemeController.darkTheme ? Colors.white.withValues(alpha: 0.5) : Colors.black.withValues(alpha: 0.5)),
+                                                            borderSide: BorderSide(
+                                                                color: marketThemeController
+                                                                        .darkTheme
+                                                                    ? Colors
+                                                                        .white
+                                                                        .withValues(
+                                                                            alpha:
+                                                                                0.5)
+                                                                    : Colors
+                                                                        .black
+                                                                        .withValues(
+                                                                            alpha:
+                                                                                0.5)),
                                                           );
 
                                                           return Padding(
@@ -1203,7 +1239,11 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                                         TextAlign
                                                                             .center,
                                                                     style: robotoRegular.copyWith(
-                                                                        color: marketThemeController.darkTheme ? Colors.white : Colors.black,
+                                                                        color: marketThemeController.darkTheme
+                                                                            ? Colors
+                                                                                .white
+                                                                            : Colors
+                                                                                .black,
                                                                         fontSize:
                                                                             Dimensions.fontSizeSmall),
                                                                     onChanged:
@@ -1214,9 +1254,10 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                                       hintText:
                                                                           'جم',
                                                                       hintStyle: robotoRegular.copyWith(
-                                                                          color: marketThemeController.darkTheme ? Colors.white.withValues(alpha: 0.6) : Colors.black.withValues(alpha: 0.6),
-                                                                          fontSize:
-                                                                              Dimensions.fontSizeSmall),
+                                                                          color: marketThemeController.darkTheme
+                                                                              ? Colors.white.withValues(alpha: 0.6)
+                                                                              : Colors.black.withValues(alpha: 0.6),
+                                                                          fontSize: Dimensions.fontSizeSmall),
                                                                       border:
                                                                           border,
                                                                       enabledBorder:
@@ -1253,7 +1294,11 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                                         TextAlign
                                                                             .center,
                                                                     style: robotoRegular.copyWith(
-                                                                        color: marketThemeController.darkTheme ? Colors.white : Colors.black,
+                                                                        color: marketThemeController.darkTheme
+                                                                            ? Colors
+                                                                                .white
+                                                                            : Colors
+                                                                                .black,
                                                                         fontSize:
                                                                             Dimensions.fontSizeSmall),
                                                                     onChanged:
@@ -1264,9 +1309,10 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                                       hintText:
                                                                           'كجم',
                                                                       hintStyle: robotoRegular.copyWith(
-                                                                          color: marketThemeController.darkTheme ? Colors.white.withValues(alpha: 0.6) : Colors.black.withValues(alpha: 0.6),
-                                                                          fontSize:
-                                                                              Dimensions.fontSizeSmall),
+                                                                          color: marketThemeController.darkTheme
+                                                                              ? Colors.white.withValues(alpha: 0.6)
+                                                                              : Colors.black.withValues(alpha: 0.6),
+                                                                          fontSize: Dimensions.fontSizeSmall),
                                                                       border:
                                                                           border,
                                                                       enabledBorder:
@@ -1301,7 +1347,9 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                                         fontSize:
                                                                             Dimensions
                                                                                 .fontSizeSmall,
-                                                                        color: marketThemeController.darkTheme ? Colors.white : Colors.black),
+                                                                        color: marketThemeController.darkTheme
+                                                                            ? Colors.white
+                                                                            : Colors.black),
                                                                   ),
                                                                 ),
                                                               ],
@@ -1328,11 +1376,18 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                                 MainAxisAlignment
                                                                     .spaceBetween,
                                                             children: [
-                                                              Text('addons'.tr,
-                                                                  style: robotoBold
-                                                                      .copyWith(
-                                                                          fontSize:
-                                                                              Dimensions.fontSizeLarge, color: marketThemeController.darkTheme ? Colors.white : Colors.black)),
+                                                              Text(
+                                                                  'addons'.tr,
+                                                                  style: robotoBold.copyWith(
+                                                                      fontSize:
+                                                                          Dimensions
+                                                                              .fontSizeLarge,
+                                                                      color: marketThemeController
+                                                                              .darkTheme
+                                                                          ? Colors
+                                                                              .white
+                                                                          : Colors
+                                                                              .black)),
                                                               Container(
                                                                 decoration:
                                                                     BoxDecoration(
@@ -1548,7 +1603,9 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                           ///Bottom side..
                           Container(
                             decoration: BoxDecoration(
-                                color: marketThemeController.darkTheme ? const Color(0xFF141313) : Theme.of(context).cardColor,
+                                color: marketThemeController.darkTheme
+                                    ? const Color(0xFF141313)
+                                    : Theme.of(context).cardColor,
                                 borderRadius: BorderRadius.vertical(
                                     bottom: Radius.circular(
                                         ResponsiveHelper.isDesktop(context)
@@ -1558,7 +1615,10 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                     ? null
                                     : [
                                         BoxShadow(
-                                            color: marketThemeController.darkTheme ? Colors.black : Colors.grey[300]!,
+                                            color:
+                                                marketThemeController.darkTheme
+                                                    ? Colors.black
+                                                    : Colors.grey[300]!,
                                             blurRadius: 10)
                                       ]),
                             padding: const EdgeInsets.symmetric(
@@ -1637,7 +1697,11 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                               .toDouble(),
                                           textStyle: robotoMedium.copyWith(
                                               fontSize:
-                                                  Dimensions.fontSizeLarge, color: marketThemeController.darkTheme ? Colors.white : Colors.black),
+                                                  Dimensions.fontSizeLarge,
+                                              color: marketThemeController
+                                                      .darkTheme
+                                                  ? Colors.white
+                                                  : Colors.black),
                                         ),
                                         QuantityButton(
                                           onTap: () {
@@ -1727,7 +1791,9 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                   padding: const EdgeInsets.all(
                                       Dimensions.paddingSizeExtraSmall),
                                   decoration: BoxDecoration(
-                                      color: marketThemeController.darkTheme ? Colors.grey[800] : Theme.of(context).cardColor,
+                                    color: marketThemeController.darkTheme
+                                        ? Colors.grey[800]
+                                        : Theme.of(context).cardColor,
                                     shape: BoxShape.circle,
                                     boxShadow: [
                                       BoxShadow(
@@ -1737,7 +1803,11 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                           blurRadius: 5)
                                     ],
                                   ),
-                                  child: Icon(Icons.close, size: 14, color: marketThemeController.darkTheme ? Colors.white : Colors.black),
+                                  child: Icon(Icons.close,
+                                      size: 14,
+                                      color: marketThemeController.darkTheme
+                                          ? Colors.white
+                                          : Colors.black),
                                 ),
                               ),
                             ),

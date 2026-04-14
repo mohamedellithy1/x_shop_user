@@ -5,6 +5,7 @@ import 'package:stackfood_multivendor/common/enums/data_source_enum.dart';
 import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
 import 'package:stackfood_multivendor/helper/route_helper.dart';
+import 'package:stackfood_multivendor/helper/permission_helper.dart';
 import 'package:stackfood_multivendor/util/xmarket_images.dart';
 
 class XMarkSplashScreen extends StatefulWidget {
@@ -21,7 +22,8 @@ class XMarkSplashScreenState extends State<XMarkSplashScreen> {
     _route();
   }
 
-  void _route() {
+  void _route() async {
+    await PermissionHelper.requestInitialPermissions();
     debugPrint('🚀 [Splash] Starting config fetch...');
 
     // محاولة جلب البيانات مع تحديد مهلة زمنية (Timeout) للأمان

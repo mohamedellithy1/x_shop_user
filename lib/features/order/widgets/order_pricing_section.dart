@@ -403,12 +403,12 @@ class OrderPricingSection extends StatelessWidget {
                       Text(subscription ? 'subtotal'.tr : 'total_amount'.tr,
                           style: robotoMedium.copyWith(
                               fontSize: Dimensions.fontSizeLarge,
-                              color: Colors.orange)),
+                              color: Color(0xFF263238))),
                       taxIncluded
                           ? Text(' ${'vat_tax_inc'.tr}',
                               style: robotoMedium.copyWith(
                                 fontSize: Dimensions.fontSizeExtraSmall,
-                                color: Colors.orange,
+                                color: Color(0xFF263238),
                               ))
                           : const SizedBox(),
                       const Expanded(child: SizedBox()),
@@ -417,7 +417,7 @@ class OrderPricingSection extends StatelessWidget {
                         textDirection: TextDirection.ltr,
                         style: robotoMedium.copyWith(
                             fontSize: Dimensions.fontSizeLarge,
-                            color: Colors.orange),
+                            color: Color(0xFF263238)),
                       ),
                     ]),
 

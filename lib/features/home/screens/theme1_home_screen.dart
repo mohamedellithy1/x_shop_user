@@ -271,50 +271,50 @@ class Theme1HomeScreen extends StatelessWidget {
               configModel.popularRestaurant == 1
                   ? const PopularStoreWidget1(isPopular: true)
                   : const SizedBox(),
-              const NearByButtonWidget1(),
+              // const NearByButtonWidget1(),
               configModel.popularFood == 1
                   ? const PopularItemWidget1(isPopular: true)
                   : const SizedBox(),
               configModel.newRestaurant == 1
                   ? const PopularStoreWidget1(isPopular: false)
                   : const SizedBox(),
-              const PromotionalBannerViewWidget(),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 15, 0, 5),
-                child: Row(children: [
-                  Expanded(
-                      child: Text(
-                    'all_restaurants'.tr,
-                    style: robotoMedium.copyWith(
-                        fontSize: Dimensions.fontSizeLarge),
-                  )),
-                  const FilterViewWidget(),
-                ]),
-              ),
-              GetBuilder<RestaurantController>(builder: (restaurantController) {
-                return PaginatedListViewWidget(
-                  scrollController: scrollController,
-                  totalSize: restaurantController.restaurantModel?.totalSize,
-                  offset: restaurantController.restaurantModel?.offset,
-                  onPaginate: (int? offset) async => await restaurantController
-                      .getRestaurantList(offset!, false),
-                  productView: ProductViewWidget(
-                    isRestaurant: true,
-                    products: null,
-                    showTheme1Restaurant: true,
-                    restaurants:
-                        restaurantController.restaurantModel?.restaurants,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: ResponsiveHelper.isDesktop(context)
-                          ? Dimensions.paddingSizeExtraSmall
-                          : Dimensions.paddingSizeSmall,
-                      vertical: ResponsiveHelper.isDesktop(context)
-                          ? Dimensions.paddingSizeExtraSmall
-                          : 0,
-                    ),
-                  ),
-                );
-              }),
+              // const PromotionalBannerViewWidget(),
+              // Padding(
+              //   padding: const EdgeInsets.fromLTRB(10, 15, 0, 5),
+              //   child: Row(children: [
+              //     Expanded(
+              //         child: Text(
+              //       'all_restaurants'.tr,
+              //       style: robotoMedium.copyWith(
+              //           fontSize: Dimensions.fontSizeLarge),
+              //     )),
+              //     const FilterViewWidget(),
+              //   ]),
+              // ),
+              // GetBuilder<RestaurantController>(builder: (restaurantController) {
+              //   return PaginatedListViewWidget(
+              //     scrollController: scrollController,
+              //     totalSize: restaurantController.restaurantModel?.totalSize,
+              //     offset: restaurantController.restaurantModel?.offset,
+              //     onPaginate: (int? offset) async => await restaurantController
+              //         .getRestaurantList(offset!, false),
+              //     productView: ProductViewWidget(
+              //       isRestaurant: true,
+              //       products: null,
+              //       showTheme1Restaurant: true,
+              //       restaurants:
+              //           restaurantController.restaurantModel?.restaurants,
+              //       padding: EdgeInsets.symmetric(
+              //         horizontal: ResponsiveHelper.isDesktop(context)
+              //             ? Dimensions.paddingSizeExtraSmall
+              //             : Dimensions.paddingSizeSmall,
+              //         vertical: ResponsiveHelper.isDesktop(context)
+              //             ? Dimensions.paddingSizeExtraSmall
+              //             : 0,
+              //       ),
+              //     ),
+              //   );
+              // }),
             ]),
           )),
         ),

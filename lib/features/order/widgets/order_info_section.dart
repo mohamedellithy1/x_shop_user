@@ -1845,7 +1845,8 @@ class OrderInfoSection extends StatelessWidget {
                     ),
                     child: Center(
                       child: Text('click_to_review_products'.tr,
-                          style: robotoMedium.copyWith(color: Colors.orange)),
+                          style:
+                              robotoMedium.copyWith(color: Color(0xFF9ebc67))),
                     ),
                   ),
                   children: [
@@ -2167,7 +2168,7 @@ class OrderInfoSection extends StatelessWidget {
                                     child: Container(
                                       decoration: BoxDecoration(
                                         border: Border.all(
-                                            color: Colors.orange, width: 1),
+                                            color: Color(0xFF9ebc67), width: 1),
                                         borderRadius: BorderRadius.circular(
                                             Dimensions.radiusSmall),
                                       ),
@@ -2180,7 +2181,7 @@ class OrderInfoSection extends StatelessWidget {
                                           style: robotoMedium.copyWith(
                                               fontSize:
                                                   Dimensions.fontSizeSmall,
-                                              color: Colors.orange)),
+                                              color: Color(0xFF263238))),
                                     ),
                                   )
                                 : const SizedBox(),

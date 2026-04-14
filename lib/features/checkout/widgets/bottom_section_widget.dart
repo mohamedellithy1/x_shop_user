@@ -499,8 +499,7 @@ class BottomSectionWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                           Row(children: [
-                            Text(
-                                'additional_charge'.tr,
+                            Text('additional_charge'.tr,
                                 style: robotoRegular.copyWith(
                                     color: Get.find<MarketThemeController>(
                                                 tag: 'xmarket')
@@ -649,7 +648,10 @@ class BottomSectionWidget extends StatelessWidget {
                       children: [
                           Text('paid_by_wallet'.tr, style: robotoRegular),
                           Text(
-                              PriceConverter.convertPrice(Get.find<MarketProfileController>().userInfoModel!.walletBalance!),
+                              PriceConverter.convertPrice(
+                                  Get.find<MarketProfileController>()
+                                      .userInfoModel!
+                                      .walletBalance!),
                               style: robotoRegular,
                               textDirection: TextDirection.ltr),
                         ])

@@ -6,6 +6,7 @@ import 'package:stackfood_multivendor/features/splash/controllers/splash_control
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
+import 'package:stackfood_multivendor/util/xmarket_images.dart';
 
 class SignUpScreen extends StatefulWidget {
   final bool exitFromApp;
@@ -34,7 +35,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                           color: Theme.of(context).textTheme.bodyLarge!.color),
                     ),
                     elevation: 0,
-                    backgroundColor: Theme.of(context).cardColor)
+                    backgroundColor: const Color(0xFFfafef5))
                 : null,
         body: SafeArea(
             child: Center(
@@ -63,12 +64,9 @@ class SignUpScreenState extends State<SignUpScreen> {
                             ),
                           )
                         : const SizedBox(),
-                    CustomImageWidget(
-                      image: Get.find<MarketSplashController>(tag: 'xmarket')
-                              .configModel
-                              ?.logoFullUrl ??
-                          '',
-                      height: 50,
+                    Image.asset(
+                      XmarketImages.logo,
+                      height: 120,
                       width: 200,
                       fit: BoxFit.contain,
                     ),
