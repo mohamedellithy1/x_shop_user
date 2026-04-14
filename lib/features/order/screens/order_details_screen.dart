@@ -252,17 +252,27 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen>
               child: Scaffold(
                 backgroundColor: marketThemeController.darkTheme
                     ? Colors.black
-                    : Colors.white,
+                    : Color(0xFFfafef5),
                 appBar: (!isDesktop
                     ? PreferredSize(
                         preferredSize: const Size.fromHeight(kToolbarHeight),
                         child: Container(
                           decoration: const BoxDecoration(
                             gradient: LinearGradient(
-                              colors: [Colors.orange, Colors.red],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
+                              colors: [
+                                Color(0xFFe3ebd5),
+                                Color(0xFFfafff4),
+                                Color(0xFFe3ebd5),
+                              ],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
                             ),
+
+                            // gradient: LinearGradient(
+                            //   colors: [Color(0xFFd6e0c4), Color(0xFFe7feba)],
+                            //   begin: Alignment.topLeft,
+                            //   end: Alignment.bottomRight,
+                            // ),
                           ),
                           child: AppBar(
                             title: Column(children: [
@@ -270,14 +280,14 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen>
                                   '${subscription ? 'subscription'.tr : 'order'.tr} # ${order?.id ?? ''}',
                                   style: robotoBold.copyWith(
                                       fontSize: Dimensions.fontSizeLarge,
-                                      color: Colors.white)),
+                                      color: Colors.black)),
                               const SizedBox(
                                   height: Dimensions.paddingSizeExtraSmall),
                             ]),
                             centerTitle: true,
                             leading: IconButton(
                               icon: const Icon(Icons.arrow_back_ios,
-                                  color: Colors.white),
+                                  color: Colors.black),
                               onPressed: () {
                                 if ((widget.orderModel == null ||
                                         widget.fromOfflinePayment) &&

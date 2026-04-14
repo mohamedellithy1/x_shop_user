@@ -25,6 +25,7 @@ class _ItemCampaignScreenState extends State<ItemCampaignScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: CustomAppBarWidget(title: 'trending_food_offers'.tr),
       endDrawer: const MenuDrawerWidget(),
       endDrawerEnableOpenDragGesture: false,

@@ -1659,7 +1659,7 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                         child: GetBuilder<MarketCartController>(
                                             builder: (cartController) {
                                           return CustomButtonWidget(
-                                            color: Colors.orange,
+                                            color: Color(0xFF9ebc67),
                                             textColor:
                                                 marketThemeController.darkTheme
                                                     ? Colors.black

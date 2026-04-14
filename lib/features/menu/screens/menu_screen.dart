@@ -50,7 +50,7 @@ class _MenuScreenState extends State<MenuScreen> {
           child: Scaffold(
             backgroundColor: marketThemeController.darkTheme
                 ? Colors.black
-                : Colors.white,
+                : Color(0xFFfafef5),
             body: GetBuilder<MarketProfileController>(
               builder: (profileController) {
                 return GetBuilder<MarketSplashController>(
@@ -762,15 +762,16 @@ class _MenuScreenState extends State<MenuScreen> {
                                 Get.dialog(
                                   ConfirmationDialogWidget(
                                     icon: XmarketImages.logOut,
-                                    description
-                                    : 'are_you_sure_to_logout'.tr,
+                                    description: 'are_you_sure_to_logout'.tr,
                                     isLogOut: true,
                                     onYesPressed: () async {
                                       Get.find<MarketAuthController>()
                                           .clearSharedData();
                                       Get.find<MarketProfileController>()
                                           .setForceFullyUserEmpty();
-                                      Get.offAllNamed(RouteHelper.getSignInRoute(RouteHelper.initial));
+                                      Get.offAllNamed(
+                                          RouteHelper.getSignInRoute(
+                                              RouteHelper.initial));
                                     },
                                   ),
                                   useSafeArea: false,

@@ -9,7 +9,7 @@ class ConversationDetailsShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: Color(0xFFfafef5),
       body: SizedBox(
         height: Get.height * 0.80,
         child: SingleChildScrollView(

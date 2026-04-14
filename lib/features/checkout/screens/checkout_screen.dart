@@ -23,7 +23,8 @@ import 'package:stackfood_multivendor/features/checkout/widgets/order_place_butt
 import 'package:stackfood_multivendor/features/checkout/widgets/top_section_widget.dart';
 import 'package:stackfood_multivendor/features/coupon/controllers/coupon_controller.dart';
 import 'package:stackfood_multivendor/common/models/restaurant_model.dart';
-import 'package:stackfood_multivendor/features/coupon/domain/models/coupon_model.dart' hide Restaurant;
+import 'package:stackfood_multivendor/features/coupon/domain/models/coupon_model.dart'
+    hide Restaurant;
 import 'package:stackfood_multivendor/features/home/controllers/home_controller.dart';
 import 'package:stackfood_multivendor/features/location/controllers/location_controller.dart';
 import 'package:stackfood_multivendor/features/location/domain/models/zone_response_model.dart';
@@ -312,7 +313,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
     return Scaffold(
       backgroundColor: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
           ? const Color(0xFF141313)
-          : Colors.white,
+          : Color(0xFFfafef5),
       appBar: CustomAppBarWidget(title: 'checkout_screen_title'.tr),
       endDrawer: const MenuDrawerWidget(),
       endDrawerEnableOpenDragGesture: false,

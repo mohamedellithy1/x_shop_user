@@ -81,7 +81,7 @@ class ConfirmationDialogWidget extends StatelessWidget {
                               authController.isLoading)
                           ? const Center(
                               child: CircularProgressIndicator(
-                              color: Colors.orange,
+                              color: Color(0xFF9ebc67),
                             ))
                           : Row(children: [
                               Expanded(
@@ -130,7 +130,7 @@ class ConfirmationDialogWidget extends StatelessWidget {
                                     ? Theme.of(context)
                                         .disabledColor
                                         .withValues(alpha: 0.3)
-                                    : Colors.orange,
+                                    : Color(0xFF9ebc67),
                                 textColor: isDelete == true
                                     ? Theme.of(context).disabledColor
                                     : Theme.of(context).cardColor,

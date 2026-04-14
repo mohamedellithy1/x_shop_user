@@ -93,7 +93,7 @@ class SearchScreenState extends State<SearchScreen> {
         _actionOnBackButton();
       },
       child: Scaffold(
-        backgroundColor: Theme.of(context).cardColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: isDesktop ? const WebMenuBar() : null,
         endDrawer: const MenuDrawerWidget(),
         endDrawerEnableOpenDragGesture: false,

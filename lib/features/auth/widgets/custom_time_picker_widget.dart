@@ -110,7 +110,7 @@ class CustomTimePickerWidget extends StatelessWidget {
                     ),
 
                     CustomButtonWidget(
-                      color:Colors.orange,
+                      color:Color(0xFF9ebc67),
                       width: 200,
                       buttonText: 'save'.tr,
                       onPressed: (){

@@ -391,7 +391,7 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
                           ],
                         ),
                   child: CustomButtonWidget(
-                    color: Colors.orange,
+                    color: Color(0xFF9ebc67),
                     buttonText: 'select'.tr,
                     onPressed: () => Get.back(),
                   ),

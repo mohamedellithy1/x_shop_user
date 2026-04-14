@@ -1,4 +1,5 @@
 import 'package:stackfood_multivendor/util/app_constants.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 
 ThemeData light = ThemeData(
@@ -11,20 +12,32 @@ ThemeData light = ThemeData(
   canvasColor: Colors.white,
   cardColor: Colors.white,
   shadowColor: Colors.black.withValues(alpha: 0.03),
-  textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(foregroundColor: const Color(0xFFFF8200))),
-  scaffoldBackgroundColor: Colors.white,
-  colorScheme: const ColorScheme.light(primary: Color(0xFFFF8200),
-    tertiary: Color(0xff102F9C),
-    tertiaryContainer: Color(0xff8195DB),
-    secondary: Color(0xFFFF8200)).copyWith(surface: Colors.white).copyWith(error: const Color(0xFFE84D4F),
-  ),
-  popupMenuTheme: const PopupMenuThemeData(color: Colors.white, surfaceTintColor: Colors.white),
+  textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(foregroundColor: const Color(0xFFFF8200))),
+  scaffoldBackgroundColor: const Color(0xFFfafef5),
+  colorScheme: const ColorScheme.light(
+          primary: Color(0xFFFF8200),
+          tertiary: Color(0xff102F9C),
+          tertiaryContainer: Color(0xff8195DB),
+          secondary: Color(0xFFFF8200))
+      .copyWith(surface: Colors.white)
+      .copyWith(
+        error: const Color(0xFFE84D4F),
+      ),
+  popupMenuTheme: const PopupMenuThemeData(
+      color: Colors.white, surfaceTintColor: Colors.white),
   dialogTheme: const DialogThemeData(surfaceTintColor: Colors.white),
-  floatingActionButtonTheme: FloatingActionButtonThemeData(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(500))),
+  floatingActionButtonTheme: FloatingActionButtonThemeData(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(500))),
   bottomAppBarTheme: const BottomAppBarThemeData(
-    surfaceTintColor: Colors.white, height: 60,
+    surfaceTintColor: Colors.white,
+    height: 60,
     padding: EdgeInsets.symmetric(vertical: 5),
   ),
-  dividerTheme: DividerThemeData(color: const Color(0xFFBABFC4).withValues(alpha: 0.25), thickness: 0.5),
+  dividerTheme: DividerThemeData(
+      color: const Color(0xFFBABFC4).withValues(alpha: 0.25), thickness: 0.5),
   tabBarTheme: const TabBarThemeData(dividerColor: Colors.transparent),
+  appBarTheme: const AppBarTheme(
+    systemOverlayStyle: SystemUiOverlayStyle.dark,
+  ),
 );

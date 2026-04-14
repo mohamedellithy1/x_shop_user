@@ -36,6 +36,7 @@ class _ComplaintsSuggestionsScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: BodyWidget(
         appBar: AppBarWidget(
           title: 'الشكاوي والاقتراحات',
@@ -166,7 +167,8 @@ class _ComplaintsSuggestionsScreenState
                       backgroundColor: Colors.orange,
                       onPressed: () async {
                         if (_descriptionController.text.isEmpty) {
-                          showCustomSnackBar('يرجى كتابة تفاصيل الشكوى أو الاقتراح');
+                          showCustomSnackBar(
+                              'يرجى كتابة تفاصيل الشكوى أو الاقتراح');
                           return;
                         }
 
@@ -184,7 +186,8 @@ class _ComplaintsSuggestionsScreenState
                           // Get.back();
                           showCustomSnackBar('شكرا لارسال ملاحظاتك');
                         } else {
-                          showCustomSnackBar('حدث خطأ أثناء الإرسال، يرجى المحاولة لاحقاً');
+                          showCustomSnackBar(
+                              'حدث خطأ أثناء الإرسال، يرجى المحاولة لاحقاً');
                         }
                       },
                     ),

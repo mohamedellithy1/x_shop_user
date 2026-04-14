@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:stackfood_multivendor/common/widgets/cart_widget.dart';
 import 'package:stackfood_multivendor/common/widgets/veg_filter_widget.dart';
@@ -40,21 +41,33 @@ class CustomAppBarWidget extends StatelessWidget
             child: Container(
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Colors.orange, Colors.red],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xFFe3ebd5),
+                    Color(0xFFfafff4),
+                    Color(0xFFe3ebd5),
+                  ],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
                 ),
+
+                // gradient: LinearGradient(
+                //   colors: [Color(0xFFd6e0c4), Color(0xFFe7feba)],
+                //   begin: Alignment.topLeft,
+                //   end: Alignment.bottomRight,
+                // ),
+                // color: Color(0xFFd6e0c4),
               ),
               child: AppBar(
+                systemOverlayStyle: SystemUiOverlayStyle.dark,
                 title: Text(title,
                     style: robotoMedium.copyWith(
                         fontSize: Dimensions.fontSizeLarge,
-                        color: Colors.white)),
+                        color: Colors.black)),
                 centerTitle: true,
                 leading: isBackButtonExist
                     ? IconButton(
                         icon: Icon(backIcon ?? Icons.arrow_back_ios),
-                        color: Colors.white,
+                        color: Colors.black,
                         onPressed: () => onBackPressed != null
                             ? onBackPressed!()
                             : Navigator.pop(context),
@@ -68,9 +81,9 @@ class CustomAppBarWidget extends StatelessWidget
                     ? [
                         showCart
                             ? IconButton(
-                                onPressed: () =>
-                                    Get.offAllNamed(RouteHelper.getMainRoute('cart')),
-                                icon: CartWidget(color: Colors.white, size: 25),
+                                onPressed: () => Get.offAllNamed(
+                                    RouteHelper.getMainRoute('cart')),
+                                icon: CartWidget(color: Colors.black, size: 25),
                               )
                             : const SizedBox(),
                         onVegFilterTap != null
@@ -78,7 +91,7 @@ class CustomAppBarWidget extends StatelessWidget
                                 type: type,
                                 onSelected: onVegFilterTap,
                                 fromAppBar: true,
-                                iconColor: Colors.white,
+                                iconColor: Colors.black,
                               )
                             : const SizedBox(),
                         const SizedBox(width: Dimensions.paddingSizeSmall),

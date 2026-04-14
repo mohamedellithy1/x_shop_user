@@ -67,9 +67,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: CustomAppBarWidget(title: 'profile'.tr),
       endDrawer: isDesktop ? const MenuDrawerWidget() : null,
       endDrawerEnableOpenDragGesture: false,
-      backgroundColor: isDesktop
-          ? Theme.of(context).colorScheme.surface
-          : Theme.of(context).cardColor,
+      backgroundColor:
+          isDesktop ? Theme.of(context).colorScheme.surface : Color(0xFFfafef5),
       body: GetBuilder<OrderController>(builder: (orderController) {
         return GetBuilder<MarketProfileController>(
             builder: (profileController) {

@@ -17,7 +17,6 @@ import 'package:stackfood_multivendor/features/address/domain/models/address_mod
 import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
 import 'package:stackfood_multivendor/features/location/controllers/location_controller.dart';
 
-
 import 'package:stackfood_multivendor/features/location/screens/pick_map_screen.dart';
 import 'package:stackfood_multivendor/features/location/widgets/animated_map_icon_extended.dart';
 import 'package:stackfood_multivendor/features/location/widgets/animated_map_icon_minimized.dart';
@@ -285,7 +284,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).cardColor,
+      backgroundColor: Color(0xFFfafef5),
       appBar: CustomAppBarWidget(
         title:
             widget.address == null ? 'add_new_address'.tr : 'update_address'.tr,
@@ -441,7 +440,8 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                       fromAddAddress: true,
                       fromSignUp: false,
                       fromSplash: false,
-                      googleMapController: Get.find<MarketLocationController>().mapController,
+                      googleMapController:
+                          Get.find<MarketLocationController>().mapController,
                       route: null,
                       canRoute: false,
                     ),
@@ -886,6 +886,7 @@ class FamousBuilding {
     };
   }
 }
+
 class FamousRegion {
   final int id;
   final String name;
@@ -1087,6 +1088,7 @@ enum LocationType {
   senderLocation,
   receiverLocation
 }
+
 class LocationPickerBottomSheet extends StatelessWidget {
   final Regions? regions;
   final FamousRegionsResponse? famousRegions;
@@ -1119,10 +1121,20 @@ class LocationPickerBottomSheet extends StatelessWidget {
                 Container(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [Colors.orange, Colors.red],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
+                      colors: [
+                        Color(0xFFe3ebd5),
+                        Color(0xFFfafff4),
+                        Color(0xFFe3ebd5),
+                      ],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
                     ),
+
+                    // gradient: LinearGradient(
+                    //   colors: [Color(0xFFd6e0c4), Color(0xFFe7feba)],
+                    //   begin: Alignment.topLeft,
+                    //   end: Alignment.bottomRight,
+                    // ),
                   ),
                   padding: const EdgeInsets.only(
                     top: 50,
@@ -1139,7 +1151,7 @@ class LocationPickerBottomSheet extends StatelessWidget {
                         IconButton(
                           icon: Icon(
                             Icons.arrow_back,
-                            color: Colors.white,
+                            color: Colors.black,
                           ),
                           onPressed: () => Navigator.pop(context),
                         ),
@@ -1147,7 +1159,7 @@ class LocationPickerBottomSheet extends StatelessWidget {
                         Text(
                           'select_location'.tr,
                           style: robotoRegular.copyWith(
-                            color: Colors.white,
+                            color: Colors.black,
                             fontWeight: FontWeight.bold,
                             fontSize: Dimensions.fontSizeLarge,
                           ),
@@ -1253,11 +1265,13 @@ class _TabBarSectionState extends State<TabBarSection>
                     // فتح الخريطة لاختيار الموقع
                     final result = await Get.to(() => PickMapScreen(
                           fromAddAddress: true,
-                      fromSignUp: false,
-                      fromSplash: false,
-                      googleMapController: Get.find<MarketLocationController>().mapController,
-                      route: null,
-                      canRoute: false,
+                          fromSignUp: false,
+                          fromSplash: false,
+                          googleMapController:
+                              Get.find<MarketLocationController>()
+                                  .mapController,
+                          route: null,
+                          canRoute: false,
                         ));
 
                     // إذا تم اختيار موقع من الخريطة، إرجاع النتيجة
@@ -1312,9 +1326,7 @@ class _TabBarSectionState extends State<TabBarSection>
         ),
       ],
     );
-    
   }
-  
 
   /// دالة للتنقل بين الـ Tabs بسرعة مخصصة (150ms)
   void goToTab(int index) {
@@ -1324,7 +1336,9 @@ class _TabBarSectionState extends State<TabBarSection>
       curve: Curves.ease,
     );
   }
-}class _LocationGrid extends StatefulWidget {
+}
+
+class _LocationGrid extends StatefulWidget {
   final String title;
   final Regions? regions;
   final FamousRegionsResponse? famousRegions;
@@ -1702,8 +1716,8 @@ class _LocationGridState extends State<_LocationGrid> {
                           child: Container(
                             decoration: BoxDecoration(
                               color: Colors.white,
-                              border:
-                                  Border.all(width: 2, color: Colors.orange),
+                              border: Border.all(
+                                  width: 2, color: Color(0xFF9ebc67)),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Center(
@@ -1730,7 +1744,6 @@ class _LocationGridState extends State<_LocationGrid> {
     );
   }
 }
-
 
 class FamousRegionsResponse {
   final String status;

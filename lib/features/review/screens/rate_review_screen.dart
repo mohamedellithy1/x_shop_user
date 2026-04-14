@@ -17,21 +17,29 @@ class RateReviewScreen extends StatefulWidget {
   RateReviewScreenState createState() => RateReviewScreenState();
 }
 
-class RateReviewScreenState extends State<RateReviewScreen> with TickerProviderStateMixin {
+class RateReviewScreenState extends State<RateReviewScreen>
+    with TickerProviderStateMixin {
   TabController? _tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: widget.rateReviewModel.deliveryMan == null ? 1 : 2, initialIndex: 0, vsync: this);
-    Get.find<ReviewController>().initRatingData(widget.rateReviewModel.orderDetailsList!);
+    _tabController = TabController(
+        length: widget.rateReviewModel.deliveryMan == null ? 1 : 2,
+        initialIndex: 0,
+        vsync: this);
+    Get.find<ReviewController>()
+        .initRatingData(widget.rateReviewModel.orderDetailsList!);
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       resizeToAvoidBottomInset: true,
       appBar: CustomAppBarWidget(title: 'rate_review'.tr),
-      endDrawer: const MenuDrawerWidget(), endDrawerEnableOpenDragGesture: false,
+      endDrawer: const MenuDrawerWidget(),
+      endDrawerEnableOpenDragGesture: false,
       body: Column(children: [
         Center(
           child: Container(
@@ -42,28 +50,52 @@ class RateReviewScreenState extends State<RateReviewScreen> with TickerProviderS
               labelColor: Theme.of(context).textTheme.bodyLarge!.color,
               indicatorColor: Theme.of(context).primaryColor,
               indicatorWeight: 3,
-              unselectedLabelStyle: robotoRegular.copyWith(color: Theme.of(context).disabledColor, fontSize: Dimensions.fontSizeSmall),
-              labelStyle: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall),
-              tabs: widget.rateReviewModel.deliveryMan != null ? [
-                Tab(text: widget.rateReviewModel.orderDetailsList!.length > 1 ? 'items'.tr : 'item'.tr),
-                Tab(text: 'delivery_man'.tr),
-              ] : [
-                Tab(text: widget.rateReviewModel.orderDetailsList!.length > 1 ? 'items'.tr : 'item'.tr),
-              ],
+              unselectedLabelStyle: robotoRegular.copyWith(
+                  color: Theme.of(context).disabledColor,
+                  fontSize: Dimensions.fontSizeSmall),
+              labelStyle:
+                  robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall),
+              tabs: widget.rateReviewModel.deliveryMan != null
+                  ? [
+                      Tab(
+                          text:
+                              widget.rateReviewModel.orderDetailsList!.length >
+                                      1
+                                  ? 'items'.tr
+                                  : 'item'.tr),
+                      Tab(text: 'delivery_man'.tr),
+                    ]
+                  : [
+                      Tab(
+                          text:
+                              widget.rateReviewModel.orderDetailsList!.length >
+                                      1
+                                  ? 'items'.tr
+                                  : 'item'.tr),
+                    ],
             ),
           ),
         ),
-
-        Expanded(child: TabBarView(
+        Expanded(
+            child: TabBarView(
           controller: _tabController,
-          children: widget.rateReviewModel.deliveryMan != null ? [
-            ProductReviewWidget(orderDetailsList: widget.rateReviewModel.orderDetailsList!),
-            DeliveryManReviewWidget(deliveryMan: widget.rateReviewModel.deliveryMan, orderID: widget.rateReviewModel.orderDetailsList![0].orderId.toString()),
-          ] : [
-            ProductReviewWidget(orderDetailsList: widget.rateReviewModel.orderDetailsList!),
-          ],
+          children: widget.rateReviewModel.deliveryMan != null
+              ? [
+                  ProductReviewWidget(
+                      orderDetailsList:
+                          widget.rateReviewModel.orderDetailsList!),
+                  DeliveryManReviewWidget(
+                      deliveryMan: widget.rateReviewModel.deliveryMan,
+                      orderID: widget
+                          .rateReviewModel.orderDetailsList![0].orderId
+                          .toString()),
+                ]
+              : [
+                  ProductReviewWidget(
+                      orderDetailsList:
+                          widget.rateReviewModel.orderDetailsList!),
+                ],
         )),
-
       ]),
     );
   }

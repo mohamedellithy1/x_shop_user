@@ -16,7 +16,6 @@ import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
 import 'package:stackfood_multivendor/util/xmarket_images.dart';
 
-
 class SubscriptionPaymentScreen extends StatefulWidget {
   final int restaurantId;
   final int packageId;

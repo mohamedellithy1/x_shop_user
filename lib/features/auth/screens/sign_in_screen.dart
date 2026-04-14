@@ -10,6 +10,7 @@ import 'package:stackfood_multivendor/features/splash/controllers/splash_control
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 import 'package:stackfood_multivendor/helper/route_helper.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
+import 'package:stackfood_multivendor/util/xmarket_images.dart';
 
 class SignInScreen extends StatefulWidget {
   final bool exitFromApp;
@@ -65,7 +66,7 @@ class SignInScreenState extends State<SignInScreen> {
       child: Scaffold(
         backgroundColor: ResponsiveHelper.isDesktop(context)
             ? Colors.transparent
-            : Theme.of(context).cardColor,
+            : Color(0xFFfafef5),
         appBar: ResponsiveHelper.isDesktop(context)
             ? null
             : !widget.exitFromApp
@@ -102,46 +103,46 @@ class SignInScreenState extends State<SignInScreen> {
               decoration: context.width > 700
                   ? BoxDecoration(
                       color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                      borderRadius:
+                          BorderRadius.circular(Dimensions.radiusSmall),
                       boxShadow: ResponsiveHelper.isDesktop(context)
                           ? null
                           : [
                               BoxShadow(
-                                  color: Colors.grey[Get.isDarkMode ? 700 : 300]!,
+                                  color:
+                                      Colors.grey[Get.isDarkMode ? 700 : 300]!,
                                   blurRadius: 5,
                                   spreadRadius: 1)
                             ],
                     )
                   : null,
               child: SingleChildScrollView(
-                child:
-                    Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-                  ResponsiveHelper.isDesktop(context)
-                      ? Align(
-                          alignment: Alignment.topRight,
-                          child: IconButton(
-                            onPressed: () => Get.back(),
-                            icon: const Icon(Icons.clear),
-                          ),
-                        )
-                      : const SizedBox(),
-                  CustomImageWidget(
-                    image: Get.find<MarketSplashController>(tag: 'xmarket')
-                            .configModel
-                            ?.logoFullUrl ??
-                        '',
-                    height: 50,
-                    width: 200,
-                    fit: BoxFit.contain,
-                  ),
-                  const SizedBox(height: Dimensions.paddingSizeOverLarge),
-                  SignInView(
-                    exitFromApp: widget.exitFromApp,
-                    backFromThis: widget.backFromThis,
-                    fromResetPassword: widget.fromResetPassword,
-                    isOtpViewEnable: (v) {},
-                  ),
-                ]),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      // ResponsiveHelper.isDesktop(context)
+                      //     ? Align(
+                      //         alignment: Alignment.topRight,
+                      //         child: IconButton(
+                      //           onPressed: () => Get.back(),
+                      //           icon: const Icon(Icons.clear),
+                      //         ),
+                      //       )
+                      //     : const SizedBox(),
+                      Image.asset(
+                        XmarketImages.logo,
+                        height: 120,
+                        width: 200,
+                        fit: BoxFit.contain,
+                      ),
+                      const SizedBox(height: Dimensions.paddingSizeOverLarge),
+                      SignInView(
+                        exitFromApp: widget.exitFromApp,
+                        backFromThis: widget.backFromThis,
+                        fromResetPassword: widget.fromResetPassword,
+                        isOtpViewEnable: (v) {},
+                      ),
+                    ]),
               ),
             ),
           )),

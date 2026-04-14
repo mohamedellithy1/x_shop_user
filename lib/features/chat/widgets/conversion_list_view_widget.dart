@@ -310,7 +310,7 @@ class _ConversationListViewWidgetState
             widget.conversation?.conversations != null)
         ? widget.conversation!.conversations!.isNotEmpty
             ? RefreshIndicator(
-                color: Colors.orange,
+                color: Color(0xFF9ebc67),
                 onRefresh: () async {
                   await Get.find<ChatController>()
                       .getConversationList(1, type: widget.type);
@@ -525,7 +525,7 @@ class _ConversationListViewWidgetState
             : Center(child: Text('no_conversation_found'.tr))
         : const Center(
             child: CircularProgressIndicator(
-            color: Colors.orange,
+            color: Color(0xFF9ebc67),
           ));
   }
 }

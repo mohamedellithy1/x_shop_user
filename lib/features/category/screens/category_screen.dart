@@ -74,7 +74,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                     backgroundColor: WidgetStatePropertyAll(
                                         Theme.of(context).cardColor),
                                     elevation: WidgetStatePropertyAll(0),
-                                    side: const WidgetStatePropertyAll(BorderSide(color: Colors.black)),
+                                    side: const WidgetStatePropertyAll(
+                                        BorderSide(color: Colors.black)),
                                     shape: WidgetStatePropertyAll(
                                         RoundedRectangleBorder(
                                             borderRadius:
@@ -139,7 +140,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                 backgroundColor: WidgetStatePropertyAll(
                                     Theme.of(context).cardColor),
                                 elevation: WidgetStatePropertyAll(0),
-                                side: const WidgetStatePropertyAll(BorderSide(color: Colors.black)),
+                                side: const WidgetStatePropertyAll(
+                                    BorderSide(color: Colors.black)),
                                 onChanged: (value) {
                                   catController.getCategoryList(true,
                                       search: value);
@@ -150,8 +152,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                 },
                                 hintText: 'search_by_category'.tr,
                                 hintStyle: WidgetStatePropertyAll(
-                                  robotoRegular.copyWith(
-                                      color: Colors.black),
+                                  robotoRegular.copyWith(color: Colors.black),
                                 ),
                                 padding: const WidgetStatePropertyAll(
                                     EdgeInsets.symmetric(horizontal: 16.0)),
@@ -261,9 +262,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                   },
                                 )
                               : NoDataScreen(title: 'no_category_found'.tr)
-                          : const Center(child: CircularProgressIndicator(
-                            color: Colors.orange,
-                          )),
+                          : const Center(
+                              child: CircularProgressIndicator(
+                              color: Color(0xFF9ebc67),
+                            )),
                     )),
                   ],
                 )),

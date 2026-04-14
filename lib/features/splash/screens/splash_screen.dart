@@ -23,9 +23,11 @@ class XMarkSplashScreenState extends State<XMarkSplashScreen> {
 
   void _route() {
     debugPrint('🚀 [Splash] Starting config fetch...');
-    
+
     // محاولة جلب البيانات مع تحديد مهلة زمنية (Timeout) للأمان
-    Get.find<MarketSplashController>(tag: 'xmarket').getConfigData(source: DataSourceEnum.client).then((value) {
+    Get.find<MarketSplashController>(tag: 'xmarket')
+        .getConfigData(source: DataSourceEnum.client)
+        .then((value) {
       debugPrint('✅ [Splash] Config fetch completed.');
       _navigateToHome();
     }).catchError((error) {
@@ -55,7 +57,7 @@ class XMarkSplashScreenState extends State<XMarkSplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Stack(
         children: [
           Center(

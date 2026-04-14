@@ -25,7 +25,9 @@ class SettingsScreen extends StatelessWidget {
           return Theme(
             data: marketThemeController.darkTheme ? darkTheme : lightTheme,
             child: Scaffold(
-              backgroundColor: marketThemeController.darkTheme ? Colors.black : Colors.white,
+              backgroundColor: marketThemeController.darkTheme
+                  ? Colors.black
+                  : Color(0xFFfafef5),
               appBar: CustomAppBarWidget(title: 'settings'.tr),
               body: SingleChildScrollView(
                 padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
@@ -40,7 +42,8 @@ class SettingsScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: Dimensions.paddingSizeSmall),
                   isLoggedIn
-                      ? GetBuilder<MarketAuthController>(builder: (authController) {
+                      ? GetBuilder<MarketAuthController>(
+                          builder: (authController) {
                           return SettingsButton(
                             icon: Icons.notifications,
                             title: 'notification'.tr,
@@ -52,7 +55,8 @@ class SettingsScreen extends StatelessWidget {
                           );
                         })
                       : const SizedBox(),
-                  SizedBox(height: isLoggedIn ? Dimensions.paddingSizeSmall : 0),
+                  SizedBox(
+                      height: isLoggedIn ? Dimensions.paddingSizeSmall : 0),
                   isLoggedIn
                       ? SettingsButton(
                           icon: Icons.lock,
@@ -65,7 +69,8 @@ class SettingsScreen extends StatelessWidget {
                                 page: 'password-change'));
                           })
                       : const SizedBox(),
-                  SizedBox(height: isLoggedIn ? Dimensions.paddingSizeSmall : 0),
+                  SizedBox(
+                      height: isLoggedIn ? Dimensions.paddingSizeSmall : 0),
                   SettingsButton(
                     icon: Icons.language,
                     title: 'language'.tr,
@@ -131,9 +136,16 @@ class SettingsButton extends StatelessWidget {
         child: Row(children: [
           Icon(icon,
               size: 25,
-              color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black.withValues(alpha: 0.6)),
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.white
+                  : Colors.black.withValues(alpha: 0.6)),
           const SizedBox(width: Dimensions.paddingSizeSmall),
-          Expanded(child: Text(title, style: robotoRegular.copyWith(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black))),
+          Expanded(
+              child: Text(title,
+                  style: robotoRegular.copyWith(
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white
+                          : Colors.black))),
           isButtonActive != null
               ? CupertinoSwitch(
                   value: isButtonActive!,

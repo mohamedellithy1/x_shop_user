@@ -76,7 +76,7 @@ class _LoyaltyScreenState extends State<LoyaltyScreen> {
     return Scaffold(
       backgroundColor: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
           ? const Color(0xFF141313)
-          : Theme.of(context).cardColor,
+          : Color(0xFFfafef5),
       appBar: CustomAppBarWidget(
         title: 'my_points'.tr,
         isBackButtonExist: true,

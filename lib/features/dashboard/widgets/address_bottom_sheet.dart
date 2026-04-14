@@ -27,11 +27,11 @@ class AddressBottomSheet extends StatelessWidget {
             data: marketThemeController.darkTheme
                 ? ThemeData.dark().copyWith(
                     cardColor: const Color(0xFF141313),
-                    primaryColor: Colors.orange,
+                    primaryColor: Color(0xFF9ebc67),
                   )
                 : ThemeData.light().copyWith(
                     cardColor: Colors.white,
-                    primaryColor: Colors.orange,
+                    primaryColor: Color(0xFF9ebc67),
                   ),
             child: Container(
               decoration: BoxDecoration(
@@ -133,7 +133,7 @@ class AddressBottomSheet extends StatelessWidget {
                                                       null &&
                                                   addressController
                                                       .addressList!.isEmpty
-                                              ? Colors.orange
+                                              ? Color(0xFF9ebc67)
                                               : Colors.transparent,
                                     ),
                                     icon: Icon(Icons.my_location,
@@ -142,7 +142,7 @@ class AddressBottomSheet extends StatelessWidget {
                                                 addressController
                                                     .addressList!.isEmpty
                                             ? Colors.black
-                                            : Colors.orange),
+                                            : Color(0xFF9ebc67)),
                                     label: Text('use_current_location'.tr,
                                         style: robotoMedium.copyWith(
                                             color:
@@ -152,7 +152,7 @@ class AddressBottomSheet extends StatelessWidget {
                                                             .addressList!
                                                             .isEmpty
                                                     ? Colors.black
-                                                    : Colors.orange)),
+                                                    : Color(0xFF9ebc67))),
                                   ),
                                 ),
                                 const SizedBox(

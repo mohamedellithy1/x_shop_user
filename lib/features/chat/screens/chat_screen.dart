@@ -87,454 +87,427 @@ class _ChatScreenState extends State<ChatScreen> {
           return GetBuilder<ChatController>(builder: (chatController) {
             bool isLoggedIn = Get.find<MarketAuthController>().isLoggedIn();
 
-      return PopScope(
-        canPop: Navigator.canPop(context),
-        onPopInvokedWithResult: (didPop, result) async {
-          if (widget.fromNotification) {
-            Get.offAllNamed(RouteHelper.getInitialRoute());
-          } else {
-            return;
-          }
-        },
-        child: Scaffold(
-          backgroundColor: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF141313) : Colors.white,
-          endDrawer: isDesktop ? const MenuDrawerWidget() : null,
-          endDrawerEnableOpenDragGesture: false,
-          appBar: (!isDesktop
-              ? PreferredSize(
-                  preferredSize: const Size.fromHeight(kToolbarHeight),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        // gradient: LinearGradient(
-                        //   colors: [Colors.orange, Colors.red],
-                        //   begin: Alignment.topLeft,
-                        //   end: Alignment.bottomRight,
-                        // ),
-                        ),
-                    child: AppBar(
-                      titleSpacing: 0,
-                      backgroundColor: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF141313) : Colors.white,
-                      surfaceTintColor: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF141313) : Colors.white,
-                      leading: IconButton(
-                        onPressed: () {
-                          if (widget.fromNotification) {
-                            Get.offAllNamed(RouteHelper.getInitialRoute());
-                          } else {
-                            Get.back();
-                          }
-                        },
-                        icon: Icon(Icons.arrow_back_ios,
-                            color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black),
-                      ),
-                      title: Row(children: [
-                        ClipOval(
-                            child: CustomImageWidget(
-                          image:
-                              '${chatController.messageModel != null ? chatController.messageModel!.conversation!.receiver!.imageFullUrl : ''}',
-                          fit: BoxFit.cover,
-                          height: 35,
-                          width: 35,
-                        )),
-                        const SizedBox(width: Dimensions.paddingSizeSmall),
-                        Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              chatController.messageModel != null
-                                  ? Text(
-                                      '${chatController.messageModel!.conversation!.receiver!.fName}'
-                                      ' ${chatController.messageModel!.conversation!.receiver!.lName}',
-                                      style: robotoRegular.copyWith(
-                                          color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black),
-                                    )
-                                  : Container(
-                                      height: 20,
-                                      width: 100,
-                                      color:
-                                          Colors.black.withValues(alpha: 0.3),
-                                    ),
-                              (chatController.messageModel != null &&
-                                      chatController.messageModel!.conversation!
-                                              .receiver!.phone !=
-                                          null)
-                                  ? Text(
-                                      '${chatController.messageModel!.conversation!.receiver!.phone}',
-                                      style: robotoRegular.copyWith(
-                                          fontSize: Dimensions.fontSizeSmall,
-                                          color: (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black)
-                                              .withValues(alpha: 0.8)),
-                                    )
-                                  : const SizedBox(),
-                            ]),
-                      ]),
-                    ),
-                  ),
-                )
-              : const WebMenuBar()) as PreferredSizeWidget?,
-          body: isLoggedIn
-              ? SafeArea(
-                  child: Center(
-                    child: Column(
-                      children: [
-                        WebScreenTitleWidget(title: 'chat_with_restaurant'.tr),
-                        // SizedBox(height: isDesktop ? Dimensions.paddingSizeSmall : 0),
+            return PopScope(
+              canPop: Navigator.canPop(context),
+              onPopInvokedWithResult: (didPop, result) async {
+                if (widget.fromNotification) {
+                  Get.offAllNamed(RouteHelper.getInitialRoute());
+                } else {
+                  return;
+                }
+              },
+              child: Scaffold(
+                backgroundColor:
+                    Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+                        ? const Color(0xFF141313)
+                        : const Color(0xFFfafef5),
+                endDrawer: isDesktop ? const MenuDrawerWidget() : null,
+                endDrawerEnableOpenDragGesture: false,
+                appBar: (!isDesktop
+                    ? PreferredSize(
+                        preferredSize: const Size.fromHeight(kToolbarHeight),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Color(0xFFe3ebd5),
+                                Color(0xFFfafff4),
+                                Color(0xFFe3ebd5),
+                              ],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                            ),
 
-                        Expanded(
-                          child: Container(
-                            decoration: isDesktop
-                                ? BoxDecoration(
-                                    color: Theme.of(context).cardColor,
-                                    borderRadius: BorderRadius.circular(
-                                        Dimensions.radiusDefault),
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Theme.of(context)
-                                              .disabledColor
-                                              .withValues(alpha: 0.2),
-                                          blurRadius: 10)
-                                    ],
-                                  )
-                                : null,
-                            width: isDesktop
-                                ? Dimensions.webMaxWidth
-                                : MediaQuery.of(context).size.width,
-                            margin: isDesktop
-                                ? const EdgeInsets.symmetric(
-                                    vertical: Dimensions.paddingSizeLarge)
-                                : null,
-                            child: Column(
-                              children: [
-                                isDesktop
-                                    ? Container(
-                                        decoration: BoxDecoration(
-                                          color: Theme.of(context)
-                                              .primaryColor
-                                              .withValues(alpha: 0.04),
+                            // gradient: LinearGradient(
+                            //   colors: [Color(0xFFd6e0c4), Color(0xFFe7feba)],
+                            //   begin: Alignment.topLeft,
+                            //   end: Alignment.bottomRight,
+                            // ),
+                            // gradient: LinearGradient(
+                            //   colors: [Colors.orange, Colors.red],
+                            //   begin: Alignment.topLeft,
+                            //   end: Alignment.bottomRight,
+                            // ),
+                          ),
+                          child: AppBar(
+                            titleSpacing: 0,
+                            backgroundColor:
+                                Get.find<MarketThemeController>(tag: 'xmarket')
+                                        .darkTheme
+                                    ? const Color(0xFF141313)
+                                    : Colors.white,
+                            surfaceTintColor:
+                                Get.find<MarketThemeController>(tag: 'xmarket')
+                                        .darkTheme
+                                    ? const Color(0xFF141313)
+                                    : Colors.white,
+                            leading: IconButton(
+                              onPressed: () {
+                                if (widget.fromNotification) {
+                                  Get.offAllNamed(
+                                      RouteHelper.getInitialRoute());
+                                } else {
+                                  Get.back();
+                                }
+                              },
+                              icon: Icon(Icons.arrow_back_ios,
+                                  color: Get.find<MarketThemeController>(
+                                              tag: 'xmarket')
+                                          .darkTheme
+                                      ? Colors.white
+                                      : Colors.black),
+                            ),
+                            title: Row(children: [
+                              ClipOval(
+                                  child: CustomImageWidget(
+                                image:
+                                    '${chatController.messageModel != null ? chatController.messageModel!.conversation!.receiver!.imageFullUrl : ''}',
+                                fit: BoxFit.cover,
+                                height: 35,
+                                width: 35,
+                              )),
+                              const SizedBox(
+                                  width: Dimensions.paddingSizeSmall),
+                              Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    chatController.messageModel != null
+                                        ? Text(
+                                            '${chatController.messageModel!.conversation!.receiver!.fName}'
+                                            ' ${chatController.messageModel!.conversation!.receiver!.lName}',
+                                            style: robotoRegular.copyWith(
+                                                color:
+                                                    Get.find<MarketThemeController>(
+                                                                tag: 'xmarket')
+                                                            .darkTheme
+                                                        ? Colors.white
+                                                        : Colors.black),
+                                          )
+                                        : Container(
+                                            height: 20,
+                                            width: 100,
+                                            color: Colors.black
+                                                .withValues(alpha: 0.3),
+                                          ),
+                                    (chatController.messageModel != null &&
+                                            chatController
+                                                    .messageModel!
+                                                    .conversation!
+                                                    .receiver!
+                                                    .phone !=
+                                                null)
+                                        ? Text(
+                                            '${chatController.messageModel!.conversation!.receiver!.phone}',
+                                            style: robotoRegular.copyWith(
+                                                fontSize:
+                                                    Dimensions.fontSizeSmall,
+                                                color:
+                                                    (Get.find<MarketThemeController>(
+                                                                    tag:
+                                                                        'xmarket')
+                                                                .darkTheme
+                                                            ? Colors.white
+                                                            : Colors.black)
+                                                        .withValues(
+                                                            alpha: 0.8)),
+                                          )
+                                        : const SizedBox(),
+                                  ]),
+                            ]),
+                          ),
+                        ),
+                      )
+                    : const WebMenuBar()) as PreferredSizeWidget?,
+                body: isLoggedIn
+                    ? SafeArea(
+                        child: Center(
+                          child: Column(
+                            children: [
+                              WebScreenTitleWidget(
+                                  title: 'chat_with_restaurant'.tr),
+                              // SizedBox(height: isDesktop ? Dimensions.paddingSizeSmall : 0),
+
+                              Expanded(
+                                child: Container(
+                                  decoration: isDesktop
+                                      ? BoxDecoration(
+                                          color: Theme.of(context).cardColor,
                                           borderRadius: BorderRadius.circular(
-                                              Dimensions.radiusSmall),
-                                          // boxShadow: [BoxShadow(color: Theme.of(context).disabledColor.withValues(alpha: 0.2), blurRadius: 2)],
-                                        ),
-                                        padding: const EdgeInsets.all(
-                                            Dimensions.paddingSizeSmall),
-                                        margin: const EdgeInsets.all(
-                                            Dimensions.paddingSizeSmall),
-                                        child: Row(children: [
-                                          ClipOval(
-                                              child: CustomImageWidget(
-                                            image:
-                                                '${chatController.messageModel != null ? chatController.messageModel!.conversation!.receiver!.imageFullUrl : ''}',
-                                            fit: BoxFit.cover,
-                                            height: 35,
-                                            width: 35,
-                                          )),
-                                          const SizedBox(
-                                              width:
+                                              Dimensions.radiusDefault),
+                                          boxShadow: [
+                                            BoxShadow(
+                                                color: Theme.of(context)
+                                                    .disabledColor
+                                                    .withValues(alpha: 0.2),
+                                                blurRadius: 10)
+                                          ],
+                                        )
+                                      : null,
+                                  width: isDesktop
+                                      ? Dimensions.webMaxWidth
+                                      : MediaQuery.of(context).size.width,
+                                  margin: isDesktop
+                                      ? const EdgeInsets.symmetric(
+                                          vertical: Dimensions.paddingSizeLarge)
+                                      : null,
+                                  child: Column(
+                                    children: [
+                                      isDesktop
+                                          ? Container(
+                                              decoration: BoxDecoration(
+                                                color: Theme.of(context)
+                                                    .primaryColor
+                                                    .withValues(alpha: 0.04),
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        Dimensions.radiusSmall),
+                                                // boxShadow: [BoxShadow(color: Theme.of(context).disabledColor.withValues(alpha: 0.2), blurRadius: 2)],
+                                              ),
+                                              padding: const EdgeInsets.all(
                                                   Dimensions.paddingSizeSmall),
-                                          Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                chatController.messageModel !=
-                                                        null
-                                                    ? Text(
-                                                        '${chatController.messageModel!.conversation!.receiver!.fName}'
-                                                        ' ${chatController.messageModel!.conversation!.receiver!.lName}',
-                                                        style: robotoRegular,
-                                                      )
-                                                    : Container(
-                                                        height: 20,
-                                                        width: 100,
-                                                        color: Theme.of(context)
-                                                            .disabledColor,
-                                                      ),
-                                                (chatController.messageModel !=
-                                                            null &&
-                                                        chatController
-                                                                .messageModel!
-                                                                .conversation!
-                                                                .receiver!
-                                                                .phone !=
-                                                            null)
-                                                    ? Text(
-                                                        '${chatController.messageModel!.conversation!.receiver!.phone}',
-                                                        style: robotoRegular.copyWith(
-                                                            fontSize: Dimensions
-                                                                .fontSizeSmall,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .hintColor),
-                                                      )
-                                                    : widget.user != null
-                                                        ? Text(
-                                                            widget.user
-                                                                    ?.phone ??
-                                                                '',
-                                                            style: robotoRegular.copyWith(
-                                                                fontSize: Dimensions
-                                                                    .fontSizeSmall,
-                                                                color: Theme.of(
-                                                                        context)
-                                                                    .hintColor),
-                                                          )
-                                                        : const SizedBox(),
-                                              ]),
-                                        ]),
-                                      )
-                                    : const SizedBox(),
-                                GetBuilder<ChatController>(
-                                    builder: (chatController) {
-                                  return Expanded(
-                                      child: chatController.messageModel != null
-                                          ? chatController.messageModel!
-                                                  .messages!.isNotEmpty
-                                              ? SingleChildScrollView(
-                                                  controller: _scrollController,
-                                                  reverse: true,
-                                                  child:
-                                                      PaginatedListViewWidget(
-                                                    scrollController:
-                                                        _scrollController,
-                                                    reverse: true,
-                                                    totalSize: chatController
-                                                        .messageModel
-                                                        ?.totalSize,
-                                                    offset: chatController
-                                                        .messageModel?.offset,
-                                                    onPaginate:
-                                                        (int? offset) async =>
-                                                            await chatController
-                                                                .getMessages(
-                                                      offset!,
-                                                      widget.notificationBody,
-                                                      widget.user,
-                                                      widget.conversationID,
-                                                    ),
-                                                    productView:
-                                                        ListView.builder(
-                                                      physics:
-                                                          const NeverScrollableScrollPhysics(),
-                                                      shrinkWrap: true,
-                                                      reverse: true,
-                                                      itemCount: chatController
-                                                          .messageModel!
-                                                          .messages!
-                                                          .length,
-                                                      itemBuilder:
-                                                          (context, index) {
-                                                        return MessageBubbleWidget(
-                                                          previousMessage: index ==
-                                                                  0
-                                                              ? null
-                                                              : chatController
-                                                                  .messageModel
-                                                                  ?.messages
-                                                                  ?.elementAt(
-                                                                      index -
-                                                                          1),
-                                                          currentMessage:
+                                              margin: const EdgeInsets.all(
+                                                  Dimensions.paddingSizeSmall),
+                                              child: Row(children: [
+                                                ClipOval(
+                                                    child: CustomImageWidget(
+                                                  image:
+                                                      '${chatController.messageModel != null ? chatController.messageModel!.conversation!.receiver!.imageFullUrl : ''}',
+                                                  fit: BoxFit.cover,
+                                                  height: 35,
+                                                  width: 35,
+                                                )),
+                                                const SizedBox(
+                                                    width: Dimensions
+                                                        .paddingSizeSmall),
+                                                Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      chatController
+                                                                  .messageModel !=
+                                                              null
+                                                          ? Text(
+                                                              '${chatController.messageModel!.conversation!.receiver!.fName}'
+                                                              ' ${chatController.messageModel!.conversation!.receiver!.lName}',
+                                                              style:
+                                                                  robotoRegular,
+                                                            )
+                                                          : Container(
+                                                              height: 20,
+                                                              width: 100,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .disabledColor,
+                                                            ),
+                                                      (chatController.messageModel !=
+                                                                  null &&
                                                               chatController
-                                                                  .messageModel!
-                                                                  .messages![index],
-                                                          nextMessage: index ==
-                                                                  (chatController
-                                                                          .messageModel!
-                                                                          .messages!
-                                                                          .length -
-                                                                      1)
-                                                              ? null
-                                                              : chatController
-                                                                  .messageModel
-                                                                  ?.messages
-                                                                  ?.elementAt(
-                                                                      index +
-                                                                          1),
-                                                          user: chatController
-                                                              .messageModel!
-                                                              .conversation!
-                                                              .receiver,
-                                                          userType: widget
-                                                                      .notificationBody!
-                                                                      .adminId !=
-                                                                  null
-                                                              ? UserType.admin
-                                                              : widget.notificationBody!
-                                                                          .deliverymanId !=
-                                                                      null
-                                                                  ? UserType
-                                                                      .delivery_man
-                                                                  : UserType
-                                                                      .vendor,
-                                                        );
-                                                      },
-                                                    ),
-                                                  ),
-                                                )
-                                              : Center(
-                                                  child: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    const CustomAssetImageWidget(
-                                                      XmarketImages
-                                                          .messageEmpty,
-                                                      height: 70,
-                                                      width: 70,
-                                                    ),
-                                                    const SizedBox(
-                                                        height: Dimensions
-                                                            .paddingSizeSmall),
-                                                    Text(
-                                                      'no_message_found'.tr,
-                                                      style: robotoRegular.copyWith(
-                                                          color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black),
-                                                    ),
-                                                  ],
-                                                ))
-                                          : const ConversationDetailsShimmer());
-                                }),
-                                (chatController.messageModel != null &&
-                                        (chatController.messageModel!.status! ||
-                                            chatController.messageModel!
-                                                .messages!.isEmpty))
-                                    ? Container(
-                                        decoration: BoxDecoration(
-                                          color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF141313) : Colors.white,
-                                          borderRadius: isDesktop
-                                              ? BorderRadius.circular(
-                                                  Dimensions.radiusSmall)
-                                              : null,
-                                        ),
-                                        margin: isDesktop
-                                            ? EdgeInsets.only(
-                                                bottom:
-                                                    Dimensions.paddingSizeSmall,
-                                                left:
-                                                    Dimensions.paddingSizeSmall,
-                                                right:
-                                                    Dimensions.paddingSizeSmall)
-                                            : EdgeInsets.zero,
-                                        child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              chatController.takeImageLoading &&
-                                                      !isDesktop
-                                                  ? const LinearProgressIndicator(
-                                                      minHeight: 2)
-                                                  : const SizedBox(),
-                                              GetBuilder<ChatController>(
-                                                  builder: (chatController) {
-                                                if (chatController
-                                                            .pickedWebVideoFile !=
-                                                        null &&
-                                                    isDesktop) {
-                                                  return Container(
-                                                    width: 250,
-                                                    decoration: BoxDecoration(
-                                                      color: Theme.of(context)
-                                                          .cardColor,
-                                                      borderRadius: BorderRadius
-                                                          .circular(Dimensions
-                                                              .radiusDefault),
-                                                    ),
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 10,
-                                                        vertical: 5),
-                                                    margin:
-                                                        const EdgeInsets.only(
-                                                            top: 10),
-                                                    child: Row(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          const Icon(
-                                                              Icons
-                                                                  .video_collection,
-                                                              size: 30),
-                                                          const SizedBox(
-                                                            width: Dimensions
-                                                                .paddingSizeExtraSmall,
-                                                          ),
-                                                          Expanded(
-                                                              child: Column(
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .start,
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .center,
-                                                                  children: [
-                                                                Text(
-                                                                  chatController
-                                                                      .pickedWebVideoFile!
-                                                                      .files
-                                                                      .first
-                                                                      .name,
-                                                                  maxLines: 2,
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
-                                                                  style: robotoBold
-                                                                      .copyWith(
-                                                                          fontSize:
-                                                                              Dimensions.fontSizeDefault),
-                                                                ),
-                                                              ])),
-                                                          InkWell(
-                                                            onTap: () {
-                                                              chatController
-                                                                  .pickVideoFile(
-                                                                      true);
-                                                            },
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .only(
-                                                                      top: 5),
-                                                              child: Align(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .topRight,
-                                                                child: Icon(
-                                                                  Icons.close,
-                                                                  size: Dimensions
-                                                                      .paddingSizeLarge,
+                                                                      .messageModel!
+                                                                      .conversation!
+                                                                      .receiver!
+                                                                      .phone !=
+                                                                  null)
+                                                          ? Text(
+                                                              '${chatController.messageModel!.conversation!.receiver!.phone}',
+                                                              style: robotoRegular.copyWith(
+                                                                  fontSize:
+                                                                      Dimensions
+                                                                          .fontSizeSmall,
                                                                   color: Theme.of(
                                                                           context)
-                                                                      .hintColor,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          )
-                                                        ]),
-                                                  );
-                                                }
-                                                if (chatController.objWebFile
-                                                        .isNotEmpty &&
-                                                    isDesktop) {
-                                                  return SizedBox(
-                                                    height: 70,
-                                                    child: ListView.separated(
-                                                      shrinkWrap: true,
-                                                      scrollDirection:
-                                                          Axis.horizontal,
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              bottom: 0,
-                                                              top: 5),
-                                                      separatorBuilder: (context,
-                                                              index) =>
+                                                                      .hintColor),
+                                                            )
+                                                          : widget.user != null
+                                                              ? Text(
+                                                                  widget.user
+                                                                          ?.phone ??
+                                                                      '',
+                                                                  style: robotoRegular.copyWith(
+                                                                      fontSize:
+                                                                          Dimensions
+                                                                              .fontSizeSmall,
+                                                                      color: Theme.of(
+                                                                              context)
+                                                                          .hintColor),
+                                                                )
+                                                              : const SizedBox(),
+                                                    ]),
+                                              ]),
+                                            )
+                                          : const SizedBox(),
+                                      GetBuilder<ChatController>(
+                                          builder: (chatController) {
+                                        return Expanded(
+                                            child: chatController
+                                                        .messageModel !=
+                                                    null
+                                                ? chatController.messageModel!
+                                                        .messages!.isNotEmpty
+                                                    ? SingleChildScrollView(
+                                                        controller:
+                                                            _scrollController,
+                                                        reverse: true,
+                                                        child:
+                                                            PaginatedListViewWidget(
+                                                          scrollController:
+                                                              _scrollController,
+                                                          reverse: true,
+                                                          totalSize:
+                                                              chatController
+                                                                  .messageModel
+                                                                  ?.totalSize,
+                                                          offset: chatController
+                                                              .messageModel
+                                                              ?.offset,
+                                                          onPaginate: (int?
+                                                                  offset) async =>
+                                                              await chatController
+                                                                  .getMessages(
+                                                            offset!,
+                                                            widget
+                                                                .notificationBody,
+                                                            widget.user,
+                                                            widget
+                                                                .conversationID,
+                                                          ),
+                                                          productView:
+                                                              ListView.builder(
+                                                            physics:
+                                                                const NeverScrollableScrollPhysics(),
+                                                            shrinkWrap: true,
+                                                            reverse: true,
+                                                            itemCount:
+                                                                chatController
+                                                                    .messageModel!
+                                                                    .messages!
+                                                                    .length,
+                                                            itemBuilder:
+                                                                (context,
+                                                                    index) {
+                                                              return MessageBubbleWidget(
+                                                                previousMessage: index ==
+                                                                        0
+                                                                    ? null
+                                                                    : chatController
+                                                                        .messageModel
+                                                                        ?.messages
+                                                                        ?.elementAt(
+                                                                            index -
+                                                                                1),
+                                                                currentMessage:
+                                                                    chatController
+                                                                        .messageModel!
+                                                                        .messages![index],
+                                                                nextMessage: index ==
+                                                                        (chatController.messageModel!.messages!.length -
+                                                                            1)
+                                                                    ? null
+                                                                    : chatController
+                                                                        .messageModel
+                                                                        ?.messages
+                                                                        ?.elementAt(
+                                                                            index +
+                                                                                1),
+                                                                user: chatController
+                                                                    .messageModel!
+                                                                    .conversation!
+                                                                    .receiver,
+                                                                userType: widget
+                                                                            .notificationBody!
+                                                                            .adminId !=
+                                                                        null
+                                                                    ? UserType
+                                                                        .admin
+                                                                    : widget.notificationBody!.deliverymanId !=
+                                                                            null
+                                                                        ? UserType
+                                                                            .delivery_man
+                                                                        : UserType
+                                                                            .vendor,
+                                                              );
+                                                            },
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : Center(
+                                                        child: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          const CustomAssetImageWidget(
+                                                            XmarketImages
+                                                                .messageEmpty,
+                                                            height: 70,
+                                                            width: 70,
+                                                          ),
                                                           const SizedBox(
-                                                              width: Dimensions
-                                                                  .paddingSizeDefault),
-                                                      itemCount: chatController
-                                                          .objWebFile.length,
-                                                      itemBuilder:
-                                                          (context, index) {
-                                                        // String fileSize = ImageSize.getImageSizeFromXFile(chatController.objFile![index]);
+                                                              height: Dimensions
+                                                                  .paddingSizeSmall),
+                                                          Text(
+                                                            'no_message_found'
+                                                                .tr,
+                                                            style: robotoRegular.copyWith(
+                                                                color: Get.find<MarketThemeController>(
+                                                                            tag:
+                                                                                'xmarket')
+                                                                        .darkTheme
+                                                                    ? Colors
+                                                                        .white
+                                                                    : Colors
+                                                                        .black),
+                                                          ),
+                                                        ],
+                                                      ))
+                                                : const ConversationDetailsShimmer());
+                                      }),
+                                      (chatController.messageModel != null &&
+                                              (chatController
+                                                      .messageModel!.status! ||
+                                                  chatController.messageModel!
+                                                      .messages!.isEmpty))
+                                          ? Container(
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    Get.find<MarketThemeController>(
+                                                                tag: 'xmarket')
+                                                            .darkTheme
+                                                        ? const Color(
+                                                            0xFF141313)
+                                                        : Colors.white,
+                                                borderRadius: isDesktop
+                                                    ? BorderRadius.circular(
+                                                        Dimensions.radiusSmall)
+                                                    : null,
+                                              ),
+                                              margin: isDesktop
+                                                  ? EdgeInsets.only(
+                                                      bottom: Dimensions
+                                                          .paddingSizeSmall,
+                                                      left: Dimensions
+                                                          .paddingSizeSmall,
+                                                      right: Dimensions
+                                                          .paddingSizeSmall)
+                                                  : EdgeInsets.zero,
+                                              child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    chatController
+                                                                .takeImageLoading &&
+                                                            !isDesktop
+                                                        ? const LinearProgressIndicator(
+                                                            minHeight: 2)
+                                                        : const SizedBox(),
+                                                    GetBuilder<ChatController>(
+                                                        builder:
+                                                            (chatController) {
+                                                      if (chatController
+                                                                  .pickedWebVideoFile !=
+                                                              null &&
+                                                          isDesktop) {
                                                         return Container(
-                                                          width: 180,
+                                                          width: 250,
                                                           decoration:
                                                               BoxDecoration(
                                                             color: Theme.of(
@@ -547,19 +520,23 @@ class _ChatScreenState extends State<ChatScreen> {
                                                           ),
                                                           padding:
                                                               const EdgeInsets
+                                                                  .symmetric(
+                                                                  horizontal:
+                                                                      10,
+                                                                  vertical: 5),
+                                                          margin:
+                                                              const EdgeInsets
                                                                   .only(
-                                                                  left: 10,
-                                                                  right: 5),
+                                                                  top: 10),
                                                           child: Row(
                                                               crossAxisAlignment:
                                                                   CrossAxisAlignment
                                                                       .center,
                                                               children: [
-                                                                Image.asset(
-                                                                    XmarketImages
-                                                                        .fileIcon,
-                                                                    height: 30,
-                                                                    width: 30),
+                                                                const Icon(
+                                                                    Icons
+                                                                        .video_collection,
+                                                                    size: 30),
                                                                 const SizedBox(
                                                                   width: Dimensions
                                                                       .paddingSizeExtraSmall,
@@ -573,28 +550,25 @@ class _ChatScreenState extends State<ChatScreen> {
                                                                             MainAxisAlignment.center,
                                                                         children: [
                                                                       Text(
-                                                                        chatController.objWebFile[index].names.first ??
-                                                                            'attachment'.tr,
+                                                                        chatController
+                                                                            .pickedWebVideoFile!
+                                                                            .files
+                                                                            .first
+                                                                            .name,
                                                                         maxLines:
-                                                                            1,
+                                                                            2,
                                                                         overflow:
                                                                             TextOverflow.ellipsis,
                                                                         style: robotoBold.copyWith(
                                                                             fontSize:
                                                                                 Dimensions.fontSizeDefault),
                                                                       ),
-
-                                                                      // Text(fileSize, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault,
-                                                                      //   color: Theme.of(context).hintColor,
-                                                                      // )),
                                                                     ])),
                                                                 InkWell(
                                                                   onTap: () {
                                                                     chatController
-                                                                        .pickFile(
-                                                                            true,
-                                                                            index:
-                                                                                index);
+                                                                        .pickVideoFile(
+                                                                            true);
                                                                   },
                                                                   child:
                                                                       Padding(
@@ -620,206 +594,197 @@ class _ChatScreenState extends State<ChatScreen> {
                                                                 )
                                                               ]),
                                                         );
-                                                      },
-                                                    ),
-                                                  );
-                                                }
-
-                                                if (chatController
-                                                        .pickedVideoFile !=
-                                                    null) {
-                                                  return Align(
-                                                    alignment:
-                                                        Alignment.centerLeft,
-                                                    child: Container(
-                                                      width: 250,
-                                                      decoration: BoxDecoration(
-                                                        color: Theme.of(context)
-                                                            .cardColor,
-                                                        borderRadius: BorderRadius
-                                                            .circular(Dimensions
-                                                                .radiusSmall),
-                                                      ),
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 10,
-                                                          vertical: 5),
-                                                      margin: const EdgeInsets
-                                                          .only(
-                                                          top: 10,
-                                                          left: Dimensions
-                                                              .paddingSizeDefault),
-                                                      child: Row(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Icon(
-                                                                Icons
-                                                                    .video_file,
-                                                                size: 35,
-                                                                color: Theme.of(
-                                                                        context)
-                                                                    .disabledColor),
-                                                            const SizedBox(
-                                                              width: Dimensions
-                                                                  .paddingSizeExtraSmall,
-                                                            ),
-                                                            Expanded(
-                                                                child: Column(
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .start,
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .center,
-                                                                    children: [
-                                                                  Text(
-                                                                    chatController
-                                                                        .pickedVideoFile!
-                                                                        .name,
-                                                                    maxLines: 2,
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                    style: robotoBold.copyWith(
-                                                                        fontSize:
-                                                                            Dimensions.fontSizeDefault),
-                                                                  ),
-                                                                  Text(
-                                                                      '${chatController.videoSize.toStringAsFixed(2)}MB',
-                                                                      style: robotoRegular
-                                                                          .copyWith(
-                                                                        fontSize:
-                                                                            Dimensions.fontSizeDefault,
-                                                                        color: Theme.of(context)
-                                                                            .disabledColor,
-                                                                      )),
-                                                                ])),
-                                                            InkWell(
-                                                              onTap: () {
+                                                      }
+                                                      if (chatController
+                                                              .objWebFile
+                                                              .isNotEmpty &&
+                                                          isDesktop) {
+                                                        return SizedBox(
+                                                          height: 70,
+                                                          child: ListView
+                                                              .separated(
+                                                            shrinkWrap: true,
+                                                            scrollDirection:
+                                                                Axis.horizontal,
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .only(
+                                                                    bottom: 0,
+                                                                    top: 5),
+                                                            separatorBuilder: (context,
+                                                                    index) =>
+                                                                const SizedBox(
+                                                                    width: Dimensions
+                                                                        .paddingSizeDefault),
+                                                            itemCount:
                                                                 chatController
-                                                                    .pickVideoFile(
-                                                                        true);
-                                                              },
-                                                              child: Align(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .topRight,
-                                                                child: Icon(
-                                                                  Icons.close,
-                                                                  size: Dimensions
-                                                                      .paddingSizeLarge,
+                                                                    .objWebFile
+                                                                    .length,
+                                                            itemBuilder:
+                                                                (context,
+                                                                    index) {
+                                                              // String fileSize = ImageSize.getImageSizeFromXFile(chatController.objFile![index]);
+                                                              return Container(
+                                                                width: 180,
+                                                                decoration:
+                                                                    BoxDecoration(
                                                                   color: Theme.of(
                                                                           context)
-                                                                      .disabledColor,
+                                                                      .cardColor,
+                                                                  borderRadius:
+                                                                      BorderRadius.circular(
+                                                                          Dimensions
+                                                                              .radiusDefault),
                                                                 ),
-                                                              ),
-                                                            )
-                                                          ]),
-                                                    ),
-                                                  );
-                                                }
-
-                                                if (chatController
-                                                    .objFile.isNotEmpty) {
-                                                  return SizedBox(
-                                                    height: 70,
-                                                    child: ListView.separated(
-                                                      shrinkWrap: true,
-                                                      scrollDirection:
-                                                          Axis.horizontal,
-                                                      padding: const EdgeInsets
-                                                          .only(
-                                                          bottom: 0,
-                                                          top: 10,
-                                                          left: Dimensions
-                                                              .paddingSizeDefault,
-                                                          right: Dimensions
-                                                              .paddingSizeDefault),
-                                                      separatorBuilder: (context,
-                                                              index) =>
-                                                          const SizedBox(
-                                                              width: Dimensions
-                                                                  .paddingSizeDefault),
-                                                      itemCount: chatController
-                                                          .objFile.length,
-                                                      itemBuilder:
-                                                          (context, index) {
-                                                        return Container(
-                                                          width: 180,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .cardColor,
-                                                            borderRadius:
-                                                                BorderRadius.circular(
-                                                                    Dimensions
-                                                                        .radiusDefault),
-                                                          ),
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  left: 10,
-                                                                  right: 5),
-                                                          child: Row(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .center,
-                                                              children: [
-                                                                Image.asset(
-                                                                    XmarketImages
-                                                                        .fileIcon,
-                                                                    height: 30,
-                                                                    width: 30),
-                                                                const SizedBox(
-                                                                  width: Dimensions
-                                                                      .paddingSizeExtraSmall,
-                                                                ),
-                                                                Expanded(
-                                                                    child: Column(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment
-                                                                                .start,
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.center,
-                                                                        children: [
-                                                                      Text(
-                                                                        chatController
-                                                                            .objFile[index]
-                                                                            .name,
-                                                                        maxLines:
-                                                                            1,
-                                                                        overflow:
-                                                                            TextOverflow.ellipsis,
-                                                                        style: robotoBold.copyWith(
-                                                                            fontSize:
-                                                                                Dimensions.fontSizeDefault),
-                                                                      ),
-                                                                      Text(
-                                                                          '${chatController.fileSizeList[index].toStringAsFixed(2)} MB',
-                                                                          style:
-                                                                              robotoRegular.copyWith(
-                                                                            fontSize:
-                                                                                Dimensions.fontSizeSmall,
-                                                                            color:
-                                                                                Theme.of(context).disabledColor,
-                                                                          )),
-                                                                    ])),
-                                                                InkWell(
-                                                                  onTap: () {
-                                                                    chatController
-                                                                        .pickFile(
-                                                                            true,
-                                                                            index:
-                                                                                index);
-                                                                  },
-                                                                  child:
-                                                                      Padding(
-                                                                    padding: const EdgeInsets
+                                                                padding:
+                                                                    const EdgeInsets
                                                                         .only(
-                                                                        top: 5),
+                                                                        left:
+                                                                            10,
+                                                                        right:
+                                                                            5),
+                                                                child: Row(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      Image.asset(
+                                                                          XmarketImages
+                                                                              .fileIcon,
+                                                                          height:
+                                                                              30,
+                                                                          width:
+                                                                              30),
+                                                                      const SizedBox(
+                                                                        width: Dimensions
+                                                                            .paddingSizeExtraSmall,
+                                                                      ),
+                                                                      Expanded(
+                                                                          child: Column(
+                                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                                              children: [
+                                                                            Text(
+                                                                              chatController.objWebFile[index].names.first ?? 'attachment'.tr,
+                                                                              maxLines: 1,
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              style: robotoBold.copyWith(fontSize: Dimensions.fontSizeDefault),
+                                                                            ),
+
+                                                                            // Text(fileSize, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault,
+                                                                            //   color: Theme.of(context).hintColor,
+                                                                            // )),
+                                                                          ])),
+                                                                      InkWell(
+                                                                        onTap:
+                                                                            () {
+                                                                          chatController.pickFile(
+                                                                              true,
+                                                                              index: index);
+                                                                        },
+                                                                        child:
+                                                                            Padding(
+                                                                          padding: const EdgeInsets
+                                                                              .only(
+                                                                              top: 5),
+                                                                          child:
+                                                                              Align(
+                                                                            alignment:
+                                                                                Alignment.topRight,
+                                                                            child:
+                                                                                Icon(
+                                                                              Icons.close,
+                                                                              size: Dimensions.paddingSizeLarge,
+                                                                              color: Theme.of(context).hintColor,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      )
+                                                                    ]),
+                                                              );
+                                                            },
+                                                          ),
+                                                        );
+                                                      }
+
+                                                      if (chatController
+                                                              .pickedVideoFile !=
+                                                          null) {
+                                                        return Align(
+                                                          alignment: Alignment
+                                                              .centerLeft,
+                                                          child: Container(
+                                                            width: 250,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .cardColor,
+                                                              borderRadius:
+                                                                  BorderRadius.circular(
+                                                                      Dimensions
+                                                                          .radiusSmall),
+                                                            ),
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                                    horizontal:
+                                                                        10,
+                                                                    vertical:
+                                                                        5),
+                                                            margin: const EdgeInsets
+                                                                .only(
+                                                                top: 10,
+                                                                left: Dimensions
+                                                                    .paddingSizeDefault),
+                                                            child: Row(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Icon(
+                                                                      Icons
+                                                                          .video_file,
+                                                                      size: 35,
+                                                                      color: Theme.of(
+                                                                              context)
+                                                                          .disabledColor),
+                                                                  const SizedBox(
+                                                                    width: Dimensions
+                                                                        .paddingSizeExtraSmall,
+                                                                  ),
+                                                                  Expanded(
+                                                                      child: Column(
+                                                                          crossAxisAlignment: CrossAxisAlignment
+                                                                              .start,
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.center,
+                                                                          children: [
+                                                                        Text(
+                                                                          chatController
+                                                                              .pickedVideoFile!
+                                                                              .name,
+                                                                          maxLines:
+                                                                              2,
+                                                                          overflow:
+                                                                              TextOverflow.ellipsis,
+                                                                          style:
+                                                                              robotoBold.copyWith(fontSize: Dimensions.fontSizeDefault),
+                                                                        ),
+                                                                        Text(
+                                                                            '${chatController.videoSize.toStringAsFixed(2)}MB',
+                                                                            style:
+                                                                                robotoRegular.copyWith(
+                                                                              fontSize: Dimensions.fontSizeDefault,
+                                                                              color: Theme.of(context).disabledColor,
+                                                                            )),
+                                                                      ])),
+                                                                  InkWell(
+                                                                    onTap: () {
+                                                                      chatController
+                                                                          .pickVideoFile(
+                                                                              true);
+                                                                    },
                                                                     child:
                                                                         Align(
                                                                       alignment:
@@ -835,454 +800,498 @@ class _ChatScreenState extends State<ChatScreen> {
                                                                             .disabledColor,
                                                                       ),
                                                                     ),
-                                                                  ),
-                                                                )
-                                                              ]),
-                                                        );
-                                                      },
-                                                    ),
-                                                  );
-                                                }
-
-                                                if (chatController
-                                                        .chatImage.isNotEmpty &&
-                                                    !chatController.isLoading) {
-                                                  return SizedBox(
-                                                    height: 70,
-                                                    child: ListView.builder(
-                                                      scrollDirection:
-                                                          Axis.horizontal,
-                                                      itemCount: chatController
-                                                          .chatImage.length,
-                                                      itemBuilder:
-                                                          (BuildContext context,
-                                                              index) {
-                                                        return chatController
-                                                                .chatImage
-                                                                .isNotEmpty
-                                                            ? Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .only(
-                                                                  left: Dimensions
-                                                                      .paddingSizeDefault,
-                                                                  right: Dimensions
-                                                                      .paddingSizeSmall,
-                                                                  top: Dimensions
-                                                                      .paddingSizeDefault,
-                                                                ),
-                                                                child: Stack(
-                                                                  clipBehavior:
-                                                                      Clip.none,
-                                                                  children: [
-                                                                    Container(
-                                                                      width: 50,
-                                                                      height:
-                                                                          60,
-                                                                      decoration: BoxDecoration(
-                                                                          color: marketThemeController.darkTheme ? const Color(0xFF1b1b1b) : Colors.white,
-                                                                          borderRadius:
-                                                                              const BorderRadius.all(Radius.circular(20))),
-                                                                      child:
-                                                                          ClipRRect(
-                                                                        borderRadius: const BorderRadius
-                                                                            .all(
-                                                                            Radius.circular(Dimensions.radiusSmall)),
-                                                                        child: Image
-                                                                            .memory(
-                                                                          chatController
-                                                                              .chatRawImage[index],
-                                                                          width:
-                                                                              50,
-                                                                          height:
-                                                                              60,
-                                                                          fit: BoxFit
-                                                                              .cover,
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    Positioned(
-                                                                      top: -5,
-                                                                      right:
-                                                                          -10,
-                                                                      child:
-                                                                          InkWell(
-                                                                        onTap: () => chatController.removeImage(
-                                                                            index,
-                                                                            _inputMessageController.text.trim()),
-                                                                        child:
-                                                                            Container(
-                                                                          decoration:
-                                                                              const BoxDecoration(
-                                                                            color:
-                                                                                Colors.grey,
-                                                                            borderRadius:
-                                                                                BorderRadius.all(Radius.circular(Dimensions.paddingSizeDefault)),
-                                                                          ),
-                                                                          child:
-                                                                              Padding(
-                                                                            padding:
-                                                                                const EdgeInsets.all(3),
-                                                                            child: Icon(Icons.clear,
-                                                                                color: Theme.of(context).cardColor,
-                                                                                size: 15),
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    )
-                                                                  ],
-                                                                ),
-                                                              )
-                                                            : const SizedBox();
-                                                      },
-                                                    ),
-                                                  );
-                                                }
-
-                                                return const SizedBox();
-                                              }),
-                                              (chatController.isLoading &&
-                                                      chatController
-                                                          .chatImage.isNotEmpty)
-                                                  ? Align(
-                                                      alignment:
-                                                          Alignment.centerRight,
-                                                      child: Padding(
-                                                        padding: const EdgeInsets
-                                                            .only(
-                                                            right: Dimensions
-                                                                .paddingSizeLarge,
-                                                            top: Dimensions
-                                                                .paddingSizeExtraSmall),
-                                                        child: Text(
-                                                          '${'uploading'.tr} ${chatController.chatImage.length} ${'images'.tr}',
-                                                          style: robotoMedium
-                                                              .copyWith(
-                                                                  color: Theme.of(
-                                                                          context)
-                                                                      .hintColor),
-                                                        ),
-                                                      ))
-                                                  : const SizedBox(),
-                                              Container(
-                                                margin: const EdgeInsets.all(
-                                                    Dimensions
-                                                        .paddingSizeDefault),
-                                                child: Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment.end,
-                                                    children: [
-                                                      Expanded(
-                                                        child: Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius.circular(
-                                                                    Dimensions
-                                                                        .radiusDefault),
-                                                            color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF1b1b1b) : Colors.white,
-                                                            border: Border.all(
-                                                                color: Theme.of(
-                                                                        context)
-                                                                    .primaryColor
-                                                                    .withValues(
-                                                                        alpha:
-                                                                            0.5),
-                                                                width: 1),
+                                                                  )
+                                                                ]),
                                                           ),
-                                                          child: Row(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .end,
-                                                              children: [
+                                                        );
+                                                      }
+
+                                                      if (chatController
+                                                          .objFile.isNotEmpty) {
+                                                        return SizedBox(
+                                                          height: 70,
+                                                          child: ListView
+                                                              .separated(
+                                                            shrinkWrap: true,
+                                                            scrollDirection:
+                                                                Axis.horizontal,
+                                                            padding: const EdgeInsets
+                                                                .only(
+                                                                bottom: 0,
+                                                                top: 10,
+                                                                left: Dimensions
+                                                                    .paddingSizeDefault,
+                                                                right: Dimensions
+                                                                    .paddingSizeDefault),
+                                                            separatorBuilder: (context,
+                                                                    index) =>
                                                                 const SizedBox(
                                                                     width: Dimensions
-                                                                        .paddingSizeSmall),
-                                                                Expanded(
-                                                                  child:
-                                                                      TextField(
-                                                                    inputFormatters: [
-                                                                      LengthLimitingTextInputFormatter(
+                                                                        .paddingSizeDefault),
+                                                            itemCount:
+                                                                chatController
+                                                                    .objFile
+                                                                    .length,
+                                                            itemBuilder:
+                                                                (context,
+                                                                    index) {
+                                                              return Container(
+                                                                width: 180,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .cardColor,
+                                                                  borderRadius:
+                                                                      BorderRadius.circular(
                                                                           Dimensions
-                                                                              .messageInputLength)
-                                                                    ],
-                                                                    controller:
-                                                                        _inputMessageController,
-                                                                    focusNode:
-                                                                        _inputMessageFocus,
-                                                                    textCapitalization:
-                                                                        TextCapitalization
-                                                                            .sentences,
-                                                                    style: robotoRegular.copyWith(
-                                                                      color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black),
-                                                                    keyboardType:
-                                                                        TextInputType
-                                                                            .multiline,
-                                                                    maxLines: 5,
-                                                                    minLines: 1,
-                                                                    decoration:
-                                                                        InputDecoration(
-                                                                      border: InputBorder
-                                                                          .none,
-                                                                      hintText:
-                                                                          'type_a_massage'
-                                                                              .tr,
-                                                                      hintStyle: robotoRegular.copyWith(
-                                                                          color: Theme.of(context)
-                                                                              .hintColor,
-                                                                          fontSize:
-                                                                              Dimensions.fontSizeLarge),
-                                                                    ),
-                                                                    onSubmitted:
-                                                                        (String
-                                                                            newText) {
-                                                                      if (newText
-                                                                              .trim()
-                                                                              .isNotEmpty &&
-                                                                          !Get.find<ChatController>()
-                                                                              .isSendButtonActive) {
-                                                                        Get.find<ChatController>()
-                                                                            .toggleSendButtonActivity();
-                                                                      } else if (newText
-                                                                              .isEmpty &&
-                                                                          Get.find<ChatController>()
-                                                                              .isSendButtonActive) {
-                                                                        Get.find<ChatController>()
-                                                                            .toggleSendButtonActivity();
-                                                                      }
-                                                                    },
-                                                                    onChanged:
-                                                                        (String
-                                                                            newText) {
-                                                                      if (newText
-                                                                              .trim()
-                                                                              .isNotEmpty &&
-                                                                          !Get.find<ChatController>()
-                                                                              .isSendButtonActive) {
-                                                                        Get.find<ChatController>()
-                                                                            .toggleSendButtonActivity();
-                                                                      } else if (newText
-                                                                              .isEmpty &&
-                                                                          Get.find<ChatController>()
-                                                                              .isSendButtonActive) {
-                                                                        Get.find<ChatController>()
-                                                                            .toggleSendButtonActivity();
-                                                                      }
-                                                                    },
-                                                                  ),
+                                                                              .radiusDefault),
                                                                 ),
-                                                                InkWell(
-                                                                  onTap:
-                                                                      () async {
-                                                                    Get.find<
-                                                                            ChatController>()
-                                                                        .pickImage(
-                                                                            false);
-                                                                  },
-                                                                  child:
-                                                                      Padding(
-                                                                    padding: const EdgeInsets
-                                                                        .symmetric(
-                                                                        vertical:
-                                                                            Dimensions.paddingSizeSmall),
-                                                                    child: CustomAssetImageWidget(
-                                                                        XmarketImages
-                                                                            .image,
-                                                                        width:
-                                                                            25,
-                                                                        height:
-                                                                            25,
-                                                                        color: Theme.of(context)
-                                                                            .hintColor),
-                                                                  ),
-                                                                ),
-                                                                MenuAnchor(
-                                                                  builder: (BuildContext context,
-                                                                      MenuController
-                                                                          controller,
-                                                                      Widget?
-                                                                          child) {
-                                                                    return InkWell(
-                                                                      onTap:
-                                                                          () async {
-                                                                        _inputMessageFocus
-                                                                            .unfocus();
-
-                                                                        if (controller
-                                                                            .isOpen) {
-                                                                          controller
-                                                                              .close();
-                                                                        } else {
-                                                                          controller
-                                                                              .open();
-                                                                        }
-                                                                      },
-                                                                      child:
-                                                                          Padding(
-                                                                        padding: const EdgeInsets
-                                                                            .symmetric(
-                                                                            horizontal:
-                                                                                Dimensions.paddingSizeDefault,
-                                                                            vertical: Dimensions.paddingSizeSmall),
-                                                                        child: CustomAssetImageWidget(
-                                                                            XmarketImages
-                                                                                .file,
-                                                                            width:
-                                                                                25,
-                                                                            height:
-                                                                                25,
-                                                                            color:
-                                                                                Theme.of(context).hintColor),
-                                                                      ),
-                                                                    );
-                                                                  },
-                                                                  menuChildren:
-                                                                      List<
-                                                                          MenuItemButton>.generate(
-                                                                    2,
-                                                                    (int index) =>
-                                                                        MenuItemButton(
-                                                                      onPressed:
-                                                                          () {
-                                                                        if (index ==
-                                                                            0) {
-                                                                          Get.find<ChatController>()
-                                                                              .pickFile(false);
-                                                                        } else {
-                                                                          Get.find<ChatController>()
-                                                                              .pickVideoFile(false);
-                                                                        }
-                                                                      },
-                                                                      child:
-                                                                          Row(
-                                                                        children: [
-                                                                          Icon(
-                                                                              index == 0 ? Icons.file_copy_outlined : Icons.video_collection_outlined,
-                                                                              size: 18,
-                                                                              color: Theme.of(context).primaryColor),
-                                                                          const SizedBox(
-                                                                              width: Dimensions.paddingSizeSmall),
-                                                                          Text(
-                                                                              index == 0 ? 'pick_files'.tr : 'pick_video'.tr,
-                                                                              style: robotoMedium),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ]),
-                                                        ),
-                                                      ),
-                                                      const SizedBox(
-                                                          width: Dimensions
-                                                              .paddingSizeSmall),
-                                                      Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius: BorderRadius
-                                                              .circular(Dimensions
-                                                                  .radiusDefault),
-                                                          color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF1b1b1b) : Colors.white,
-                                                          border: Border.all(
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .primaryColor
-                                                                  .withValues(
-                                                                      alpha:
-                                                                          0.5),
-                                                              width: 1),
-                                                        ),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                                vertical: 4),
-                                                        child: GetBuilder<
-                                                                ChatController>(
-                                                            builder:
-                                                                (chatController) {
-                                                          return chatController
-                                                                  .isLoading
-                                                              ? const Padding(
-                                                                  padding: EdgeInsets.symmetric(
-                                                                      horizontal:
-                                                                          Dimensions
-                                                                              .paddingSizeDefault,
-                                                                      vertical:
-                                                                          7),
-                                                                  child: SizedBox(
-                                                                      height:
-                                                                          24,
-                                                                      width: 24,
-                                                                      child:
-                                                                          CircularProgressIndicator(
-                                                                            color: Colors.orange,
-                                                                          )),
-                                                                )
-                                                              : InkWell(
-                                                                  onTap:
-                                                                      () async {
-                                                                    if (chatController
-                                                                        .isSendButtonActive) {
-                                                                      await chatController
-                                                                          .sendMessage(
-                                                                        message:
-                                                                            _inputMessageController.text,
-                                                                        notificationBody:
-                                                                            widget.notificationBody,
-                                                                        conversationID:
-                                                                            widget.conversationID,
-                                                                        index: widget
-                                                                            .index,
-                                                                      );
-                                                                      _inputMessageController
-                                                                          .clear();
-                                                                    } else {
-                                                                      showCustomSnackBar(
-                                                                          'write_something'
-                                                                              .tr);
-                                                                    }
-                                                                  },
-                                                                  child:
-                                                                      Padding(
-                                                                    padding: const EdgeInsets
+                                                                padding:
+                                                                    const EdgeInsets
                                                                         .only(
                                                                         left:
                                                                             10,
                                                                         right:
-                                                                            6),
-                                                                    child:
-                                                                        CustomAssetImageWidget(
-                                                                      XmarketImages
-                                                                          .send,
-                                                                      width: 40,
-                                                                      height:
-                                                                          40,
+                                                                            5),
+                                                                child: Row(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      Image.asset(
+                                                                          XmarketImages
+                                                                              .fileIcon,
+                                                                          height:
+                                                                              30,
+                                                                          width:
+                                                                              30),
+                                                                      const SizedBox(
+                                                                        width: Dimensions
+                                                                            .paddingSizeExtraSmall,
+                                                                      ),
+                                                                      Expanded(
+                                                                          child: Column(
+                                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                                              children: [
+                                                                            Text(
+                                                                              chatController.objFile[index].name,
+                                                                              maxLines: 1,
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              style: robotoBold.copyWith(fontSize: Dimensions.fontSizeDefault),
+                                                                            ),
+                                                                            Text('${chatController.fileSizeList[index].toStringAsFixed(2)} MB',
+                                                                                style: robotoRegular.copyWith(
+                                                                                  fontSize: Dimensions.fontSizeSmall,
+                                                                                  color: Theme.of(context).disabledColor,
+                                                                                )),
+                                                                          ])),
+                                                                      InkWell(
+                                                                        onTap:
+                                                                            () {
+                                                                          chatController.pickFile(
+                                                                              true,
+                                                                              index: index);
+                                                                        },
+                                                                        child:
+                                                                            Padding(
+                                                                          padding: const EdgeInsets
+                                                                              .only(
+                                                                              top: 5),
+                                                                          child:
+                                                                              Align(
+                                                                            alignment:
+                                                                                Alignment.topRight,
+                                                                            child:
+                                                                                Icon(
+                                                                              Icons.close,
+                                                                              size: Dimensions.paddingSizeLarge,
+                                                                              color: Theme.of(context).disabledColor,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      )
+                                                                    ]),
+                                                              );
+                                                            },
+                                                          ),
+                                                        );
+                                                      }
+
+                                                      if (chatController
+                                                              .chatImage
+                                                              .isNotEmpty &&
+                                                          !chatController
+                                                              .isLoading) {
+                                                        return SizedBox(
+                                                          height: 70,
+                                                          child:
+                                                              ListView.builder(
+                                                            scrollDirection:
+                                                                Axis.horizontal,
+                                                            itemCount:
+                                                                chatController
+                                                                    .chatImage
+                                                                    .length,
+                                                            itemBuilder:
+                                                                (BuildContext
+                                                                        context,
+                                                                    index) {
+                                                              return chatController
+                                                                      .chatImage
+                                                                      .isNotEmpty
+                                                                  ? Padding(
+                                                                      padding:
+                                                                          const EdgeInsets
+                                                                              .only(
+                                                                        left: Dimensions
+                                                                            .paddingSizeDefault,
+                                                                        right: Dimensions
+                                                                            .paddingSizeSmall,
+                                                                        top: Dimensions
+                                                                            .paddingSizeDefault,
+                                                                      ),
+                                                                      child:
+                                                                          Stack(
+                                                                        clipBehavior:
+                                                                            Clip.none,
+                                                                        children: [
+                                                                          Container(
+                                                                            width:
+                                                                                50,
+                                                                            height:
+                                                                                60,
+                                                                            decoration:
+                                                                                BoxDecoration(color: marketThemeController.darkTheme ? const Color(0xFF1b1b1b) : Colors.white, borderRadius: const BorderRadius.all(Radius.circular(20))),
+                                                                            child:
+                                                                                ClipRRect(
+                                                                              borderRadius: const BorderRadius.all(Radius.circular(Dimensions.radiusSmall)),
+                                                                              child: Image.memory(
+                                                                                chatController.chatRawImage[index],
+                                                                                width: 50,
+                                                                                height: 60,
+                                                                                fit: BoxFit.cover,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          Positioned(
+                                                                            top:
+                                                                                -5,
+                                                                            right:
+                                                                                -10,
+                                                                            child:
+                                                                                InkWell(
+                                                                              onTap: () => chatController.removeImage(index, _inputMessageController.text.trim()),
+                                                                              child: Container(
+                                                                                decoration: const BoxDecoration(
+                                                                                  color: Colors.grey,
+                                                                                  borderRadius: BorderRadius.all(Radius.circular(Dimensions.paddingSizeDefault)),
+                                                                                ),
+                                                                                child: Padding(
+                                                                                  padding: const EdgeInsets.all(3),
+                                                                                  child: Icon(Icons.clear, color: Theme.of(context).cardColor, size: 15),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          )
+                                                                        ],
+                                                                      ),
+                                                                    )
+                                                                  : const SizedBox();
+                                                            },
+                                                          ),
+                                                        );
+                                                      }
+
+                                                      return const SizedBox();
+                                                    }),
+                                                    (chatController.isLoading &&
+                                                            chatController
+                                                                .chatImage
+                                                                .isNotEmpty)
+                                                        ? Align(
+                                                            alignment: Alignment
+                                                                .centerRight,
+                                                            child: Padding(
+                                                              padding: const EdgeInsets
+                                                                  .only(
+                                                                  right: Dimensions
+                                                                      .paddingSizeLarge,
+                                                                  top: Dimensions
+                                                                      .paddingSizeExtraSmall),
+                                                              child: Text(
+                                                                '${'uploading'.tr} ${chatController.chatImage.length} ${'images'.tr}',
+                                                                style: robotoMedium.copyWith(
+                                                                    color: Theme.of(
+                                                                            context)
+                                                                        .hintColor),
+                                                              ),
+                                                            ))
+                                                        : const SizedBox(),
+                                                    Container(
+                                                      margin: const EdgeInsets
+                                                          .all(Dimensions
+                                                              .paddingSizeDefault),
+                                                      child: Row(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .end,
+                                                          children: [
+                                                            Expanded(
+                                                              child: Container(
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  borderRadius:
+                                                                      BorderRadius.circular(
+                                                                          Dimensions
+                                                                              .radiusDefault),
+                                                                  color: Get.find<MarketThemeController>(
+                                                                              tag:
+                                                                                  'xmarket')
+                                                                          .darkTheme
+                                                                      ? const Color(
+                                                                          0xFF1b1b1b)
+                                                                      : Colors
+                                                                          .white,
+                                                                  border: Border.all(
                                                                       color: Theme.of(
                                                                               context)
-                                                                          .primaryColor,
-                                                                    ),
-                                                                  ),
-                                                                );
-                                                        }),
-                                                      ),
-                                                    ]),
-                                              ),
-                                            ]),
-                                      )
-                                    : const SizedBox(),
-                              ],
-                            ),
+                                                                          .primaryColor
+                                                                          .withValues(
+                                                                              alpha: 0.5),
+                                                                      width: 1),
+                                                                ),
+                                                                child: Row(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .end,
+                                                                    children: [
+                                                                      const SizedBox(
+                                                                          width:
+                                                                              Dimensions.paddingSizeSmall),
+                                                                      Expanded(
+                                                                        child:
+                                                                            TextField(
+                                                                          inputFormatters: [
+                                                                            LengthLimitingTextInputFormatter(Dimensions.messageInputLength)
+                                                                          ],
+                                                                          controller:
+                                                                              _inputMessageController,
+                                                                          focusNode:
+                                                                              _inputMessageFocus,
+                                                                          textCapitalization:
+                                                                              TextCapitalization.sentences,
+                                                                          style:
+                                                                              robotoRegular.copyWith(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black),
+                                                                          keyboardType:
+                                                                              TextInputType.multiline,
+                                                                          maxLines:
+                                                                              5,
+                                                                          minLines:
+                                                                              1,
+                                                                          decoration:
+                                                                              InputDecoration(
+                                                                            border:
+                                                                                InputBorder.none,
+                                                                            hintText:
+                                                                                'type_a_massage'.tr,
+                                                                            hintStyle:
+                                                                                robotoRegular.copyWith(color: Theme.of(context).hintColor, fontSize: Dimensions.fontSizeLarge),
+                                                                          ),
+                                                                          onSubmitted:
+                                                                              (String newText) {
+                                                                            if (newText.trim().isNotEmpty &&
+                                                                                !Get.find<ChatController>().isSendButtonActive) {
+                                                                              Get.find<ChatController>().toggleSendButtonActivity();
+                                                                            } else if (newText.isEmpty && Get.find<ChatController>().isSendButtonActive) {
+                                                                              Get.find<ChatController>().toggleSendButtonActivity();
+                                                                            }
+                                                                          },
+                                                                          onChanged:
+                                                                              (String newText) {
+                                                                            if (newText.trim().isNotEmpty &&
+                                                                                !Get.find<ChatController>().isSendButtonActive) {
+                                                                              Get.find<ChatController>().toggleSendButtonActivity();
+                                                                            } else if (newText.isEmpty && Get.find<ChatController>().isSendButtonActive) {
+                                                                              Get.find<ChatController>().toggleSendButtonActivity();
+                                                                            }
+                                                                          },
+                                                                        ),
+                                                                      ),
+                                                                      InkWell(
+                                                                        onTap:
+                                                                            () async {
+                                                                          Get.find<ChatController>()
+                                                                              .pickImage(false);
+                                                                        },
+                                                                        child:
+                                                                            Padding(
+                                                                          padding: const EdgeInsets
+                                                                              .symmetric(
+                                                                              vertical: Dimensions.paddingSizeSmall),
+                                                                          child: CustomAssetImageWidget(
+                                                                              XmarketImages.image,
+                                                                              width: 25,
+                                                                              height: 25,
+                                                                              color: Theme.of(context).hintColor),
+                                                                        ),
+                                                                      ),
+                                                                      MenuAnchor(
+                                                                        builder: (BuildContext context,
+                                                                            MenuController
+                                                                                controller,
+                                                                            Widget?
+                                                                                child) {
+                                                                          return InkWell(
+                                                                            onTap:
+                                                                                () async {
+                                                                              _inputMessageFocus.unfocus();
+
+                                                                              if (controller.isOpen) {
+                                                                                controller.close();
+                                                                              } else {
+                                                                                controller.open();
+                                                                              }
+                                                                            },
+                                                                            child:
+                                                                                Padding(
+                                                                              padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault, vertical: Dimensions.paddingSizeSmall),
+                                                                              child: CustomAssetImageWidget(XmarketImages.file, width: 25, height: 25, color: Theme.of(context).hintColor),
+                                                                            ),
+                                                                          );
+                                                                        },
+                                                                        menuChildren:
+                                                                            List<MenuItemButton>.generate(
+                                                                          2,
+                                                                          (int index) =>
+                                                                              MenuItemButton(
+                                                                            onPressed:
+                                                                                () {
+                                                                              if (index == 0) {
+                                                                                Get.find<ChatController>().pickFile(false);
+                                                                              } else {
+                                                                                Get.find<ChatController>().pickVideoFile(false);
+                                                                              }
+                                                                            },
+                                                                            child:
+                                                                                Row(
+                                                                              children: [
+                                                                                Icon(index == 0 ? Icons.file_copy_outlined : Icons.video_collection_outlined, size: 18, color: Theme.of(context).primaryColor),
+                                                                                const SizedBox(width: Dimensions.paddingSizeSmall),
+                                                                                Text(index == 0 ? 'pick_files'.tr : 'pick_video'.tr, style: robotoMedium),
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ]),
+                                                              ),
+                                                            ),
+                                                            const SizedBox(
+                                                                width: Dimensions
+                                                                    .paddingSizeSmall),
+                                                            Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius.circular(
+                                                                        Dimensions
+                                                                            .radiusDefault),
+                                                                color: Get.find<MarketThemeController>(
+                                                                            tag:
+                                                                                'xmarket')
+                                                                        .darkTheme
+                                                                    ? const Color(
+                                                                        0xFF1b1b1b)
+                                                                    : Colors
+                                                                        .white,
+                                                                border: Border.all(
+                                                                    color: Theme.of(
+                                                                            context)
+                                                                        .primaryColor
+                                                                        .withValues(
+                                                                            alpha:
+                                                                                0.5),
+                                                                    width: 1),
+                                                              ),
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .symmetric(
+                                                                      vertical:
+                                                                          4),
+                                                              child: GetBuilder<
+                                                                      ChatController>(
+                                                                  builder:
+                                                                      (chatController) {
+                                                                return chatController
+                                                                        .isLoading
+                                                                    ? const Padding(
+                                                                        padding: EdgeInsets.symmetric(
+                                                                            horizontal:
+                                                                                Dimensions.paddingSizeDefault,
+                                                                            vertical: 7),
+                                                                        child: SizedBox(
+                                                                            height: 24,
+                                                                            width: 24,
+                                                                            child: CircularProgressIndicator(
+                                                                              color: Color(0xFF9ebc67),
+                                                                            )),
+                                                                      )
+                                                                    : InkWell(
+                                                                        onTap:
+                                                                            () async {
+                                                                          if (chatController
+                                                                              .isSendButtonActive) {
+                                                                            await chatController.sendMessage(
+                                                                              message: _inputMessageController.text,
+                                                                              notificationBody: widget.notificationBody,
+                                                                              conversationID: widget.conversationID,
+                                                                              index: widget.index,
+                                                                            );
+                                                                            _inputMessageController.clear();
+                                                                          } else {
+                                                                            showCustomSnackBar('write_something'.tr);
+                                                                          }
+                                                                        },
+                                                                        child:
+                                                                            Padding(
+                                                                          padding: const EdgeInsets
+                                                                              .only(
+                                                                              left: 10,
+                                                                              right: 6),
+                                                                          child:
+                                                                              CustomAssetImageWidget(
+                                                                            XmarketImages.send,
+                                                                            width:
+                                                                                40,
+                                                                            height:
+                                                                                40,
+                                                                            color:
+                                                                                Theme.of(context).primaryColor,
+                                                                          ),
+                                                                        ),
+                                                                      );
+                                                              }),
+                                                            ),
+                                                          ]),
+                                                    ),
+                                                  ]),
+                                            )
+                                          : const SizedBox(),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                )
-              : NotLoggedInScreen(callBack: (value) {
-                  _initCall();
-                  setState(() {});
-                }),
-        ),
+                      )
+                    : NotLoggedInScreen(callBack: (value) {
+                        _initCall();
+                        setState(() {});
+                      }),
+              ),
             );
           });
         });

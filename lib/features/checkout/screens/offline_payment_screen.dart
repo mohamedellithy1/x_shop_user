@@ -85,7 +85,7 @@ class _OfflinePaymentScreenState extends State<OfflinePaymentScreen> {
     return Scaffold(
       backgroundColor: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
           ? const Color(0xFF141313)
-          : Theme.of(context).colorScheme.surface,
+          : Color(0xFFfafef5),
       appBar: CustomAppBarWidget(title: 'offline_payment'.tr),
       body: GetBuilder<CheckoutController>(builder: (checkoutController) {
         List<MethodInformations>? methodInformation;
@@ -405,7 +405,7 @@ class _OfflinePaymentScreenState extends State<OfflinePaymentScreen> {
               ])
             : const Center(
                 child: CircularProgressIndicator(
-                color: Colors.orange,
+                color: Color(0xFF9ebc67),
               ));
       }),
     );

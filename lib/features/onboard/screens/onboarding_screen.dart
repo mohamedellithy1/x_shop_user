@@ -19,8 +19,7 @@ class OnBoardingScreen extends StatelessWidget {
     return GetBuilder<OnBoardingController>(builder: (onBoardingController) {
       return Scaffold(
         appBar: AppBar(
-          backgroundColor:
-              Theme.of(context).primaryColor.withValues(alpha: 0.05),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           actions: [
             onBoardingController.selectedIndex == 2
                 ? const SizedBox()

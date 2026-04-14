@@ -39,7 +39,7 @@ class _ReferAndEarnScreenState extends State<ReferAndEarnScreen> {
     bool isLoggedIn = Get.find<MarketAuthController>().isLoggedIn();
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: CustomAppBarWidget(
         title: 'refer_and_earn'.tr,
         actions: [

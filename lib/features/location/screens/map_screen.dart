@@ -57,6 +57,9 @@ class MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+          ? const Color(0xFF141313)
+          : Color(0xFFfafef5),
       appBar: CustomAppBarWidget(
           title: widget.fromRestaurant || widget.fromOrder
               ? widget.restaurantName!

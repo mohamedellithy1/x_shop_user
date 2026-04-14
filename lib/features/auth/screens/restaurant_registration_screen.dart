@@ -136,17 +136,27 @@ class _RestaurantRegistrationScreenState
             backgroundColor:
                 Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
                     ? const Color(0xFF141313)
-                    : Colors.white,
+                    : const Color(0xFFfafef5),
             resizeToAvoidBottomInset: false,
             appBar: PreferredSize(
               preferredSize: const Size.fromHeight(kToolbarHeight + 3),
               child: Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Colors.orange, Colors.red],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+                    colors: [
+                      Color(0xFFe3ebd5),
+                      Color(0xFFfafff4),
+                      Color(0xFFe3ebd5),
+                    ],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
                   ),
+
+                  // gradient: LinearGradient(
+                  //   colors: [Color(0xFFd6e0c4), Color(0xFFe7feba)],
+                  //   begin: Alignment.topLeft,
+                  //   end: Alignment.bottomRight,
+                  // ),
                 ),
                 child: AppBar(
                   title: Text(
@@ -318,7 +328,7 @@ class _RestaurantRegistrationScreenState
                                                               .darkTheme
                                                           ? const Color(
                                                               0xFF141313)
-                                                          : Colors.white,
+                                                          : Color(0xFFfafef5),
                                                   appBar: AppBar(
                                                       title: Text(
                                                           'set_your_store_location'
@@ -1239,7 +1249,7 @@ class _RestaurantRegistrationScreenState
                                       restaurantRegController.storeStatus == 0.6
                                   ? 'next'.tr
                                   : 'submit'.tr,
-                              color: Colors.orange,
+                              color: Color(0xFF9ebc67),
                               textColor: Colors.white,
                               onPressed: () {
                                 bool defaultNameNull = false;
@@ -1564,7 +1574,7 @@ class _RestaurantRegistrationScreenState
                                 padding: EdgeInsets.all(
                                     Dimensions.paddingSizeDefault),
                                 child: CircularProgressIndicator(
-                                  color: Colors.orange,
+                                  color: Color(0xFF9ebc67),
                                 ))),
               ],
             ),

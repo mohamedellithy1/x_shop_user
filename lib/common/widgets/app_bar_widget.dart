@@ -44,10 +44,20 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
       preferredSize: const Size.fromHeight(150.0),
       child: Container(
         decoration: BoxDecoration(
+          // color: Color(0xFFd6e0c4),
+          // gradient: LinearGradient(
+          //   colors: [Color(0xFFd6e0c4), Color(0xFFe7feba)],
+          //   begin: Alignment.topLeft,
+          //   end: Alignment.bottomRight,
+          // ),
           gradient: LinearGradient(
-            colors: [Colors.orange, Colors.red],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFFe3ebd5),
+              Color(0xFFfafff4),
+              Color(0xFFe3ebd5),
+            ],
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
           ),
         ),
         child: AppBar(
@@ -70,7 +80,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                       title.tr,
                       style: robotoRegular.copyWith(
                         fontSize: fontSize ?? Dimensions.fontSizeLarge,
-                        color: Colors.white,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                       ),
                       maxLines: 1,

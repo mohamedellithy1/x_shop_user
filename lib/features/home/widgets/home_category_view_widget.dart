@@ -25,11 +25,11 @@ class HomeCategoryViewWidget extends StatelessWidget {
               child: Padding(
             padding: EdgeInsets.all(Dimensions.paddingSizeDefault),
             child: CircularProgressIndicator(
-              color: Colors.orange,
+              color: Color(0xFF9ebc67),
             ),
           ));
         }
-        
+
         return Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(

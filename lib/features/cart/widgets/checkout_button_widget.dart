@@ -156,7 +156,7 @@ class CheckoutButtonWidget extends StatelessWidget {
             ),
             GetBuilder<MarketCartController>(builder: (cartController) {
               return CustomButtonWidget(
-                color: Colors.orange,
+                color: Color(0xFF9ebc67),
                 radius: 10,
                 buttonText: 'confirm_delivery_details'.tr,
                 onPressed: cartController.isLoading ||

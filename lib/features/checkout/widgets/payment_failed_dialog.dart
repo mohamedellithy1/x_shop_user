@@ -67,7 +67,7 @@ class PaymentFailedDialog extends StatelessWidget {
                                 .configModel!
                                 .cashOnDelivery!
                             ? CustomButtonWidget(
-                                color: Colors.orange,
+                                color: Color(0xFF9ebc67),
                                 buttonText: 'switch_to_cash_on_delivery'.tr,
                                 onPressed: () {
                                   if (maxCodOrderAmount == null ||
@@ -133,12 +133,12 @@ class PaymentFailedDialog extends StatelessWidget {
                               )
                             : const Center(
                                 child: CircularProgressIndicator(
-                                color: Colors.orange,
+                                color: Color(0xFF9ebc67),
                               )),
                       ])
                     : const Center(
                         child: CircularProgressIndicator(
-                        color: Colors.orange,
+                        color: Color(0xFF9ebc67),
                       ));
               }),
             ]),

@@ -48,6 +48,7 @@ class _PopularFoodScreenState extends State<PopularFoodScreen> {
     return GetBuilder<ProductController>(builder: (productController) {
       return GetBuilder<ReviewController>(builder: (reviewController) {
         return Scaffold(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             appBar: CustomAppBarWidget(
               title: widget.isPopular
                   ? widget.fromIsRestaurantFood

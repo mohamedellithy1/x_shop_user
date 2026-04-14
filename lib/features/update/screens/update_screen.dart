@@ -20,6 +20,7 @@ class UpdateScreen extends StatelessWidget {
     bool isDesktop = ResponsiveHelper.isDesktop(context);
 
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       endDrawer: const MenuDrawerWidget(),
       endDrawerEnableOpenDragGesture: false,
       body: GetBuilder<MarketSplashController>(

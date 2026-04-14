@@ -131,7 +131,7 @@ class PaymentScreenState extends State<PaymentWebViewScreen> {
         _exitApp();
       },
       child: Scaffold(
-        backgroundColor: Theme.of(context).cardColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         // ✅ AppBar عادي بدون CustomAppBarWidget
         appBar: AppBar(
           title: Text('payment'.tr),
@@ -207,7 +207,7 @@ class PaymentScreenState extends State<PaymentWebViewScreen> {
             _isLoading
                 ? Center(
                     child: CircularProgressIndicator(
-                      color: Colors.orange,
+                        color: Color(0xFF9ebc67),
                         valueColor: AlwaysStoppedAnimation<Color>(
                             Theme.of(context).primaryColor)),
                   )
@@ -298,7 +298,9 @@ class PaymentScreenState extends State<PaymentWebViewScreen> {
               DigitalPaymentDialog(
                 icon: XmarketImages.xshopLogo,
                 title: isCancel ? 'payment_cancelled'.tr : 'payment_failed'.tr,
-                description: isCancel ? 'your_payment_cancelled'.tr : 'your_payment_failed'.tr,
+                description: isCancel
+                    ? 'your_payment_cancelled'.tr
+                    : 'your_payment_failed'.tr,
                 isFailed: true,
               ),
               dismissible: false,

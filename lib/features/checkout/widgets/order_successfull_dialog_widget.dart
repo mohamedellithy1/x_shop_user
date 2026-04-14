@@ -160,7 +160,7 @@ class _OrderSuccessfulDialogWidgetState
                 )
               : const Center(
                   child: CircularProgressIndicator(
-                  color: Colors.orange,
+                  color: Color(0xFF9ebc67),
                 ));
         }));
   }

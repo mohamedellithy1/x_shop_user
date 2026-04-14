@@ -68,14 +68,14 @@ class NoDataScreen extends StatelessWidget {
                       width: 100,
                       decoration: BoxDecoration(
                         color:
-                            Colors.orange.withValues(alpha: 0.2),
+                            Color(0xFF9ebc67).withValues(alpha: 0.2),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
                         isEmptyWishlist
                             ? Icons.favorite_border_rounded
                             : Icons.account_balance_wallet_outlined,
-                        color: Colors.orange,
+                        color: Color(0xFF9ebc67),
                         size: 60,
                       ),
                     )

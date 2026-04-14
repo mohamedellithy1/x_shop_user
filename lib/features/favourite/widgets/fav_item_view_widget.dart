@@ -12,7 +12,9 @@ class FavItemViewWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).brightness == Brightness.dark
+          ? Colors.black
+          : Color(0xFFfafef5),
       body: GetBuilder<FavouriteController>(builder: (favouriteController) {
         return RefreshIndicator(
           onRefresh: () async {

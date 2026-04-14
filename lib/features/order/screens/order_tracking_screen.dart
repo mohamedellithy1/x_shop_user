@@ -132,6 +132,9 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+          ? Colors.black
+          : Color(0xFFfafef5),
       appBar: CustomAppBarWidget(
           title: '${'order'.tr}' ' #' '${widget.orderID.toString()}'),
       endDrawer: const MenuDrawerWidget(),

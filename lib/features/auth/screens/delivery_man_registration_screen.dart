@@ -49,16 +49,26 @@ class _DeliveryManRegistrationScreenState
         backgroundColor:
             Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
                 ? const Color(0xFF141313)
-                : Colors.white,
+                : const Color(0xFFfafef5),
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(kToolbarHeight + 3),
           child: Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.orange, Colors.red],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xFFe3ebd5),
+                  Color(0xFFfafff4),
+                  Color(0xFFe3ebd5),
+                ],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
               ),
+
+              // gradient: LinearGradient(
+              //   colors: [Color(0xFFd6e0c4), Color(0xFFe7feba)],
+              //   begin: Alignment.topLeft,
+              //   end: Alignment.bottomRight,
+              // ),
             ),
             child: AppBar(
               title: Text('إنشاء حساب دليفري',
@@ -82,8 +92,7 @@ class _DeliveryManRegistrationScreenState
                   Expanded(
                       flex: (100 - (dmController.dmStatus * 100)).toInt(),
                       child: Container(
-                          height: 3,
-                          color: Colors.white.withOpacity(0.3))),
+                          height: 3, color: Colors.white.withOpacity(0.3))),
                 ]),
               ),
             ),
@@ -230,7 +239,7 @@ class _DeliveryManRegistrationScreenState
             ],
             const SizedBox(height: 40),
             CustomButtonWidget(
-              color: Colors.orange,
+              color: Color(0xFF9ebc67),
               textColor: Colors.white,
               buttonText: dmController.dmStatus == 0.4 ? 'التالي' : 'إرسال',
               isLoading: dmController.isLoading,

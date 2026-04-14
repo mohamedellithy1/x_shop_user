@@ -57,7 +57,7 @@ class _OrderSuccessfulScreenState extends State<OrderSuccessfulScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).cardColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: ResponsiveHelper.isDesktop(context) ? const WebMenuBar() : null,
       endDrawer: const MenuDrawerWidget(),
       endDrawerEnableOpenDragGesture: false,
@@ -202,7 +202,7 @@ class _OrderSuccessfulScreenState extends State<OrderSuccessfulScreen> {
               )
             : const Center(
                 child: CircularProgressIndicator(
-                color: Colors.orange,
+                color: Color(0xFF9ebc67),
               ));
       }),
     );

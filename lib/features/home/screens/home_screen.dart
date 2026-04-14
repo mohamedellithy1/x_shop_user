@@ -57,6 +57,7 @@ import 'package:stackfood_multivendor/util/styles.dart';
 // import 'package:stackfood_multivendor/common/widgets/footer_view_widget.dart';
 import 'package:stackfood_multivendor/common/widgets/web_menu_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
 // WebSocket/Reverb initialization
@@ -302,7 +303,7 @@ class _XMarketHomeScreenState extends State<XMarketHomeScreen> {
                           endDrawerEnableOpenDragGesture: false,
                           backgroundColor: marketThemeController.darkTheme
                               ? Colors.black
-                              : Colors.white,
+                              : Theme.of(context).scaffoldBackgroundColor,
                           body: configModel == null
                               ? Builder(builder: (context) {
                                   // جلب الـ Config في الخلفية فوراً
@@ -322,7 +323,7 @@ class _XMarketHomeScreenState extends State<XMarketHomeScreen> {
                               : Stack(
                                   children: [
                                     SafeArea(
-                                      top: (configModel.theme == 2),
+                                      top: false,
                                       child: RefreshIndicator(
                                         color: Colors.orange,
                                         onRefresh: () async {
@@ -389,6 +390,15 @@ class _XMarketHomeScreenState extends State<XMarketHomeScreen> {
                                                         slivers: [
                                                           /// App Bar
                                                           SliverAppBar(
+                                                            systemOverlayStyle:
+                                                                const SystemUiOverlayStyle(
+                                                              statusBarIconBrightness:
+                                                                  Brightness
+                                                                      .dark,
+                                                              statusBarBrightness:
+                                                                  Brightness
+                                                                      .light,
+                                                            ),
                                                             // leading: IconButton(onPressed: () => Get.to(XRideDashboardScreen()), icon: Icon(Icons.arrow_back_ios , color: Colors.black,)),
                                                             pinned: true,
                                                             toolbarHeight: 10,
@@ -414,15 +424,34 @@ class _XMarketHomeScreenState extends State<XMarketHomeScreen> {
                                                                 gradient:
                                                                     LinearGradient(
                                                                   colors: [
-                                                                    Colors
-                                                                        .orange,
-                                                                    Colors.red
+                                                                    Color(
+                                                                        0xFFd6e0c4), // الجمب الشمال
+                                                                    Color(
+                                                                        0xFFfafef5), // اللون الخفيف اللي في النص (نفس لون الباك جراوند)
+                                                                    Color(
+                                                                        0xFFd6e0c4), // الجمب اليمين (نفس الشمال)
                                                                   ],
                                                                   begin: Alignment
-                                                                      .topLeft,
+                                                                      .centerLeft,
                                                                   end: Alignment
-                                                                      .bottomRight,
+                                                                      .centerRight,
                                                                 ),
+
+                                                                // gradient:
+                                                                //     LinearGradient(
+                                                                //   colors: [
+                                                                //     Color(
+                                                                //         0xFFd6e0c4),
+                                                                //     Color(
+                                                                //         0xFFe7feba)
+                                                                //   ],
+                                                                //   begin: Alignment
+                                                                //       .topLeft,
+                                                                //   end: Alignment
+                                                                //       .bottomRight,
+                                                                // ),
+                                                                // color: Color(
+                                                                //     0xFFd6e0c4),
                                                               ),
                                                               child:
                                                                   FlexibleSpaceBar(
@@ -440,16 +469,34 @@ class _XMarketHomeScreenState extends State<XMarketHomeScreen> {
                                                                     gradient:
                                                                         LinearGradient(
                                                                       colors: [
-                                                                        Colors
-                                                                            .orange,
-                                                                        Colors
-                                                                            .red
+                                                                        Color(
+                                                                            0xFFd6e0c4), // الجمب الشمال
+                                                                        Color(
+                                                                            0xFFfafef5), // اللون الخفيف اللي في النص (نفس لون الباك جراوند)
+                                                                        Color(
+                                                                            0xFFd6e0c4), // الجمب اليمين (نفس الشمال)
                                                                       ],
                                                                       begin: Alignment
-                                                                          .topLeft,
+                                                                          .centerLeft,
                                                                       end: Alignment
-                                                                          .bottomRight,
+                                                                          .centerRight,
                                                                     ),
+
+                                                                    // gradient:
+                                                                    //     LinearGradient(
+                                                                    //   colors: [
+                                                                    //     Color(
+                                                                    //         0xFFd6e0c4),
+                                                                    //     Color(
+                                                                    //         0xFFe7feba)
+                                                                    //   ],
+                                                                    //   begin: Alignment
+                                                                    //       .topLeft,
+                                                                    //   end: Alignment
+                                                                    //       .bottomRight,
+                                                                    // ),
+                                                                    // color: Color(
+                                                                    //     0xFFd6e0c4),
                                                                   ),
                                                                 ),
                                                                 title:
@@ -465,17 +512,8 @@ class _XMarketHomeScreenState extends State<XMarketHomeScreen> {
                                                                           .webMaxWidth,
                                                                       decoration:
                                                                           const BoxDecoration(
-                                                                        gradient:
-                                                                            LinearGradient(
-                                                                          colors: [
-                                                                            Colors.orange,
-                                                                            Colors.red
-                                                                          ],
-                                                                          begin:
-                                                                              Alignment.topLeft,
-                                                                          end: Alignment
-                                                                              .bottomRight,
-                                                                        ),
+                                                                        color: Color(
+                                                                            0xFFd6e0c4),
                                                                       ),
                                                                       padding: const EdgeInsets
                                                                           .only(
@@ -501,7 +539,7 @@ class _XMarketHomeScreenState extends State<XMarketHomeScreen> {
                                                                                     margin: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeExtraSmall),
                                                                                     padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: Dimensions.paddingSizeExtraSmall),
                                                                                     decoration: BoxDecoration(
-                                                                                      color: Theme.of(context).cardColor,
+                                                                                      color: Theme.of(context).brightness == Brightness.dark ? Color(0xFFfafef5) : const Color(0xFFfafef5),
                                                                                       borderRadius: BorderRadius.circular(Dimensions.radiusExtraLarge),
                                                                                       border: Border.all(color: (Theme.of(context).brightness == Brightness.dark ? Colors.black : Colors.white).withValues(alpha: 0.2), width: 1.2),
                                                                                     ),

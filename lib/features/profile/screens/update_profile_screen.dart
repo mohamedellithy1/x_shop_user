@@ -110,7 +110,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
               child: Scaffold(
                 backgroundColor: marketThemeController.darkTheme
                     ? Colors.black
-                    : Colors.white,
+                    : Color(0xFFfafef5),
                 appBar: CustomAppBarWidget(
                   title: 'edit_profile'.tr,
                   actions: [

@@ -18,7 +18,6 @@ import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
 import 'package:stackfood_multivendor/util/xmarket_images.dart';
 
-
 class NewUserSetupScreen extends StatefulWidget {
   final String name;
   final String loginType;
@@ -67,7 +66,7 @@ class _NewUserSetupScreenState extends State<NewUserSetupScreen> {
     return Scaffold(
       backgroundColor: ResponsiveHelper.isDesktop(context)
           ? Colors.transparent
-          : Theme.of(context).cardColor,
+          : Color(0xFFfafef5),
       appBar: ResponsiveHelper.isDesktop(context)
           ? null
           : AppBar(
@@ -172,7 +171,8 @@ class _NewUserSetupScreenState extends State<NewUserSetupScreen> {
                                             .configModel!
                                             .country!)
                                     .code
-                                : Get.find<LocalizationController>(tag: 'xmarket')
+                                : Get.find<LocalizationController>(
+                                        tag: 'xmarket')
                                     .locale
                                     .countryCode,
                             validator: (value) =>

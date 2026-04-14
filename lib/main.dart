@@ -100,6 +100,7 @@ Future<void> main() async {
       version: "v13.0",
     );
   }
+
   runApp(MyApp(languages: languages, body: body, linkBody: linkBody));
 }
 

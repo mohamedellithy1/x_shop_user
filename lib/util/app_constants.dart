@@ -4,7 +4,7 @@ import 'package:stackfood_multivendor/util/xmarket_images.dart';
 // import 'package:stackfood_multivendor/util_images.dart';
 
 class AppConstants {
-  static const String appName = 'XShop';
+  static const String appName = 'Taswiqa';
   static const double appVersion = 8.6;
 
   ///Flutter SDK: 3.38.2

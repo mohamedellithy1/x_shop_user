@@ -41,7 +41,7 @@ class _CampaignScreenState extends State<CampaignScreen> {
       appBar: isDesktop ? const WebMenuBar() : null,
       endDrawer: const MenuDrawerWidget(),
       endDrawerEnableOpenDragGesture: false,
-      backgroundColor: Theme.of(context).cardColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: GetBuilder<CampaignController>(builder: (campaignController) {
         return isDesktop
             ? WebCampaignScreen(campaignController: campaignController)
@@ -74,10 +74,20 @@ class _CampaignScreenState extends State<CampaignScreen> {
                     flexibleSpace: Container(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: [Colors.orange, Colors.red],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
+                          colors: [
+                            Color(0xFFe3ebd5),
+                            Color(0xFFfafff4),
+                            Color(0xFFe3ebd5),
+                          ],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
                         ),
+
+                        // gradient: LinearGradient(
+                        //   colors: [Colors.orange, Colors.red],
+                        //   begin: Alignment.topLeft,
+                        //   end: Alignment.bottomRight,
+                        // ),
                       ),
                       child: FlexibleSpaceBar(
                         centerTitle: true,

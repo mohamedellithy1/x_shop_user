@@ -105,7 +105,7 @@ class _ConversationScreenState extends State<ConversationScreen>
         backgroundColor:
             Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
                 ? const Color(0xFF141313)
-                : Colors.white,
+                : Color(0xFFfafef5),
         appBar: CustomAppBarWidget(title: 'conversation_list'.tr),
         endDrawer: const MenuDrawerWidget(),
         endDrawerEnableOpenDragGesture: false,
@@ -183,7 +183,7 @@ class _ConversationScreenState extends State<ConversationScreen>
                     child: Get.find<MarketAuthController>().isLoggedIn()
                         ? (conversation != null)
                             ? RefreshIndicator(
-                                color: Colors.orange,
+                                color: Color(0xFF9ebc67),
                                 onRefresh: () async {
                                   await Get.find<ChatController>()
                                       .getConversationList(1,
@@ -380,15 +380,16 @@ class _ConversationScreenState extends State<ConversationScreen>
                                                 child: Center(
                                                     child:
                                                         CircularProgressIndicator(
-                                                          color: Colors.orange,
-                                                        )),
+                                                  color: Color(0xFF9ebc67),
+                                                )),
                                               ),
                                       ),
                                     ]),
                               )
-                            : const Center(child: CircularProgressIndicator(
-                              color: Colors.orange,
-                            ))
+                            : const Center(
+                                child: CircularProgressIndicator(
+                                color: Color(0xFF9ebc67),
+                              ))
                         : NotLoggedInScreen(callBack: (value) {
                             _initCall();
                             setState(() {});
@@ -661,8 +662,9 @@ class _ConversationScreenState extends State<ConversationScreen>
           )
         : const Padding(
             padding: EdgeInsets.only(top: 100),
-            child: Center(child: CircularProgressIndicator(
-              color: Colors.orange,
+            child: Center(
+                child: CircularProgressIndicator(
+              color: Color(0xFF9ebc67),
             )),
           );
   }

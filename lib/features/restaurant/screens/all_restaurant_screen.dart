@@ -48,6 +48,7 @@ class _AllRestaurantScreenState extends State<AllRestaurantScreen> {
   Widget build(BuildContext context) {
     return GetBuilder<RestaurantController>(builder: (restController) {
       return Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: CustomAppBarWidget(
           title: widget.isPopular
               ? 'popular_restaurants'.tr

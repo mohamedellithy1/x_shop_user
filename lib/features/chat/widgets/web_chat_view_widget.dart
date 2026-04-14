@@ -1184,8 +1184,8 @@ class _WebChatViewWidgetState extends State<WebChatViewWidget>
                                                         width: 25,
                                                         child:
                                                             CircularProgressIndicator(
-                                                          color: Colors.orange,
-                                                        )),
+                                                                color: Color(
+                                                                    0xFF9ebc67))),
                                                   )
                                                 : InkWell(
                                                     onTap: () async {

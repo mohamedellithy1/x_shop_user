@@ -48,8 +48,9 @@ class FavouriteScreenState extends State<FavouriteScreen> {
           return Theme(
             data: marketThemeController.darkTheme ? darkTheme : lightTheme,
             child: Scaffold(
-              backgroundColor:
-                  marketThemeController.darkTheme ? Colors.black : Colors.white,
+              backgroundColor: marketThemeController.darkTheme
+                  ? Colors.black
+                  : Color(0xFFfafef5),
               appBar: CustomAppBarWidget(
                 title: 'wishlist'.tr,
                 isBackButtonExist: false,

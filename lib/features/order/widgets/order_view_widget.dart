@@ -36,7 +36,8 @@ class OrderViewWidget extends StatelessWidget {
         Get.find<MarketThemeController>(tag: 'xmarket');
 
     return Scaffold(
-      backgroundColor: themeController.darkTheme ? Colors.black : Colors.white,
+      backgroundColor:
+          themeController.darkTheme ? Colors.black : Color(0xFFfafef5),
       body: GetBuilder<OrderController>(builder: (orderController) {
         List<OrderModel>? orderList;
         bool paginate = false;
@@ -92,7 +93,7 @@ class OrderViewWidget extends StatelessWidget {
         return orderList != null
             ? orderList.isNotEmpty
                 ? RefreshIndicator(
-                    color: Colors.orange,
+                    color: Color(0xFF9ebc67),
                     onRefresh: () async {
                       if (isRunning) {
                         await orderController.getRunningOrders(1);
@@ -314,8 +315,8 @@ class OrderViewWidget extends StatelessWidget {
                                                                               .handover
                                                                               .name
                                                                       ? 'جاري التسليم'
-                                                                      : orderStatus
-                                                                          !.tr,
+                                                                      : orderStatus!
+                                                                          .tr,
                                                               style: robotoMedium.copyWith(
                                                                   fontSize:
                                                                       Dimensions

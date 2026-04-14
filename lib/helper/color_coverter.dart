@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class ColorConverter{
-  static Color stringToColor(String? color){
+class ColorConverter {
+  static Color stringToColor(String? color) {
     int value = 0xFFEF7822;
-    if(color != null) {
+    if (color != null) {
       value = int.parse(color.replaceAll('#', '0xFF'));
     }
     return Color(value);
@@ -14,7 +14,7 @@ class ColorConverter{
       case 'pending':
         return Colors.blue;
       case 'processing':
-        return Colors.orange;
+        return Color(0xFF9ebc67);
       case 'accepted':
         return Colors.green;
       case 'confirmed':
@@ -33,5 +33,4 @@ class ColorConverter{
         return Colors.grey;
     }
   }
-
 }

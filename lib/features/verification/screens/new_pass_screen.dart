@@ -60,7 +60,9 @@ class _NewPassScreenState extends State<NewPassScreen> {
               height: 575,
               width: 475,
               decoration: BoxDecoration(
-                color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF1b1b1b) : Theme.of(context).cardColor,
+                color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+                    ? const Color(0xFF1b1b1b)
+                    : Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
               ),
               child: Column(children: [
@@ -79,7 +81,13 @@ class _NewPassScreenState extends State<NewPassScreen> {
                           height: 170, width: 190),
                       const SizedBox(height: Dimensions.paddingSizeLarge),
                       Text('enter_your_new_password'.tr,
-                          style: robotoBold.copyWith(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black), textAlign: TextAlign.center),
+                          style: robotoBold.copyWith(
+                              color: Get.find<MarketThemeController>(
+                                          tag: 'xmarket')
+                                      .darkTheme
+                                  ? Colors.white
+                                  : Colors.black),
+                          textAlign: TextAlign.center),
                       const SizedBox(height: Dimensions.paddingSizeOverLarge),
                       CustomTextFieldWidget(
                         hintText: '8+characters'.tr,
@@ -135,7 +143,10 @@ class _NewPassScreenState extends State<NewPassScreen> {
             )),
           )
         : Scaffold(
-            backgroundColor: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF141313) : Colors.white,
+            backgroundColor:
+                Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+                    ? const Color(0xFF141313)
+                    : Color(0xFFfafef5),
             appBar: CustomAppBarWidget(
                 title: widget.fromPasswordChange
                     ? 'change_password'.tr
@@ -154,7 +165,13 @@ class _NewPassScreenState extends State<NewPassScreen> {
                               height: 170, width: 190),
                           const SizedBox(height: Dimensions.paddingSizeLarge),
                           Text('enter_your_new_password'.tr,
-                              style: robotoBold.copyWith(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black), textAlign: TextAlign.center),
+                              style: robotoBold.copyWith(
+                                  color: Get.find<MarketThemeController>(
+                                              tag: 'xmarket')
+                                          .darkTheme
+                                      ? Colors.white
+                                      : Colors.black),
+                              textAlign: TextAlign.center),
                           const SizedBox(
                               height: Dimensions.paddingSizeOverLarge),
                           CustomTextFieldWidget(
@@ -197,7 +214,7 @@ class _NewPassScreenState extends State<NewPassScreen> {
                     return GetBuilder<VerificationController>(
                         builder: (verificationController) {
                       return CustomButtonWidget(
-                        color: Colors.orange,
+                        color: Color(0xFF9ebc67),
                         margin:
                             const EdgeInsets.all(Dimensions.paddingSizeDefault),
                         radius: Dimensions.radiusDefault,

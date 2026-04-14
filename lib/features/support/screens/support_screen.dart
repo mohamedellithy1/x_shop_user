@@ -32,17 +32,29 @@ class _SupportScreenState extends State<SupportScreen> {
         return Theme(
           data: marketThemeController.darkTheme ? darkTheme : lightTheme,
           child: Scaffold(
-            backgroundColor: marketThemeController.darkTheme ? Colors.black : Colors.white,
+            backgroundColor: marketThemeController.darkTheme
+                ? Colors.black
+                : Color(0xFFfafef5),
             body: Column(children: [
               // Custom Gradient AppBar
               Container(
                 height: 120,
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Colors.orange, Colors.red],
+                    colors: [
+                      Color(0xFFe3ebd5),
+                      Color(0xFFfafff4),
+                      Color(0xFFe3ebd5),
+                    ],
                     begin: Alignment.centerLeft,
                     end: Alignment.centerRight,
                   ),
+
+                  // gradient: LinearGradient(
+                  //   colors: [Color(0xFFd6e0c4), Color(0xFFe7feba)],
+                  //   begin: Alignment.topLeft,
+                  //   end: Alignment.bottomRight,
+                  // ),
                 ),
                 padding: const EdgeInsets.only(top: 40, left: 10, right: 10),
                 child: Row(

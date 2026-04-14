@@ -78,7 +78,7 @@ class _ForgetPassScreenState extends State<ForgetPassScreen> {
     return Scaffold(
       backgroundColor: ResponsiveHelper.isDesktop(context)
           ? Colors.transparent
-          : Theme.of(context).cardColor,
+          : Color(0xFFfafef5),
       appBar: ResponsiveHelper.isDesktop(context)
           ? null
           : CustomAppBarWidget(title: 'forgot_password'.tr),

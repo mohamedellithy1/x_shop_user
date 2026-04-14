@@ -6,6 +6,7 @@ import 'package:stackfood_multivendor/features/notification/widgets/notification
 import 'package:stackfood_multivendor/features/notification/widgets/notification_dialog_widget.dart';
 import 'package:stackfood_multivendor/features/profile/controllers/profile_controller.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
+import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
 import 'package:stackfood_multivendor/helper/date_converter.dart';
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 import 'package:stackfood_multivendor/helper/route_helper.dart';
@@ -64,7 +65,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
         }
       },
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor:
+            Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+                ? Colors.black
+                : Color(0xFFfafef5),
         appBar: CustomAppBarWidget(
             title: 'notification'.tr,
             // bgColor: Colors.transparent,

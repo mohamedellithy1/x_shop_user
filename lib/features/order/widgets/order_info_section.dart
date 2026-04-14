@@ -586,7 +586,10 @@ class OrderInfoSection extends StatelessWidget {
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text(subscription ? 'subscription_details'.tr : 'general_info'.tr,
-                  style: robotoSemiBold.copyWith(color: themeController.darkTheme ? Colors.white : Colors.black)),
+                  style: robotoSemiBold.copyWith(
+                      color: themeController.darkTheme
+                          ? Colors.white
+                          : Colors.black)),
               SizedBox(height: Dimensions.paddingSizeLarge),
               subscription
                   ? Row(children: [
@@ -1835,7 +1838,7 @@ class OrderInfoSection extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         vertical: Dimensions.paddingSizeSmall),
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.orange, width: 1.5),
+                      border: Border.all(color: Color(0xFF9ebc67), width: 1.5),
                       borderRadius:
                           BorderRadius.circular(Dimensions.radiusSmall),
                       color: Colors.transparent,
@@ -1852,7 +1855,11 @@ class OrderInfoSection extends StatelessWidget {
                           vertical: Dimensions.paddingSizeSmall),
                       child: Row(
                         children: [
-                          Text('item_info'.tr, style: robotoSemiBold.copyWith(color: themeController.darkTheme ? Colors.white : Colors.black)),
+                          Text('item_info'.tr,
+                              style: robotoSemiBold.copyWith(
+                                  color: themeController.darkTheme
+                                      ? Colors.white
+                                      : Colors.black)),
                           const SizedBox(
                               width: Dimensions.paddingSizeExtraSmall),
                           Container(
@@ -2160,9 +2167,7 @@ class OrderInfoSection extends StatelessWidget {
                                     child: Container(
                                       decoration: BoxDecoration(
                                         border: Border.all(
-                                            color:
-                                                Colors.orange,
-                                            width: 1),
+                                            color: Colors.orange, width: 1),
                                         borderRadius: BorderRadius.circular(
                                             Dimensions.radiusSmall),
                                       ),

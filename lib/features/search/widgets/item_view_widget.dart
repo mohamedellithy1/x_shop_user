@@ -16,6 +16,7 @@ class ItemViewWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: GetBuilder<search.SearchController>(builder: (searchController) {
         return SingleChildScrollView(
           controller: scrollController,

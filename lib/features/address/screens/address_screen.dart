@@ -77,7 +77,7 @@ class _AddressScreenState extends State<AddressScreen> {
                 builder: (_) {
                   return isLoggedIn
                       ? RefreshIndicator(
-                          color: Colors.orange,
+                          color: Color(0xFF9ebc67),
                           onRefresh: () async {
                             await addressController.getAddressList();
                           },

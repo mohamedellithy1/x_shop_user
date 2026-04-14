@@ -133,7 +133,7 @@ class _WalletScreenState extends State<WalletScreen> {
         }
       },
       child: Scaffold(
-        backgroundColor: Theme.of(context).cardColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: CustomAppBarWidget(
             title: 'wallet'.tr,
             isBackButtonExist: true,
@@ -152,7 +152,7 @@ class _WalletScreenState extends State<WalletScreen> {
               ? profileController.userInfoModel != null
                   ? SafeArea(
                       child: RefreshIndicator(
-                        color: Colors.orange,
+                        color: Color(0xFF9ebc67),
                         onRefresh: () async {
                           Get.find<MarketWalletController>()
                               .setWalletFilerType('all');

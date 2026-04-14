@@ -62,7 +62,7 @@ class _ImageViewerScreenWidgetState extends State<ImageViewerScreenWidget> {
                                 ? 0
                                 : event.cumulativeBytesLoaded /
                                     event.expectedTotalBytes!,
-                            color: Colors.orange,
+                            color: Color(0xFF9ebc67),
                           ))),
                   onPageChanged: (int index) =>
                       productController.setImageIndex(index, true)),

@@ -34,56 +34,54 @@ class _CuisineRestaurantScreenState extends State<CuisineRestaurantScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).brightness == Brightness.dark
+          ? Colors.black
+          : Color(0xFFfafef5),
       appBar: CustomAppBarWidget(title: widget.name!),
       endDrawer: const MenuDrawerWidget(),
       endDrawerEnableOpenDragGesture: false,
       body: SingleChildScrollView(
         controller: _scrollController,
         child: Center(
-            child: SizedBox(
-              width: Dimensions.webMaxWidth,
-              child:
-                  GetBuilder<CuisineController>(builder: (cuisineController) {
-                if (cuisineController.cuisineRestaurantsModel != null) {}
-                return PaginatedListViewWidget(
-                  scrollController: _scrollController,
-                  totalSize:
-                      cuisineController.cuisineRestaurantsModel?.totalSize,
-                  offset: cuisineController.cuisineRestaurantsModel != null
-                      ? int.parse(
-                          cuisineController.cuisineRestaurantsModel!.offset!)
-                      : null,
-                  onPaginate: (int? offset) async =>
-                      await cuisineController.getCuisineRestaurantList(
-                          widget.cuisineId, offset!, false),
-                  productView: ProductViewWidget(
-                    isRestaurant: true,
-                    products: null,
-                    restaurants:
-                        cuisineController.cuisineRestaurantsModel?.restaurants,
-                    useGridCard: true,
-                    padding: EdgeInsets.only(
-                      left: ResponsiveHelper.isDesktop(context)
-                          ? Dimensions.paddingSizeExtraSmall
-                          : Dimensions.paddingSizeSmall,
-                      right: ResponsiveHelper.isDesktop(context)
-                          ? Dimensions.paddingSizeExtraSmall
-                          : Dimensions.paddingSizeSmall,
-                      top: ResponsiveHelper.isDesktop(context)
-                          ? Dimensions.paddingSizeExtraSmall
-                          : Dimensions.paddingSizeDefault,
-                      bottom: ResponsiveHelper.isDesktop(context)
-                          ? Dimensions.paddingSizeExtraSmall
-                          : 0,
-                    ),
+          child: SizedBox(
+            width: Dimensions.webMaxWidth,
+            child: GetBuilder<CuisineController>(builder: (cuisineController) {
+              if (cuisineController.cuisineRestaurantsModel != null) {}
+              return PaginatedListViewWidget(
+                scrollController: _scrollController,
+                totalSize: cuisineController.cuisineRestaurantsModel?.totalSize,
+                offset: cuisineController.cuisineRestaurantsModel != null
+                    ? int.parse(
+                        cuisineController.cuisineRestaurantsModel!.offset!)
+                    : null,
+                onPaginate: (int? offset) async => await cuisineController
+                    .getCuisineRestaurantList(widget.cuisineId, offset!, false),
+                productView: ProductViewWidget(
+                  isRestaurant: true,
+                  products: null,
+                  restaurants:
+                      cuisineController.cuisineRestaurantsModel?.restaurants,
+                  useGridCard: true,
+                  padding: EdgeInsets.only(
+                    left: ResponsiveHelper.isDesktop(context)
+                        ? Dimensions.paddingSizeExtraSmall
+                        : Dimensions.paddingSizeSmall,
+                    right: ResponsiveHelper.isDesktop(context)
+                        ? Dimensions.paddingSizeExtraSmall
+                        : Dimensions.paddingSizeSmall,
+                    top: ResponsiveHelper.isDesktop(context)
+                        ? Dimensions.paddingSizeExtraSmall
+                        : Dimensions.paddingSizeDefault,
+                    bottom: ResponsiveHelper.isDesktop(context)
+                        ? Dimensions.paddingSizeExtraSmall
+                        : 0,
                   ),
-                );
-              }),
-            ),
+                ),
+              );
+            }),
           ),
         ),
-      
+      ),
     );
   }
 }

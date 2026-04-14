@@ -140,7 +140,7 @@ class CategoryProductScreenState extends State<CategoryProductScreen> {
         backgroundColor:
             Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
                 ? Colors.black
-                : Colors.white,
+                : Color(0xFFfafef5),
         appBar: (ResponsiveHelper.isDesktop(context)
             ? const WebMenuBar()
             : PreferredSize(
@@ -148,10 +148,20 @@ class CategoryProductScreenState extends State<CategoryProductScreen> {
                 child: Container(
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [Colors.orange, Colors.red],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
+                      colors: [
+                        Color(0xFFe3ebd5),
+                        Color(0xFFfafff4),
+                        Color(0xFFe3ebd5),
+                      ],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
                     ),
+
+                    // gradient: LinearGradient(
+                    //   colors: [Color(0xFFd6e0c4), Color(0xFFe7feba)],
+                    //   begin: Alignment.topLeft,
+                    //   end: Alignment.bottomRight,
+                    // ),
                   ),
                   child: AppBar(
                     title: Text(widget.categoryName,
@@ -444,7 +454,7 @@ class CategoryProductScreenState extends State<CategoryProductScreen> {
                                             padding: const EdgeInsets.all(
                                                 Dimensions.paddingSizeDefault),
                                             child: CircularProgressIndicator(
-                                                color: Colors.orange),
+                                                color: Color(0xFF9ebc67)),
                                           ))
                                         : const SizedBox(),
                                   ],

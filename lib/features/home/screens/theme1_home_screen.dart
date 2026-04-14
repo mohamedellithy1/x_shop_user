@@ -22,6 +22,7 @@ import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.
 import 'package:stackfood_multivendor/features/location/controllers/location_controller.dart';
 import 'package:stackfood_multivendor/helper/address_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:stackfood_multivendor/features/restaurant/controllers/restaurant_controller.dart';
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
@@ -47,6 +48,10 @@ class Theme1HomeScreen extends StatelessWidget {
       slivers: [
         // App Bar
         SliverAppBar(
+          systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarIconBrightness: Brightness.dark,
+            statusBarBrightness: Brightness.light,
+          ),
           pinned: true,
           floating: false,
           elevation: 0,
@@ -54,106 +59,133 @@ class Theme1HomeScreen extends StatelessWidget {
           backgroundColor: Colors.transparent,
           surfaceTintColor: Colors.transparent,
           flexibleSpace: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.orange, Colors.red],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xFFe3ebd5),
+                  Color(0xFFfafff4),
+                  Color(0xFFe3ebd5),
+                ],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
               ),
+
+              // gradient: LinearGradient(
+              //   colors: [Color(0xFFd6e0c4), Color(0xFFe7feba)],
+              //   begin: Alignment.topLeft,
+              //   end: Alignment.bottomRight,
+              // ),
+              // color: Color(0xFFd6e0c4),
             ),
-            child: Center(
-              child: Container(
-                width: Dimensions.webMaxWidth,
-                height: 50,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.orange, Colors.red],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
-                child: Row(children: [
-                  Expanded(
-                      child: LocationDropdown(
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: Dimensions.paddingSizeSmall),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: Dimensions.paddingSizeSmall,
-                          vertical: Dimensions.paddingSizeExtraSmall),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardColor,
-                        borderRadius:
-                            BorderRadius.circular(Dimensions.radiusExtraLarge),
-                        border: Border.all(color: Colors.black, width: 1.2),
-                      ),
-                      child: GetBuilder<MarketLocationController>(
-                          builder: (locationController) {
-                        final address =
-                            AddressHelper.getAddressFromSharedPref();
-                        return Row(
-                          children: [
-                            const Icon(Icons.keyboard_arrow_down,
-                                color: Colors.black, size: 20),
-                            const SizedBox(
-                                width: Dimensions.paddingSizeExtraSmall),
-                            Expanded(
-                              child: Text(
-                                address?.address ?? 'your_location'.tr,
-                                style: robotoRegular.copyWith(
-                                  color: Colors.black,
-                                  fontSize: Dimensions.fontSizeSmall,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            const SizedBox(
-                                width: Dimensions.paddingSizeExtraSmall),
-                            const Icon(Icons.location_on,
-                                color: Colors.orange, size: 20),
-                          ],
-                        );
-                      }),
+            child: SafeArea(
+              child: Center(
+                child: Container(
+                  width: Dimensions.webMaxWidth,
+                  height: 50,
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Color(0xFFe3ebd5),
+                        Color(0xFFfafff4),
+                        Color(0xFFe3ebd5),
+                      ],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
                     ),
-                  )),
-                  InkWell(
-                    child: GetBuilder<MarketNotificationController>(
-                        builder: (notificationController) {
-                      return Stack(children: [
-                        Container(
-                          width: 30,
-                          height: 30,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(
-                                Dimensions.radiusExtraLarge),
-                            border: Border.all(color: Colors.white, width: 1.2),
-                          ),
-                          child: Icon(Icons.notifications,
-                              size: 25, color: const Color(0xFF00ac7a)),
-                        ),
-                        notificationController.hasNotification
-                            ? Positioned(
-                                top: 0,
-                                right: 0,
-                                child: Container(
-                                  height: 10,
-                                  width: 10,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                        width: 1, color: Colors.white),
-                                  ),
-                                ))
-                            : const SizedBox(),
-                      ]);
-                    }),
-                    onTap: () =>
-                        Get.toNamed(RouteHelper.getNotificationRoute()),
+
+                    // gradient: LinearGradient(
+                    //   colors: [Color(0xFFd6e0c4), Color(0xFFe7feba)],
+                    //   begin: Alignment.topLeft,
+                    //   end: Alignment.bottomRight,
+                    // ),
+                    // color: Color(0xFFd6e0c4),
                   ),
-                ]),
+                  child: Row(children: [
+                    Expanded(
+                        child: LocationDropdown(
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: Dimensions.paddingSizeSmall),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: Dimensions.paddingSizeSmall,
+                            vertical: Dimensions.paddingSizeExtraSmall),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Color(0xFFfafef5)
+                              : const Color(0xFFfafef5),
+                          borderRadius: BorderRadius.circular(
+                              Dimensions.radiusExtraLarge),
+                          border: Border.all(color: Colors.black, width: 1.2),
+                        ),
+                        child: GetBuilder<MarketLocationController>(
+                            builder: (locationController) {
+                          final address =
+                              AddressHelper.getAddressFromSharedPref();
+                          return Row(
+                            children: [
+                              const Icon(Icons.keyboard_arrow_down,
+                                  color: Colors.black, size: 20),
+                              const SizedBox(
+                                  width: Dimensions.paddingSizeExtraSmall),
+                              Expanded(
+                                child: Text(
+                                  address?.address ?? 'your_location'.tr,
+                                  style: robotoRegular.copyWith(
+                                    color: Colors.black,
+                                    fontSize: Dimensions.fontSizeSmall,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              const SizedBox(
+                                  width: Dimensions.paddingSizeExtraSmall),
+                              const Icon(Icons.location_on,
+                                  color: Color(0xFFacb566), size: 20),
+                            ],
+                          );
+                        }),
+                      ),
+                    )),
+                    InkWell(
+                      child: GetBuilder<MarketNotificationController>(
+                          builder: (notificationController) {
+                        return Stack(children: [
+                          Container(
+                            width: 30,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(
+                                  Dimensions.radiusExtraLarge),
+                              border:
+                                  Border.all(color: Colors.white, width: 1.2),
+                            ),
+                            child: Icon(Icons.notifications,
+                                size: 25, color: const Color(0xFF00ac7a)),
+                          ),
+                          notificationController.hasNotification
+                              ? Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: Container(
+                                    height: 10,
+                                    width: 10,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                          width: 1, color: Colors.white),
+                                    ),
+                                  ))
+                              : const SizedBox(),
+                        ]);
+                      }),
+                      onTap: () =>
+                          Get.toNamed(RouteHelper.getNotificationRoute()),
+                    ),
+                  ]),
+                ),
               ),
             ),
           ),

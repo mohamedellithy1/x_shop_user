@@ -1,7 +1,7 @@
 class XmarketImages {
-  static const String logo = 'assets/image/logo.png';
+  static const String logo = 'assets/image/logo_tasweqa.png';
   static const String splashLogo = 'assets/image/splash_tasweqa.jpeg';
-  static const String xshopLogo = 'assets/image/xshop.png';
+  static const String xshopLogo = 'assets/image/logo_tasweqa.png';
   static const String logoName = 'assets/image/logo_name.png';
   static const String placeholder = 'assets/image/placeholder.svg';
   static const String arabic = 'assets/image/arabic.png';

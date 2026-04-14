@@ -306,7 +306,7 @@ class _CouponBottomSheetState extends State<CouponBottomSheet> {
                                   height: 30,
                                   width: 30,
                                   child: CircularProgressIndicator(
-                                    color: Colors.orange,
+                                      color: Color(0xFF9ebc67),
                                       valueColor: AlwaysStoppedAnimation<Color>(
                                           Get.find<MarketThemeController>(
                                                       tag: 'xmarket')

@@ -51,7 +51,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
         allowFullScreen: false,
         placeholder: const Center(
             child: CircularProgressIndicator(
-          color: Colors.orange,
+          color: Color(0xFF9ebc67),
         )),
       );
       await _chewController?.play();
@@ -68,8 +68,9 @@ class _PreviewScreenState extends State<PreviewScreen> {
               autoPlay: true,
               allowFullScreen: false,
               aspectRatio: videoPlayerController?.value.aspectRatio,
-              placeholder: const Center(child: CircularProgressIndicator(
-                color: Colors.orange,
+              placeholder: const Center(
+                  child: CircularProgressIndicator(
+                color: Color(0xFF9ebc67),
               )),
               errorBuilder: (context, error) => Center(
                   child: Padding(
@@ -111,7 +112,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
   Widget build(BuildContext context) {
     bool isDesktop = ResponsiveHelper.isDesktop(context);
     return Scaffold(
-      backgroundColor: isDesktop ? Colors.transparent : Colors.black,
+      backgroundColor: isDesktop ? Colors.transparent : Color(0xFFfafef5),
       body: SafeArea(
         child: Stack(
           children: [

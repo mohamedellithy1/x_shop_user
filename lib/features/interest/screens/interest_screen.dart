@@ -31,91 +31,149 @@ class _InterestScreenState extends State<InterestScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: Theme.of(context).brightness == Brightness.dark
+          ? Colors.black
+          : Color(0xFFfafef5),
       appBar: ResponsiveHelper.isDesktop(context) ? const WebMenuBar() : null,
-      endDrawer: const MenuDrawerWidget(), endDrawerEnableOpenDragGesture: false,
+      endDrawer: const MenuDrawerWidget(),
+      endDrawerEnableOpenDragGesture: false,
       body: SafeArea(
         child: GetBuilder<InterestController>(builder: (interestController) {
-          return interestController.categoryList != null ? interestController.categoryList!.isNotEmpty ? Center(
-            child: Container(
-              width: Dimensions.webMaxWidth,
-              padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
-              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                const SizedBox(height: Dimensions.paddingSizeLarge),
-
-                Text('choose_your_interests'.tr, style: robotoMedium.copyWith(fontSize: 22)),
-                const SizedBox(height: Dimensions.paddingSizeSmall),
-
-                Text('get_personalized_recommendations'.tr, style: robotoRegular.copyWith(color: Theme.of(context).disabledColor)),
-                const SizedBox(height: Dimensions.paddingSizeLarge),
-
-                Expanded(
-                  child: GridView.builder(
-                    controller: _scrollController,
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: interestController.categoryList!.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: ResponsiveHelper.isDesktop(context) ? 4 : ResponsiveHelper.isTab(context) ? 3 : 2,
-                      childAspectRatio: (1/0.35),
-                    ),
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () => interestController.addInterestSelection(index),
-                        child: Container(
-                          margin: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
-                          padding: const EdgeInsets.symmetric(
-                            vertical: Dimensions.paddingSizeExtraSmall, horizontal: Dimensions.paddingSizeSmall,
-                          ),
-                          decoration: BoxDecoration(
-                            color: interestController.interestCategorySelectedList![index] ? Theme.of(context).primaryColor
-                                : Theme.of(context).cardColor,
-                            borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                            boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 800 : 200]!, blurRadius: 5, spreadRadius: 1)],
-                          ),
-                          alignment: Alignment.center,
-                          child: Row(children: [
-                            CustomImageWidget(
-                              image: '${interestController.categoryList![index].imageFullUrl}',
-                              height: 30, width: 30,
-                            ),
-                            const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                            Flexible(child: Text(
-                              interestController.categoryList![index].name!,
-                              style: robotoMedium.copyWith(
-                                fontSize: Dimensions.fontSizeSmall,
-                                color: interestController.interestCategorySelectedList![index] ? Theme.of(context).cardColor
-                                    : Theme.of(context).textTheme.bodyLarge!.color,
+          return interestController.categoryList != null
+              ? interestController.categoryList!.isNotEmpty
+                  ? Center(
+                      child: Container(
+                        width: Dimensions.webMaxWidth,
+                        padding:
+                            const EdgeInsets.all(Dimensions.paddingSizeSmall),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(
+                                  height: Dimensions.paddingSizeLarge),
+                              Text('choose_your_interests'.tr,
+                                  style: robotoMedium.copyWith(fontSize: 22)),
+                              const SizedBox(
+                                  height: Dimensions.paddingSizeSmall),
+                              Text('get_personalized_recommendations'.tr,
+                                  style: robotoRegular.copyWith(
+                                      color: Theme.of(context).disabledColor)),
+                              const SizedBox(
+                                  height: Dimensions.paddingSizeLarge),
+                              Expanded(
+                                child: GridView.builder(
+                                  controller: _scrollController,
+                                  physics: const BouncingScrollPhysics(),
+                                  itemCount:
+                                      interestController.categoryList!.length,
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount:
+                                        ResponsiveHelper.isDesktop(context)
+                                            ? 4
+                                            : ResponsiveHelper.isTab(context)
+                                                ? 3
+                                                : 2,
+                                    childAspectRatio: (1 / 0.35),
+                                  ),
+                                  itemBuilder: (context, index) {
+                                    return InkWell(
+                                      onTap: () => interestController
+                                          .addInterestSelection(index),
+                                      child: Container(
+                                        margin: const EdgeInsets.all(
+                                            Dimensions.paddingSizeExtraSmall),
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical:
+                                              Dimensions.paddingSizeExtraSmall,
+                                          horizontal:
+                                              Dimensions.paddingSizeSmall,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: interestController
+                                                      .interestCategorySelectedList![
+                                                  index]
+                                              ? Theme.of(context).primaryColor
+                                              : Theme.of(context).cardColor,
+                                          borderRadius: BorderRadius.circular(
+                                              Dimensions.radiusSmall),
+                                          boxShadow: [
+                                            BoxShadow(
+                                                color: Colors.grey[
+                                                    Get.isDarkMode
+                                                        ? 800
+                                                        : 200]!,
+                                                blurRadius: 5,
+                                                spreadRadius: 1)
+                                          ],
+                                        ),
+                                        alignment: Alignment.center,
+                                        child: Row(children: [
+                                          CustomImageWidget(
+                                            image:
+                                                '${interestController.categoryList![index].imageFullUrl}',
+                                            height: 30,
+                                            width: 30,
+                                          ),
+                                          const SizedBox(
+                                              width: Dimensions
+                                                  .paddingSizeExtraSmall),
+                                          Flexible(
+                                              child: Text(
+                                            interestController
+                                                .categoryList![index].name!,
+                                            style: robotoMedium.copyWith(
+                                              fontSize:
+                                                  Dimensions.fontSizeSmall,
+                                              color: interestController
+                                                          .interestCategorySelectedList![
+                                                      index]
+                                                  ? Theme.of(context).cardColor
+                                                  : Theme.of(context)
+                                                      .textTheme
+                                                      .bodyLarge!
+                                                      .color,
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          )),
+                                        ]),
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
-                              maxLines: 1, overflow: TextOverflow.ellipsis,
-                            )),
-                          ]),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-
-                CustomButtonWidget(
-                  buttonText: 'save_and_continue'.tr,
-                  isLoading: interestController.isLoading,
-                  onPressed: () {
-                    List<int?> interests = [];
-                    for(int index=0; index<interestController.categoryList!.length; index++) {
-                      if(interestController.interestCategorySelectedList![index]) {
-                        interests.add(interestController.categoryList![index].id);
-                      }
-                    }
-                    interestController.saveInterest(interests).then((isSuccess) {
-                      if(isSuccess) {
-                        Get.offAllNamed(RouteHelper.getInitialRoute());
-                      }
-                    });
-                  },
-                ),
-
-              ]),
-            ),
-          ) : NoDataScreen(title: 'no_category_found'.tr) : const Center(child: CircularProgressIndicator());
+                              CustomButtonWidget(
+                                buttonText: 'save_and_continue'.tr,
+                                isLoading: interestController.isLoading,
+                                onPressed: () {
+                                  List<int?> interests = [];
+                                  for (int index = 0;
+                                      index <
+                                          interestController
+                                              .categoryList!.length;
+                                      index++) {
+                                    if (interestController
+                                        .interestCategorySelectedList![index]) {
+                                      interests.add(interestController
+                                          .categoryList![index].id);
+                                    }
+                                  }
+                                  interestController
+                                      .saveInterest(interests)
+                                      .then((isSuccess) {
+                                    if (isSuccess) {
+                                      Get.offAllNamed(
+                                          RouteHelper.getInitialRoute());
+                                    }
+                                  });
+                                },
+                              ),
+                            ]),
+                      ),
+                    )
+                  : NoDataScreen(title: 'no_category_found'.tr)
+              : const Center(child: CircularProgressIndicator());
         }),
       ),
     );

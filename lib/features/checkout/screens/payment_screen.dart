@@ -160,7 +160,7 @@ class PaymentScreenState extends State<PaymentScreen> {
         _exitApp().then((value) => value!);
       },
       child: Scaffold(
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: CustomAppBarWidget(
             title: 'payment'.tr, onBackPressed: () => _exitApp()),
         endDrawer: const MenuDrawerWidget(),
@@ -173,7 +173,7 @@ class PaymentScreenState extends State<PaymentScreen> {
                 _isLoading
                     ? Center(
                         child: CircularProgressIndicator(
-                            color: Colors.orange,
+                            color: Color(0xFF9ebc67),
                             valueColor: AlwaysStoppedAnimation<Color>(
                                 Theme.of(context).primaryColor)),
                       )

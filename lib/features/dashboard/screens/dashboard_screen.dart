@@ -198,7 +198,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                                   height: 65,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
-                                    color: const Color(0xFFacb566),
+                                    color: const Color(0xFF9ebc67),
                                     boxShadow: [
                                       BoxShadow(
                                         offset: const Offset(0, 4),

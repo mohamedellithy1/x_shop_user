@@ -31,7 +31,9 @@ class _DineInDateSelectBottomSheetState
         width: ResponsiveHelper.isDesktop(context) ? 500 : context.width,
         padding: const EdgeInsets.all(Dimensions.paddingSizeLarge),
         decoration: BoxDecoration(
-          color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF141313) : Theme.of(context).cardColor,
+          color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+              ? const Color(0xFF141313)
+              : Theme.of(context).cardColor,
           borderRadius: ResponsiveHelper.isDesktop(context)
               ? BorderRadius.circular(Dimensions.radiusSmall)
               : const BorderRadius.only(
@@ -51,32 +53,67 @@ class _DineInDateSelectBottomSheetState
           SizedBox(height: Dimensions.paddingSizeLarge),
 
           Text('select_your_date'.tr,
-              style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge, color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black),
+              style: robotoMedium.copyWith(
+                  fontSize: Dimensions.fontSizeLarge,
+                  color:
+                      Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+                          ? Colors.white
+                          : Colors.black),
               textAlign: TextAlign.center),
           SizedBox(height: Dimensions.paddingSizeLarge),
 
           SfDateRangePicker(
-              backgroundColor: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF141313) : Theme.of(context).cardColor,
+              backgroundColor:
+                  Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+                      ? const Color(0xFF141313)
+                      : Theme.of(context).cardColor,
               headerStyle: DateRangePickerHeaderStyle(
                 textAlign: TextAlign.start,
                 textStyle: robotoMedium.copyWith(
-                    color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black, fontSize: Dimensions.fontSizeLarge),
-                backgroundColor: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF141313) : Theme.of(context).cardColor,
+                    color: Get.find<MarketThemeController>(tag: 'xmarket')
+                            .darkTheme
+                        ? Colors.white
+                        : Colors.black,
+                    fontSize: Dimensions.fontSizeLarge),
+                backgroundColor:
+                    Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+                        ? const Color(0xFF141313)
+                        : Theme.of(context).cardColor,
               ),
               monthCellStyle: DateRangePickerMonthCellStyle(
-                textStyle: robotoRegular.copyWith(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black),
-                todayTextStyle: robotoRegular.copyWith(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black),
+                textStyle: robotoRegular.copyWith(
+                    color: Get.find<MarketThemeController>(tag: 'xmarket')
+                            .darkTheme
+                        ? Colors.white
+                        : Colors.black),
+                todayTextStyle: robotoRegular.copyWith(
+                    color: Get.find<MarketThemeController>(tag: 'xmarket')
+                            .darkTheme
+                        ? Colors.white
+                        : Colors.black),
               ),
               yearCellStyle: DateRangePickerYearCellStyle(
-                textStyle: robotoRegular.copyWith(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black),
-                todayTextStyle: robotoRegular.copyWith(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black),
+                textStyle: robotoRegular.copyWith(
+                    color: Get.find<MarketThemeController>(tag: 'xmarket')
+                            .darkTheme
+                        ? Colors.white
+                        : Colors.black),
+                todayTextStyle: robotoRegular.copyWith(
+                    color: Get.find<MarketThemeController>(tag: 'xmarket')
+                            .darkTheme
+                        ? Colors.white
+                        : Colors.black),
               ),
               selectionColor: Theme.of(context).primaryColor,
               selectionTextStyle: robotoRegular.copyWith(color: Colors.white),
               todayHighlightColor: Theme.of(context).primaryColor,
               monthViewSettings: DateRangePickerMonthViewSettings(
                 viewHeaderStyle: DateRangePickerViewHeaderStyle(
-                  textStyle: robotoRegular.copyWith(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white60 : Colors.black),
+                  textStyle: robotoRegular.copyWith(
+                      color: Get.find<MarketThemeController>(tag: 'xmarket')
+                              .darkTheme
+                          ? Colors.white60
+                          : Colors.black),
                 ),
               ),
               initialSelectedDate: checkoutController.selectedDineInDate,
@@ -146,7 +183,7 @@ class _DineInDateSelectBottomSheetState
           CustomButtonWidget(
             textColor: Colors.white,
             buttonText: 'done'.tr,
-            color: Colors.orange,
+            color: Color(0xFF9ebc67),
             onPressed: () {
               Get.back();
             },

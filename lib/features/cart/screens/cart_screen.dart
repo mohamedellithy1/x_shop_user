@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stackfood_multivendor/theme/dark_theme.dart';
@@ -20,7 +19,8 @@ import 'package:stackfood_multivendor/features/cart/widgets/checkout_button_widg
 import 'package:stackfood_multivendor/features/cart/widgets/pricing_view_widget.dart';
 import 'package:stackfood_multivendor/features/checkout/controllers/checkout_controller.dart';
 import 'package:stackfood_multivendor/common/models/restaurant_model.dart';
-import 'package:stackfood_multivendor/features/coupon/domain/models/coupon_model.dart' hide Restaurant;
+import 'package:stackfood_multivendor/features/coupon/domain/models/coupon_model.dart'
+    hide Restaurant;
 import 'package:stackfood_multivendor/features/profile/controllers/profile_controller.dart';
 import 'package:stackfood_multivendor/features/restaurant/controllers/restaurant_controller.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
@@ -47,7 +47,7 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   final ScrollController scrollController = ScrollController();
-  
+
   ThemeData get darkTheme => dark;
   final ThemeData lightTheme = light;
 
@@ -102,8 +102,9 @@ class _CartScreenState extends State<CartScreen> {
           return Theme(
             data: marketThemeController.darkTheme ? darkTheme : lightTheme,
             child: Scaffold(
-              backgroundColor:
-                  marketThemeController.darkTheme ? Colors.black : Colors.white,
+              backgroundColor: marketThemeController.darkTheme
+                  ? Colors.black
+                  : Color(0xFFfafef5),
               appBar: CustomAppBarWidget(
                   title: 'my_cart'.tr,
                   isBackButtonExist: (isDesktop || !widget.fromNav)),
@@ -414,9 +415,12 @@ class _CartScreenState extends State<CartScreen> {
                                                                                                                   style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).textTheme.bodyLarge!.color?.withValues(alpha: 0.7)),
                                                                                                                 ),
                                                                                                               ])
-                                                                                                            : const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(
-                                                                                                              color: Colors.orange,
-                                                                                                            )),
+                                                                                                            : const SizedBox(
+                                                                                                                height: 20,
+                                                                                                                width: 20,
+                                                                                                                child: CircularProgressIndicator(
+                                                                                                                  color: Color(0xFF9ebc67),
+                                                                                                                )),
                                                                                                       ),
                                                                                                     ),
                                                                                                   )
@@ -469,9 +473,12 @@ class _CartScreenState extends State<CartScreen> {
                                                                                                         const SizedBox(width: Dimensions.paddingSizeSmall),
                                                                                                         Text(cartController.cartList.length > 1 ? 'remove_all_from_cart'.tr : 'remove_from_cart'.tr, style: robotoMedium.copyWith(color: Theme.of(context).colorScheme.error, fontSize: Dimensions.fontSizeSmall)),
                                                                                                       ])
-                                                                                                    : const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(
-                                                                                                      color: Colors.orange,
-                                                                                                    )),
+                                                                                                    : const SizedBox(
+                                                                                                        height: 20,
+                                                                                                        width: 20,
+                                                                                                        child: CircularProgressIndicator(
+                                                                                                          color: Color(0xFF9ebc67),
+                                                                                                        )),
                                                                                               ),
                                                                                             ),
                                                                                           ),
@@ -486,8 +493,8 @@ class _CartScreenState extends State<CartScreen> {
                                                                                   onPressed: () {
                                                                                     Get.toNamed(RouteHelper.getCategoryRoute());
                                                                                   },
-                                                                                  icon: Icon(Icons.add_circle_outline_sharp, color:Colors.orange),
-                                                                                  label: Text('add_more_items'.tr, style: robotoMedium.copyWith(color:  Colors.orange, fontSize: Dimensions.fontSizeDefault)),
+                                                                                  icon: Icon(Icons.add_circle_outline_sharp, color: Color(0xFF9ebc67)),
+                                                                                  label: Text('add_more_items'.tr, style: robotoMedium.copyWith(color: Color(0xFF9ebc67), fontSize: Dimensions.fontSizeDefault)),
                                                                                 ),
                                                                               ),
                                                                               SizedBox(height: !isDesktop ? 0 : 8),

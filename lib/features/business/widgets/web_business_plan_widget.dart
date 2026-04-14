@@ -120,7 +120,7 @@ class WebBusinessPlanWidget extends StatelessWidget {
                                   ),
                           )
                         : const CircularProgressIndicator(
-                          color: Colors.orange,
+                          color: Color(0xFF9ebc67),
                         ),
                   ])
                 : const SizedBox(),

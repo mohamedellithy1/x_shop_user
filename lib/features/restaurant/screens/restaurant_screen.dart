@@ -99,7 +99,9 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                   isDesktop ? WebMenuBar(fromDineIn: widget.fromDineIn) : null,
               endDrawer: const MenuDrawerWidget(),
               endDrawerEnableOpenDragGesture: false,
-              backgroundColor: marketThemeController.darkTheme ? Colors.black : Colors.white,
+              backgroundColor: marketThemeController.darkTheme
+                  ? Colors.black
+                  : Color(0xFFfafef5),
               body: GetBuilder<RestaurantController>(builder: (restController) {
                 return GetBuilder<MarketCouponController>(
                     builder: (couponController) {

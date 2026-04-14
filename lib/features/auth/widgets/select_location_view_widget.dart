@@ -147,7 +147,11 @@ class _SelectLocationViewWidgetState extends State<SelectLocationViewWidget> {
                           const SizedBox(height: Dimensions.paddingSizeDefault),
                           Text('restaurant_address'.tr,
                               style: robotoBold.copyWith(
-                                  color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black,
+                                  color: Get.find<MarketThemeController>(
+                                              tag: 'xmarket')
+                                          .darkTheme
+                                      ? Colors.white
+                                      : Colors.black,
                                   fontSize: Dimensions.fontSizeLarge)),
                           const SizedBox(height: Dimensions.paddingSizeSmall),
                           CustomTextFieldWidget(
@@ -322,7 +326,7 @@ class _SelectLocationViewWidgetState extends State<SelectLocationViewWidget> {
                                 color: Theme.of(context).hintColor,
                                 fontSize: Dimensions.fontSizeSmall),
                           ),
-                          const Icon(Icons.search, color: Colors.orange),
+                          const Icon(Icons.search, color: Color(0xFF9ebc67)),
                         ],
                       ),
                     ),
@@ -357,7 +361,12 @@ class _SelectLocationViewWidgetState extends State<SelectLocationViewWidget> {
                               );
                             } else {
                               Get.to(Scaffold(
-                                backgroundColor: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF141313) : Colors.white,
+                                backgroundColor:
+                                    Get.find<MarketThemeController>(
+                                                tag: 'xmarket')
+                                            .darkTheme
+                                        ? const Color(0xFF141313)
+                                        : Color(0xFFfafef5),
                                 appBar: CustomAppBarWidget(
                                     title: 'set_your_store_location'.tr),
                                 body: SelectLocationViewWidget(
@@ -464,7 +473,7 @@ class _SelectLocationViewWidgetState extends State<SelectLocationViewWidget> {
                         right: 20,
                         bottom: ResponsiveHelper.isDesktop(context) ? 40 : 20,
                         child: CustomButtonWidget(
-                          color: Colors.orange,
+                          color: Color(0xFF9ebc67),
                           buttonText: restaurantRegController.inZone
                               ? 'confirm'.tr
                               : 'not_in_zone'.tr,

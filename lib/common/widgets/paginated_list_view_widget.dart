@@ -99,7 +99,7 @@ class _PaginatedListViewWidgetState extends State<PaginatedListViewWidget> {
                     : EdgeInsets.zero,
                 child: _isLoading
                     ? const CircularProgressIndicator(
-                        color: Colors.orange,
+                        color: Color(0xFF9ebc67),
                       )
                     : (ResponsiveHelper.isDesktop(context) &&
                             widget.totalSize != null)

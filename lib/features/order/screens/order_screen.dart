@@ -72,8 +72,9 @@ class OrderScreenState extends State<OrderScreen>
           return Theme(
             data: marketThemeController.darkTheme ? darkTheme : lightTheme,
             child: Scaffold(
-              backgroundColor:
-                  marketThemeController.darkTheme ? Colors.black : Colors.white,
+              backgroundColor: marketThemeController.darkTheme
+                  ? Colors.black
+                  : Color(0xFFfafef5),
               appBar: CustomAppBarWidget(
                   title: 'orders'.tr,
                   isBackButtonExist: ResponsiveHelper.isDesktop(context)),
@@ -118,12 +119,12 @@ class OrderScreenState extends State<OrderScreen>
                                               : Colors.white,
                                       child: TabBar(
                                         controller: _tabController,
-                                        indicatorColor: Colors.orange,
+                                        indicatorColor: Color(0xFF9ebc67),
                                         indicatorWeight: 3,
                                         labelColor:
                                             marketThemeController.darkTheme
-                                                ? Colors.orange
-                                                : Colors.orange,
+                                                ? Color(0xFF9ebc67)
+                                                : Color(0xFF9ebc67),
                                         unselectedLabelColor:
                                             marketThemeController.darkTheme
                                                 ? Colors.white

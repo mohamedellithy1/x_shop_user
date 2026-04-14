@@ -28,7 +28,7 @@ class GuestButtonWidget extends StatelessWidget {
           TextSpan(text: 'guest'.tr, style: robotoMedium.copyWith(color: Theme.of(context).textTheme.bodyLarge!.color)),
         ])),
       ) : const Center(child: SizedBox(height: 25, width: 25, child: CircularProgressIndicator(
-        color: Colors.orange,
+        color: Color(0xFF9ebc67),
       )));
     });
   }

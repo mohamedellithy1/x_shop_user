@@ -24,21 +24,26 @@ class _CuisineScreenState extends State<CuisineScreen> {
     super.initState();
     Get.find<CuisineController>().getCuisineList();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       appBar: CustomAppBarWidget(title: 'متاجر'),
-      backgroundColor: Colors.white,
-      endDrawer: const MenuDrawerWidget(), endDrawerEnableOpenDragGesture: false,
+      backgroundColor: Theme.of(context).brightness == Brightness.dark
+          ? Colors.black
+          : Color(0xFFfafef5),
+      endDrawer: const MenuDrawerWidget(),
+      endDrawerEnableOpenDragGesture: false,
       body: SingleChildScrollView(
         controller: scrollController,
         child: Column(children: [
-
-          SizedBox(height: ResponsiveHelper.isDesktop(context) ? 0: Dimensions.paddingSizeLarge),
+          SizedBox(
+              height: ResponsiveHelper.isDesktop(context)
+                  ? 0
+                  : Dimensions.paddingSizeLarge),
           WebScreenTitleWidget(title: 'cuisine'.tr),
-
-          Center(child:  SizedBox(
+          Center(
+            child: SizedBox(
               width: Dimensions.webMaxWidth,
               child: Column(children: [
                 RefreshIndicator(
@@ -46,35 +51,61 @@ class _CuisineScreenState extends State<CuisineScreen> {
                     await Get.find<CuisineController>().getCuisineList();
                   },
                   child: Padding(
-                    padding: EdgeInsets.only(left: ResponsiveHelper.isDesktop(context) ? 0 : Dimensions.paddingSizeDefault, right: ResponsiveHelper.isDesktop(context) ? 0 : Dimensions.paddingSizeDefault),
-                    child: GetBuilder<CuisineController>(builder: (cuisineController) {
-                      return cuisineController.cuisineModel != null ? GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: ResponsiveHelper.isMobile(context) ? 4 : ResponsiveHelper.isDesktop(context) ? 8 : 6,
-                          mainAxisSpacing: Dimensions.paddingSizeDefault,
-                          crossAxisSpacing: ResponsiveHelper.isDesktop(context) ? 35 : Dimensions.paddingSizeDefault,
-                          childAspectRatio: 1,
-                        ),
-                        shrinkWrap: true,
-                        itemCount: cuisineController.cuisineModel!.cuisines!.length,
-                        scrollDirection: Axis.vertical,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index){
-                          return InkWell(
-                            hoverColor: Colors.transparent,
-                            onTap: (){
-                              Get.toNamed(RouteHelper.getCuisineRestaurantRoute(cuisineController.cuisineModel!.cuisines![index].id, cuisineController.cuisineModel!.cuisines![index].name));
-                            },
-                            child: SizedBox(
-                              height: 130,
-                              child: CuisineCardWidget(
-                                image: '${cuisineController.cuisineModel!.cuisines![index].imageFullUrl}',
-                                name: cuisineController.cuisineModel!.cuisines![index].name!,
-                                fromCuisinesPage: true,
+                    padding: EdgeInsets.only(
+                        left: ResponsiveHelper.isDesktop(context)
+                            ? 0
+                            : Dimensions.paddingSizeDefault,
+                        right: ResponsiveHelper.isDesktop(context)
+                            ? 0
+                            : Dimensions.paddingSizeDefault),
+                    child: GetBuilder<CuisineController>(
+                        builder: (cuisineController) {
+                      return cuisineController.cuisineModel != null
+                          ? GridView.builder(
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount:
+                                    ResponsiveHelper.isMobile(context)
+                                        ? 4
+                                        : ResponsiveHelper.isDesktop(context)
+                                            ? 8
+                                            : 6,
+                                mainAxisSpacing: Dimensions.paddingSizeDefault,
+                                crossAxisSpacing:
+                                    ResponsiveHelper.isDesktop(context)
+                                        ? 35
+                                        : Dimensions.paddingSizeDefault,
+                                childAspectRatio: 1,
                               ),
-                            ),
-                          );
-                        }) : const Center(child: CircularProgressIndicator());
+                              shrinkWrap: true,
+                              itemCount: cuisineController
+                                  .cuisineModel!.cuisines!.length,
+                              scrollDirection: Axis.vertical,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                  hoverColor: Colors.transparent,
+                                  onTap: () {
+                                    Get.toNamed(
+                                        RouteHelper.getCuisineRestaurantRoute(
+                                            cuisineController.cuisineModel!
+                                                .cuisines![index].id,
+                                            cuisineController.cuisineModel!
+                                                .cuisines![index].name));
+                                  },
+                                  child: SizedBox(
+                                    height: 130,
+                                    child: CuisineCardWidget(
+                                      image:
+                                          '${cuisineController.cuisineModel!.cuisines![index].imageFullUrl}',
+                                      name: cuisineController
+                                          .cuisineModel!.cuisines![index].name!,
+                                      fromCuisinesPage: true,
+                                    ),
+                                  ),
+                                );
+                              })
+                          : const Center(child: CircularProgressIndicator());
                     }),
                   ),
                 ),
