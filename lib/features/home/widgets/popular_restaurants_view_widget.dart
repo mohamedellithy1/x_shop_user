@@ -107,13 +107,13 @@ class PopularRestaurantsViewWidget extends StatelessWidget {
                               physics: const BouncingScrollPhysics(),
                               itemBuilder: (context, index) {
                                 bool isAvailable =
-                                    restaurantList![index].open == 1 &&
-                                        restaurantList[index].active!;
+                                    (restaurantList[index].open == 1) &&
+                                        (restaurantList[index].active ?? false);
                                 String characteristics = '';
                                 if (restaurantList[index].characteristics !=
                                     null) {
-                                  for (var v in restaurantList[index]
-                                      .characteristics!) {
+                                  for (var v in (restaurantList[index]
+                                      .characteristics ?? [])) {
                                     characteristics =
                                         '$characteristics${characteristics.isNotEmpty ? ', ' : ''}$v';
                                   }

@@ -259,7 +259,7 @@ class Theme1HomeScreen extends StatelessWidget {
               configModel.mostReviewedFoods == 1
                   ? const BestReviewedItemWidget1()
                   : const SizedBox(),
-              configModel.dineInOrderOption!
+              (configModel.dineInOrderOption ?? false)
                   ? DineInWidget()
                   : const SizedBox(),
               const ReferBannerViewWidget(fromTheme1: true),

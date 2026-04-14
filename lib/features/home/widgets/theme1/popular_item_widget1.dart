@@ -31,7 +31,11 @@ class PopularItemWidget1 extends StatelessWidget {
             ? productController.popularProductList
             : reviewController.reviewedProductList;
 
-        return (productList!.isEmpty)
+        if (productList == null) {
+          return PopularItemShimmer(enabled: productController.popularProductList == null);
+        }
+
+        return (productList.isEmpty)
             ? const SizedBox()
             : Column(
                 children: [
@@ -53,7 +57,7 @@ class PopularItemWidget1 extends StatelessWidget {
                             scrollDirection: Axis.horizontal,
                             padding: const EdgeInsets.only(
                                 left: Dimensions.paddingSizeSmall),
-                            itemCount: productList!.length > 10
+                            itemCount: productList.length > 10
                                 ? 10
                                 : productList.length,
                             itemBuilder: (context, index) {
@@ -158,10 +162,10 @@ class PopularItemWidget1 extends StatelessWidget {
                                                               width: Dimensions
                                                                   .paddingSizeExtraSmall),
                                                           (Get.find<MarketSplashController>(
-                                                                      tag:
-                                                                          'xmarket')
-                                                                  .configModel!
-                                                                  .toggleVegNonVeg!)
+                                                                      tag: 'xmarket')
+                                                                  .configModel
+                                                                  ?.toggleVegNonVeg ??
+                                                              false)
                                                               ? Image.asset(
                                                                   productList[index]
                                                                               .veg ==
@@ -296,108 +300,111 @@ class PopularItemShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const BouncingScrollPhysics(),
-      scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.only(left: Dimensions.paddingSizeSmall),
-      itemCount: 10,
-      itemBuilder: (context, index) {
-        return Padding(
-          padding:
-              const EdgeInsets.fromLTRB(2, 2, Dimensions.paddingSizeSmall, 2),
-          child: Container(
-            height: 90,
-            width: 250,
-            padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
-              borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey[
-                      Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
-                          ? 700
-                          : 300]!,
-                  blurRadius: 5,
-                  spreadRadius: 1,
-                )
-              ],
-            ),
-            child: Shimmer(
-              duration: const Duration(seconds: 1),
-              interval: const Duration(seconds: 1),
-              enabled: enabled,
-              child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 80,
-                      width: 80,
-                      decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.circular(Dimensions.radiusSmall),
-                        color: Colors.grey[300],
+    return SizedBox(
+      height: 95,
+      child: ListView.builder(
+        shrinkWrap: true,
+        physics: const BouncingScrollPhysics(),
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.only(left: Dimensions.paddingSizeSmall),
+        itemCount: 10,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding:
+                const EdgeInsets.fromLTRB(2, 2, Dimensions.paddingSizeSmall, 2),
+            child: Container(
+              height: 90,
+              width: 250,
+              padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey[
+                        Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+                            ? 700
+                            : 300]!,
+                    blurRadius: 5,
+                    spreadRadius: 1,
+                  )
+                ],
+              ),
+              child: Shimmer(
+                duration: const Duration(seconds: 1),
+                interval: const Duration(seconds: 1),
+                enabled: enabled,
+                child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 80,
+                        width: 80,
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              BorderRadius.circular(Dimensions.radiusSmall),
+                          color: Colors.grey[300],
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: Dimensions.paddingSizeExtraSmall),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                  height: 15,
-                                  width: 100,
-                                  color: Colors.grey[300]),
-                              const SizedBox(height: 5),
-                              Container(
-                                  height: 10,
-                                  width: 130,
-                                  color: Colors.grey[300]),
-                              const SizedBox(height: 5),
-                              const RatingBarWidget(
-                                  rating: 0, size: 12, ratingCount: 0),
-                              Row(children: [
-                                Expanded(
-                                  child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        const SizedBox(
-                                            width: Dimensions
-                                                .paddingSizeExtraSmall),
-                                        Container(
-                                            height: 10,
-                                            width: 40,
-                                            color: Colors.grey[300]),
-                                        Container(
-                                            height: 15,
-                                            width: 40,
-                                            color: Colors.grey[300]),
-                                      ]),
-                                ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: Dimensions.paddingSizeExtraSmall),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
                                 Container(
-                                  height: 25,
-                                  width: 25,
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Theme.of(context).primaryColor),
-                                  child: const Icon(Icons.add,
-                                      size: 20, color: Colors.white),
-                                ),
+                                    height: 15,
+                                    width: 100,
+                                    color: Colors.grey[300]),
+                                const SizedBox(height: 5),
+                                Container(
+                                    height: 10,
+                                    width: 130,
+                                    color: Colors.grey[300]),
+                                const SizedBox(height: 5),
+                                const RatingBarWidget(
+                                    rating: 0, size: 12, ratingCount: 0),
+                                Row(children: [
+                                  Expanded(
+                                    child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          const SizedBox(
+                                              width: Dimensions
+                                                  .paddingSizeExtraSmall),
+                                          Container(
+                                              height: 10,
+                                              width: 40,
+                                              color: Colors.grey[300]),
+                                          Container(
+                                              height: 15,
+                                              width: 40,
+                                              color: Colors.grey[300]),
+                                        ]),
+                                  ),
+                                  Container(
+                                    height: 25,
+                                    width: 25,
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Theme.of(context).primaryColor),
+                                    child: const Icon(Icons.add,
+                                        size: 20, color: Colors.white),
+                                  ),
+                                ]),
                               ]),
-                            ]),
+                        ),
                       ),
-                    ),
-                  ]),
+                    ]),
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

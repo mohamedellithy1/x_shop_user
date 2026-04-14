@@ -25,7 +25,11 @@ class BestReviewedItemWidget1 extends StatelessWidget {
     return GetBuilder<ReviewController>(builder: (reviewController) {
       List<Product>? productList = reviewController.reviewedProductList;
 
-      return (productList!.isEmpty)
+      if (productList == null) {
+        return BestReviewedItemShimmer(reviewController: reviewController);
+      }
+
+      return (productList.isEmpty)
           ? const SizedBox()
           : Column(
               children: [
@@ -143,8 +147,9 @@ class BestReviewedItemWidget1 extends StatelessWidget {
                                                     width: Dimensions
                                                         .paddingSizeExtraSmall),
                                                 Text(
-                                                    productList[index]
-                                                        .avgRating!
+                                                    (productList[index]
+                                                                .avgRating ??
+                                                            0.0)
                                                         .toStringAsFixed(1),
                                                     style: robotoRegular),
                                               ]),
@@ -192,10 +197,10 @@ class BestReviewedItemWidget1 extends StatelessWidget {
                                                                 width: Dimensions
                                                                     .paddingSizeExtraSmall),
                                                             (Get.find<MarketSplashController>(
-                                                                        tag:
-                                                                            'xmarket')
-                                                                    .configModel!
-                                                                    .toggleVegNonVeg!)
+                                                                        tag: 'xmarket')
+                                                                    .configModel
+                                                                    ?.toggleVegNonVeg ??
+                                                                false)
                                                                 ? Image.asset(
                                                                     productList[index].veg ==
                                                                             0
@@ -326,133 +331,136 @@ class BestReviewedItemShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const BouncingScrollPhysics(),
-      scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.only(left: Dimensions.paddingSizeSmall),
-      itemCount: 10,
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.only(
-              right: Dimensions.paddingSizeSmall, bottom: 5),
-          child: Container(
-            height: 220,
-            width: 180,
-            padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
-              borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey[
-                      Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
-                          ? 700
-                          : 300]!,
-                  blurRadius: 5,
-                  spreadRadius: 1,
-                )
-              ],
-            ),
-            child: Shimmer(
-              duration: const Duration(seconds: 2),
-              enabled: reviewController.reviewedProductList == null,
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Stack(children: [
-                      Container(
-                        height: 125,
-                        width: 170,
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(Dimensions.radiusSmall)),
-                          color: Colors.grey[300],
-                        ),
-                      ),
-                      Positioned(
-                        top: Dimensions.paddingSizeExtraSmall,
-                        left: Dimensions.paddingSizeExtraSmall,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 2,
-                              horizontal: Dimensions.paddingSizeExtraSmall),
+    return SizedBox(
+      height: 220,
+      child: ListView.builder(
+        shrinkWrap: true,
+        physics: const BouncingScrollPhysics(),
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.only(left: Dimensions.paddingSizeSmall),
+        itemCount: 10,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.only(
+                right: Dimensions.paddingSizeSmall, bottom: 5),
+            child: Container(
+              height: 220,
+              width: 180,
+              padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey[
+                        Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+                            ? 700
+                            : 300]!,
+                    blurRadius: 5,
+                    spreadRadius: 1,
+                  )
+                ],
+              ),
+              child: Shimmer(
+                duration: const Duration(seconds: 2),
+                enabled: reviewController.reviewedProductList == null,
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Stack(children: [
+                        Container(
+                          height: 125,
+                          width: 170,
                           decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .cardColor
-                                .withValues(alpha: 0.8),
-                            borderRadius:
-                                BorderRadius.circular(Dimensions.radiusSmall),
+                            borderRadius: const BorderRadius.vertical(
+                                top: Radius.circular(Dimensions.radiusSmall)),
+                            color: Colors.grey[300],
                           ),
-                          child: Row(children: [
-                            Icon(Icons.star,
-                                color: Theme.of(context).primaryColor,
-                                size: 15),
-                            const SizedBox(
-                                width: Dimensions.paddingSizeExtraSmall),
-                            Text('0.0', style: robotoRegular),
-                          ]),
-                        ),
-                      ),
-                    ]),
-                    Expanded(
-                      child: Stack(children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: Dimensions.paddingSizeExtraSmall),
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Container(
-                                    height: 15,
-                                    width: 100,
-                                    color: Colors.grey[300]),
-                                const SizedBox(height: 2),
-                                Container(
-                                    height: 10,
-                                    width: 70,
-                                    color: Colors.grey[300]),
-                                const SizedBox(
-                                    height: Dimensions.paddingSizeExtraSmall),
-                                Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Container(
-                                          height: 10,
-                                          width: 40,
-                                          color: Colors.grey[300]),
-                                      const SizedBox(
-                                          width:
-                                              Dimensions.paddingSizeExtraSmall),
-                                      Container(
-                                          height: 15,
-                                          width: 40,
-                                          color: Colors.grey[300]),
-                                    ]),
-                              ]),
                         ),
                         Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: Container(
-                              height: 25,
-                              width: 25,
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Theme.of(context).primaryColor),
-                              child: const Icon(Icons.add,
-                                  size: 20, color: Colors.white),
-                            )),
+                          top: Dimensions.paddingSizeExtraSmall,
+                          left: Dimensions.paddingSizeExtraSmall,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 2,
+                                horizontal: Dimensions.paddingSizeExtraSmall),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context)
+                                  .cardColor
+                                  .withValues(alpha: 0.8),
+                              borderRadius:
+                                  BorderRadius.circular(Dimensions.radiusSmall),
+                            ),
+                            child: Row(children: [
+                              Icon(Icons.star,
+                                  color: Theme.of(context).primaryColor,
+                                  size: 15),
+                              const SizedBox(
+                                  width: Dimensions.paddingSizeExtraSmall),
+                              Text('0.0', style: robotoRegular),
+                            ]),
+                          ),
+                        ),
                       ]),
-                    ),
-                  ]),
+                      Expanded(
+                        child: Stack(children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: Dimensions.paddingSizeExtraSmall),
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Container(
+                                      height: 15,
+                                      width: 100,
+                                      color: Colors.grey[300]),
+                                  const SizedBox(height: 2),
+                                  Container(
+                                      height: 10,
+                                      width: 70,
+                                      color: Colors.grey[300]),
+                                  const SizedBox(
+                                      height: Dimensions.paddingSizeExtraSmall),
+                                  Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        Container(
+                                            height: 10,
+                                            width: 40,
+                                            color: Colors.grey[300]),
+                                        const SizedBox(
+                                            width:
+                                                Dimensions.paddingSizeExtraSmall),
+                                        Container(
+                                            height: 15,
+                                            width: 40,
+                                            color: Colors.grey[300]),
+                                      ]),
+                                ]),
+                          ),
+                          Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Container(
+                                height: 25,
+                                width: 25,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Theme.of(context).primaryColor),
+                                child: const Icon(Icons.add,
+                                    size: 20, color: Colors.white),
+                              )),
+                        ]),
+                      ),
+                    ]),
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

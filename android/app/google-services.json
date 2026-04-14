@@ -1,40 +1,40 @@
 {
   "project_info": {
-    "project_number": "491987943015",
-    "project_id": "stackmart-500c7",
-    "storage_bucket": "stackmart-500c7.appspot.com"
+    "project_number": "709395535688",
+    "project_id": "newss-d6e35",
+    "storage_bucket": "newss-d6e35.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:491987943015:android:fe79b69339834d5c8f1ec2",
+        "mobilesdk_app_id": "1:709395535688:android:9c52a5806abd346f36057d",
         "android_client_info": {
-          "package_name": "com.sixamtech.sixam_mart_delivery_app"
+          "package_name": "com.Taswiq.Taswiq"
         }
       },
       "oauth_client": [
         {
-          "client_id": "491987943015-agln6biv84krpnngdphj87jkko7r9lb8.apps.googleusercontent.com",
+          "client_id": "709395535688-4jh0evi7lvbtpso9r9k71jjm2relhcr7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCc3OCd5I2xSlnftZ4bFAbuCzMhgQHLivA"
+          "current_key": "AIzaSyAhhZPPpRSPC_lDmkH8Dc-oy1yLXvQM-3Q"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "491987943015-agln6biv84krpnngdphj87jkko7r9lb8.apps.googleusercontent.com",
+              "client_id": "709395535688-4jh0evi7lvbtpso9r9k71jjm2relhcr7.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "491987943015-8enep3h58pfk6da9oc17rv2iqostjvln.apps.googleusercontent.com",
+              "client_id": "709395535688-2u6hroh5oiv2oc9pn79poptq8510k9i2.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.sixamtech.stackfood"
+                "bundle_id": "com.wasset.apexusers"
               }
             }
           ]
@@ -43,34 +43,42 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:491987943015:android:9795ba69e89c684b8f1ec2",
+        "mobilesdk_app_id": "1:709395535688:android:1031f7f409c66ae936057d",
         "android_client_info": {
-          "package_name": "com.sixamtech.sixam_mart_store_app"
+          "package_name": "com.wasset.apexdriver"
         }
       },
       "oauth_client": [
         {
-          "client_id": "491987943015-agln6biv84krpnngdphj87jkko7r9lb8.apps.googleusercontent.com",
+          "client_id": "709395535688-2vaccdr41hjen1dmgv0auuap7ns2b5p6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wasset.apexdriver",
+            "certificate_hash": "47d9359f9ba3317338e5dee0a3d81483401c2e2a"
+          }
+        },
+        {
+          "client_id": "709395535688-4jh0evi7lvbtpso9r9k71jjm2relhcr7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCc3OCd5I2xSlnftZ4bFAbuCzMhgQHLivA"
+          "current_key": "AIzaSyAhhZPPpRSPC_lDmkH8Dc-oy1yLXvQM-3Q"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "491987943015-agln6biv84krpnngdphj87jkko7r9lb8.apps.googleusercontent.com",
+              "client_id": "709395535688-4jh0evi7lvbtpso9r9k71jjm2relhcr7.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "491987943015-8enep3h58pfk6da9oc17rv2iqostjvln.apps.googleusercontent.com",
+              "client_id": "709395535688-2u6hroh5oiv2oc9pn79poptq8510k9i2.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.sixamtech.stackfood"
+                "bundle_id": "com.wasset.apexusers"
               }
             }
           ]
@@ -79,34 +87,42 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:491987943015:android:a6fb4303cc4bf3d18f1ec2",
+        "mobilesdk_app_id": "1:709395535688:android:94f0bf90863299a336057d",
         "android_client_info": {
-          "package_name": "com.sixamtech.sixam_mart_user"
+          "package_name": "com.wasset.apexdrivers"
         }
       },
       "oauth_client": [
         {
-          "client_id": "491987943015-agln6biv84krpnngdphj87jkko7r9lb8.apps.googleusercontent.com",
+          "client_id": "709395535688-t5pksuqvd0af32agpa36e60eqafethag.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wasset.apexdrivers",
+            "certificate_hash": "47d9359f9ba3317338e5dee0a3d81483401c2e2a"
+          }
+        },
+        {
+          "client_id": "709395535688-4jh0evi7lvbtpso9r9k71jjm2relhcr7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCc3OCd5I2xSlnftZ4bFAbuCzMhgQHLivA"
+          "current_key": "AIzaSyAhhZPPpRSPC_lDmkH8Dc-oy1yLXvQM-3Q"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "491987943015-agln6biv84krpnngdphj87jkko7r9lb8.apps.googleusercontent.com",
+              "client_id": "709395535688-4jh0evi7lvbtpso9r9k71jjm2relhcr7.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "491987943015-8enep3h58pfk6da9oc17rv2iqostjvln.apps.googleusercontent.com",
+              "client_id": "709395535688-2u6hroh5oiv2oc9pn79poptq8510k9i2.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.sixamtech.stackfood"
+                "bundle_id": "com.wasset.apexusers"
               }
             }
           ]
@@ -115,34 +131,42 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:491987943015:android:0fe481bb315de1de8f1ec2",
+        "mobilesdk_app_id": "1:709395535688:android:53961d45baf0640136057d",
         "android_client_info": {
-          "package_name": "com.sixamtech.stack_food_delivery"
+          "package_name": "com.wasset.apexuserapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "491987943015-agln6biv84krpnngdphj87jkko7r9lb8.apps.googleusercontent.com",
+          "client_id": "709395535688-l24jsb7dafpvmp130fnutr45pq7m5noh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wasset.apexuserapp",
+            "certificate_hash": "47d9359f9ba3317338e5dee0a3d81483401c2e2a"
+          }
+        },
+        {
+          "client_id": "709395535688-4jh0evi7lvbtpso9r9k71jjm2relhcr7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCc3OCd5I2xSlnftZ4bFAbuCzMhgQHLivA"
+          "current_key": "AIzaSyAhhZPPpRSPC_lDmkH8Dc-oy1yLXvQM-3Q"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "491987943015-agln6biv84krpnngdphj87jkko7r9lb8.apps.googleusercontent.com",
+              "client_id": "709395535688-4jh0evi7lvbtpso9r9k71jjm2relhcr7.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "491987943015-8enep3h58pfk6da9oc17rv2iqostjvln.apps.googleusercontent.com",
+              "client_id": "709395535688-2u6hroh5oiv2oc9pn79poptq8510k9i2.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.sixamtech.stackfood"
+                "bundle_id": "com.wasset.apexusers"
               }
             }
           ]
@@ -151,34 +175,34 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:491987943015:android:de46aa9776b1b4888f1ec2",
+        "mobilesdk_app_id": "1:709395535688:android:2a2f3fd16bc2be0e36057d",
         "android_client_info": {
-          "package_name": "com.sixamtech.stack_food_user"
+          "package_name": "com.wasset.usersapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "491987943015-agln6biv84krpnngdphj87jkko7r9lb8.apps.googleusercontent.com",
+          "client_id": "709395535688-4jh0evi7lvbtpso9r9k71jjm2relhcr7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCc3OCd5I2xSlnftZ4bFAbuCzMhgQHLivA"
+          "current_key": "AIzaSyAhhZPPpRSPC_lDmkH8Dc-oy1yLXvQM-3Q"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "491987943015-agln6biv84krpnngdphj87jkko7r9lb8.apps.googleusercontent.com",
+              "client_id": "709395535688-4jh0evi7lvbtpso9r9k71jjm2relhcr7.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "491987943015-8enep3h58pfk6da9oc17rv2iqostjvln.apps.googleusercontent.com",
+              "client_id": "709395535688-2u6hroh5oiv2oc9pn79poptq8510k9i2.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.sixamtech.stackfood"
+                "bundle_id": "com.wasset.apexusers"
               }
             }
           ]
@@ -187,34 +211,34 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:491987943015:android:63ecc08c0433bf7c8f1ec2",
+        "mobilesdk_app_id": "1:709395535688:android:3917d8cc93c693a836057d",
         "android_client_info": {
-          "package_name": "com.sixamtech.stack_food_vandor"
+          "package_name": "com.x.apexdrivers"
         }
       },
       "oauth_client": [
         {
-          "client_id": "491987943015-agln6biv84krpnngdphj87jkko7r9lb8.apps.googleusercontent.com",
+          "client_id": "709395535688-4jh0evi7lvbtpso9r9k71jjm2relhcr7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCc3OCd5I2xSlnftZ4bFAbuCzMhgQHLivA"
+          "current_key": "AIzaSyAhhZPPpRSPC_lDmkH8Dc-oy1yLXvQM-3Q"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "491987943015-agln6biv84krpnngdphj87jkko7r9lb8.apps.googleusercontent.com",
+              "client_id": "709395535688-4jh0evi7lvbtpso9r9k71jjm2relhcr7.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "491987943015-8enep3h58pfk6da9oc17rv2iqostjvln.apps.googleusercontent.com",
+              "client_id": "709395535688-2u6hroh5oiv2oc9pn79poptq8510k9i2.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.sixamtech.stackfood"
+                "bundle_id": "com.wasset.apexusers"
               }
             }
           ]
@@ -223,34 +247,194 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:491987943015:android:555e8c84d567150b8f1ec2",
+        "mobilesdk_app_id": "1:709395535688:android:d427a015aaddb6d136057d",
         "android_client_info": {
-          "package_name": "com.sixamtech.stackfooduser"
+          "package_name": "com.x.xuserapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "491987943015-agln6biv84krpnngdphj87jkko7r9lb8.apps.googleusercontent.com",
+          "client_id": "709395535688-4jh0evi7lvbtpso9r9k71jjm2relhcr7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCc3OCd5I2xSlnftZ4bFAbuCzMhgQHLivA"
+          "current_key": "AIzaSyAhhZPPpRSPC_lDmkH8Dc-oy1yLXvQM-3Q"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "491987943015-agln6biv84krpnngdphj87jkko7r9lb8.apps.googleusercontent.com",
+              "client_id": "709395535688-4jh0evi7lvbtpso9r9k71jjm2relhcr7.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "491987943015-8enep3h58pfk6da9oc17rv2iqostjvln.apps.googleusercontent.com",
+              "client_id": "709395535688-2u6hroh5oiv2oc9pn79poptq8510k9i2.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.sixamtech.stackfood"
+                "bundle_id": "com.wasset.apexusers"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:709395535688:android:8917bd59e4803c9736057d",
+        "android_client_info": {
+          "package_name": "com.xgo.ridedrivers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "709395535688-otgjtoro2aenipglmmmmhrif3ik444qq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.xgo.ridedrivers",
+            "certificate_hash": "c5c270eed1f0b13652536ad18b465f53ea8676bd"
+          }
+        },
+        {
+          "client_id": "709395535688-4jh0evi7lvbtpso9r9k71jjm2relhcr7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhhZPPpRSPC_lDmkH8Dc-oy1yLXvQM-3Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "709395535688-4jh0evi7lvbtpso9r9k71jjm2relhcr7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "709395535688-2u6hroh5oiv2oc9pn79poptq8510k9i2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.wasset.apexusers"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:709395535688:android:0827ae71ac6c158536057d",
+        "android_client_info": {
+          "package_name": "com.xgo.rideuser"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "709395535688-3h01fgm2k6rsaqvgovrahnr86sk7k7lc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.xgo.rideuser",
+            "certificate_hash": "b8602201ca391ded6e441880a20436ebf2c357ef"
+          }
+        },
+        {
+          "client_id": "709395535688-4jh0evi7lvbtpso9r9k71jjm2relhcr7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhhZPPpRSPC_lDmkH8Dc-oy1yLXvQM-3Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "709395535688-4jh0evi7lvbtpso9r9k71jjm2relhcr7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "709395535688-2u6hroh5oiv2oc9pn79poptq8510k9i2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.wasset.apexusers"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:709395535688:android:dc76abd48241c18036057d",
+        "android_client_info": {
+          "package_name": "com.xgo.xDelivery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "709395535688-4jh0evi7lvbtpso9r9k71jjm2relhcr7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhhZPPpRSPC_lDmkH8Dc-oy1yLXvQM-3Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "709395535688-4jh0evi7lvbtpso9r9k71jjm2relhcr7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "709395535688-2u6hroh5oiv2oc9pn79poptq8510k9i2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.wasset.apexusers"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:709395535688:android:33785e4ac28de2b736057d",
+        "android_client_info": {
+          "package_name": "com.xgo.xVandor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "709395535688-4jh0evi7lvbtpso9r9k71jjm2relhcr7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhhZPPpRSPC_lDmkH8Dc-oy1yLXvQM-3Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "709395535688-4jh0evi7lvbtpso9r9k71jjm2relhcr7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "709395535688-2u6hroh5oiv2oc9pn79poptq8510k9i2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.wasset.apexusers"
               }
             }
           ]

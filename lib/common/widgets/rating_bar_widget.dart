@@ -14,8 +14,9 @@ class RatingBarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> starList = [];
 
-    int realNumber = rating!.floor();
-    int partNumber = ((rating! - realNumber) * 10).ceil();
+    double rating0 = rating ?? 0.0;
+    int realNumber = rating0.floor();
+    int partNumber = ((rating0 - realNumber) * 10).ceil();
 
     for (int i = 0; i < 5; i++) {
       if (i < realNumber) {
