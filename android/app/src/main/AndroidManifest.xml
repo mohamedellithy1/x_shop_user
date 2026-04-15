@@ -47,7 +47,7 @@
         <meta-data android:name="com.facebook.sdk.AutoLogAppEventsEnabled" android:value="false" />
 
         <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDUDEfxlI5sfTaeN-wOKphkht1ma2kgalY"/>
+            android:value="AIzaSyAhhZPPpRSPC_lDmkH8Dc-oy1yLXvQM-3Q"/>
 
         <activity
             android:name=".MainActivity"

@@ -22,11 +22,13 @@ class XMarkSplashScreenState extends State<XMarkSplashScreen> {
     _route();
   }
 
+  bool _isNavigated = false;
+
   void _route() async {
     await PermissionHelper.requestInitialPermissions();
     debugPrint('🚀 [Splash] Starting config fetch...');
 
-    // محاولة جلب البيانات مع تحديد مهلة زمنية (Timeout) للأمان
+    // محاولة جلب البيانات
     Get.find<MarketSplashController>(tag: 'xmarket')
         .getConfigData(source: DataSourceEnum.client)
         .then((value) {
@@ -34,12 +36,12 @@ class XMarkSplashScreenState extends State<XMarkSplashScreen> {
       _navigateToHome();
     }).catchError((error) {
       debugPrint('❌ [Splash] Config fetch error: $error');
-      _navigateToHome(); // برضه هنحول للهوم عشان ميفضلش معلق
+      _navigateToHome();
     });
 
     // سياج أمان: لو البيانات اتأخرت أكتر من 5 ثواني حول للهوم فوراً
     Future.delayed(const Duration(seconds: 5), () {
-      if (mounted) {
+      if (mounted && !_isNavigated) {
         debugPrint('⏰ [Splash] Timeout reached, navigating to home...');
         _navigateToHome();
       }
@@ -47,12 +49,13 @@ class XMarkSplashScreenState extends State<XMarkSplashScreen> {
   }
 
   void _navigateToHome() {
-    if (Get.currentRoute != RouteHelper.getInitialRoute()) {
-      if (Get.find<MarketAuthController>().isLoggedIn()) {
-        Get.offAllNamed(RouteHelper.getInitialRoute());
-      } else {
-        Get.offAllNamed(RouteHelper.getSignInRoute(RouteHelper.splash));
-      }
+    if (_isNavigated) return;
+    _isNavigated = true;
+
+    if (Get.find<MarketAuthController>().isLoggedIn()) {
+      Get.offAllNamed(RouteHelper.getInitialRoute());
+    } else {
+      Get.offAllNamed(RouteHelper.getSignInRoute(RouteHelper.splash));
     }
   }
 

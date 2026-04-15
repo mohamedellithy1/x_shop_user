@@ -89,7 +89,7 @@ class AuthRepo implements AuthRepoInterface<SignUpBodyModel> {
       } catch (_) {}
     }
     if (deviceToken != null) {
-      debugPrint('--------Device Token---------- $deviceToken');
+      print('---👇---Device Token (FCM)---👇---\n$deviceToken\n----------------------------------');
     }
     return deviceToken;
   }

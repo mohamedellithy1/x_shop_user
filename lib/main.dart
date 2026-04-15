@@ -57,20 +57,20 @@ Future<void> main() async {
   if (GetPlatform.isWeb) {
     await Firebase.initializeApp(
         options: const FirebaseOptions(
-      apiKey: "AIzaSyD0Z911mOoWCVkeGdjhIKwWFPRgvd6ZyAw",
-      authDomain: "stackmart-500c7.firebaseapp.com",
-      projectId: "stackmart-500c7",
-      storageBucket: "stackmart-500c7.firebasestorage.app",
-      messagingSenderId: "491987943015",
-      appId: "1:491987943015:web:d8bc7ab8dbc9991c8f1ec2",
+      apiKey: "AIzaSyAhhZPPpRSPC_lDmkH8Dc-oy1yLXvQM-3Q",
+      authDomain: "newss-d6e35.firebaseapp.com",
+      projectId: "newss-d6e35",
+      storageBucket: "newss-d6e35.firebasestorage.app",
+      messagingSenderId: "709395535688",
+      appId: "1:709395535688:web:8e309cc4c760639036057d", // Note: Web App ID might not be exact, but project info is updated.
     ));
   } else if (GetPlatform.isAndroid) {
     await Firebase.initializeApp(
       options: const FirebaseOptions(
-        apiKey: 'AIzaSyCc3OCd5I2xSlnftZ4bFAbuCzMhgQHLivA',
-        appId: '1:491987943015:android:fe79b69339834d5c8f1ec2',
-        messagingSenderId: '491987943015',
-        projectId: 'stackmart-500c7',
+        apiKey: 'AIzaSyAhhZPPpRSPC_lDmkH8Dc-oy1yLXvQM-3Q',
+        appId: '1:709395535688:android:9c52a5806abd346f36057d',
+        messagingSenderId: '709395535688',
+        projectId: 'newss-d6e35',
       ),
     );
   } else {
