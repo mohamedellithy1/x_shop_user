@@ -79,118 +79,136 @@ class Theme1HomeScreen extends StatelessWidget {
               // color: Color(0xFFd6e0c4),
             ),
             child: SafeArea(
-              child: Center(
-                child: Container(
-                  width: Dimensions.webMaxWidth,
-                  height: 50,
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Color(0xFFe3ebd5),
-                        Color(0xFFfafff4),
-                        Color(0xFFe3ebd5),
-                      ],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                    ),
-
-                    // gradient: LinearGradient(
-                    //   colors: [Color(0xFFd6e0c4), Color(0xFFe7feba)],
-                    //   begin: Alignment.topLeft,
-                    //   end: Alignment.bottomRight,
-                    // ),
-                    // color: Color(0xFFd6e0c4),
-                  ),
-                  child: Row(children: [
-                    Expanded(
-                        child: LocationDropdown(
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: Dimensions.paddingSizeSmall),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: Dimensions.paddingSizeSmall,
-                            vertical: Dimensions.paddingSizeExtraSmall),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).brightness == Brightness.dark
-                              ? Color(0xFFfafef5)
-                              : const Color(0xFFfafef5),
-                          borderRadius: BorderRadius.circular(
-                              Dimensions.radiusExtraLarge),
-                          border: Border.all(color: Colors.black, width: 1.2),
+              child: Column(
+                children: [
+                  Center(
+                    child: Container(
+                      width: Dimensions.webMaxWidth,
+                      height: 50,
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Color(0xFFe3ebd5),
+                            Color(0xFFfafff4),
+                            Color(0xFFe3ebd5),
+                          ],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
                         ),
-                        child: GetBuilder<MarketLocationController>(
-                            builder: (locationController) {
-                          final address =
-                              AddressHelper.getAddressFromSharedPref();
-                          return Row(
-                            children: [
-                              const Icon(Icons.keyboard_arrow_down,
-                                  color: Colors.black, size: 20),
-                              const SizedBox(
-                                  width: Dimensions.paddingSizeExtraSmall),
-                              Expanded(
-                                child: Text(
-                                  address?.address ?? 'your_location'.tr,
-                                  style: robotoRegular.copyWith(
-                                    color: Colors.black,
-                                    fontSize: Dimensions.fontSizeSmall,
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                              const SizedBox(
-                                  width: Dimensions.paddingSizeExtraSmall),
-                              const Icon(Icons.location_on,
-                                  color: Color(0xFFacb566), size: 20),
-                            ],
-                          );
-                        }),
+
+                        // gradient: LinearGradient(
+                        //   colors: [Color(0xFFd6e0c4), Color(0xFFe7feba)],
+                        //   begin: Alignment.topLeft,
+                        //   end: Alignment.bottomRight,
+                        // ),
+                        // color: Color(0xFFd6e0c4),
                       ),
-                    )),
-                    InkWell(
-                      child: GetBuilder<MarketNotificationController>(
-                          builder: (notificationController) {
-                        return Stack(children: [
-                          Container(
-                            width: 30,
-                            height: 30,
+                      child: Row(children: [
+                        Expanded(
+                            child: LocationDropdown(
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: Dimensions.paddingSizeSmall),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: Dimensions.paddingSizeSmall,
+                                vertical: Dimensions.paddingSizeExtraSmall),
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Color(0xFFfafef5)
+                                  : const Color(0xFFfafef5),
                               borderRadius: BorderRadius.circular(
                                   Dimensions.radiusExtraLarge),
                               border:
-                                  Border.all(color: Colors.white, width: 1.2),
+                                  Border.all(color: Colors.black, width: 1.2),
                             ),
-                            child: Icon(Icons.notifications,
-                                size: 25, color: Colors.green),
-                          ),
-                          notificationController.hasNotification
-                              ? Positioned(
-                                  top: 0,
-                                  right: 0,
-                                  child: Container(
-                                    height: 10,
-                                    width: 10,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                          width: 1, color: Colors.white),
+                            child: GetBuilder<MarketLocationController>(
+                                builder: (locationController) {
+                              final address =
+                                  AddressHelper.getAddressFromSharedPref();
+                              return Row(
+                                children: [
+                                  const Icon(Icons.keyboard_arrow_down,
+                                      color: Colors.black, size: 20),
+                                  const SizedBox(
+                                      width: Dimensions.paddingSizeExtraSmall),
+                                  Expanded(
+                                    child: Text(
+                                      address?.address ?? 'your_location'.tr,
+                                      style: robotoRegular.copyWith(
+                                        color: Colors.black,
+                                        fontSize: Dimensions.fontSizeSmall,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                  ))
-                              : const SizedBox(),
-                        ]);
-                      }),
-                      onTap: () =>
-                          Get.toNamed(RouteHelper.getNotificationRoute()),
+                                  ),
+                                  const SizedBox(
+                                      width: Dimensions.paddingSizeExtraSmall),
+                                  const Icon(Icons.location_on,
+                                      color: Color(0xFFacb566), size: 20),
+                                ],
+                              );
+                            }),
+                          ),
+                        )),
+                        InkWell(
+                          child: GetBuilder<MarketNotificationController>(
+                              builder: (notificationController) {
+                            return Stack(children: [
+                              Container(
+                                width: 30,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(
+                                      Dimensions.radiusExtraLarge),
+                                  border: Border.all(
+                                      color: Colors.white, width: 1.2),
+                                ),
+                                child: Icon(Icons.notifications,
+                                    size: 25, color: Colors.green),
+                              ),
+                              notificationController.hasNotification
+                                  ? Positioned(
+                                      top: 0,
+                                      right: 0,
+                                      child: Container(
+                                        height: 10,
+                                        width: 10,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                              width: 1, color: Colors.white),
+                                        ),
+                                      ))
+                                  : const SizedBox(),
+                            ]);
+                          }),
+                          onTap: () =>
+                              Get.toNamed(RouteHelper.getNotificationRoute()),
+                        ),
+                      ]),
                     ),
-                  ]),
-                ),
+                  ),
+                ],
               ),
             ),
           ),
           actions: const [SizedBox()],
+        ),
+        SliverToBoxAdapter(
+          child: SizedBox(height: 10),
+        ),
+
+        // Banner فوق السيرش
+        SliverToBoxAdapter(
+          child: const BannerView(),
+        ),
+        // Banner فوق السيرش
+        SliverToBoxAdapter(
+          child: SizedBox(height: 10),
         ),
 
         // Search Button
@@ -249,7 +267,6 @@ class Theme1HomeScreen extends StatelessWidget {
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               const BannerViewWidget1(),
               const SizedBox(height: Dimensions.paddingSizeSmall),
-              const BannerView(),
               const BadWeatherWidget(),
               const CategoryWidget1(),
               const ItemCampaignWidget1(),
