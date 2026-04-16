@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PortionWidget extends StatelessWidget {
-  final String icon;
+  final dynamic icon;
   final String title;
   final bool hideDivider;
   final String route;
@@ -28,14 +28,22 @@ class PortionWidget extends StatelessWidget {
             const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeSmall),
         child: Column(children: [
           Row(children: [
-            Image.asset(icon,
-                height: 16,
-                width: 16,
-                color: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .color
-                    ?.withValues(alpha: 0.7)),
+            icon is String
+                ? Image.asset(icon,
+                    height: 16,
+                    width: 16,
+                    color: Theme.of(context)
+                        .textTheme
+                        .bodyMedium!
+                        .color
+                        ?.withValues(alpha: 0.7))
+                : Icon(icon as IconData,
+                    size: 16,
+                    color: Theme.of(context)
+                        .textTheme
+                        .bodyMedium!
+                        .color
+                        ?.withValues(alpha: 0.7)),
             const SizedBox(width: Dimensions.paddingSizeSmall),
             Expanded(
                 child: Text(title,

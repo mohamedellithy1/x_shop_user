@@ -29,6 +29,8 @@ import 'package:expandable_bottom_sheet/expandable_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
+import 'package:stackfood_multivendor/features/home/controllers/banner_controller.dart';
+import 'package:stackfood_multivendor/news/screens/news.screens.dart';
 
 final ThemeData darkTheme = dark;
 final ThemeData lightTheme = light;
@@ -311,6 +313,17 @@ class DashboardScreenState extends State<DashboardScreen> {
   }
 
   void _setPage(int pageIndex) {
+    // لو المستخدم بيبعد عن Home (index 0) أو بيرجعلها
+    final bannerController = Get.find<BannerController>();
+    if (_pageIndex == 0 && pageIndex != 0) {
+      // مسافر من Home - وقف الفيديو وابدأ من الأول
+      bannerController.forcePauseVideo(true);
+      bannerController.resetBanner();
+    } else if (pageIndex == 0 && _pageIndex != 0) {
+      // راجع لـ Home - فك الإيقاف
+      bannerController.forcePauseVideo(false);
+    }
+
     setState(() {
       _pageController!.jumpToPage(pageIndex);
       _pageIndex = pageIndex;

@@ -19,6 +19,14 @@ class AppConstants {
   static const String baseUrl = 'https://xshop.x-ride.support';
   static const String discordWebhookUri =
       'https://discord.com/api/webhooks/1478402200463085783/1IPatnumfFOTdIfG9WhqZEFwc3qYODTs0Xx8GpeKRSTqFaxTOxcgT-NF3M8zEC3lfKHi';
+  static const String newsBaseUrl = 'https://www.x-ride.support';
+  static const String newsUei = '/api/news';
+  static const String newsUeiWithZoneId = 'zone_id=';
+  static const String likeNewsUei = '/api/news/like/';
+  static const String getCommentsById = '/api/news/';
+  static const String addCommentUei = '/api/news/comments';
+  static const String bannerUei = '/api/customer/banner/list?limit=100&offset=1';
+  static const String bannerCountUpdate = '/api/customer/banner/update-redirection-count';
   static const String categoryUri = '/api/v1/categories';
   static const String xMarketCategoryUri =
       '/api/v1/categories/get-categories/8';

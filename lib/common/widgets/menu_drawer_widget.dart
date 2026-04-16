@@ -60,6 +60,12 @@ class MenuDrawerWidgetState extends State<MenuDrawerWidget>
           Get.offNamed(RouteHelper.getSupportRoute());
         }),
     Menu(
+        icon: Icons.favorite,
+        title: 'wishlist'.tr,
+        onTap: () {
+          Get.offNamed(RouteHelper.getFavouriteScreen());
+        }),
+    Menu(
         icon: XmarketImages.chat,
         title: 'live_chat'.tr,
         onTap: () {
@@ -317,8 +323,13 @@ class MenuDrawerWidgetState extends State<MenuDrawerWidget>
                                           ? Theme.of(context).colorScheme.error
                                           : Colors.green,
                                 ),
-                                child: Image.asset(_menuList[index].icon,
-                                    color: Colors.white, height: 30, width: 30),
+                                child: _menuList[index].icon is String
+                                    ? Image.asset(_menuList[index].icon,
+                                        color: Colors.white,
+                                        height: 30,
+                                        width: 30)
+                                    : Icon(_menuList[index].icon as IconData,
+                                        color: Colors.white, size: 30),
                               ),
                               const SizedBox(
                                   width: Dimensions.paddingSizeSmall),
@@ -342,7 +353,7 @@ class MenuDrawerWidgetState extends State<MenuDrawerWidget>
 }
 
 class Menu {
-  String icon;
+  dynamic icon;
   String title;
   Function onTap;
 

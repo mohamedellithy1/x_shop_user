@@ -70,12 +70,13 @@ class ApiClient extends GetxService {
       bool handleError = true,
       bool showToaster = false}) async {
     try {
+      Uri url = uri.startsWith('http') ? Uri.parse(uri) : Uri.parse(appBaseUrl + uri);
       if (kDebugMode) {
-        debugPrint('====> API Call: ${appBaseUrl + uri}\nHeader: ${headers ?? _mainHeaders}');
+        debugPrint('====> API Call: $url\nHeader: ${headers ?? _mainHeaders}');
       }
       http.Response response = await http
           .get(
-            Uri.parse(appBaseUrl + uri),
+            url,
             headers: headers ?? _mainHeaders,
           )
           .timeout(Duration(seconds: timeoutInSeconds));
@@ -92,13 +93,14 @@ class ApiClient extends GetxService {
   Future<Response> postData(String uri, dynamic body,
       {Map<String, String>? headers, bool handleError = true}) async {
     try {
+      Uri url = uri.startsWith('http') ? Uri.parse(uri) : Uri.parse(appBaseUrl + uri);
       if (kDebugMode) {
-        debugPrint('====> API Call: ${appBaseUrl + uri}\nHeader: $_mainHeaders');
+        debugPrint('====> API Call: $url\nHeader: $_mainHeaders');
         debugPrint('====> API Body: $body');
       }
       http.Response response = await http
           .post(
-            Uri.parse(appBaseUrl + uri),
+            url,
             body: jsonEncode(body),
             headers: headers ?? _mainHeaders,
           )
@@ -190,13 +192,14 @@ class ApiClient extends GetxService {
   Future<Response> putData(String uri, dynamic body,
       {Map<String, String>? headers, bool handleError = true}) async {
     try {
+      Uri url = uri.startsWith('http') ? Uri.parse(uri) : Uri.parse(appBaseUrl + uri);
       if (kDebugMode) {
-        debugPrint('====> API Call: ${appBaseUrl + uri}\nHeader: $_mainHeaders');
+        debugPrint('====> API Call: $url\nHeader: $_mainHeaders');
         debugPrint('====> API Body: $body');
       }
       http.Response response = await http
           .put(
-            Uri.parse(appBaseUrl + uri),
+            url,
             body: jsonEncode(body),
             headers: headers ?? _mainHeaders,
           )
@@ -210,12 +213,13 @@ class ApiClient extends GetxService {
   Future<Response> deleteData(String uri,
       {Map<String, String>? headers, bool handleError = true}) async {
     try {
+      Uri url = uri.startsWith('http') ? Uri.parse(uri) : Uri.parse(appBaseUrl + uri);
       if (kDebugMode) {
-        debugPrint('====> API Call: ${appBaseUrl + uri}\nHeader: $_mainHeaders');
+        debugPrint('====> API Call: $url\nHeader: $_mainHeaders');
       }
       http.Response response = await http
           .delete(
-            Uri.parse(appBaseUrl + uri),
+            url,
             headers: headers ?? _mainHeaders,
           )
           .timeout(Duration(seconds: timeoutInSeconds));

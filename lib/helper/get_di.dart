@@ -14,6 +14,8 @@ import 'package:stackfood_multivendor/features/home/domain/services/advertisemen
 import 'package:stackfood_multivendor/features/home/domain/services/advertisement_service_interface.dart';
 import 'package:stackfood_multivendor/features/product/controllers/campaign_controller.dart';
 import 'package:stackfood_multivendor/features/cart/controllers/cart_controller.dart';
+import 'package:stackfood_multivendor/news/controllers/news_controller.dart';
+import 'package:stackfood_multivendor/news/domain/repositories/news_repository.dart';
 import 'package:stackfood_multivendor/features/cart/domain/repositories/cart_repository.dart';
 import 'package:stackfood_multivendor/features/cart/domain/repositories/cart_repository_interface.dart';
 import 'package:stackfood_multivendor/features/cart/domain/services/cart_service.dart';
@@ -34,6 +36,8 @@ import 'package:stackfood_multivendor/features/home/domain/repositories/home_rep
 import 'package:stackfood_multivendor/features/home/domain/repositories/home_repository_interface.dart';
 import 'package:stackfood_multivendor/features/home/domain/services/home_service.dart';
 import 'package:stackfood_multivendor/features/home/domain/services/home_service_interface.dart';
+import 'package:stackfood_multivendor/features/home/controllers/banner_controller.dart';
+import 'package:stackfood_multivendor/features/home/domain/repositories/banner_repo.dart';
 import 'package:stackfood_multivendor/features/order/controllers/order_controller.dart';
 import 'package:stackfood_multivendor/features/order/domain/repositories/order_repository.dart';
 import 'package:stackfood_multivendor/features/order/domain/repositories/order_repository_interface.dart';
@@ -397,6 +401,9 @@ Future<Map<String, Map<String, String>>> init() async {
       DineInService(dineInRepositoryInterface: Get.find(tag: 'xmarket'));
   Get.lazyPut(() => dineInServiceInterface, tag: 'xmarket');
 
+  Get.lazyPut(() => NewsRepository(Get.find(tag: 'xmarket')));
+  Get.lazyPut(() => BannerRepo(apiClient: Get.find(tag: 'xmarket')));
+
   /// Controller
   Get.lazyPut(
       () => MarketThemeController(
@@ -477,6 +484,8 @@ Future<Map<String, Map<String, String>>> init() async {
       () => DineInController(dineInServiceInterface: Get.find(tag: 'xmarket')));
   Get.lazyPut(() => ReverbService());
   Get.lazyPut(() => UserRealtimeService());
+  Get.lazyPut(() => BannerController(bannerRepo: Get.find()));
+  Get.lazyPut(() => NewsController(newsRepo: Get.find()));
 
   /// Retrieving localized data
   /// Note: Language files are already loaded by xride DI, so we return empty map

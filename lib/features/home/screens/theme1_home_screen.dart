@@ -7,6 +7,7 @@ import 'package:stackfood_multivendor/features/home/widgets/filter_view_widget.d
 import 'package:stackfood_multivendor/features/home/widgets/highlight_widget_view.dart';
 import 'package:stackfood_multivendor/features/home/widgets/order_again_view_widget.dart';
 import 'package:stackfood_multivendor/features/home/widgets/refer_banner_view_widget.dart';
+import 'package:stackfood_multivendor/features/home/widgets/theme1/banner_view.dart';
 import 'package:stackfood_multivendor/features/home/widgets/theme1/banner_view_widget1.dart';
 import 'package:stackfood_multivendor/features/home/widgets/theme1/best_reviewed_item_widget1.dart';
 import 'package:stackfood_multivendor/features/home/widgets/theme1/category_widget1.dart';
@@ -247,6 +248,8 @@ class Theme1HomeScreen extends StatelessWidget {
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               const BannerViewWidget1(),
+              const SizedBox(height: Dimensions.paddingSizeSmall),
+              const BannerView(),
               const BadWeatherWidget(),
               const CategoryWidget1(),
               const ItemCampaignWidget1(),

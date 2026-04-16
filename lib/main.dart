@@ -17,6 +17,7 @@ import 'package:stackfood_multivendor/features/splash/controllers/theme_controll
 import 'package:stackfood_multivendor/util/app_constants.dart';
 import 'package:stackfood_multivendor/util/messages.dart';
 import 'package:stackfood_multivendor/common/widgets/cookies_view_widget.dart';
+import 'package:stackfood_multivendor/core/navigation/app_navigator_observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
@@ -180,6 +181,7 @@ class _MyAppState extends State<MyApp> {
                                   ? RouteHelper.getInitialRoute()
                                   : RouteHelper.splash,
                               getPages: RouteHelper.routes,
+                              navigatorObservers: [appRouteObserver],
                               defaultTransition: Transition.topLevel,
                               transitionDuration:
                                   const Duration(milliseconds: 500),

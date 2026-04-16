@@ -53,7 +53,7 @@ class FavouriteScreenState extends State<FavouriteScreen> {
                   : Color(0xFFfafef5),
               appBar: CustomAppBarWidget(
                 title: 'wishlist'.tr,
-                isBackButtonExist: false,
+                isBackButtonExist: true,
                 actions: [
                   TextButton(
                     onPressed: () {
