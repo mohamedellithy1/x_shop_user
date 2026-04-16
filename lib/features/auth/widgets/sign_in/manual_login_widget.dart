@@ -41,11 +41,11 @@ class ManualLoginWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isDesktop = ResponsiveHelper.isDesktop(context);
-    return GetBuilder<MarketAuthController>(builder: (authController) {
-      if (isDesktop) {
-        return webView(isDesktop, context, authController);
-      }
-      return Column(mainAxisSize: MainAxisSize.min, children: [
+    MarketAuthController authController = Get.find<MarketAuthController>();
+    if (isDesktop) {
+      return webView(isDesktop, context, authController);
+    }
+    return Column(mainAxisSize: MainAxisSize.min, children: [
         Align(
           alignment: Alignment.topRight,
           child: Text('login'.tr,
@@ -218,8 +218,8 @@ class ManualLoginWidget extends StatelessWidget {
             ? const SocialLoginWidget(onlySocialLogin: false)
             : const SizedBox(),
       ]);
-    });
-  }
+    }
+
 
   Widget webView(bool isDesktop, BuildContext context,
       MarketAuthController authController) {

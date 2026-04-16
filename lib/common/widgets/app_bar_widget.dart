@@ -80,7 +80,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                       title.tr,
                       style: robotoRegular.copyWith(
                         fontSize: fontSize ?? Dimensions.fontSizeLarge,
-                        color: Colors.black,
+                        color: Color(0xFF263238),
                         fontWeight: FontWeight.bold,
                       ),
                       maxLines: 1,

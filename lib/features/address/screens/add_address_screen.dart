@@ -565,7 +565,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
               height: 40,
               width: 250,
               fontSize: Dimensions.fontSizeDefault,
-              buttonText: 'إضغط للإختيار من الأماكن',
+              buttonText: 'إضغط للإختيار من المناطق',
               onPressed: () => _openLocationPicker(locationController),
             ),
           ),
@@ -1234,10 +1234,10 @@ class _TabBarSectionState extends State<TabBarSection>
           color: Colors.white,
           child: TabBar(
             controller: _tabController,
-            dividerColor: Color(0xffe36f2c),
+            dividerColor: Color(0xFF9ebc67),
             labelColor: Colors.black,
             unselectedLabelColor: Colors.black,
-            indicatorColor: Color(0xffe36f2c),
+            indicatorColor: Color(0xFF9ebc67),
             indicatorWeight: 2,
             labelStyle: const TextStyle(
               fontWeight: FontWeight.normal,

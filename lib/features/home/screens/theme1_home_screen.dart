@@ -162,7 +162,7 @@ class Theme1HomeScreen extends StatelessWidget {
                                   Border.all(color: Colors.white, width: 1.2),
                             ),
                             child: Icon(Icons.notifications,
-                                size: 25, color: const Color(0xFF00ac7a)),
+                                size: 25, color: Colors.green),
                           ),
                           notificationController.hasNotification
                               ? Positioned(

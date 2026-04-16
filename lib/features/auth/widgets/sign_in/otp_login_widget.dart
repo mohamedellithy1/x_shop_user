@@ -32,89 +32,88 @@ class OtpLoginWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isDesktop = ResponsiveHelper.isDesktop(context);
-    return GetBuilder<MarketAuthController>(builder: (authController) {
-      return Padding(
-        padding: EdgeInsets.symmetric(
-            horizontal: isDesktop ? Dimensions.paddingSizeLarge : 0),
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
-          Align(
-            alignment: Alignment.topLeft,
-            child: Text('login'.tr,
-                style: robotoBold.copyWith(
-                    fontSize: Dimensions.fontSizeExtraLarge)),
-          ),
-          const SizedBox(height: Dimensions.paddingSizeLarge),
-          CustomTextFieldWidget(
-            hintText: 'xxx-xxx-xxxxx'.tr,
-            controller: phoneController,
-            focusNode: phoneFocus,
-            inputAction: TextInputAction.done,
-            inputType: TextInputType.phone,
-            isPhone: false,
-            onCountryChanged: onCountryChanged,
-            countryDialCode: CountryCode.fromCountryCode(
-                        Get.find<MarketSplashController>(tag: 'xmarket')
-                            .configModel!
-                            .country!)
-                    .code ??
-                Get.find<LocalizationController>(tag: 'xmarket')
-                    .locale
-                    .countryCode,
-            labelText: 'phone'.tr,
-            required: true,
-            validator: (value) => ValidateCheck.validateEmptyText(
-                value, "please_enter_phone_number".tr),
-          ),
-          const SizedBox(height: Dimensions.paddingSizeExtraLarge),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: InkWell(
-              onTap: () => authController.toggleRememberMeForOtp(),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    height: 24,
-                    width: 24,
-                    child: Checkbox(
-                      side: BorderSide(color: Theme.of(context).hintColor),
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      activeColor: Theme.of(context).primaryColor,
-                      value: authController.isActiveRememberMeForOtp,
-                      onChanged: (bool? isChecked) =>
-                          authController.toggleRememberMeForOtp(),
-                    ),
+    MarketAuthController authController = Get.find<MarketAuthController>();
+    return Padding(
+      padding: EdgeInsets.symmetric(
+          horizontal: isDesktop ? Dimensions.paddingSizeLarge : 0),
+      child: Column(mainAxisSize: MainAxisSize.min, children: [
+        Align(
+          alignment: Alignment.topLeft,
+          child: Text('login'.tr,
+              style: robotoBold.copyWith(
+                  fontSize: Dimensions.fontSizeExtraLarge)),
+        ),
+        const SizedBox(height: Dimensions.paddingSizeLarge),
+        CustomTextFieldWidget(
+          hintText: 'xxx-xxx-xxxxx'.tr,
+          controller: phoneController,
+          focusNode: phoneFocus,
+          inputAction: TextInputAction.done,
+          inputType: TextInputType.phone,
+          isPhone: false,
+          onCountryChanged: onCountryChanged,
+          countryDialCode: CountryCode.fromCountryCode(
+                      Get.find<MarketSplashController>(tag: 'xmarket')
+                          .configModel!
+                          .country!)
+                  .code ??
+              Get.find<LocalizationController>(tag: 'xmarket')
+                  .locale
+                  .countryCode,
+          labelText: 'phone'.tr,
+          required: true,
+          validator: (value) => ValidateCheck.validateEmptyText(
+              value, "please_enter_phone_number".tr),
+        ),
+        const SizedBox(height: Dimensions.paddingSizeExtraLarge),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: InkWell(
+            onTap: () => authController.toggleRememberMeForOtp(),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  height: 24,
+                  width: 24,
+                  child: Checkbox(
+                    side: BorderSide(color: Theme.of(context).hintColor),
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    activeColor: Theme.of(context).primaryColor,
+                    value: authController.isActiveRememberMeForOtp,
+                    onChanged: (bool? isChecked) =>
+                        authController.toggleRememberMeForOtp(),
                   ),
-                  const SizedBox(width: Dimensions.paddingSizeSmall),
-                  Text('remember_me'.tr, style: robotoRegular),
-                ],
-              ),
+                ),
+                const SizedBox(width: Dimensions.paddingSizeSmall),
+                Text('remember_me'.tr, style: robotoRegular),
+              ],
             ),
           ),
-          const SizedBox(height: Dimensions.paddingSizeLarge),
-          TramsConditionsCheckBoxWidget(
-              authController: authController, fromDialog: true),
-          const SizedBox(height: Dimensions.paddingSizeLarge),
-          CustomButtonWidget(
-            buttonText: 'login'.tr,
-            radius: Dimensions.radiusDefault,
-            isBold: isDesktop ? false : true,
-            isLoading: authController.isLoading,
-            onPressed: onClickLoginButton,
-            fontSize: isDesktop
-                ? Dimensions.fontSizeSmall
-                : Dimensions.fontSizeDefault,
-          ),
-          const SizedBox(height: Dimensions.paddingSizeLarge),
-          socialEnable
-              ? const SocialLoginWidget(onlySocialLogin: false)
-              : const SizedBox(),
-          socialEnable && isDesktop
-              ? const SizedBox(height: Dimensions.paddingSizeLarge)
-              : const SizedBox(),
-          !socialEnable ? const SizedBox(height: 100) : const SizedBox(),
-        ]),
-      );
-    });
+        ),
+        const SizedBox(height: Dimensions.paddingSizeLarge),
+        TramsConditionsCheckBoxWidget(
+            authController: authController, fromDialog: true),
+        const SizedBox(height: Dimensions.paddingSizeLarge),
+        CustomButtonWidget(
+          buttonText: 'login'.tr,
+          radius: Dimensions.radiusDefault,
+          isBold: isDesktop ? false : true,
+          isLoading: authController.isLoading,
+          onPressed: onClickLoginButton,
+          fontSize: isDesktop
+              ? Dimensions.fontSizeSmall
+              : Dimensions.fontSizeDefault,
+        ),
+        const SizedBox(height: Dimensions.paddingSizeLarge),
+        socialEnable
+            ? const SocialLoginWidget(onlySocialLogin: false)
+            : const SizedBox(),
+        socialEnable && isDesktop
+            ? const SizedBox(height: Dimensions.paddingSizeLarge)
+            : const SizedBox(),
+        !socialEnable ? const SizedBox(height: 100) : const SizedBox(),
+      ]),
+    );
   }
 }

@@ -166,7 +166,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                       content: Text('back_press_again_to_exit'.tr,
                           style: const TextStyle(color: Colors.white)),
                       behavior: SnackBarBehavior.floating,
-                      backgroundColor: Colors.green,
+                      backgroundColor: Color(0xFF9ebc67),
                       duration: const Duration(seconds: 2),
                       margin: const EdgeInsets.all(Dimensions.paddingSizeSmall),
                     ));
@@ -180,20 +180,24 @@ class DashboardScreenState extends State<DashboardScreen> {
               },
               child: Scaffold(
                 key: _scaffoldKey,
-                backgroundColor: marketThemeController.darkTheme ? Colors.black : Colors.white,
+                backgroundColor: marketThemeController.darkTheme
+                    ? Colors.black
+                    : Colors.white,
                 floatingActionButton: const SizedBox(),
-                floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+                floatingActionButtonLocation:
+                    FloatingActionButtonLocation.centerDocked,
                 bottomNavigationBar: ResponsiveHelper.isDesktop(context)
                     ? const SizedBox()
                     : GetBuilder<OrderController>(builder: (orderController) {
                         return (orderController.showBottomSheet &&
                                 (orderController.runningOrderList != null &&
-                                    orderController.runningOrderList!.isNotEmpty &&
+                                    orderController
+                                        .runningOrderList!.isNotEmpty &&
                                     _isLogin))
                             ? const SizedBox()
                             : Padding(
-                                padding:
-                                    const EdgeInsets.all(Dimensions.paddingSizeDefault),
+                                padding: const EdgeInsets.all(
+                                    Dimensions.paddingSizeDefault),
                                 child: Container(
                                   height: 65,
                                   decoration: BoxDecoration(
@@ -253,7 +257,8 @@ class DashboardScreenState extends State<DashboardScreen> {
                           ? orderController.runningOrderList!
                           : [];
 
-                  List<OrderModel> reversOrder = List.from(runningOrder.reversed);
+                  List<OrderModel> reversOrder =
+                      List.from(runningOrder.reversed);
                   return ExpandableBottomSheet(
                     background: PageView.builder(
                       controller: _pageController,

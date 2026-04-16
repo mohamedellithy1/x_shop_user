@@ -13,7 +13,7 @@ ThemeData light = ThemeData(
   cardColor: Colors.white,
   shadowColor: Colors.black.withValues(alpha: 0.03),
   textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(foregroundColor: const Color(0xFFFF8200))),
+      style: TextButton.styleFrom(foregroundColor: const Color(0xFF263238))),
   scaffoldBackgroundColor: const Color(0xFFfafef5),
   colorScheme: const ColorScheme.light(
           primary: Color(0xFFFF8200),

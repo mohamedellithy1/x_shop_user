@@ -35,11 +35,7 @@ class _ForgetPassScreenState extends State<ForgetPassScreen> {
   final TextEditingController _emailController = TextEditingController();
   final FocusNode _numberFocusNode = FocusNode();
   final FocusNode _emailFocusNode = FocusNode();
-  String? _countryDialCode = CountryCode.fromCountryCode(
-          Get.find<MarketSplashController>(tag: 'xmarket')
-              .configModel!
-              .country!)
-      .dialCode;
+  String? _countryDialCode = '+20';
   GlobalKey<FormState>? _formKeyLogin;
   bool isEmail = false;
   bool isPhone = false;
@@ -164,25 +160,12 @@ class _ForgetPassScreenState extends State<ForgetPassScreen> {
                           key: _formKeyLogin,
                           child: isPhone
                               ? CustomTextFieldWidget(
-                                  titleText: 'xxx-xxx-xxxxx'.tr,
+                                  titleText: '',
                                   controller: _numberController,
                                   focusNode: _numberFocusNode,
                                   inputType: TextInputType.phone,
                                   inputAction: TextInputAction.done,
                                   isPhone: false,
-                                  onCountryChanged: (CountryCode countryCode) {
-                                    _countryDialCode = countryCode.dialCode;
-                                  },
-                                  countryDialCode: CountryCode.fromCountryCode(
-                                              Get.find<MarketSplashController>(
-                                                      tag: 'xmarket')
-                                                  .configModel!
-                                                  .country!)
-                                          .code ??
-                                      Get.find<LocalizationController>(
-                                              tag: 'xmarket')
-                                          .locale
-                                          .countryCode,
                                   onSubmit: (text) => GetPlatform.isWeb
                                       ? _onPressedForgetPass(_countryDialCode!)
                                       : null,
@@ -302,17 +285,27 @@ class _ForgetPassScreenState extends State<ForgetPassScreen> {
     );
   }
 
-  void _onPressedForgetPass(String countryCode) async {
+  void _onPressedForgetPass(String ignoredCountryCode) async {
     String phone = _numberController.text.trim();
+    if (phone.startsWith('0')) {
+      phone = phone.substring(1);
+    }
     String email = _emailController.text.trim();
 
-    String numberWithCountryCode = countryCode + phone;
+    // نثبت كود مصر هنا مباشرة لضمان عدم حدوث خطأ
+    String numberWithCountryCode = '+20$phone';
+    
     PhoneValid phoneValid =
         await CustomValidator.isPhoneValid(numberWithCountryCode);
-    numberWithCountryCode = phoneValid.phone;
+    
+    // نستخدم الرقم المجمع بتاعنا لو الـ validator فشل أو طلع رقم غريب
+    if (phoneValid.isValid && phoneValid.phone.isNotEmpty) {
+      numberWithCountryCode = phoneValid.phone;
+    }
 
     if (_formKeyLogin!.currentState!.validate()) {
-      if (!phoneValid.isValid && !isEmail) {
+      bool isLocalValid = phone.length == 10;
+      if (!phoneValid.isValid && !isLocalValid && !isEmail) {
         showCustomSnackBar('invalid_phone_number'.tr);
       } else {
         Get.find<VerificationController>()

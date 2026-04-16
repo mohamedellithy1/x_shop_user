@@ -64,7 +64,7 @@ class _SupportScreenState extends State<SupportScreen> {
                       icon: Icon(Icons.arrow_back,
                           color: Theme.of(context).brightness == Brightness.dark
                               ? Colors.black
-                              : Colors.white),
+                              : Colors.black),
                       onPressed: () => Get.back(),
                     ),
                     Expanded(
@@ -76,7 +76,7 @@ class _SupportScreenState extends State<SupportScreen> {
                             color:
                                 Theme.of(context).brightness == Brightness.dark
                                     ? Colors.black
-                                    : Colors.white),
+                                    : Colors.black),
                       ),
                     ),
                     const SizedBox(width: 48), // Placeholder for symmetry

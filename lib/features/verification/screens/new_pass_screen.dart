@@ -77,8 +77,8 @@ class _NewPassScreenState extends State<NewPassScreen> {
                   child: Padding(
                     padding: EdgeInsets.all(Dimensions.paddingSizeOverLarge),
                     child: Column(children: [
-                      Image.asset(XmarketImages.changePasswordBg,
-                          height: 170, width: 190),
+                      // Image.asset(XmarketImages.changePasswordBg,
+                      //     height: 170, width: 190),
                       const SizedBox(height: Dimensions.paddingSizeLarge),
                       Text('enter_your_new_password'.tr,
                           style: robotoBold.copyWith(
@@ -161,8 +161,8 @@ class _NewPassScreenState extends State<NewPassScreen> {
                           const EdgeInsets.all(Dimensions.paddingSizeLarge),
                       child: Column(
                         children: [
-                          Image.asset(XmarketImages.changePasswordBg,
-                              height: 170, width: 190),
+                          // Image.asset(XmarketImages.changePasswordBg,
+                          //     height: 170, width: 190),
                           const SizedBox(height: Dimensions.paddingSizeLarge),
                           Text('enter_your_new_password'.tr,
                               style: robotoBold.copyWith(

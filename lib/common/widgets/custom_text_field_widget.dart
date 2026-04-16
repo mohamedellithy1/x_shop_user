@@ -228,8 +228,8 @@ class CustomTextFieldWidgetState extends State<CustomTextFieldWidget> {
                     color: Theme.of(context).disabledColor),
               ),
               isDense: true,
-              hintText:
-                  widget.hintText.isEmpty ? widget.titleText : widget.hintText,
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+              hintText: widget.hintText.isEmpty ? null : widget.hintText,
               fillColor: !widget.isEnabled
                   ? (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
                       ? Colors.white10
@@ -254,10 +254,10 @@ class CustomTextFieldWidgetState extends State<CustomTextFieldWidget> {
                   : null,
               errorStyle:
                   robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
-              label: widget.showLabelText
+              label: widget.showLabelText && (widget.labelText != null || widget.titleText.isNotEmpty)
                   ? Text.rich(TextSpan(children: [
                       TextSpan(
-                        text: widget.labelText ?? '',
+                        text: widget.labelText ?? widget.titleText,
                         style: robotoRegular.copyWith(
                           fontSize:
                               widget.levelTextSize ?? Dimensions.fontSizeLarge,
@@ -267,10 +267,7 @@ class CustomTextFieldWidgetState extends State<CustomTextFieldWidget> {
                               ? (Get.find<MarketThemeController>(tag: 'xmarket')
                                       .darkTheme
                                   ? Colors.white
-                                  : Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
-                                      ?.color)
+                                  : Theme.of(context).primaryColor)
                               : (Get.find<MarketThemeController>(tag: 'xmarket')
                                       .darkTheme
                                   ? Colors.white
@@ -279,7 +276,7 @@ class CustomTextFieldWidgetState extends State<CustomTextFieldWidget> {
                                       .withValues(alpha: .75)),
                         ),
                       ),
-                      if (widget.required && widget.labelText != null)
+                      if (widget.required && (widget.labelText != null || widget.titleText.isNotEmpty))
                         TextSpan(
                             text: ' *',
                             style: robotoRegular.copyWith(

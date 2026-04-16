@@ -25,6 +25,9 @@ class HomeRepository implements HomeRepositoryInterface {
       case DataSourceEnum.client:
         Response response = await apiClient.getData(AppConstants.bannerUri);
         if(response.statusCode == 200) {
+          print('---👇---RAW BANNER API RESPONSE---👇---');
+          print(response.body);
+          print('-----------------------------------------');
           bannerModel = BannerModel.fromJson(response.body);
           LocalClient.organize(DataSourceEnum.client, cacheId, jsonEncode(response.body), apiClient.getHeader());
         }

@@ -48,15 +48,24 @@ class _SignInViewState extends State<SignInView> {
     _formKeyLogin = GlobalKey<FormState>();
     MarketAuthController authController  = Get.find<MarketAuthController>();
 
-    _countryDialCode = authController.getUserCountryCode().isNotEmpty ? authController.getUserCountryCode()
-        : CountryCode.fromCountryCode(Get.find<MarketSplashController>(tag: 'xmarket').configModel!.country!).dialCode;
+    final splashController = Get.find<MarketSplashController>(tag: 'xmarket');
+    final country = splashController.configModel?.country;
+    _countryDialCode = authController.getUserCountryCode().isNotEmpty
+        ? authController.getUserCountryCode()
+        : (country != null && country.isNotEmpty
+            ? CountryCode.fromCountryCode(country).dialCode
+            : '+20');
     _phoneController.text =  authController.getUserNumber();
     _passwordController.text = authController.getUserPassword();
     _otpPhoneController.text = authController.getUserOtpPhoneNumber();
 
     WidgetsBinding.instance.addPostFrameCallback((_){
-      bool isOtpActive = CentralizeLoginHelper.getPreferredLoginMethod(Get.find<MarketSplashController>(tag: 'xmarket').configModel!.centralizeLoginSetup!, authController.isOtpViewEnable).type == CentralizeLoginType.otp
-      || CentralizeLoginHelper.getPreferredLoginMethod(Get.find<MarketSplashController>(tag: 'xmarket').configModel!.centralizeLoginSetup!, authController.isOtpViewEnable).type == CentralizeLoginType.otpAndSocial ;
+      final centralizeSetup = Get.find<MarketSplashController>(tag: 'xmarket').configModel?.centralizeLoginSetup;
+      bool isOtpActive = false;
+      if (centralizeSetup != null) {
+        final loginType = CentralizeLoginHelper.getPreferredLoginMethod(centralizeSetup, authController.isOtpViewEnable).type;
+        isOtpActive = loginType == CentralizeLoginType.otp || loginType == CentralizeLoginType.otpAndSocial;
+      }
       if(_countryDialCode != "" && _phoneController.text != "" && _phoneController.text.contains('@') && isOtpActive) {
         _phoneController.text = '';
       } else if(_countryDialCode != "" && _phoneController.text != "" && !_phoneController.text.contains('@')){
@@ -80,7 +89,9 @@ class _SignInViewState extends State<SignInView> {
     return GetBuilder<MarketAuthController>(builder: (authController) {
       return Form(
         key: _formKeyLogin,
-        child: activeCentralizeLogin(Get.find<MarketSplashController>(tag: 'xmarket').configModel!.centralizeLoginSetup!, authController),
+        child: Get.find<MarketSplashController>(tag: 'xmarket').configModel?.centralizeLoginSetup != null
+            ? activeCentralizeLogin(Get.find<MarketSplashController>(tag: 'xmarket').configModel!.centralizeLoginSetup!, authController)
+            : const Center(child: CircularProgressIndicator()),
       );
     });
   }

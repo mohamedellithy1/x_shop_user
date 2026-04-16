@@ -59,7 +59,7 @@ class PriceConverter {
       child: AnimatedFlipCounter(
         duration: const Duration(milliseconds: 500),
         value: toFixed(price!),
-        textStyle: textStyle ?? robotoMedium,
+        textStyle: textStyle ?? robotoMedium.copyWith(color: Color(0xFF263238)),
         fractionDigits: forDM
             ? 0
             : Get.find<MarketSplashController>(tag: 'xmarket')

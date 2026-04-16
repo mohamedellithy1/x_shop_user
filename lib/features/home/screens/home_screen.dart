@@ -581,7 +581,7 @@ class _XMarketHomeScreenState extends State<XMarketHomeScreen> {
                                                                                       child: Stack(children: [
                                                                                         Transform.translate(
                                                                                           offset: Offset(0, -(scrollingRate * 10)),
-                                                                                          child: Icon(Icons.notifications_outlined, size: 25, color: const Color(0xFF00ac7a)),
+                                                                                          child: Icon(Icons.notifications_outlined, size: 25, color: Colors.green),
                                                                                         ),
                                                                                         notificationController.hasNotification
                                                                                             ? Positioned(
