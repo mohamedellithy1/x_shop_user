@@ -66,7 +66,7 @@ class BaseCardWidget extends StatelessWidget {
                       isDesktop ? Alignment.centerLeft : Alignment.center,
                   child: Text(title,
                       style: robotoMedium.copyWith(
-                        color: Colors.black,
+                        color:Color(0xFF55745a),
                         fontSize: Dimensions.fontSizeDefault,
                         fontWeight:
                             restaurantRegistrationController.businessIndex ==
@@ -83,7 +83,7 @@ class BaseCardWidget extends StatelessWidget {
                         description ?? '',
                         style: robotoRegular.copyWith(
                             fontSize: Dimensions.fontSizeSmall,
-                            color: Colors.black),
+                            color: Color(0xFF55745a)),
                         textAlign: TextAlign.justify,
                         textScaler: const TextScaler.linear(1.1),
                       )

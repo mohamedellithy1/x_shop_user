@@ -98,7 +98,9 @@ class _DeliverySectionState extends State<DeliverySection> {
               vertical: Dimensions.paddingSizeSmall,
             ),
             decoration: BoxDecoration(
-              color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF1b1b1b) : Colors.white,
+              color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+                  ? const Color(0xFF1b1b1b)
+                  : Colors.white,
               borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
               // boxShadow: [
               //   BoxShadow(
@@ -117,7 +119,12 @@ class _DeliverySectionState extends State<DeliverySection> {
                   children: [
                     Text('حدد عنوان التسليم',
                         style: robotoMedium.copyWith(
-                            color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black, fontSize: 17)),
+                            color:
+                                Get.find<MarketThemeController>(tag: 'xmarket')
+                                        .darkTheme
+                                    ? Colors.white
+                                    : Color(0xFF55745a),
+                            fontSize: 17)),
                     InkWell(
                       onTap: () {
                         if (isDesktop) {
@@ -139,9 +146,16 @@ class _DeliverySectionState extends State<DeliverySection> {
                 padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-                  color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF141313).withValues(alpha: 0.5) : Colors.white,
+                  color:
+                      Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+                          ? const Color(0xFF141313).withValues(alpha: 0.5)
+                          : Colors.white,
                   border: Border.all(
-                      color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white10 : Theme.of(context).disabledColor, width: 0.3),
+                      color: Get.find<MarketThemeController>(tag: 'xmarket')
+                              .darkTheme
+                          ? Colors.white10
+                          : Theme.of(context).disabledColor,
+                      width: 0.3),
                 ),
                 child: Row(children: [
                   Image.asset(
@@ -162,7 +176,11 @@ class _DeliverySectionState extends State<DeliverySection> {
                           Text(
                             checkoutController.addressType.tr,
                             style: robotoMedium.copyWith(
-                                color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white70 : Colors.black,
+                                color: Get.find<MarketThemeController>(
+                                            tag: 'xmarket')
+                                        .darkTheme
+                                    ? Colors.white70
+                                    : Color(0xFF55745a),
                                 fontSize: Dimensions.fontSizeDefault),
                           ),
                           const SizedBox(
@@ -171,7 +189,11 @@ class _DeliverySectionState extends State<DeliverySection> {
                             checkoutController.addressController.text,
                             style: robotoRegular.copyWith(
                                 fontSize: Dimensions.fontSizeSmall,
-                                color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white60 : Colors.black),
+                                color: Get.find<MarketThemeController>(
+                                            tag: 'xmarket')
+                                        .darkTheme
+                                    ? Colors.white60
+                                    : Color(0xFF55745a)),
                           ),
                         ]),
                   ),

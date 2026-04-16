@@ -47,7 +47,7 @@ class AddressCardWidget extends StatelessWidget {
                       color: isSelected
                           ? (Theme.of(context).brightness == Brightness.dark
                               ? Colors.white
-                              : Colors.black)
+                              : Color(0xFF55745a))
                           : Colors.transparent,
                       width: isSelected ? 1 : 0),
                 )
@@ -61,7 +61,7 @@ class AddressCardWidget extends StatelessWidget {
                           color: isSelected
                               ? (Theme.of(context).brightness == Brightness.dark
                                   ? Colors.white
-                                  : Colors.black)
+                                  : Color(0xFF55745a))
                               : Theme.of(context).cardColor,
                           width: isSelected ? 0.5 : 0),
                     ),
@@ -99,7 +99,7 @@ class AddressCardWidget extends StatelessWidget {
                                           color: Theme.of(context).brightness ==
                                                   Brightness.dark
                                               ? Colors.white
-                                              : Colors.black)),
+                                              : Color(0xFF55745a))),
                                   Text(
                                     address?.address ?? '',
                                     style: robotoRegular.copyWith(
@@ -107,7 +107,7 @@ class AddressCardWidget extends StatelessWidget {
                                         color: Theme.of(context).brightness ==
                                                 Brightness.dark
                                             ? Colors.white70
-                                            : Colors.black54),
+                                            : Color(0xFF55745a)),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -130,7 +130,7 @@ class AddressCardWidget extends StatelessWidget {
                                                 Theme.of(context).brightness ==
                                                         Brightness.dark
                                                     ? Colors.white
-                                                    : Colors.black))),
+                                                    : Color(0xFF55745a)))),
                                 const SizedBox(width: 20),
                                 const Icon(CupertinoIcons.pencil_circle_fill,
                                     color: Colors.blue, size: 20),

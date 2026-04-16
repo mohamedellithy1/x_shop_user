@@ -587,7 +587,7 @@ class _ConversationScreenState extends State<ConversationScreen>
                                                                           'xmarket')
                                                                   .darkTheme
                                                               ? Colors.white70
-                                                              : Colors.black),
+                                                              : Color(0xFF55745a)),
                                                       maxLines: 1,
                                                       overflow:
                                                           TextOverflow.ellipsis,
@@ -642,7 +642,7 @@ class _ConversationScreenState extends State<ConversationScreen>
                                                                             'xmarket')
                                                                     .darkTheme
                                                                 ? Colors.white
-                                                                : Colors.black,
+                                                                : Color(0xFF55745a),
                                                             fontSize: Dimensions
                                                                 .fontSizeExtraSmall),
                                                       ),

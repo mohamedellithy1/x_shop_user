@@ -151,7 +151,7 @@ class _SelectLocationViewWidgetState extends State<SelectLocationViewWidget> {
                                               tag: 'xmarket')
                                           .darkTheme
                                       ? Colors.white
-                                      : Colors.black,
+                                      : Color(0xFF55745a),
                                   fontSize: Dimensions.fontSizeLarge)),
                           const SizedBox(height: Dimensions.paddingSizeSmall),
                           CustomTextFieldWidget(

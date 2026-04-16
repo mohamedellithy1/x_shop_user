@@ -188,7 +188,7 @@ class _MenuScreenState extends State<MenuScreen> {
                                                                 .brightness ==
                                                             Brightness.dark
                                                         ? Colors.white
-                                                        : Colors.black,
+                                                        :Color(0xFF55745a),
                                                     fontSize: Dimensions
                                                         .fontSizeExtraLarge,
                                                   )),
@@ -203,7 +203,7 @@ class _MenuScreenState extends State<MenuScreen> {
                                                                   .brightness ==
                                                               Brightness.dark
                                                           ? Colors.white
-                                                          : Colors.black)),
+                                                          : Color(0xFF55745a))),
                                             ]),
                                           ),
                                           Container(
@@ -223,7 +223,7 @@ class _MenuScreenState extends State<MenuScreen> {
                                                                 .brightness ==
                                                             Brightness.dark
                                                         ? Colors.white
-                                                        : Colors.black,
+                                                        : Color(0xFF55745a),
                                                     fontSize: Dimensions
                                                         .fontSizeExtraLarge,
                                                   )),
@@ -238,7 +238,7 @@ class _MenuScreenState extends State<MenuScreen> {
                                                                   .brightness ==
                                                               Brightness.dark
                                                           ? Colors.white
-                                                          : Colors.black)),
+                                                          : Color(0xFF55745a))),
                                             ]),
                                           ),
                                           Container(
@@ -258,7 +258,7 @@ class _MenuScreenState extends State<MenuScreen> {
                                                                 .brightness ==
                                                             Brightness.dark
                                                         ? Colors.white
-                                                        : Colors.black,
+                                                        : Color(0xFF55745a),
                                                     fontSize: Dimensions
                                                         .fontSizeExtraLarge,
                                                   )),
@@ -273,7 +273,7 @@ class _MenuScreenState extends State<MenuScreen> {
                                                                   .brightness ==
                                                               Brightness.dark
                                                           ? Colors.white
-                                                          : Colors.black)),
+                                                          : Color(0xFF55745a))),
                                             ]),
                                           ),
                                         ]),
@@ -745,7 +745,7 @@ class _MenuScreenState extends State<MenuScreen> {
                                                 Theme.of(context).brightness ==
                                                         Brightness.dark
                                                     ? Colors.white
-                                                    : Colors.black,
+                                                    : Color(0xFF55745a),
                                             fontSize:
                                                 Dimensions.fontSizeExtraSmall,
                                           ),

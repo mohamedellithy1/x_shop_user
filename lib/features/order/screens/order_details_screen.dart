@@ -280,7 +280,7 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen>
                                   '${subscription ? 'subscription'.tr : 'order'.tr} # ${order?.id ?? ''}',
                                   style: robotoBold.copyWith(
                                       fontSize: Dimensions.fontSizeLarge,
-                                      color: Colors.black)),
+                                      color: Color(0xFF55745a))),
                               const SizedBox(
                                   height: Dimensions.paddingSizeExtraSmall),
                             ]),

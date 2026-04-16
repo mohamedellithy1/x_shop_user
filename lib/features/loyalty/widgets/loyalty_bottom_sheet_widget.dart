@@ -89,7 +89,7 @@ class _WalletBottomSheetState extends State<LoyaltyBottomSheetWidget> {
                       color: Get.find<MarketThemeController>(tag: 'xmarket')
                               .darkTheme
                           ? Colors.white
-                          : Colors.black),
+                          : Color(0xFF55745a)),
                 ),
               ),
               Padding(
@@ -104,7 +104,7 @@ class _WalletBottomSheetState extends State<LoyaltyBottomSheetWidget> {
                     color: Get.find<MarketThemeController>(tag: 'xmarket')
                             .darkTheme
                         ? Colors.white70
-                        : Colors.black,
+                        : Color(0xFF55745a),
                   ),
                 ),
               ),
@@ -123,7 +123,7 @@ class _WalletBottomSheetState extends State<LoyaltyBottomSheetWidget> {
                         color: Get.find<MarketThemeController>(tag: 'xmarket')
                                 .darkTheme
                             ? Colors.white54
-                            : Colors.black.withValues(alpha: .5)),
+                            : Color(0xFF55745a)),
                     enabledBorder: const UnderlineInputBorder(
                         borderSide:
                             BorderSide(width: 0.0, color: Colors.transparent)),
@@ -136,7 +136,7 @@ class _WalletBottomSheetState extends State<LoyaltyBottomSheetWidget> {
                       color: Get.find<MarketThemeController>(tag: 'xmarket')
                               .darkTheme
                           ? Colors.white
-                          : Colors.black),
+                          : Color(0xFF55745a)),
                   onChanged: (String value) {
                     selectedIndex = -1;
                     setState(() {});
@@ -195,7 +195,7 @@ class _WalletBottomSheetState extends State<LoyaltyBottomSheetWidget> {
                                                 tag: 'xmarket')
                                             .darkTheme
                                         ? Colors.white
-                                        : Colors.black),
+                                        : Color(0xFF55745a)),
                               ),
                             ),
                           ),
@@ -212,7 +212,7 @@ class _WalletBottomSheetState extends State<LoyaltyBottomSheetWidget> {
                     color: Get.find<MarketThemeController>(tag: 'xmarket')
                             .darkTheme
                         ? Colors.white70
-                        : Colors.black),
+                        : Color(0xFF55745a)),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: Dimensions.paddingSizeExtraLarge),

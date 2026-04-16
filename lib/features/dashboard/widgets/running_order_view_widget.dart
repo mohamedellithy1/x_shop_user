@@ -184,7 +184,7 @@ class RunningOrderViewWidget extends StatelessWidget {
                                                       .fontSizeDefault,
                                                   color: isDark
                                                       ? Colors.white
-                                                      : Colors.black)),
+                                                      : Color(0xFF55745a))),
                                         ]),
                                     const SizedBox(
                                         height:
@@ -195,7 +195,7 @@ class RunningOrderViewWidget extends StatelessWidget {
                                           fontSize: Dimensions.fontSizeSmall,
                                           color: isDark
                                               ? Colors.white70
-                                              : Colors.black),
+                                              : Color(0xFF55745a)),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -267,14 +267,14 @@ class RunningOrderViewWidget extends StatelessWidget {
                                                             .fontSizeLarge,
                                                         color: isDark
                                                             ? Colors.white70
-                                                            : Colors.black)),
+                                                            : Color(0xFF55745a))),
                                                 Text('more'.tr,
                                                     style: robotoBold.copyWith(
                                                         fontSize: Dimensions
                                                             .fontSizeExtraSmall,
                                                         color: isDark
                                                             ? Colors.white70
-                                                            : Colors.black)),
+                                                            : Color(0xFF55745a))),
                                               ]),
                                         )
                                       : Icon(Icons.arrow_forward,

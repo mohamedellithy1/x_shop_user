@@ -86,7 +86,8 @@ class _NewPassScreenState extends State<NewPassScreen> {
                                           tag: 'xmarket')
                                       .darkTheme
                                   ? Colors.white
-                                  : Colors.black),
+                                  : Color(0xFF55745a)),
+                                  
                           textAlign: TextAlign.center),
                       const SizedBox(height: Dimensions.paddingSizeOverLarge),
                       CustomTextFieldWidget(
@@ -170,7 +171,7 @@ class _NewPassScreenState extends State<NewPassScreen> {
                                               tag: 'xmarket')
                                           .darkTheme
                                       ? Colors.white
-                                      : Colors.black),
+                                      : Color(0xFF55745a)),
                               textAlign: TextAlign.center),
                           const SizedBox(
                               height: Dimensions.paddingSizeOverLarge),

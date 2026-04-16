@@ -29,158 +29,161 @@ class OfflinePaymentButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-            onTap: onTap as void Function()?,
-            child: Container(
-              width: 550,
-              decoration: BoxDecoration(
-                color: isSelected
-                    ? Theme.of(context).primaryColor.withValues(alpha: 0.1)
-                    : Colors.transparent,
-                borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                border: Border.all(
-                    color:
-                        Theme.of(context).disabledColor.withValues(alpha: 0.2)),
-              ),
-              padding: const EdgeInsets.symmetric(
-                  horizontal: Dimensions.paddingSizeSmall,
-                  vertical: Dimensions.paddingSizeSmall),
-              margin:
-                  const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
-              child: Column(children: [
-                Row(children: [
-                  Expanded(
-                    child: Row(children: [
-                      Flexible(
-                        child: Text(
-                          'pay_offline'.tr,
-                          style: robotoSemiBold.copyWith(
-                              fontSize: Dimensions.fontSizeDefault,
-                              color: disablePayment!
-                                  ? Theme.of(context).disabledColor
-                                  : Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .color),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ),
-                      ),
-                      const SizedBox(width: Dimensions.paddingSizeSmall),
-                      JustTheTooltip(
-                        backgroundColor: Colors.black,
-                        controller: tooltipController,
-                        preferredDirection: AxisDirection.up,
-                        tailLength: 14,
-                        tailBaseWidth: 20,
-                        content: Padding(
-                          padding:
-                              const EdgeInsets.all(Dimensions.paddingSizeSmall),
-                          child: SizedBox(
-                            width: 400,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('note'.tr,
-                                    style: robotoMedium.copyWith(
-                                        color: const Color(0xff90D0FF))),
-                                const SizedBox(
-                                    height: Dimensions.paddingSizeSmall),
-                                OfflinePaymentTooltipNoteWidget(
-                                  note: 'offline_payment_note_line_one'.tr,
-                                ),
-                                const SizedBox(
-                                    height: Dimensions.paddingSizeSmall),
-                                OfflinePaymentTooltipNoteWidget(
-                                  note: 'offline_payment_note_line_two'.tr,
-                                ),
-                                const SizedBox(
-                                    height: Dimensions.paddingSizeSmall),
-                                OfflinePaymentTooltipNoteWidget(
-                                  note: 'offline_payment_note_line_three'.tr,
-                                ),
-                              ],
-                            ),
+      onTap: onTap as void Function()?,
+      child: Container(
+        width: 550,
+        decoration: BoxDecoration(
+          color: isSelected
+              ? Theme.of(context).primaryColor.withValues(alpha: 0.1)
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+          border: Border.all(
+              color: Theme.of(context).disabledColor.withValues(alpha: 0.2)),
+        ),
+        padding: const EdgeInsets.symmetric(
+            horizontal: Dimensions.paddingSizeSmall,
+            vertical: Dimensions.paddingSizeSmall),
+        margin: const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
+        child: Column(children: [
+          Row(children: [
+            Expanded(
+              child: Row(children: [
+                Flexible(
+                  child: Text(
+                    'pay_offline'.tr,
+                    style: robotoSemiBold.copyWith(
+                        fontSize: Dimensions.fontSizeDefault,
+                        color: disablePayment!
+                            ? Theme.of(context).disabledColor
+                            : Theme.of(context).textTheme.bodyLarge!.color),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                ),
+                const SizedBox(width: Dimensions.paddingSizeSmall),
+                JustTheTooltip(
+                  backgroundColor: Colors.black,
+                  controller: tooltipController,
+                  preferredDirection: AxisDirection.up,
+                  tailLength: 14,
+                  tailBaseWidth: 20,
+                  content: Padding(
+                    padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
+                    child: SizedBox(
+                      width: 400,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('note'.tr,
+                              style: robotoMedium.copyWith(
+                                  color: const Color(0xff90D0FF))),
+                          const SizedBox(height: Dimensions.paddingSizeSmall),
+                          OfflinePaymentTooltipNoteWidget(
+                            note: 'offline_payment_note_line_one'.tr,
                           ),
-                        ),
-                        child: InkWell(
-                          onTap: () => tooltipController.showTooltip(),
-                          child: isSelected
-                              ? Icon(Icons.info_rounded,
-                               color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black,
-                                  size: 18)
-                              : const SizedBox(),
-                        ),
+                          const SizedBox(height: Dimensions.paddingSizeSmall),
+                          OfflinePaymentTooltipNoteWidget(
+                            note: 'offline_payment_note_line_two'.tr,
+                          ),
+                          const SizedBox(height: Dimensions.paddingSizeSmall),
+                          OfflinePaymentTooltipNoteWidget(
+                            note: 'offline_payment_note_line_three'.tr,
+                          ),
+                        ],
                       ),
-                    ]),
+                    ),
                   ),
-
-                  // Expanded(child: SizedBox()),
-
-                  Icon(
-                    isSelected ? Icons.check_circle : Icons.circle_outlined,
-                    size: 24,
-                    color: isSelected
-                        ? (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black)
-                        : Theme.of(context)
-                            .disabledColor
-                            .withValues(alpha: 0.5),
+                  child: InkWell(
+                    onTap: () => tooltipController.showTooltip(),
+                    child: isSelected
+                        ? Icon(Icons.info_rounded,
+                            color:
+                                Get.find<MarketThemeController>(tag: 'xmarket')
+                                        .darkTheme
+                                    ? Colors.white
+                                    : Colors.black,
+                            size: 18)
+                        : const SizedBox(),
                   ),
-                ]),
-                SizedBox(height: isSelected ? Dimensions.paddingSizeLarge : 0),
-                isSelected
-                    ? GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisSpacing: Dimensions.paddingSizeDefault,
-                          mainAxisSpacing: Dimensions.paddingSizeDefault,
-                          mainAxisExtent: 50,
-                          crossAxisCount:
-                              ResponsiveHelper.isDesktop(context) ? 4 : 3,
-                        ),
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        padding: EdgeInsets.zero,
-                        itemCount: offlineMethodList!.length,
-                        itemBuilder: (context, index) {
-                          bool isSelected =
-                              checkoutController.selectedOfflineBankIndex ==
-                                  index;
-                          return InkWell(
-                            onTap: () =>
-                                checkoutController.selectOfflineBank(index),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: isSelected
-                                    ? (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white70 : Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium!
-                                        .color!
-                                        .withValues(alpha: 0.8))
-                                    : (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF1b1b1b) : Theme.of(context).cardColor),
-                                borderRadius: BorderRadius.circular(
-                                    Dimensions.radiusLarge),
-                              ),
-                              child: Center(
-                                  child: Text(
-                                offlineMethodList![index].methodName!,
-                                style: robotoMedium.copyWith(
-                                    color: isSelected
-                                        ? (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.black : Theme.of(context).cardColor)
-                                        : (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium!
-                                            .color!)),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              )),
-                            ),
-                          );
-                        },
-                      )
-                    : const SizedBox(),
+                ),
               ]),
             ),
-          );
+
+            // Expanded(child: SizedBox()),
+
+            Icon(
+              isSelected ? Icons.check_circle : Icons.circle_outlined,
+              size: 24,
+              color: isSelected
+                  ? (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+                      ? Colors.white
+                      : Colors.black)
+                  : Theme.of(context).disabledColor.withValues(alpha: 0.5),
+            ),
+          ]),
+          SizedBox(height: isSelected ? Dimensions.paddingSizeLarge : 0),
+          isSelected
+              ? GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisSpacing: Dimensions.paddingSizeDefault,
+                    mainAxisSpacing: Dimensions.paddingSizeDefault,
+                    mainAxisExtent: 50,
+                    crossAxisCount: ResponsiveHelper.isDesktop(context) ? 4 : 3,
+                  ),
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  padding: EdgeInsets.zero,
+                  itemCount: offlineMethodList!.length,
+                  itemBuilder: (context, index) {
+                    bool isSelected =
+                        checkoutController.selectedOfflineBankIndex == index;
+                    return InkWell(
+                      onTap: () => checkoutController.selectOfflineBank(index),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? (Get.find<MarketThemeController>(tag: 'xmarket')
+                                      .darkTheme
+                                  ? Colors.white70
+                                  : Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .color!
+                                      .withValues(alpha: 0.8))
+                              : (Get.find<MarketThemeController>(tag: 'xmarket')
+                                      .darkTheme
+                                  ? const Color(0xFF1b1b1b)
+                                  : Theme.of(context).cardColor),
+                          borderRadius:
+                              BorderRadius.circular(Dimensions.radiusLarge),
+                        ),
+                        child: Center(
+                            child: Text(
+                          offlineMethodList![index].methodName!,
+                          style: robotoMedium.copyWith(
+                              color: isSelected
+                                  ? (Get.find<MarketThemeController>(
+                                              tag: 'xmarket')
+                                          .darkTheme
+                                      ? Color(0xFF55745a)
+                                      : Theme.of(context).cardColor)
+                                  : (Get.find<MarketThemeController>(
+                                              tag: 'xmarket')
+                                          .darkTheme
+                                      ? Colors.white
+                                      : Color(0xFF55745a))),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        )),
+                      ),
+                    );
+                  },
+                )
+              : const SizedBox(),
+        ]),
+      ),
+    );
   }
 }
 

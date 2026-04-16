@@ -82,7 +82,7 @@ class _DineInRestaurantScreenState extends State<DineInRestaurantScreen> {
                     SizedBox(width: Dimensions.paddingSizeSmall),
                     Text('view_from_map'.tr,
                         style: robotoMedium.copyWith(
-                            color: Colors.white,
+                            color: Color(0xFF55745a),
                             fontSize: Dimensions.fontSizeLarge)),
                   ]),
                 ),

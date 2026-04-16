@@ -142,7 +142,7 @@ class _CouponScreenState extends State<CouponScreen> {
                                                                         'xmarket')
                                                                 .darkTheme
                                                             ? Colors.white
-                                                            : Colors.black)),
+                                                            : Color(0xFF55745a))),
                                               ),
                                               GridView.builder(
                                                 gridDelegate:
@@ -261,7 +261,7 @@ class _CouponScreenState extends State<CouponScreen> {
                                                                         'xmarket')
                                                                 .darkTheme
                                                             ? Colors.white
-                                                            : Colors.black)),
+                                                            : Color(0xFF55745a))),
                                               ),
                                               GridView.builder(
                                                 gridDelegate:

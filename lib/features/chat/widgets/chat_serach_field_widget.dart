@@ -13,8 +13,15 @@ class ChatSearchFieldWidget extends StatefulWidget {
   final Function? onSubmit;
   final Function? onChanged;
   final Function()? onTap;
-  const ChatSearchFieldWidget({super.key, required this.controller, required this.hint, required this.suffixIcon, required this.iconPressed,
-    this.onSubmit, this.onChanged, this.onTap});
+  const ChatSearchFieldWidget(
+      {super.key,
+      required this.controller,
+      required this.hint,
+      required this.suffixIcon,
+      required this.iconPressed,
+      this.onSubmit,
+      this.onChanged,
+      this.onTap});
 
   @override
   State<ChatSearchFieldWidget> createState() => _ChatSearchFieldWidgetState();
@@ -29,25 +36,45 @@ class _ChatSearchFieldWidgetState extends State<ChatSearchFieldWidget> {
       onTap: widget.onTap,
       decoration: InputDecoration(
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(ResponsiveHelper.isDesktop(context) ? Dimensions.radiusSmall : 60),
-          borderSide: BorderSide(width: 1, color: Theme.of(context).disabledColor.withValues(alpha: 0.3)),
+          borderRadius: BorderRadius.circular(
+              ResponsiveHelper.isDesktop(context)
+                  ? Dimensions.radiusSmall
+                  : 60),
+          borderSide: BorderSide(
+              width: 1,
+              color: Theme.of(context).disabledColor.withValues(alpha: 0.3)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(ResponsiveHelper.isDesktop(context) ? Dimensions.radiusSmall : 60),
-          borderSide: BorderSide(width: 1, color: Theme.of(context).primaryColor.withValues(alpha: 0.3)),
+          borderRadius: BorderRadius.circular(
+              ResponsiveHelper.isDesktop(context)
+                  ? Dimensions.radiusSmall
+                  : 60),
+          borderSide: BorderSide(
+              width: 1,
+              color: Theme.of(context).primaryColor.withValues(alpha: 0.3)),
         ),
         hintText: widget.hint,
-        hintStyle: robotoRegular.copyWith(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white54 : Colors.black),
+        hintStyle: robotoRegular.copyWith(
+            color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+                ? Colors.white54
+                : Color(0xFF55745a)),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(ResponsiveHelper.isDesktop(context) ? Dimensions.radiusSmall : 60),
+          borderRadius: BorderRadius.circular(
+              ResponsiveHelper.isDesktop(context)
+                  ? Dimensions.radiusSmall
+                  : 60),
           borderSide: BorderSide.none,
         ),
         filled: true,
-        fillColor: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF1b1b1b) : Theme.of(context).cardColor,
+        fillColor: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+            ? const Color(0xFF1b1b1b)
+            : Theme.of(context).cardColor,
         contentPadding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
         suffixIcon: IconButton(
           onPressed: widget.iconPressed as void Function()?,
-          icon: Icon(widget.suffixIcon, color: Theme.of(context).disabledColor.withValues(alpha: 0.7), size: 25),
+          icon: Icon(widget.suffixIcon,
+              color: Theme.of(context).disabledColor.withValues(alpha: 0.7),
+              size: 25),
         ),
       ),
       onSubmitted: widget.onSubmit as void Function(String)?,

@@ -46,7 +46,7 @@ class _SearchFieldWidgetState extends State<SearchFieldWidget> {
             fontSize: Dimensions.fontSizeDefault,
             color: Theme.of(context).brightness == Brightness.dark
                 ? Colors.white
-                : Colors.black),
+                : Color(0xFF55745a)),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(
               ResponsiveHelper.isDesktop(context)

@@ -193,7 +193,7 @@ class WebMenuBar extends StatelessWidget implements PreferredSizeWidget {
                                             tag: 'xmarket')
                                         .darkTheme
                                     ? Colors.white
-                                    : Colors.black,
+                                    : Color(0xFF55745a),
                               ),
                             ),
                           ),
@@ -217,7 +217,7 @@ class WebMenuBar extends StatelessWidget implements PreferredSizeWidget {
                                             tag: 'xmarket')
                                         .darkTheme
                                     ? Colors.white
-                                    : Colors.black,
+                                    : Color(0xFF55745a),
                               ),
                             ),
                           ),
@@ -354,7 +354,7 @@ class WebMenuBar extends StatelessWidget implements PreferredSizeWidget {
                                                               tag: 'xmarket')
                                                           .darkTheme
                                                       ? Colors.white
-                                                      : Colors.black)),
+                                                      : Color(0xFF55745a))),
                                     ],
                                   ),
                                 ),

@@ -92,7 +92,10 @@ class CouponCardWidget extends StatelessWidget {
                       '${couponList![index].couponType == 'free_delivery' ? '' : couponList![index].discount}${couponList![index].discountType == 'percent' ? '%' : couponList![index].couponType == 'free_delivery' ? 'free_delivery'.tr : Get.find<MarketSplashController>(tag: 'xmarket').configModel!.currencySymbol} ${couponList![index].couponType == 'free_delivery' ? '' : 'off'.tr}',
                       style: robotoBold.copyWith(
                           fontSize: Dimensions.fontSizeLarge,
-                          color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black),
+                          color: Get.find<MarketThemeController>(tag: 'xmarket')
+                                  .darkTheme
+                              ? Colors.white
+                              : Color(0xFF55745a)),
                     ),
                     const SizedBox(height: Dimensions.paddingSizeExtraSmall),
                     couponList![index].restaurant == null
@@ -103,7 +106,11 @@ class CouponCardWidget extends StatelessWidget {
                                 : 'on_all_store'.tr,
                             style: robotoRegular.copyWith(
                                 fontSize: Dimensions.fontSizeExtraSmall,
-                                color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white70 : Colors.black),
+                                color: Get.find<MarketThemeController>(
+                                            tag: 'xmarket')
+                                        .darkTheme
+                                    ? Colors.white70
+                                    : Color(0xFF55745a)),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.center,
@@ -118,7 +125,11 @@ class CouponCardWidget extends StatelessWidget {
                                     : '',
                             style: robotoRegular.copyWith(
                                 fontSize: Dimensions.fontSizeExtraSmall,
-                                color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white70 : Colors.black),
+                                color: Get.find<MarketThemeController>(
+                                            tag: 'xmarket')
+                                        .darkTheme
+                                    ? Colors.white70
+                                    : Color(0xFF55745a)),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           )),
@@ -131,7 +142,11 @@ class CouponCardWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     JustTheTooltip(
-                      backgroundColor: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF1b1b1b) : Colors.white,
+                      backgroundColor:
+                          Get.find<MarketThemeController>(tag: 'xmarket')
+                                  .darkTheme
+                              ? const Color(0xFF1b1b1b)
+                              : Colors.white,
                       controller: toolTipController![index],
                       preferredDirection: AxisDirection.up,
                       tailLength: 14,
@@ -143,7 +158,11 @@ class CouponCardWidget extends StatelessWidget {
                               padding: const EdgeInsets.all(8.0),
                               child: Text('${'code_copied'.tr} !',
                                   style: robotoRegular.copyWith(
-                                      color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black)),
+                                      color: Get.find<MarketThemeController>(
+                                                  tag: 'xmarket')
+                                              .darkTheme
+                                          ? Colors.white
+                                          : Color(0xFF55745a))),
                             ),
                       child: DottedBorder(
                         color: unavailable
@@ -163,13 +182,22 @@ class CouponCardWidget extends StatelessWidget {
                             '${couponList![index].code}',
                             style: robotoMedium.copyWith(
                                 fontSize: Dimensions.fontSizeSmall,
-                                color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black),
+                                color: Get.find<MarketThemeController>(
+                                            tag: 'xmarket')
+                                        .darkTheme
+                                    ? Colors.white
+                                    : Color(0xFF55745a)),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(width: Dimensions.paddingSizeSmall),
                           Icon(Icons.copy_rounded,
-                              color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white70 : Colors.black, size: 20),
+                              color: Get.find<MarketThemeController>(
+                                          tag: 'xmarket')
+                                      .darkTheme
+                                  ? Colors.white70
+                                  : Colors.black,
+                              size: 20),
                         ]),
                       ),
                     ),
@@ -177,7 +205,10 @@ class CouponCardWidget extends StatelessWidget {
                     Text(
                       '${DateConverter.stringDateTimeToDate(couponList![index].startDate!)} ${'to'.tr} ${DateConverter.stringDateTimeToDate(couponList![index].expireDate!)}',
                       style: robotoMedium.copyWith(
-                          color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white70 : Colors.black,
+                          color: Get.find<MarketThemeController>(tag: 'xmarket')
+                                  .darkTheme
+                              ? Colors.white70
+                              : Color(0xFF55745a),
                           fontSize: Dimensions.fontSizeSmall),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -186,12 +217,20 @@ class CouponCardWidget extends StatelessWidget {
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                       Text('*',
                           style: robotoRegular.copyWith(
-                              color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black,
+                              color: Get.find<MarketThemeController>(
+                                          tag: 'xmarket')
+                                      .darkTheme
+                                  ? Colors.white
+                                  : Color(0xFF55745a),
                               fontSize: Dimensions.fontSizeSmall)),
                       Text(
                         '${'min_purchase'.tr} ',
                         style: robotoRegular.copyWith(
-                            color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white70 : Colors.black,
+                            color:
+                                Get.find<MarketThemeController>(tag: 'xmarket')
+                                        .darkTheme
+                                    ? Colors.white70
+                                    : Color(0xFF55745a),
                             fontSize: Dimensions.fontSizeSmall),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -200,7 +239,11 @@ class CouponCardWidget extends StatelessWidget {
                         PriceConverter.convertPrice(
                             couponList![index].minPurchase),
                         style: robotoMedium.copyWith(
-                            color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white70 : Colors.black,
+                            color:
+                                Get.find<MarketThemeController>(tag: 'xmarket')
+                                        .darkTheme
+                                    ? Colors.white70
+                                    : Color(0xFF55745a),
                             fontSize: Dimensions.fontSizeSmall),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,

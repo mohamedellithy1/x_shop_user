@@ -201,7 +201,7 @@ class _OfflinePaymentScreenState extends State<OfflinePaymentScreen> {
                                                                 tag: 'xmarket')
                                                             .darkTheme
                                                         ? Colors.white
-                                                        : Colors.black)),
+                                                        : Color(0xFF55745a))),
                                       ]),
                                       const SizedBox(
                                           height:
@@ -243,7 +243,7 @@ class _OfflinePaymentScreenState extends State<OfflinePaymentScreen> {
                                             tag: 'xmarket')
                                         .darkTheme
                                     ? Colors.white
-                                    : Colors.black),
+                                    : Color(0xFF55745a)),
                           ),
                           const SizedBox(
                               height: Dimensions.paddingSizeExtraLarge),
@@ -264,7 +264,7 @@ class _OfflinePaymentScreenState extends State<OfflinePaymentScreen> {
                                                           tag: 'xmarket')
                                                       .darkTheme
                                                   ? Colors.white
-                                                  : Colors.black),
+                                                  : Color(0xFF55745a)),
                                     ),
                                   ),
                                   ListView.builder(
@@ -514,7 +514,7 @@ class InfoTextRowWidget extends StatelessWidget {
                 fontSize: Dimensions.fontSizeSmall,
                 color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
                     ? Colors.white70
-                    : Colors.black)),
+                    : Color(0xFF55745a))),
       ),
     ]);
   }

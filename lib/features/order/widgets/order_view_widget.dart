@@ -262,7 +262,7 @@ class OrderViewWidget extends StatelessWidget {
                                                                       style: robotoBold.copyWith(
                                                                           color: themeController.darkTheme
                                                                               ? Colors.white
-                                                                              : Colors.black)),
+                                                                              : Color(0xFF55745a))),
                                                                   const SizedBox(
                                                                       height: Dimensions
                                                                           .paddingSizeExtraSmall),
@@ -274,8 +274,7 @@ class OrderViewWidget extends StatelessWidget {
                                                                         color: themeController.darkTheme
                                                                             ? Colors
                                                                                 .grey
-                                                                            : Colors
-                                                                                .black,
+                                                                            : Color(0xFF55745a),
                                                                         fontSize:
                                                                             Dimensions.fontSizeSmall),
                                                                   ),
@@ -423,7 +422,7 @@ class OrderViewWidget extends StatelessWidget {
                                                             color: themeController
                                                                     .darkTheme
                                                                 ? Colors.white
-                                                                : Colors.black),
+                                                                : Color(0xFF55745a)),
                                                       ),
                                                       (isRunning ||
                                                               isSubscription)
@@ -469,7 +468,7 @@ class OrderViewWidget extends StatelessWidget {
                                                                               Dimensions.fontSizeSmall,
                                                                           color: themeController.darkTheme
                                                                               ? Colors.white
-                                                                              : Colors.black,
+                                                                              : Color(0xFF55745a),
                                                                         )),
                                                                   ),
                                                                 )
@@ -539,7 +538,7 @@ class OrderViewWidget extends StatelessWidget {
                                                                             'give_review'
                                                                                 .tr,
                                                                             style:
-                                                                                robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: themeController.darkTheme ? Colors.white : Colors.black)),
+                                                                                robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: themeController.darkTheme ? Colors.white : Color(0xFF55745a))),
                                                                       ),
                                                                     )
                                                                   : SizedBox(),
@@ -584,7 +583,7 @@ class OrderViewWidget extends StatelessWidget {
                                                                             child: Text('buy_again'.tr,
                                                                                 style: robotoMedium.copyWith(
                                                                                   fontSize: Dimensions.fontSizeSmall,
-                                                                                  color: themeController.darkTheme ? Colors.white : Colors.black,
+                                                                                  color: themeController.darkTheme ? Colors.white : Color(0xFF55745a),
                                                                                 )),
                                                                           ),
                                                                         )

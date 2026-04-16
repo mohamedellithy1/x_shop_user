@@ -43,7 +43,7 @@ class ReviewDialogWidget extends StatelessWidget {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: robotoBold.copyWith(
-                                color: Colors.black,
+                                color: Color(0xFF55745a),
                                 fontSize: Dimensions.fontSizeSmall),
                           ),
                           RatingBarWidget(
@@ -55,14 +55,14 @@ class ReviewDialogWidget extends StatelessWidget {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: robotoMedium.copyWith(
-                                color: Colors.black,
+                                color: Color(0xFF55745a),
                                 fontSize: Dimensions.fontSizeExtraSmall),
                           ),
                           Text(
                             review.comment!,
                             style: robotoRegular.copyWith(
                                 fontSize: Dimensions.fontSizeExtraSmall,
-                                color: Colors.black),
+                                color: Color(0xFF55745a)),
                           ),
                         ])),
                   ])
@@ -70,7 +70,7 @@ class ReviewDialogWidget extends StatelessWidget {
                     review.comment!,
                     style: robotoRegular.copyWith(
                         fontSize: Dimensions.fontSizeSmall,
-                        color: Colors.black),
+                        color:Color(0xFF55745a)),
                   ),
           )),
     );

@@ -34,7 +34,9 @@ class CouponSection extends StatelessWidget {
       builder: (couponController) {
         return Container(
           decoration: BoxDecoration(
-            color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF1b1b1b) : Theme.of(context).cardColor,
+            color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+                ? const Color(0xFF1b1b1b)
+                : Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
             boxShadow: [
               BoxShadow(
@@ -57,7 +59,13 @@ class CouponSection extends StatelessWidget {
                       Image.asset(XmarketImages.couponIcon1,
                           height: 20, width: 20),
                       const SizedBox(width: Dimensions.paddingSizeSmall),
-                       Text('add_coupon'.tr, style: robotoRegular.copyWith(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black)),
+                      Text('add_coupon'.tr,
+                          style: robotoRegular.copyWith(
+                              color: Get.find<MarketThemeController>(
+                                          tag: 'xmarket')
+                                      .darkTheme
+                                  ? Colors.white
+                                  : Color(0xFF55745a))),
                     ]),
                   ),
                   InkWell(
@@ -97,10 +105,12 @@ class CouponSection extends StatelessWidget {
                       padding: const EdgeInsets.all(10.0),
                       child: Row(children: [
                         Text('add'.tr,
-                             style  : robotoMedium.copyWith(
-                                 fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor)),
+                            style: robotoMedium.copyWith(
+                                fontSize: Dimensions.fontSizeSmall,
+                                color: Theme.of(context).primaryColor)),
                         const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                        Icon(Icons.add, size: 20, color: Theme.of(context).primaryColor),
+                        Icon(Icons.add,
+                            size: 20, color: Theme.of(context).primaryColor),
                       ]),
                     ),
                   ),
@@ -112,7 +122,12 @@ class CouponSection extends StatelessWidget {
                     const SizedBox(width: Dimensions.paddingSizeSmall),
                     Text('${'coupon_applied'.tr}!',
                         style: robotoMedium.copyWith(
-                            fontSize: Dimensions.fontSizeSmall, color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black)),
+                            fontSize: Dimensions.fontSizeSmall,
+                            color:
+                                Get.find<MarketThemeController>(tag: 'xmarket')
+                                        .darkTheme
+                                    ? Colors.white
+                                    : Color(0xFF55745a))),
                   ]),
                   const SizedBox(height: Dimensions.paddingSizeSmall),
                   Container(

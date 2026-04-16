@@ -79,7 +79,7 @@ class AddressBottomSheet extends StatelessWidget {
                                     style: robotoBold.copyWith(
                                         color: marketThemeController.darkTheme
                                             ? Colors.white
-                                            : Colors.black,
+                                            : Color(0xFF55745a),
                                         fontSize: Dimensions.fontSizeDefault)),
                                 const SizedBox(
                                     height: Dimensions.paddingSizeLarge),
@@ -105,7 +105,7 @@ class AddressBottomSheet extends StatelessWidget {
                                               color: marketThemeController
                                                       .darkTheme
                                                   ? Colors.white70
-                                                  : Colors.black),
+                                                  : Color(0xFF55745a)),
                                         ),
                                         const SizedBox(
                                             height:
@@ -252,13 +252,13 @@ class AddressBottomSheet extends StatelessWidget {
                                                 false, 0)),
                                         icon: const Icon(
                                             Icons.add_circle_outline_sharp,
-                                            color: Colors.orange),
+                                            color: Color(0xFF55745a)),
                                         label: Text('add_new_address'.tr,
                                             style: robotoMedium.copyWith(
                                                 color: marketThemeController
                                                         .darkTheme
                                                     ? Colors.white
-                                                    : Colors.black)),
+                                                    : Color(0xFF55745a))),
                                       )
                                     : const SizedBox(),
                               ]),

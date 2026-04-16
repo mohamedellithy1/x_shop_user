@@ -660,13 +660,11 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                         style: robotoRegular.copyWith(
                                                             fontWeight:
                                                                 FontWeight.bold,
-                                                            color:
-                                                                marketThemeController
-                                                                        .darkTheme
-                                                                    ? Colors
-                                                                        .white
-                                                                    : Colors
-                                                                        .black),
+                                                            color: marketThemeController
+                                                                    .darkTheme
+                                                                ? Colors.white
+                                                                : Color(
+                                                                    0xFF55745a)),
                                                         trimMode: TrimMode.Line,
                                                         trimLines: 3,
                                                         colorClickableText:
@@ -768,8 +766,8 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                               color: marketThemeController
                                                                       .darkTheme
                                                                   ? Colors.white
-                                                                  : Colors
-                                                                      .black)),
+                                                                  : Color(
+                                                                      0xFF55745a))),
                                                       const SizedBox(
                                                           height: Dimensions
                                                               .paddingSizeExtraSmall),
@@ -1133,7 +1131,8 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                           marketThemeController
                                                                   .darkTheme
                                                               ? Colors.white
-                                                              : Colors.black),
+                                                              : Color(
+                                                                  0xFF55745a)),
                                                 )),
                                               ),
                                             SizedBox(
@@ -1242,8 +1241,8 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                                         color: marketThemeController.darkTheme
                                                                             ? Colors
                                                                                 .white
-                                                                            : Colors
-                                                                                .black,
+                                                                            : Color(
+                                                                                0xFF55745a),
                                                                         fontSize:
                                                                             Dimensions.fontSizeSmall),
                                                                     onChanged:
@@ -1256,7 +1255,7 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                                       hintStyle: robotoRegular.copyWith(
                                                                           color: marketThemeController.darkTheme
                                                                               ? Colors.white.withValues(alpha: 0.6)
-                                                                              : Colors.black.withValues(alpha: 0.6),
+                                                                              : Color(0xFF55745a),
                                                                           fontSize: Dimensions.fontSizeSmall),
                                                                       border:
                                                                           border,
@@ -1297,8 +1296,8 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                                         color: marketThemeController.darkTheme
                                                                             ? Colors
                                                                                 .white
-                                                                            : Colors
-                                                                                .black,
+                                                                            : Color(
+                                                                                0xFF55745a),
                                                                         fontSize:
                                                                             Dimensions.fontSizeSmall),
                                                                     onChanged:
@@ -1311,7 +1310,7 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                                       hintStyle: robotoRegular.copyWith(
                                                                           color: marketThemeController.darkTheme
                                                                               ? Colors.white.withValues(alpha: 0.6)
-                                                                              : Colors.black.withValues(alpha: 0.6),
+                                                                              : Color(0xFF55745a),
                                                                           fontSize: Dimensions.fontSizeSmall),
                                                                       border:
                                                                           border,
@@ -1349,7 +1348,7 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                                                 .fontSizeSmall,
                                                                         color: marketThemeController.darkTheme
                                                                             ? Colors.white
-                                                                            : Colors.black),
+                                                                            : Color(0xFF55745a)),
                                                                   ),
                                                                 ),
                                                               ],
@@ -1386,8 +1385,8 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                                               .darkTheme
                                                                           ? Colors
                                                                               .white
-                                                                          : Colors
-                                                                              .black)),
+                                                                          : Color(
+                                                                              0xFF55745a))),
                                                               Container(
                                                                 decoration:
                                                                     BoxDecoration(
@@ -1636,7 +1635,7 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                 color: marketThemeController
                                                         .darkTheme
                                                     ? Colors.white
-                                                    : Colors.black)),
+                                                    : Color(0xFF55745a))),
                                         const SizedBox(
                                             width: Dimensions
                                                 .paddingSizeExtraSmall),
@@ -1651,7 +1650,8 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                           marketThemeController
                                                                   .darkTheme
                                                               ? Colors.white
-                                                              : Colors.black,
+                                                              : Color(
+                                                                  0xFF55745a),
                                                       fontSize: Dimensions
                                                           .fontSizeSmall,
                                                       decoration: TextDecoration
@@ -1667,7 +1667,7 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                 color: marketThemeController
                                                         .darkTheme
                                                     ? Colors.white
-                                                    : Colors.black),
+                                                    : Color(0xFF55745a)),
                                           ),
                                         ]),
                                       ]),
@@ -1701,7 +1701,7 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                               color: marketThemeController
                                                       .darkTheme
                                                   ? Colors.white
-                                                  : Colors.black),
+                                                  : Color(0xFF55745a)),
                                         ),
                                         QuantityButton(
                                           onTap: () {

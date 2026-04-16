@@ -106,12 +106,12 @@ class OrderPricingSection extends StatelessWidget {
                     style: robotoRegular.copyWith(
                         color: themeController.darkTheme
                             ? Colors.white
-                            : Colors.black)),
+                            : Color(0xFF55745a))),
                 Text(PriceConverter.convertPrice(itemsPrice),
                     style: robotoRegular.copyWith(
                         color: themeController.darkTheme
                             ? Colors.white
-                            : Colors.black),
+                            : Color(0xFF55745a)),
                     textDirection: TextDirection.ltr),
               ]),
               const SizedBox(height: 10),
@@ -121,12 +121,12 @@ class OrderPricingSection extends StatelessWidget {
                     style: robotoRegular.copyWith(
                         color: themeController.darkTheme
                             ? Colors.white
-                            : Colors.black)),
+                            : Color(0xFF55745a))),
                 Text(PriceConverter.convertPrice(addOns),
                     style: robotoRegular.copyWith(
                         color: themeController.darkTheme
                             ? Colors.white
-                            : Colors.black),
+                            : Color(0xFF55745a)),
                     textDirection: TextDirection.ltr),
               ]),
               SizedBox(height: 10),
@@ -151,12 +151,12 @@ class OrderPricingSection extends StatelessWidget {
                     style: robotoRegular.copyWith(
                         color: themeController.darkTheme
                             ? Colors.white
-                            : Colors.black)),
+                            : Color(0xFF55745a))),
                 Text(PriceConverter.convertPrice(discount),
                     style: robotoRegular.copyWith(
                         color: themeController.darkTheme
                             ? Colors.white
-                            : Colors.black),
+                            : Color(0xFF55745a)),
                     textDirection: TextDirection.ltr),
               ]),
               const SizedBox(height: Dimensions.paddingSizeSmall),
@@ -169,14 +169,14 @@ class OrderPricingSection extends StatelessWidget {
                               style: robotoRegular.copyWith(
                                   color: themeController.darkTheme
                                       ? Colors.white
-                                      : Colors.black)),
+                                      : Color(0xFF55745a))),
                           Text(
                               PriceConverter.convertPrice(
                                   order.additionalCharge),
                               style: robotoRegular.copyWith(
                                   color: themeController.darkTheme
                                       ? Colors.white
-                                      : Colors.black),
+                                      : Color(0xFF55745a)),
                               textDirection: TextDirection.ltr),
                         ])
                   : const SizedBox(),
@@ -192,13 +192,13 @@ class OrderPricingSection extends StatelessWidget {
                               style: robotoRegular.copyWith(
                                   color: themeController.darkTheme
                                       ? Colors.white
-                                      : Colors.black)),
+                                      : Color(0xFF55745a))),
                           Text(
                             PriceConverter.convertPrice(couponDiscount),
                             style: robotoRegular.copyWith(
                                 color: themeController.darkTheme
                                     ? Colors.white
-                                    : Colors.black),
+                                    : Color(0xFF55745a)),
                             textDirection: TextDirection.ltr,
                           ),
                         ])
@@ -254,12 +254,12 @@ class OrderPricingSection extends StatelessWidget {
                             style: robotoRegular.copyWith(
                                 color: themeController.darkTheme
                                     ? Colors.white
-                                    : Colors.black)),
+                                    : Color(0xFF55745a))),
                         Text(PriceConverter.convertPrice(dmTips),
                             style: robotoRegular.copyWith(
                                 color: themeController.darkTheme
                                     ? Colors.white
-                                    : Colors.black),
+                                    : Color(0xFF55745a)),
                             textDirection: TextDirection.ltr),
                       ],
                     )
@@ -282,12 +282,12 @@ class OrderPricingSection extends StatelessWidget {
                             style: robotoRegular.copyWith(
                                 color: themeController.darkTheme
                                     ? Colors.white
-                                    : Colors.black)),
+                                    : Color(0xFF55745a))),
                         Text(PriceConverter.convertPrice(extraPackagingAmount),
                             style: robotoRegular.copyWith(
                                 color: themeController.darkTheme
                                     ? Colors.white
-                                    : Colors.black),
+                                    : Color(0xFF55745a)),
                             textDirection: TextDirection.ltr),
                       ],
                     )
@@ -344,13 +344,13 @@ class OrderPricingSection extends StatelessWidget {
                                       : Dimensions.fontSizeDefault,
                                   color: themeController.darkTheme
                                       ? Colors.white
-                                      : Colors.black,
+                                      : Color(0xFF55745a),
                                 )),
                             taxIncluded
                                 ? Text(' ${'vat_tax_inc'.tr}',
                                     style: robotoMedium.copyWith(
                                       fontSize: Dimensions.fontSizeExtraSmall,
-                                      color: Theme.of(context).primaryColor,
+                                      color: Color(0xFF55745a),
                                     ))
                                 : const SizedBox(),
                             const Expanded(child: SizedBox()),

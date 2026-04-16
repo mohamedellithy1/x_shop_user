@@ -57,7 +57,7 @@ class PartialPayView extends StatelessWidget {
               const SizedBox(height: Dimensions.paddingSizeExtraSmall),
               Text(
                 'wallet_balance'.tr,
-                style: robotoMedium.copyWith(fontSize: 20, color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black),
+                style: robotoMedium.copyWith(fontSize: 20, color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Color(0xFF55745a)),
               ),
             ]),
           ]),
@@ -77,7 +77,7 @@ class PartialPayView extends StatelessWidget {
                     Text(
                       'applied'.tr,
                       style: robotoMedium.copyWith(
-                          color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black,
+                          color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Color(0xFF55745a),
                           fontSize: Dimensions.fontSizeLarge),
                     )
                   ])

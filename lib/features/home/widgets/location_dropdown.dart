@@ -269,7 +269,7 @@ class _LocationDropdownState extends State<LocationDropdown>
               child: Text(title,
                   style: robotoMedium.copyWith(
                       fontSize: Dimensions.fontSizeDefault,
-                      color: Colors.black))),
+                      color: Color(0xFF55745a)))),
         ]),
       ),
     );

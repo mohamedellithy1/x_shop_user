@@ -164,7 +164,7 @@ class BottomSectionWidget extends StatelessWidget {
                                           tag: 'xmarket')
                                       .darkTheme
                                   ? Colors.white
-                                  : Colors.black)),
+                                  : Color(0xFF55745a))),
                       const SizedBox(height: Dimensions.paddingSizeSmall),
                       CustomTextFieldWidget(
                         controller: checkoutController.noteController,
@@ -211,7 +211,7 @@ class BottomSectionWidget extends StatelessWidget {
                                               tag: 'xmarket')
                                           .darkTheme
                                       ? Colors.white
-                                      : Colors.black),
+                                      : Color(0xFF55745a)),
                             ),
                             PriceConverter.convertAnimationPrice(
                               total,
@@ -221,7 +221,7 @@ class BottomSectionWidget extends StatelessWidget {
                                               tag: 'xmarket')
                                           .darkTheme
                                       ? Colors.white
-                                      : Colors.black),
+                                      : Color(0xFF55745a)),
                             ),
                           ]),
                     ),
@@ -326,7 +326,7 @@ class BottomSectionWidget extends StatelessWidget {
                         color: Get.find<MarketThemeController>(tag: 'xmarket')
                                 .darkTheme
                             ? Colors.white70
-                            : Colors.black),
+                            : Color(0xFF55745a)),
                     textDirection: TextDirection.ltr),
               ]),
               const SizedBox(height: Dimensions.paddingSizeSmall),
@@ -356,7 +356,7 @@ class BottomSectionWidget extends StatelessWidget {
                                 ? Text(
                                     'free_delivery'.tr,
                                     style: robotoRegular.copyWith(
-                                        color: Colors.black),
+                                        color: Color(0xFF55745a)),
                                   )
                                 : Row(children: [
                                     // Text('',
@@ -366,7 +366,7 @@ class BottomSectionWidget extends StatelessWidget {
                                       PriceConverter.convertPrice(
                                           couponController.discount),
                                       style: robotoRegular.copyWith(
-                                          color: Colors.black),
+                                          color: Color(0xFF55745a)),
                                       textDirection: TextDirection.ltr,
                                     )
                                   ]),
@@ -400,7 +400,7 @@ class BottomSectionWidget extends StatelessWidget {
                           Text('vat_tax'.tr, style: robotoRegular),
                           Text(PriceConverter.convertPrice(tax),
                               style:
-                                  robotoRegular.copyWith(color: Colors.black),
+                                  robotoRegular.copyWith(color:Color(0xFF55745a)),
                               textDirection: TextDirection.ltr),
                         ]),
               SizedBox(
@@ -505,7 +505,7 @@ class BottomSectionWidget extends StatelessWidget {
                                                 tag: 'xmarket')
                                             .darkTheme
                                         ? Colors.white70
-                                        : Colors.black)),
+                                        : Color(0xFF55745a))),
                             const SizedBox(
                                 width: Dimensions.paddingSizeExtraSmall),
 
@@ -522,7 +522,7 @@ class BottomSectionWidget extends StatelessWidget {
                                             tag: 'xmarket')
                                         .darkTheme
                                     ? Colors.white
-                                    : Colors.black),
+                                    : Color(0xFF55745a)),
                             textDirection: TextDirection.ltr,
                           ),
                         ])

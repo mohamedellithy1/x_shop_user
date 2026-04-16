@@ -117,7 +117,7 @@ class _ProductReviewWidgetState extends State<ProductReviewWidget> {
                         // Rate
                         Text(
                           'rate_the_food'.tr,
-                          style: robotoMedium.copyWith(color: Colors.black),
+                          style: robotoMedium.copyWith(color: Color(0xFF55745a)),
                           overflow: TextOverflow.ellipsis,
                         ),
                         const SizedBox(height: Dimensions.paddingSizeSmall),
@@ -152,7 +152,7 @@ class _ProductReviewWidgetState extends State<ProductReviewWidget> {
                         const SizedBox(height: Dimensions.paddingSizeLarge),
                         Text(
                           'share_your_opinion'.tr,
-                          style: robotoMedium.copyWith(color: Colors.black),
+                          style: robotoMedium.copyWith(color: Color(0xFF55745a)),
                           overflow: TextOverflow.ellipsis,
                         ),
                         const SizedBox(height: Dimensions.paddingSizeLarge),

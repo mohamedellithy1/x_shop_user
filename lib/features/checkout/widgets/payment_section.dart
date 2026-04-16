@@ -35,11 +35,15 @@ class PaymentSection extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF1b1b1b) : Theme.of(context).cardColor,
+        color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+            ? const Color(0xFF1b1b1b)
+            : Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
         boxShadow: [
           BoxShadow(
-              color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.black.withValues(alpha: 0.2) : Colors.black.withValues(alpha: 0.1),
+              color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+                  ? Colors.black.withValues(alpha: 0.2)
+                  : Colors.black.withValues(alpha: 0.1),
               spreadRadius: 1,
               blurRadius: 10,
               offset: const Offset(0, 1))
@@ -55,7 +59,12 @@ class PaymentSection extends StatelessWidget {
       child: Column(children: [
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Row(spacing: Dimensions.paddingSizeSmall, children: [
-            Text('payment_method'.tr, style: robotoMedium.copyWith(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black)),
+            Text('payment_method'.tr,
+                style: robotoMedium.copyWith(
+                    color: Get.find<MarketThemeController>(tag: 'xmarket')
+                            .darkTheme
+                        ? Colors.white
+                        : Color(0xFF55745a))),
           ]),
           InkWell(
             onTap: () {
@@ -102,7 +111,11 @@ class PaymentSection extends StatelessWidget {
                         'cash_on_delivery'.tr,
                         style: robotoMedium.copyWith(
                             fontSize: Dimensions.fontSizeSmall,
-                            color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white70 : Colors.black),
+                            color:
+                                Get.find<MarketThemeController>(tag: 'xmarket')
+                                        .darkTheme
+                                    ? Colors.white70
+                                    : Color(0xFF55745a)),
                       ),
                     ],
                   )),
@@ -122,13 +135,21 @@ class PaymentSection extends StatelessWidget {
                             Text('paid_by_wallet'.tr,
                                 style: robotoRegular.copyWith(
                                     fontSize: Dimensions.fontSizeSmall,
-                                    color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white70 : Colors.black)),
+                                    color: Get.find<MarketThemeController>(
+                                                tag: 'xmarket')
+                                            .darkTheme
+                                        ? Colors.white70
+                                        : Colors.black)),
                             Text(
                               PriceConverter.convertPrice(walletBalance),
                               textDirection: TextDirection.ltr,
                               style: robotoMedium.copyWith(
                                   fontSize: Dimensions.fontSizeSmall,
-                                  color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black),
+                                  color: Get.find<MarketThemeController>(
+                                              tag: 'xmarket')
+                                          .darkTheme
+                                      ? Colors.white
+                                      : Color(0xFF55745a)),
                             ),
                           ]),
                       const SizedBox(height: Dimensions.paddingSizeExtraSmall),
@@ -140,7 +161,11 @@ class PaymentSection extends StatelessWidget {
                               color:
                                   checkoutController.paymentMethodIndex == 1 &&
                                           checkoutController.isPartialPay
-                                      ? (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white70 : Colors.black)
+                                      ? (Get.find<MarketThemeController>(
+                                                  tag: 'xmarket')
+                                              .darkTheme
+                                          ? Colors.white70
+                                          : Color(0xFF55745a))
                                       : Theme.of(context)
                                           .textTheme
                                           .bodyLarge!

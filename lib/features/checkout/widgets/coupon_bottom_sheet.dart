@@ -173,7 +173,7 @@ class _CouponBottomSheetState extends State<CouponBottomSheet> {
                                 Get.find<MarketThemeController>(tag: 'xmarket')
                                         .darkTheme
                                     ? Colors.white
-                                    : Colors.black),
+                                    : Color(0xFF55745a)),
                         decoration: InputDecoration(
                             hintText: 'enter_promo_code'.tr,
                             hintStyle: robotoRegular.copyWith(
@@ -300,7 +300,7 @@ class _CouponBottomSheetState extends State<CouponBottomSheet> {
                                                   tag: 'xmarket')
                                               .darkTheme
                                           ? Colors.white
-                                          : Colors.black),
+                                          : Color(0xFF55745a)),
                                 )
                               : SizedBox(
                                   height: 30,
@@ -342,7 +342,7 @@ class _CouponBottomSheetState extends State<CouponBottomSheet> {
                                                   tag: 'xmarket')
                                               .darkTheme
                                           ? Colors.white
-                                          : Colors.black,
+                                          : Color(0xFF55745a),
                                       fontSize: Dimensions.fontSizeDefault))),
                         ),
                         GridView.builder(
@@ -476,7 +476,7 @@ class _CouponBottomSheetState extends State<CouponBottomSheet> {
                                                             tag: 'xmarket')
                                                         .darkTheme
                                                     ? Colors.white
-                                                    : Colors.black))),
+                                                    : Color(0xFF55745a)))),
                               )
                             : const SizedBox(),
                         _unavailableCouponList != null &&
@@ -520,7 +520,7 @@ class _CouponBottomSheetState extends State<CouponBottomSheet> {
                                             tag: 'xmarket')
                                         .darkTheme
                                     ? Colors.white
-                                    : Colors.black)),
+                                    : Color(0xFF55745a))),
                         const SizedBox(
                             height: Dimensions.paddingSizeExtraSmall),
 
@@ -532,7 +532,7 @@ class _CouponBottomSheetState extends State<CouponBottomSheet> {
                                           tag: 'xmarket')
                                       .darkTheme
                                   ? Colors.white70
-                                  : Colors.black),
+                                  : Color(0xFF55745a)),
                         ),
                         const SizedBox(height: 50),
                       ],

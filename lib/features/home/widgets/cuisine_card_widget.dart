@@ -87,7 +87,7 @@ class CuisineCardWidget extends StatelessWidget {
                       name,
                       style: robotoMedium.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color: Color(0xFF55745a),
                           fontSize: Dimensions.fontSizeSmall),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -116,7 +116,7 @@ class CuisineCardWidget extends StatelessWidget {
                 style: robotoMedium.copyWith(
                   fontSize: Dimensions.fontSizeExtraSmall,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  color: Color(0xFF55745a),
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,

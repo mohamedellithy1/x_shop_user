@@ -60,7 +60,7 @@ class LoyaltyCardWidget extends StatelessWidget {
                           color: Get.find<MarketThemeController>(tag: 'xmarket')
                                   .darkTheme
                               ? Colors.white70
-                              : Colors.black,
+                              : Color(0xFF55745a),
                         ),
                       ),
                       const SizedBox(width: Dimensions.paddingSizeExtraSmall),
@@ -131,7 +131,7 @@ class LoyaltyCardWidget extends StatelessWidget {
                           color: Get.find<MarketThemeController>(tag: 'xmarket')
                                   .darkTheme
                               ? Colors.white
-                              : Colors.black,
+                              : Color(0xFF55745a),
                         ),
                       ),
                       const SizedBox(width: Dimensions.paddingSizeExtraSmall),
@@ -145,7 +145,7 @@ class LoyaltyCardWidget extends StatelessWidget {
                           color: Get.find<MarketThemeController>(tag: 'xmarket')
                                   .darkTheme
                               ? Colors.white
-                              : Colors.black,
+                              : Color(0xFF55745a),
                         ),
                       ),
                     ],
@@ -180,7 +180,7 @@ class LoyaltyCardWidget extends StatelessWidget {
                     color: Get.find<MarketThemeController>(tag: 'xmarket')
                             .darkTheme
                         ? Colors.white
-                        : Colors.black))
+                        : Color(0xFF55745a)))
             : const SizedBox(),
         ResponsiveHelper.isDesktop(context)
             ? const SizedBox(height: Dimensions.paddingSizeDefault)

@@ -267,7 +267,7 @@ class MessageBubbleWidget extends StatelessWidget {
                                                       : (marketThemeController
                                                               .darkTheme
                                                           ? Colors.white
-                                                          : Colors.black),
+                                                          : Color(0xFF55745a)),
                                                   fontSize: Dimensions
                                                       .fontSizeDefault,
                                                 ),
@@ -307,7 +307,7 @@ class MessageBubbleWidget extends StatelessWidget {
                                                             marketThemeController
                                                                     .darkTheme
                                                                 ? Colors.white70
-                                                                : Colors.black),
+                                                                : Color(0xFF55745a)),
                                                   ),
                                                 ),
                                               ),
@@ -438,8 +438,8 @@ class MessageBubbleWidget extends StatelessWidget {
                                                                     color: marketThemeController.darkTheme
                                                                         ? Colors
                                                                             .white70
-                                                                        : Colors
-                                                                            .black),
+                                                                        : Color(0xFF55745a)
+                                                                            ),
                                                               ),
                                                             ),
                                                           ),

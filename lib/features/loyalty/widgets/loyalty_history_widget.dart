@@ -18,7 +18,11 @@ class LoyaltyHistoryWidget extends StatelessWidget {
       return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(
           'point_history'.tr,
-          style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge, color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black),
+          style: robotoMedium.copyWith(
+              fontSize: Dimensions.fontSizeLarge,
+              color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+                  ? Colors.white
+                  : Colors.black),
         ),
         const Divider(thickness: .125),
         walletController.transactionList != null

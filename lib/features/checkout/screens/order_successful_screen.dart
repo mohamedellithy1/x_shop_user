@@ -124,7 +124,7 @@ class _OrderSuccessfulScreenState extends State<OrderSuccessfulScreen> {
                                               tag: 'xmarket')
                                           .darkTheme
                                       ? Colors.white
-                                      : Colors.black),
+                                      : Color(0xFF55745a)),
                             ),
                             const SizedBox(height: Dimensions.paddingSizeSmall),
 
@@ -133,7 +133,7 @@ class _OrderSuccessfulScreenState extends State<OrderSuccessfulScreen> {
                                     '${'order_id'.tr}: $orderId',
                                     style: robotoMedium.copyWith(
                                         fontSize: Dimensions.fontSizeLarge,
-                                        color: Colors.black),
+                                        color: Color(0xFF55745a)),
                                   )
                                 : const SizedBox(),
 
@@ -177,7 +177,7 @@ class _OrderSuccessfulScreenState extends State<OrderSuccessfulScreen> {
                                         '${'you_have_earned'.tr} ${total.floor().toString()} ${'points_it_will_add_to'.tr}',
                                         style: robotoRegular.copyWith(
                                             fontSize: Dimensions.fontSizeLarge,
-                                            color: Colors.black),
+                                            color: Color(0xFF55745a)),
                                         textAlign: TextAlign.center,
                                       ),
                                     ),

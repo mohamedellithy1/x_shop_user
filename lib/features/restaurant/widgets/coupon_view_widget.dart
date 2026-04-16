@@ -123,7 +123,7 @@ class CouponViewWidget extends StatelessWidget {
                                         couponController
                                             .couponList![index].startDate!),
                                     style: robotoMedium.copyWith(
-                                        color: Colors.black,
+                                        color: Color(0xFF55745a),
                                         fontSize:
                                             Dimensions.fontSizeExtraSmall),
                                     maxLines: 1,
@@ -132,7 +132,7 @@ class CouponViewWidget extends StatelessWidget {
                                   Text(
                                     ' ${'to'.tr} ${DateConverter.stringToReadableString(couponController.couponList![index].expireDate!)}',
                                     style: robotoMedium.copyWith(
-                                        color: Colors.black,
+                                        color: Color(0xFF55745a),
                                         fontSize:
                                             Dimensions.fontSizeExtraSmall),
                                     maxLines: 1,
@@ -146,7 +146,7 @@ class CouponViewWidget extends StatelessWidget {
                                         Text(
                                           '${'min_purchase'.tr} ',
                                           style: robotoRegular.copyWith(
-                                              color: Colors.black,
+                                              color: Color(0xFF55745a),
                                               fontSize: Dimensions
                                                   .fontSizeExtraSmall),
                                           maxLines: 1,
@@ -158,7 +158,7 @@ class CouponViewWidget extends StatelessWidget {
                                                   .couponList![index]
                                                   .minPurchase),
                                           style: robotoMedium.copyWith(
-                                              color: Colors.black,
+                                              color: Color(0xFF55745a),
                                               fontSize: Dimensions
                                                   .fontSizeExtraSmall),
                                           maxLines: 1,
@@ -192,7 +192,7 @@ class CouponViewWidget extends StatelessWidget {
                                   Text(
                                     '${couponController.couponList![index].couponType == 'free_delivery' ? '' : couponController.couponList![index].discount}${couponController.couponList![index].discountType == 'percent' ? '%' : couponController.couponList![index].couponType == 'free_delivery' ? 'free_delivery'.tr : " EGP "} ${couponController.couponList![index].couponType == 'free_delivery' ? '' : 'off'.tr}',
                                     style: robotoBold.copyWith(
-                                        color: Colors.black,
+                                        color: Color(0xFF55745a),
                                         fontSize: Dimensions.fontSizeDefault),
                                   ),
                                   const SizedBox(
@@ -211,7 +211,7 @@ class CouponViewWidget extends StatelessWidget {
                                       style: robotoRegular.copyWith(
                                           fontSize:
                                               Dimensions.fontSizeExtraSmall,
-                                          color: Colors.black),
+                                          color: Color(0xFF55745a)),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.center,

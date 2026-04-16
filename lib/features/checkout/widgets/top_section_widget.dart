@@ -174,7 +174,10 @@ class TopSectionWidget extends StatelessWidget {
             ? Container(
                 width: context.width,
                 decoration: BoxDecoration(
-                  color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF1b1b1b) : Theme.of(context).cardColor,
+                  color:
+                      Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+                          ? const Color(0xFF1b1b1b)
+                          : Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
                   boxShadow: [
                     BoxShadow(
@@ -194,7 +197,13 @@ class TopSectionWidget extends StatelessWidget {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                       Text('order_type'.tr, style: robotoMedium.copyWith(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black)),
+                      Text('order_type'.tr,
+                          style: robotoMedium.copyWith(
+                              color: Get.find<MarketThemeController>(
+                                          tag: 'xmarket')
+                                      .darkTheme
+                                  ? Colors.white
+                                  : Color(0xFF55745a))),
                       const SizedBox(height: Dimensions.paddingSizeExtraSmall),
                       Row(children: [
                         Expanded(
@@ -264,7 +273,10 @@ class TopSectionWidget extends StatelessWidget {
             ? Container(
                 width: context.width,
                 decoration: BoxDecoration(
-                  color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF1b1b1b) : Theme.of(context).cardColor,
+                  color:
+                      Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+                          ? const Color(0xFF1b1b1b)
+                          : Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
                   boxShadow: [
                     BoxShadow(
@@ -284,7 +296,13 @@ class TopSectionWidget extends StatelessWidget {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                       Text('delivery_option'.tr, style: robotoMedium.copyWith(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black)),
+                      Text('delivery_option'.tr,
+                          style: robotoMedium.copyWith(
+                              color: Get.find<MarketThemeController>(
+                                          tag: 'xmarket')
+                                      .darkTheme
+                                  ? Colors.white
+                                  : Color(0xFF55745a))),
                       const SizedBox(height: Dimensions.paddingSizeDefault),
                       SingleChildScrollView(
                           controller: deliveryOptionScrollController,
@@ -450,7 +468,12 @@ class TopSectionWidget extends StatelessWidget {
         isDesktop
             ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 const SizedBox(height: Dimensions.paddingSizeLarge),
-                 Text('additional_note'.tr, style: robotoMedium.copyWith(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black)),
+                Text('additional_note'.tr,
+                    style: robotoMedium.copyWith(
+                        color: Get.find<MarketThemeController>(tag: 'xmarket')
+                                .darkTheme
+                            ? Colors.white
+                            : Color(0xFF55745a))),
                 const SizedBox(height: Dimensions.paddingSizeSmall),
                 CustomTextFieldWidget(
                   controller: checkoutController.noteController,

@@ -115,7 +115,7 @@ class CuisineWidget extends StatelessWidget {
                     child: Row(children: [
                       Text(
                         cuisineController.cuisineModel!.cuisines![cuisineController.selectedCuisines![index]].name!,
-                        style: robotoRegular.copyWith(color: Colors.black),
+                        style: robotoRegular.copyWith(color:Color(0xFF55745a)),
                       ),
                       InkWell(
                         onTap: () => cuisineController.removeCuisine(index),

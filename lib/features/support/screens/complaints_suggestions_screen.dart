@@ -112,7 +112,7 @@ class _ComplaintsSuggestionsScreenState
                                 const SizedBox(height: 4),
                                 Text('أضف صورة',
                                     style: robotoRegular.copyWith(
-                                        fontSize: 10, color: Colors.black)),
+                                        fontSize: 10, color: Color(0xFF55745a))),
                               ],
                             ),
                           ),

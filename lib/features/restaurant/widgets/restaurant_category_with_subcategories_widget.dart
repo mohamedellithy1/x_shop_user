@@ -262,7 +262,7 @@ class _RestaurantCategoryWithSubcategoriesWidgetState
                           height: 20,
                           width: 20,
                           child: CircularProgressIndicator(
-                            color: Colors.black,
+                            color: Color(0xFF55745a),
                             strokeWidth: 2,
                           ),
                         ),
@@ -271,7 +271,7 @@ class _RestaurantCategoryWithSubcategoriesWidgetState
                           'جاري تحميل المزيد...',
                           style: robotoRegular.copyWith(
                               fontSize: Dimensions.fontSizeSmall,
-                              color: Colors.black),
+                              color: Color(0xFF55745a)),
                         ),
                       ],
                     ),

@@ -149,7 +149,7 @@ class _SubscriptionPaymentScreenState extends State<SubscriptionPaymentScreen> {
                                         style: robotoBold.copyWith(
                                             fontSize:
                                                 Dimensions.fontSizeDefault,
-                                            color: Colors.black,
+                                            color: Color(0xFF55745a),
                                             fontWeight: FontWeight.bold)),
                                     Text(
                                       'faster_and_secure_way_to_pay_bill'.tr,

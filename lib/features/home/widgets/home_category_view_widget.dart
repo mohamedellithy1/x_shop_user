@@ -41,7 +41,7 @@ class HomeCategoryViewWidget extends StatelessWidget {
                   "الخدمه غير متوفره الان",
                   style: robotoBold.copyWith(
                     fontSize: Dimensions.fontSizeExtraLarge,
-                    color: Colors.black,
+                    color: Color(0xFF55745a),
                   ),
                 ),
                 const SizedBox(height: Dimensions.paddingSizeSmall),
@@ -49,7 +49,7 @@ class HomeCategoryViewWidget extends StatelessWidget {
                   "برجاء المحاوله لاحقا",
                   style: robotoMedium.copyWith(
                     fontSize: Dimensions.fontSizeLarge,
-                    color: Colors.black87,
+                    color: Color(0xFF55745a),
                   ),
                 ),
               ],
@@ -117,7 +117,7 @@ class HomeCategoryViewWidget extends StatelessWidget {
                           color: Get.find<MarketThemeController>(tag: 'xmarket')
                                   .darkTheme
                               ? Colors.white
-                              : Colors.black),
+                              : Color(0xFF55745a)),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,

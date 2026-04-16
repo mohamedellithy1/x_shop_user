@@ -40,11 +40,16 @@ class TimeSlotSection extends StatelessWidget {
               !isDineIn)
           ? Container(
               decoration: BoxDecoration(
-                color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF141313) : Theme.of(context).cardColor,
+                color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+                    ? const Color(0xFF141313)
+                    : Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
                 boxShadow: [
                   BoxShadow(
-                      color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.black.withValues(alpha: 0.2) : Colors.grey.withValues(alpha: 0.1),
+                      color: Get.find<MarketThemeController>(tag: 'xmarket')
+                              .darkTheme
+                          ? Colors.black.withValues(alpha: 0.2)
+                          : Colors.grey.withValues(alpha: 0.1),
                       spreadRadius: 1,
                       blurRadius: 10,
                       offset: const Offset(0, 1))
@@ -152,10 +157,14 @@ class TimeSlotSection extends StatelessWidget {
                                               checkoutController
                                                   .customDateRestaurantClose)
                                       ? Theme.of(context).colorScheme.error
-                                      : Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Theme.of(context)
-                                           .textTheme
-                                           .bodyMedium!
-                                           .color),
+                                      : Get.find<MarketThemeController>(
+                                                  tag: 'xmarket')
+                                              .darkTheme
+                                          ? Colors.white
+                                          : Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium!
+                                              .color),
                             ));
                           }),
                           Icon(Icons.access_time_filled_outlined,

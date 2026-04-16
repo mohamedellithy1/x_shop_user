@@ -226,7 +226,7 @@ class _RestaurantRegistrationScreenState
                                                   tag: 'xmarket')
                                               .darkTheme
                                           ? Colors.white
-                                          : Colors.black),
+                                          : Color(0xFF55745a)),
                                 ),
                                 const SizedBox(
                                   height: Dimensions.paddingSizeSmall,
@@ -289,7 +289,7 @@ class _RestaurantRegistrationScreenState
                                                   tag: 'xmarket')
                                               .darkTheme
                                           ? Colors.white
-                                          : Colors.black),
+                                          : Color(0xFF55745a)),
                                 ),
                                 const SizedBox(
                                   height: Dimensions.paddingSizeSmall,
@@ -827,7 +827,7 @@ class _RestaurantRegistrationScreenState
                                                   tag: 'xmarket')
                                               .darkTheme
                                           ? Colors.white
-                                          : Colors.black),
+                                          : Color(0xFF55745a)),
                                 ),
                                 const SizedBox(
                                   height: Dimensions.paddingSizeSmall,
@@ -895,7 +895,7 @@ class _RestaurantRegistrationScreenState
                                                   tag: 'xmarket')
                                               .darkTheme
                                           ? Colors.white
-                                          : Colors.black),
+                                          : Color(0xFF55745a)),
                                 ),
                                 const SizedBox(
                                   height: Dimensions.paddingSizeSmall,
@@ -996,7 +996,7 @@ class _RestaurantRegistrationScreenState
                                                                 tag: 'xmarket')
                                                             .darkTheme
                                                         ? Colors.white
-                                                        : Colors.black),
+                                                        : Color(0xFF55745a)),
                                           ),
                                         ),
                                       ),
@@ -1156,7 +1156,7 @@ class _RestaurantRegistrationScreenState
                                                                   Brightness
                                                                       .dark
                                                               ? Colors.white
-                                                              : Colors.black,
+                                                              : Color(0xFF55745a),
                                                         ),
                                                         children: [
                                                           TextSpan(

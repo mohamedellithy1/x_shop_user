@@ -263,7 +263,7 @@ class _DeliveryManRegistrationScreenState
               fontSize: Dimensions.fontSizeLarge,
               color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
                   ? Colors.white
-                  : Colors.black)),
+                  : Color(0xFF55745a))),
     );
   }
 
@@ -302,7 +302,7 @@ class _DeliveryManRegistrationScreenState
                   color:
                       Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
                           ? Colors.white
-                          : Colors.black87))),
+                          : Color(0xFF55745a)))),
       _buildImagePicker(front, frontType, 'الوجه الامامي', dmController),
       if (front != null) ...[
         const SizedBox(height: Dimensions.paddingSizeDefault),

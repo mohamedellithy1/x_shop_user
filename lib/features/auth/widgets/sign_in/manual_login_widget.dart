@@ -147,7 +147,7 @@ class ManualLoginWidget extends StatelessWidget {
               });
             },
             child: Text('forgot_password'.tr,
-                style: robotoRegular.copyWith(color: Colors.black)),
+                style: robotoRegular.copyWith(color: Color(0xFF55745a))),
           ),
         ]),
         const SizedBox(height: Dimensions.paddingSizeLarge),

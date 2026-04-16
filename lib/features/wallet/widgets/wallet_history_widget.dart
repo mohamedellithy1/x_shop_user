@@ -26,7 +26,7 @@ class WalletHistoryWidget extends StatelessWidget {
             style: robotoMedium.copyWith(
               color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
                   ? Colors.white
-                  : Colors.black,
+                  : Color(0xFF55745a),
             ),
           )));
     }

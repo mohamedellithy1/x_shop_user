@@ -92,7 +92,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                     hintText: 'search_by_category'.tr,
                                     hintStyle: WidgetStatePropertyAll(
                                       robotoRegular.copyWith(
-                                          color: Colors.black),
+                                          color: Color(0xFF55745a)),
                                     ),
                                     padding: const WidgetStatePropertyAll(
                                         EdgeInsets.symmetric(horizontal: 16.0)),
@@ -152,7 +152,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                 },
                                 hintText: 'search_by_category'.tr,
                                 hintStyle: WidgetStatePropertyAll(
-                                  robotoRegular.copyWith(color: Colors.black),
+                                  robotoRegular.copyWith(color: Color(0xFF55745a)),
                                 ),
                                 padding: const WidgetStatePropertyAll(
                                     EdgeInsets.symmetric(horizontal: 16.0)),

@@ -26,7 +26,8 @@ class OrderProductWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final MarketThemeController themeController = Get.find<MarketThemeController>(tag: 'xmarket');
+    final MarketThemeController themeController =
+        Get.find<MarketThemeController>(tag: 'xmarket');
     String addOnText = '';
     for (var addOn in orderDetails.addOns!) {
       addOnText =
@@ -62,7 +63,8 @@ class OrderProductWidget extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: themeController.darkTheme ? const Color(0xFF242424) : Colors.white,
+        color:
+            themeController.darkTheme ? const Color(0xFF242424) : Colors.white,
       ),
       padding: const EdgeInsets.symmetric(
           vertical: Dimensions.paddingSizeSmall,
@@ -138,12 +140,16 @@ class OrderProductWidget extends StatelessWidget {
                         Text('${'weight'.tr}: ',
                             style: robotoRegular.copyWith(
                                 fontSize: Dimensions.fontSizeSmall,
-                                color: themeController.darkTheme ? Colors.white : Colors.black)),
+                                color: themeController.darkTheme
+                                    ? Colors.white
+                                    : Color(0xFF55745a))),
                         Text(
                           orderDetails.requestedWeight.toString(),
                           style: robotoMedium.copyWith(
                               fontSize: Dimensions.fontSizeSmall,
-                              color: themeController.darkTheme ? Colors.white : Colors.black),
+                              color: themeController.darkTheme
+                                  ? Colors.white
+                                  : Color(0xFF55745a)),
                         ),
                       ]),
                     )
@@ -153,7 +159,8 @@ class OrderProductWidget extends StatelessWidget {
                     child: Text(
                   PriceConverter.convertPrice(
                     (orderDetails.foodDetails?.isWeightBased ?? false)
-                        ? ((orderDetails.price ?? 0) * (orderDetails.requestedWeight ?? 1.0))
+                        ? ((orderDetails.price ?? 0) *
+                            (orderDetails.requestedWeight ?? 1.0))
                         : (orderDetails.price ?? 0),
                   ),
                   style: robotoMedium,

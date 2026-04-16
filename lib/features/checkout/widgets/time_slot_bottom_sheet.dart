@@ -199,7 +199,7 @@ class _TimeSlotBottomSheetState extends State<TimeSlotBottomSheet> {
                                                                 tag: 'xmarket')
                                                             .darkTheme
                                                         ? Colors.white
-                                                        : Colors.black))),
+                                                        : Color(0xFF55745a)))),
                                     const SizedBox(
                                         height: Dimensions.paddingSizeLarge),
                                     SfDateRangePicker(
@@ -247,7 +247,8 @@ class _TimeSlotBottomSheetState extends State<TimeSlotBottomSheet> {
                                                                         'xmarket')
                                                                 .darkTheme
                                                             ? Colors.white
-                                                            : Colors.black)),
+                                                            : Color(
+                                                                0xFF55745a))),
                                               )
                                             : ListView.builder(
                                                 scrollDirection:
@@ -297,7 +298,7 @@ class _TimeSlotBottomSheetState extends State<TimeSlotBottomSheet> {
                                                                 tag: 'xmarket')
                                                             .darkTheme
                                                         ? Colors.white
-                                                        : Colors.black)),
+                                                        : Color(0xFF55745a))),
                                       )
                                     : checkoutController.timeSlots != null
                                         ? checkoutController
@@ -337,8 +338,16 @@ class _TimeSlotBottomSheetState extends State<TimeSlotBottomSheet> {
                                                   );
                                                 })
                                             : Center(
-                                                 child: Text(
-                                                     'no_slot_available'.tr, style: robotoMedium.copyWith(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black)))
+                                                child: Text(
+                                                    'no_slot_available'.tr,
+                                                    style: robotoMedium.copyWith(
+                                                        color: Get.find<MarketThemeController>(
+                                                                    tag:
+                                                                        'xmarket')
+                                                                .darkTheme
+                                                            ? Colors.white
+                                                            : Color(
+                                                                0xFF55745a))))
                                         : const Center(
                                             child: CircularProgressIndicator()),
                           ]),

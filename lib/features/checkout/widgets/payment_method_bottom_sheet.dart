@@ -131,7 +131,9 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
             constraints: BoxConstraints(
                 maxHeight: MediaQuery.of(context).size.height * 0.8),
             decoration: BoxDecoration(
-              color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF141313) : Theme.of(context).cardColor,
+              color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+                  ? const Color(0xFF141313)
+                  : Theme.of(context).cardColor,
               borderRadius: BorderRadius.vertical(
                   top: const Radius.circular(Dimensions.radiusLarge),
                   bottom: Radius.circular(ResponsiveHelper.isDesktop(context)
@@ -172,7 +174,11 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
                     ),
               const SizedBox(height: Dimensions.paddingSizeExtraSmall),
               Text('choose_payment_method'.tr,
-                  style: robotoBold.copyWith(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black)),
+                  style: robotoBold.copyWith(
+                      color: Get.find<MarketThemeController>(tag: 'xmarket')
+                              .darkTheme
+                          ? Colors.white
+                          : Color(0xFF55745a))),
               const SizedBox(height: Dimensions.paddingSizeSmall),
               Flexible(
                 child: SingleChildScrollView(
@@ -183,11 +189,21 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
                     children: [
                       Text('total_bill'.tr,
                           style: robotoMedium.copyWith(
-                              fontSize: 14, color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white70 : Colors.black54)),
+                              fontSize: 14,
+                              color: Get.find<MarketThemeController>(
+                                          tag: 'xmarket')
+                                      .darkTheme
+                                  ? Colors.white70
+                                  : Color(0xFF55745a))),
                       const SizedBox(height: Dimensions.paddingSizeExtraSmall),
                       Text(PriceConverter.convertPrice(widget.totalPrice),
                           style: robotoMedium.copyWith(
-                              fontSize: 20, color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black)),
+                              fontSize: 20,
+                              color: Get.find<MarketThemeController>(
+                                          tag: 'xmarket')
+                                      .darkTheme
+                                  ? Colors.white
+                                  : Color(0xFF55745a))),
                       const SizedBox(height: Dimensions.paddingSizeLarge),
                       Get.find<MarketSplashController>(tag: 'xmarket')
                               .configModel!
@@ -221,7 +237,8 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
                                           .configModel!
                                           .activePaymentMethodList !=
                                       null &&
-                                  Get.find<MarketSplashController>(tag: 'xmarket')
+                                  Get.find<MarketSplashController>(
+                                          tag: 'xmarket')
                                       .configModel!
                                       .activePaymentMethodList!
                                       .isNotEmpty)
@@ -239,14 +256,20 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text('pay_via_online'.tr,
-                                       style: robotoSemiBold.copyWith(
-                                           fontWeight: FontWeight.bold,
-                                           color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black)),
+                                      style: robotoSemiBold.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          color:
+                                              Get.find<MarketThemeController>(
+                                                          tag: 'xmarket')
+                                                      .darkTheme
+                                                  ? Colors.white
+                                                  : Color(0xFF55745a))),
                                   const SizedBox(
                                       height: Dimensions.paddingSizeSmall),
                                   ListView.builder(
                                       itemCount:
-                                          Get.find<MarketSplashController>(tag: 'xmarket')
+                                          Get.find<MarketSplashController>(
+                                                  tag: 'xmarket')
                                               .configModel!
                                               .activePaymentMethodList!
                                               .length,
@@ -260,7 +283,8 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
                                           isSelected = businessController
                                                       .paymentIndex ==
                                                   1 &&
-                                              Get.find<MarketSplashController>(tag: 'xmarket')
+                                              Get.find<MarketSplashController>(
+                                                          tag: 'xmarket')
                                                       .configModel!
                                                       .activePaymentMethodList![
                                                           index]
@@ -271,7 +295,8 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
                                           isSelected = checkoutController
                                                       .paymentMethodIndex ==
                                                   2 &&
-                                              Get.find<MarketSplashController>(tag: 'xmarket')
+                                              Get.find<MarketSplashController>(
+                                                          tag: 'xmarket')
                                                       .configModel!
                                                       .activePaymentMethodList![
                                                           index]
@@ -282,7 +307,9 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
                                         return paymentButtonView(
                                           padding: EdgeInsets.only(
                                               bottom: index ==
-                                                      Get.find<MarketSplashController>(tag: 'xmarket')
+                                                      Get.find<MarketSplashController>(
+                                                                  tag:
+                                                                      'xmarket')
                                                               .configModel!
                                                               .activePaymentMethodList!
                                                               .length -
@@ -300,31 +327,37 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
                                                     businessController
                                                         .setPaymentIndex(1);
                                                     businessController
-                                                        .changeDigitalPaymentName(Get
-                                                                .find<
-                                                                    MarketSplashController>(tag: 'xmarket')
-                                                            .configModel!
-                                                            .activePaymentMethodList![
-                                                                index]
-                                                            .getWay!);
+                                                        .changeDigitalPaymentName(
+                                                            Get.find<MarketSplashController>(
+                                                                    tag:
+                                                                        'xmarket')
+                                                                .configModel!
+                                                                .activePaymentMethodList![
+                                                                    index]
+                                                                .getWay!);
                                                   } else {
                                                     checkoutController
                                                         .setPaymentMethod(2);
                                                     checkoutController
-                                                        .changeDigitalPaymentName(Get
-                                                                .find<
-                                                                    MarketSplashController>(tag: 'xmarket')
-                                                            .configModel!
-                                                            .activePaymentMethodList![
-                                                                index]
-                                                            .getWay!);
+                                                        .changeDigitalPaymentName(
+                                                            Get.find<MarketSplashController>(
+                                                                    tag:
+                                                                        'xmarket')
+                                                                .configModel!
+                                                                .activePaymentMethodList![
+                                                                    index]
+                                                                .getWay!);
                                                   }
                                                 },
-                                          title: Get.find<MarketSplashController>(tag: 'xmarket')
+                                          title: Get.find<
+                                                      MarketSplashController>(
+                                                  tag: 'xmarket')
                                               .configModel!
                                               .activePaymentMethodList![index]
                                               .getWayTitle!,
-                                          image: Get.find<MarketSplashController>(tag: 'xmarket')
+                                          image: Get.find<
+                                                      MarketSplashController>(
+                                                  tag: 'xmarket')
                                               .configModel!
                                               .activePaymentMethodList![index]
                                               .getWayImageFullUrl,
@@ -339,11 +372,13 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
                           height: widget.isDigitalPaymentActive &&
                                   notHideDigital &&
                                   !checkoutController.subscriptionOrder &&
-                                  (Get.find<MarketSplashController>(tag: 'xmarket')
+                                  (Get.find<MarketSplashController>(
+                                                  tag: 'xmarket')
                                               .configModel!
                                               .activePaymentMethodList !=
                                           null &&
-                                      Get.find<MarketSplashController>(tag: 'xmarket')
+                                      Get.find<MarketSplashController>(
+                                              tag: 'xmarket')
                                           .configModel!
                                           .activePaymentMethodList!
                                           .isNotEmpty)
@@ -382,7 +417,10 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
                   decoration: ResponsiveHelper.isDesktop(context)
                       ? null
                       : BoxDecoration(
-                          color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF141313) : Theme.of(context).cardColor,
+                          color: Get.find<MarketThemeController>(tag: 'xmarket')
+                                  .darkTheme
+                              ? const Color(0xFF141313)
+                              : Theme.of(context).cardColor,
                           boxShadow: [
                             BoxShadow(
                                 color: Colors.black.withValues(alpha: 0.1),
@@ -447,17 +485,27 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
               child: Text(
                 title,
                 style: isDigitalPayment
-                    ? robotoMedium.copyWith(fontSize: 15, color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black)
+                    ? robotoMedium.copyWith(
+                        fontSize: 15,
+                        color: Get.find<MarketThemeController>(tag: 'xmarket')
+                                .darkTheme
+                            ? Colors.white
+                            : Color(0xFF55745a))
                     : robotoSemiBold.copyWith(
                         fontSize: Dimensions.fontSizeDefault,
-                        color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black),
+                        color: Get.find<MarketThemeController>(tag: 'xmarket')
+                                .darkTheme
+                            ? Colors.white
+                            : Color(0xFF55745a)),
               ),
             ),
             Icon(
               isSelected ? Icons.check_circle : Icons.circle_outlined,
               size: 24,
               color: isSelected
-                  ? (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black)
+                  ? (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+                      ? Colors.white
+                      : Color(0xFF55745a))
                   : Theme.of(context).disabledColor.withValues(alpha: 0.5),
             ),
           ]),
@@ -571,20 +619,34 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
                                   ? 'wallet_remaining_balance'.tr
                                   : 'wallet_balance'.tr,
                               style: robotoMedium.copyWith(
-                                  fontSize: 12, color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white70 : Colors.grey.shade700)),
+                                  fontSize: 12,
+                                  color: Get.find<MarketThemeController>(
+                                              tag: 'xmarket')
+                                          .darkTheme
+                                      ? Colors.white70
+                                      : Colors.grey.shade700)),
                           Row(children: [
-                              Text(
-                                PriceConverter.convertPrice(
-                                    isWalletSelected ? balance : walletBalance),
-                                style: robotoMedium.copyWith(
-                                    fontSize: Dimensions.fontSizeExtraLarge, color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black),
-                              ),
-                              Text(
-                                isWalletSelected ? ' (${'applied'.tr})' : '',
-                                style: robotoMedium.copyWith(
-                                    fontSize: Dimensions.fontSizeDefault,
-                                    color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white70 : Colors.black54),
-                              ),
+                            Text(
+                              PriceConverter.convertPrice(
+                                  isWalletSelected ? balance : walletBalance),
+                              style: robotoMedium.copyWith(
+                                  fontSize: Dimensions.fontSizeExtraLarge,
+                                  color: Get.find<MarketThemeController>(
+                                              tag: 'xmarket')
+                                          .darkTheme
+                                      ? Colors.white
+                                      : Color(0xFF55745a)),
+                            ),
+                            Text(
+                              isWalletSelected ? ' (${'applied'.tr})' : '',
+                              style: robotoMedium.copyWith(
+                                  fontSize: Dimensions.fontSizeDefault,
+                                  color: Get.find<MarketThemeController>(
+                                              tag: 'xmarket')
+                                          .darkTheme
+                                      ? Colors.white70
+                                      : Color(0xFF55745a)),
+                            ),
                           ])
                         ]),
                     CustomInkWellWidget(
@@ -618,7 +680,12 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
                                   vertical: 4, horizontal: 20),
                               child: Text('apply'.tr,
                                   style: robotoMedium.copyWith(
-                                      fontSize: 12, color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black)),
+                                      fontSize: 12,
+                                      color: Get.find<MarketThemeController>(
+                                                  tag: 'xmarket')
+                                              .darkTheme
+                                          ? Colors.white
+                                          : Color(0xFF55745a))),
                             ),
                     ),
                   ]),
@@ -637,9 +704,21 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('paid_by_wallet'.tr,
-                          style: robotoBold.copyWith(fontSize: 14, color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black)),
+                          style: robotoBold.copyWith(
+                              fontSize: 14,
+                              color: Get.find<MarketThemeController>(
+                                          tag: 'xmarket')
+                                      .darkTheme
+                                  ? Colors.white
+                                  : Color(0xFF55745a))),
                       Text(PriceConverter.convertPrice(widget.totalPrice),
-                          style: robotoMedium.copyWith(fontSize: 18, color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black))
+                          style: robotoMedium.copyWith(
+                              fontSize: 18,
+                              color: Get.find<MarketThemeController>(
+                                          tag: 'xmarket')
+                                      .darkTheme
+                                  ? Colors.white
+                                  : Color(0xFF55745a)))
                     ]),
               ),
             if (isWalletSelected && checkoutController.isPartialPay)
@@ -660,22 +739,44 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text('paid_by_wallet'.tr,
-                               style: robotoMedium.copyWith(
-                                   fontSize: 14, color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white70 : Colors.grey.shade700)),
+                              style: robotoMedium.copyWith(
+                                  fontSize: 14,
+                                  color: Get.find<MarketThemeController>(
+                                              tag: 'xmarket')
+                                          .darkTheme
+                                      ? Colors.white70
+                                      : Colors.grey.shade700)),
                           Text(PriceConverter.convertPrice(walletBalance),
-                               style: robotoMedium.copyWith(
-                                   fontSize: 14, color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white70 : Colors.grey.shade700))
+                              style: robotoMedium.copyWith(
+                                  fontSize: 14,
+                                  color: Get.find<MarketThemeController>(
+                                              tag: 'xmarket')
+                                          .darkTheme
+                                      ? Colors.white70
+                                      : Colors.grey.shade700))
                         ]),
                     const SizedBox(height: 5),
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text('remaining_bill'.tr,
-                               style: robotoMedium.copyWith(fontSize: 14, color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black)),
+                              style: robotoMedium.copyWith(
+                                  fontSize: 14,
+                                  color: Get.find<MarketThemeController>(
+                                              tag: 'xmarket')
+                                          .darkTheme
+                                      ? Colors.white
+                                      : Color(0xFF55745a))),
                           Text(
                               PriceConverter.convertPrice(
                                   widget.totalPrice - walletBalance),
-                              style: robotoBold.copyWith(fontSize: 18, color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black)),
+                              style: robotoBold.copyWith(
+                                  fontSize: 18,
+                                  color: Get.find<MarketThemeController>(
+                                              tag: 'xmarket')
+                                          .darkTheme
+                                      ? Colors.white
+                                      : Color(0xFF55745a))),
                         ])
                   ]),
                 ),

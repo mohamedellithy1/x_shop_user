@@ -181,7 +181,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                                                 tag: 'xmarket')
                                                             .darkTheme
                                                         ? Colors.white
-                                                        : Colors.black),
+                                                        : Color(0xFF55745a)),
                                           )
                                         : Container(
                                             height: 20,
@@ -207,7 +207,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                                                         'xmarket')
                                                                 .darkTheme
                                                             ? Colors.white
-                                                            : Colors.black)
+                                                            : Color(0xFF55745a))
                                                         .withValues(
                                                             alpha: 0.8)),
                                           )
@@ -454,8 +454,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                                                         .darkTheme
                                                                     ? Colors
                                                                         .white
-                                                                    : Colors
-                                                                        .black),
+                                                                    : Color(
+                                                                        0xFF55745a)),
                                                           ),
                                                         ],
                                                       ))
@@ -1083,7 +1083,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                                                           textCapitalization:
                                                                               TextCapitalization.sentences,
                                                                           style:
-                                                                              robotoRegular.copyWith(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black),
+                                                                              robotoRegular.copyWith(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Color(0xFF55745a)),
                                                                           keyboardType:
                                                                               TextInputType.multiline,
                                                                           maxLines:

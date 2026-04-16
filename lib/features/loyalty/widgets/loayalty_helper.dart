@@ -53,7 +53,7 @@ class LoyaltyXmarketPointHelpWidget extends StatelessWidget {
                   color:
                       Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
                           ? Colors.white
-                          : Colors.black,
+                          : Color(0xFF55745a),
                 )),
             const SizedBox(height: Dimensions.paddingSizeSmall),
             Lottie.asset("assets/image/gifts.json", height: 100, width: 200),
@@ -77,7 +77,7 @@ class LoyaltyXmarketPointHelpWidget extends StatelessWidget {
                       color: Get.find<MarketThemeController>(tag: 'xmarket')
                               .darkTheme
                           ? Colors.white
-                          : Colors.black,
+                          : Color(0xFF55745a),
                     ))
               ],
             ),
@@ -103,7 +103,7 @@ class LoyaltyXmarketPointHelpWidget extends StatelessWidget {
                     color: Get.find<MarketThemeController>(tag: 'xmarket')
                             .darkTheme
                         ? Colors.white
-                        : Colors.black,
+                        : Color(0xFF55745a),
                   ),
                 )),
               ],

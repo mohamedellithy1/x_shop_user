@@ -8,18 +8,30 @@ class NotAvailableWidget extends StatelessWidget {
   final bool isRestaurant;
   final double opacity;
   final Color color;
-  const NotAvailableWidget({super.key, this.fontSize = 15, this.isRestaurant = false, this.opacity = 0.6, this.color = Colors.white});
+  const NotAvailableWidget(
+      {super.key,
+      this.fontSize = 15,
+      this.isRestaurant = false,
+      this.opacity = 0.6,
+      this.color = Colors.white});
 
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: 0, left: 0, bottom: 0, right: 0,
+      top: 0,
+      left: 0,
+      bottom: 0,
+      right: 0,
       child: Container(
         alignment: Alignment.center,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(Dimensions.radiusSmall), color: Colors.black.withValues(alpha: opacity)),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+            color: Colors.black.withValues(alpha: opacity)),
         child: Text(
-          isRestaurant ? 'closed_now'.tr : 'not_available_now_break'.tr, textAlign: TextAlign.center,
-          style: robotoRegular.copyWith(color: color, fontSize: fontSize, fontWeight: FontWeight.bold),
+          isRestaurant ? 'closed_now'.tr : 'not_available_now_break'.tr,
+          textAlign: TextAlign.center,
+          style: robotoRegular.copyWith(
+              color: color, fontSize: fontSize, fontWeight: FontWeight.bold),
         ),
       ),
     );

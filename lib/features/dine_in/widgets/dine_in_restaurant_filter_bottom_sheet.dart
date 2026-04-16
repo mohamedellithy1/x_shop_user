@@ -188,7 +188,8 @@ class _DineRestaurantFilterBottomSheetState
                                             children: [
                                               Text('view_more'.tr,
                                                   style: robotoMedium.copyWith(
-                                                      color: Colors.black)),
+                                                      color:
+                                                          Color(0xFF55745a))),
                                               Icon(
                                                   Icons
                                                       .keyboard_arrow_down_rounded,

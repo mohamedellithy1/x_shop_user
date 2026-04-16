@@ -47,7 +47,10 @@ class LoyaltyHistoryCardWidget extends StatelessWidget {
                     _getTransactionTitle(data![index]),
                     style: robotoMedium.copyWith(
                       fontSize: Dimensions.fontSizeDefault,
-                      color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black,
+                      color: Get.find<MarketThemeController>(tag: 'xmarket')
+                              .darkTheme
+                          ? Colors.white
+                          : Color(0xFF55745a),
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -58,7 +61,10 @@ class LoyaltyHistoryCardWidget extends StatelessWidget {
                         data![index].createdAt!),
                     style: robotoRegular.copyWith(
                       fontSize: Dimensions.fontSizeSmall,
-                      color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white70 : Colors.black.withValues(alpha: 0.6),
+                      color: Get.find<MarketThemeController>(tag: 'xmarket')
+                              .darkTheme
+                          ? Colors.white70
+                          : Color(0xFF55745a),
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -74,7 +80,11 @@ class LoyaltyHistoryCardWidget extends StatelessWidget {
                   : '${data![index].credit!.toStringAsFixed(0)}+',
               style: robotoBold.copyWith(
                 fontSize: Dimensions.fontSizeLarge,
-                color: isDebit ? Colors.red : (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black),
+                color: isDebit
+                    ? Colors.red
+                    : (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+                        ? Colors.white
+                        : Color(0xFF55745a)),
               ),
               textAlign: TextAlign.end,
             ),

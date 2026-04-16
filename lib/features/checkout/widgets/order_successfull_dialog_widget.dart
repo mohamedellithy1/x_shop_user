@@ -119,7 +119,7 @@ class _OrderSuccessfulDialogWidgetState
                                               tag: 'xmarket')
                                           .darkTheme
                                       ? Colors.white
-                                      : Colors.black),
+                                      : Color(0xFF55745a)),
                             ),
                             const SizedBox(
                                 height: Dimensions.paddingSizeDefault),

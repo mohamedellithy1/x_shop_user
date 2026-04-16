@@ -553,7 +553,7 @@ class _XMarketHomeScreenState extends State<XMarketHomeScreen> {
                                                                                             child: Text(
                                                                                               address?.address?.isNotEmpty == true ? address!.address! : 'your_location'.tr,
                                                                                               style: robotoRegular.copyWith(
-                                                                                                color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
+                                                                                                color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Color(0xFF55745a),
                                                                                                 fontSize: Dimensions.fontSizeSmall,
                                                                                               ),
                                                                                               maxLines: 1,

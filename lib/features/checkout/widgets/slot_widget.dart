@@ -10,7 +10,12 @@ class SlotWidget extends StatelessWidget {
   final bool isSelected;
   final Function onTap;
   final bool fromCustomDate;
-  const SlotWidget({super.key, required this.title, required this.isSelected, required this.onTap, this.fromCustomDate = false});
+  const SlotWidget(
+      {super.key,
+      required this.title,
+      required this.isSelected,
+      required this.onTap,
+      this.fromCustomDate = false});
 
   @override
   Widget build(BuildContext context) {
@@ -20,18 +25,48 @@ class SlotWidget extends StatelessWidget {
       child: InkWell(
         onTap: onTap as void Function()?,
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: Dimensions.paddingSizeExtraSmall, horizontal: fromCustomDate ? Dimensions.paddingSizeSmall : Dimensions.paddingSizeExtraSmall),
+          padding: EdgeInsets.symmetric(
+              vertical: Dimensions.paddingSizeExtraSmall,
+              horizontal: fromCustomDate
+                  ? Dimensions.paddingSizeSmall
+                  : Dimensions.paddingSizeExtraSmall),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: isSelected ? Theme.of(context).primaryColor : isDesktop || fromCustomDate ? Theme.of(context).disabledColor.withValues(alpha: 0.2) : (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? const Color(0xFF1b1b1b) : Theme.of(context).cardColor),
+            color: isSelected
+                ? Theme.of(context).primaryColor
+                : isDesktop || fromCustomDate
+                    ? Theme.of(context).disabledColor.withValues(alpha: 0.2)
+                    : (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+                        ? const Color(0xFF1b1b1b)
+                        : Theme.of(context).cardColor),
             borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-            boxShadow: isDesktop || fromCustomDate ? [] : [BoxShadow(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.black.withValues(alpha: 0.2) : Colors.black12, spreadRadius: 0.5, blurRadius: 0.5)],
+            boxShadow: isDesktop || fromCustomDate
+                ? []
+                : [
+                    BoxShadow(
+                        color: Get.find<MarketThemeController>(tag: 'xmarket')
+                                .darkTheme
+                            ? Colors.black.withValues(alpha: 0.2)
+                            : Colors.black12,
+                        spreadRadius: 0.5,
+                        blurRadius: 0.5)
+                  ],
           ),
           child: Text(
             title,
             style: robotoRegular.copyWith(
-              color: isSelected ? (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Theme.of(context).cardColor) : (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white70 : Theme.of(context).textTheme.bodyLarge!.color),
-              fontSize: isDesktop ? 10 : fromCustomDate ? Dimensions.fontSizeSmall : Dimensions.fontSizeExtraSmall,
+              color: isSelected
+                  ? (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+                      ? Colors.white
+                      : Theme.of(context).cardColor)
+                  : (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+                      ? Colors.white70
+                      : Theme.of(context).textTheme.bodyLarge!.color),
+              fontSize: isDesktop
+                  ? 10
+                  : fromCustomDate
+                      ? Dimensions.fontSizeSmall
+                      : Dimensions.fontSizeExtraSmall,
             ),
           ),
         ),

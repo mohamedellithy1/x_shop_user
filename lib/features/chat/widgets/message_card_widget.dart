@@ -14,8 +14,15 @@ class MessageCardWidget extends StatelessWidget {
   final Function()? onTap;
   final bool isUnread;
   final int count;
-  const MessageCardWidget({super.key, required this.userTypeImage, required this.userType, required this.message, required this.time,
-    this.onTap, this.isUnread = false, required this.count});
+  const MessageCardWidget(
+      {super.key,
+      required this.userTypeImage,
+      required this.userType,
+      required this.message,
+      required this.time,
+      this.onTap,
+      this.isUnread = false,
+      required this.count});
 
   @override
   Widget build(BuildContext context) {
@@ -25,60 +32,102 @@ class MessageCardWidget extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-
           ClipOval(
-            child: CustomImageWidget(height: 50, width: 50, image: userTypeImage,
+              child: CustomImageWidget(
+            height: 50,
+            width: 50,
+            image: userTypeImage,
           )),
           const SizedBox(width: Dimensions.paddingSizeSmall),
-
-          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-
-              Row(
-                children: [
-                  Text(userType, style: robotoMedium.copyWith(color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black)),
-                  const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: Dimensions.paddingSizeExtraSmall),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(Dimensions.radiusExtraLarge),
-                    ),
-                    child: Text(
-                      'admin'.tr, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black),
-                    ),
-                  ),
-                ],
-              ),
-
-              Align(
-                alignment: Alignment.centerRight,
-                child: Text(time, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white70 : Colors.black)),
-              ),
-            ]),
-            const SizedBox(height: Dimensions.paddingSizeExtraSmall),
-
-            Text(
-              message, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white70 : Colors.black),
-              maxLines: 1, overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: Dimensions.paddingSizeExtraSmall),
-
-            Align(
-              alignment: Alignment.centerRight,
-              child: count > 0 ? Container(
-                padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  shape: BoxShape.circle,
+          Expanded(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Text(userType,
+                              style: robotoMedium.copyWith(
+                                  color: Get.find<MarketThemeController>(
+                                              tag: 'xmarket')
+                                          .darkTheme
+                                      ? Colors.white
+                                      : Color(0xFF55745a))),
+                          const SizedBox(
+                              width: Dimensions.paddingSizeExtraSmall),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: Dimensions.paddingSizeSmall,
+                                vertical: Dimensions.paddingSizeExtraSmall),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context)
+                                  .primaryColor
+                                  .withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(
+                                  Dimensions.radiusExtraLarge),
+                            ),
+                            child: Text(
+                              'admin'.tr,
+                              style: robotoMedium.copyWith(
+                                  fontSize: Dimensions.fontSizeSmall,
+                                  color: Get.find<MarketThemeController>(
+                                              tag: 'xmarket')
+                                          .darkTheme
+                                      ? Colors.white
+                                      : Color(0xFF55745a)),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(time,
+                            style: robotoRegular.copyWith(
+                                fontSize: Dimensions.fontSizeSmall,
+                                color: Get.find<MarketThemeController>(
+                                            tag: 'xmarket')
+                                        .darkTheme
+                                    ? Colors.white70
+                                    : Color(0xFF55745a))),
+                      ),
+                    ]),
+                const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                Text(
+                  message,
+                  style: robotoRegular.copyWith(
+                      fontSize: Dimensions.fontSizeSmall,
+                      color: Get.find<MarketThemeController>(tag: 'xmarket')
+                              .darkTheme
+                          ? Colors.white70
+                          : Color(0xFF55745a)),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                child: Text(count.toString(), style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Get.find<MarketThemeController>(tag: 'xmarket').darkTheme ? Colors.white : Colors.black)),
-              ) : const SizedBox(height: 15),
-            ),
-
-          ])),
+                const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: count > 0
+                      ? Container(
+                          padding: const EdgeInsets.all(
+                              Dimensions.paddingSizeExtraSmall),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Text(count.toString(),
+                              style: robotoRegular.copyWith(
+                                  fontSize: Dimensions.fontSizeExtraSmall,
+                                  color: Get.find<MarketThemeController>(
+                                              tag: 'xmarket')
+                                          .darkTheme
+                                      ? Colors.white
+                                      : Color(0xFF55745a))),
+                        )
+                      : const SizedBox(height: 15),
+                ),
+              ])),
         ]),
       ),
     );

@@ -136,7 +136,7 @@ class Theme1HomeScreen extends StatelessWidget {
                                     child: Text(
                                       address?.address ?? 'your_location'.tr,
                                       style: robotoRegular.copyWith(
-                                        color: Colors.black,
+                                        color: Color(0xFF55745a),
                                         fontSize: Dimensions.fontSizeSmall,
                                       ),
                                       maxLines: 1,

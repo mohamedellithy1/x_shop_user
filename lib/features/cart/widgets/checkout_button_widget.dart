@@ -142,11 +142,11 @@ class CheckoutButtonWidget extends StatelessWidget {
                       children: [
                         Text('subtotal'.tr,
                             style: robotoMedium.copyWith(
-                                color: isDark ? Colors.white : Colors.black)),
+                                color: isDark ? Colors.white : Color(0xFF55745a))),
                         PriceConverter.convertAnimationPrice(
                             cartController.subTotal,
                             textStyle: robotoRegular.copyWith(
-                                color: isDark ? Colors.white : Colors.black)),
+                                color: isDark ? Colors.white : Color(0xFF55745a))),
                       ],
                     ),
                   )

@@ -1159,7 +1159,7 @@ class LocationPickerBottomSheet extends StatelessWidget {
                         Text(
                           'select_location'.tr,
                           style: robotoRegular.copyWith(
-                            color: Colors.black,
+                            color: Color(0xFF55745a),
                             fontWeight: FontWeight.bold,
                             fontSize: Dimensions.fontSizeLarge,
                           ),
@@ -1592,7 +1592,7 @@ class _LocationGridState extends State<_LocationGrid> {
                         Text(
                           'رجوع',
                           style: TextStyle(
-                            color: Colors.black,
+                            color: Color(0xFF55745a),
                             fontSize: 12,
                           ),
                         ),
@@ -1619,7 +1619,7 @@ class _LocationGridState extends State<_LocationGrid> {
                         child: Text(
                           getDisplayName(crumb),
                           style: const TextStyle(
-                            color: Colors.black,
+                            color: Color(0xFF55745a),
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
                           ),
@@ -1724,7 +1724,7 @@ class _LocationGridState extends State<_LocationGrid> {
                               child: Text(
                                 getDisplayName(filteredData[index]),
                                 style: TextStyle(
-                                  color: Colors.black,
+                                  color: Color(0xFF55745a),
                                   fontWeight: FontWeight.w600,
                                   fontSize: 14,
                                 ),

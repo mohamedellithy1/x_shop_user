@@ -589,7 +589,7 @@ class OrderInfoSection extends StatelessWidget {
                   style: robotoSemiBold.copyWith(
                       color: themeController.darkTheme
                           ? Colors.white
-                          : Colors.black)),
+                          : Color(0xFF55745a))),
               SizedBox(height: Dimensions.paddingSizeLarge),
               subscription
                   ? Row(children: [
@@ -661,7 +661,7 @@ class OrderInfoSection extends StatelessWidget {
                               fontSize: Dimensions.fontSizeSmall,
                               color: themeController.darkTheme
                                   ? Colors.white
-                                  : Colors.black
+                                  : Color(0xFF55745a)
                               //  (subscription
                               //         ? order.subscription!.status ==
                               //                 'canceled' ||
@@ -804,7 +804,7 @@ class OrderInfoSection extends StatelessWidget {
                           style: robotoMedium.copyWith(
                               color: themeController.darkTheme
                                   ? Colors.white
-                                  : Colors.black,
+                                  : Color(0xFF55745a),
                               fontSize: Dimensions.fontSizeExtraSmall),
                         ),
                       )
@@ -1271,7 +1271,7 @@ class OrderInfoSection extends StatelessWidget {
                               style: robotoRegular.copyWith(
                                   color: themeController.darkTheme
                                       ? Colors.white
-                                      : Colors.black),
+                                      : Color(0xFF55745a)),
                             ),
                           ),
                         ])
@@ -1683,14 +1683,14 @@ class OrderInfoSection extends StatelessWidget {
                                 fontSize: Dimensions.fontSizeSmall,
                                 color: themeController.darkTheme
                                     ? Colors.white
-                                    : Colors.black)),
+                                    : Color(0xFF55745a))),
                         TextSpan(
                           text: order.deliveryAddress?.contactPersonName ?? '',
                           style: robotoSemiBold.copyWith(
                               fontSize: Dimensions.fontSizeSmall,
                               color: themeController.darkTheme
                                   ? Colors.white
-                                  : Colors.black),
+                                  : Color(0xFF55745a)),
                         ),
                         TextSpan(
                             text:
@@ -1699,7 +1699,7 @@ class OrderInfoSection extends StatelessWidget {
                                 fontSize: Dimensions.fontSizeSmall,
                                 color: themeController.darkTheme
                                     ? Colors.white
-                                    : Colors.black)),
+                                    : Color(0xFF55745a))),
                       ]),
                     ),
                     const SizedBox(height: Dimensions.paddingSizeSmall),
@@ -1714,14 +1714,14 @@ class OrderInfoSection extends StatelessWidget {
                                         fontSize: Dimensions.fontSizeSmall,
                                         color: themeController.darkTheme
                                             ? Colors.white
-                                            : Colors.black)),
+                                            : Color(0xFF55745a))),
                                 TextSpan(
                                   text: order.deliveryAddress?.road ?? '',
                                   style: robotoSemiBold.copyWith(
                                       fontSize: Dimensions.fontSizeSmall,
                                       color: themeController.darkTheme
                                           ? Colors.white
-                                          : Colors.black),
+                                          : Color(0xFF55745a)),
                                 ),
                               ]),
                             )
@@ -1746,14 +1746,14 @@ class OrderInfoSection extends StatelessWidget {
                                         fontSize: Dimensions.fontSizeSmall,
                                         color: themeController.darkTheme
                                             ? Colors.white
-                                            : Colors.black)),
+                                            : Color(0xFF55745a))),
                                 TextSpan(
                                   text: order.deliveryAddress?.house ?? '',
                                   style: robotoSemiBold.copyWith(
                                       fontSize: Dimensions.fontSizeSmall,
                                       color: themeController.darkTheme
                                           ? Colors.white
-                                          : Colors.black),
+                                          : Color(0xFF55745a)),
                                 ),
                               ]),
                             )
@@ -1778,14 +1778,14 @@ class OrderInfoSection extends StatelessWidget {
                                         fontSize: Dimensions.fontSizeSmall,
                                         color: themeController.darkTheme
                                             ? Colors.white
-                                            : Colors.black)),
+                                            : Color(0xFF55745a))),
                                 TextSpan(
                                   text: order.deliveryAddress?.floor ?? '',
                                   style: robotoSemiBold.copyWith(
                                       fontSize: Dimensions.fontSizeSmall,
                                       color: themeController.darkTheme
                                           ? Colors.white
-                                          : Colors.black),
+                                          : Color(0xFF55745a)),
                                 ),
                               ]),
                             )
@@ -1812,7 +1812,7 @@ class OrderInfoSection extends StatelessWidget {
                               fontSize: Dimensions.fontSizeSmall,
                               color: themeController.darkTheme
                                   ? Colors.white
-                                  : Colors.black),
+                                  : Color(0xFF55745a)),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -1860,7 +1860,7 @@ class OrderInfoSection extends StatelessWidget {
                               style: robotoSemiBold.copyWith(
                                   color: themeController.darkTheme
                                       ? Colors.white
-                                      : Colors.black)),
+                                      : Color(0xFF55745a))),
                           const SizedBox(
                               width: Dimensions.paddingSizeExtraSmall),
                           Container(
@@ -2019,7 +2019,7 @@ class OrderInfoSection extends StatelessWidget {
                                                   Dimensions.fontSizeSmall,
                                               color: themeController.darkTheme
                                                   ? Colors.white
-                                                  : Colors.black),
+                                                  : Color(0xFF55745a)),
                                         )
                                       : const SizedBox(),
                                 ])),
@@ -2379,7 +2379,7 @@ class OrderInfoSection extends StatelessWidget {
                                 style: robotoMedium.copyWith(
                                     color: themeController.darkTheme
                                         ? Colors.white
-                                        : Colors.black),
+                                        : Color(0xFF55745a)),
                               )
                             : const SizedBox(),
                       ])
@@ -2418,7 +2418,7 @@ class OrderInfoSection extends StatelessWidget {
                         style: robotoMedium.copyWith(
                             color: themeController.darkTheme
                                 ? Colors.white
-                                : Colors.black),
+                                : Color(0xFF55745a)),
                       ),
                     ),
                   ]),

@@ -167,7 +167,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                                                   .brightness ==
                                                               Brightness.dark
                                                           ? Colors.white
-                                                          : Colors.black),
+                                                          : Color(0xFF55745a)),
                                                 ),
                                                 Text(
                                                   restaurant.discount!
@@ -183,7 +183,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                                                   .brightness ==
                                                               Brightness.dark
                                                           ? Colors.white
-                                                          : Colors.black),
+                                                          : Color(0xFF55745a)),
                                                 ),
                                                 SizedBox(
                                                     height: (restaurant
@@ -208,7 +208,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                                                     Brightness
                                                                         .dark
                                                                 ? Colors.white
-                                                                : Colors.black),
+                                                                : Color(0xFF55745a)),
                                                       )
                                                     : const SizedBox(),
                                                 restaurant.discount!
@@ -224,7 +224,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                                                     Brightness
                                                                         .dark
                                                                 ? Colors.white
-                                                                : Colors.black),
+                                                                : Color(0xFF55745a)),
                                                       )
                                                     : const SizedBox(),
                                                 Text(
@@ -237,7 +237,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                                                   .brightness ==
                                                               Brightness.dark
                                                           ? Colors.white
-                                                          : Colors.black),
+                                                          : Color(0xFF55745a)),
                                                 ),
                                               ]),
                                         )
@@ -284,7 +284,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                                                   .brightness ==
                                                               Brightness.dark
                                                           ? Colors.white
-                                                          : Colors.black),
+                                                          : Color(0xFF55745a)),
                                                 )),
                                               ]),
                                             )
@@ -1294,8 +1294,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                                                               .dark
                                                                       ? Colors
                                                                           .white
-                                                                      : Colors
-                                                                          .black,
+                                                                      : Color(0xFF55745a),
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold,

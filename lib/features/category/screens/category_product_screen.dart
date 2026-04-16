@@ -332,7 +332,7 @@ class CategoryProductScreenState extends State<CategoryProductScreen> {
                                                             tag: 'xmarket')
                                                         .darkTheme
                                                     ? Colors.white
-                                                    : Colors.black),
+                                                    : Color(0xFF55745a)),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         textAlign: TextAlign.center,
@@ -367,7 +367,7 @@ class CategoryProductScreenState extends State<CategoryProductScreen> {
                                       'no_internet_connection'.tr,
                                       style: robotoMedium.copyWith(
                                         fontSize: Dimensions.fontSizeLarge,
-                                        color: Colors.black87,
+                                        color: Color(0xFF55745a),
                                       ),
                                       textAlign: TextAlign.center,
                                     ),

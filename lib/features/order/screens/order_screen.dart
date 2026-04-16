@@ -128,7 +128,7 @@ class OrderScreenState extends State<OrderScreen>
                                         unselectedLabelColor:
                                             marketThemeController.darkTheme
                                                 ? Colors.white
-                                                : Colors.black,
+                                                : Color(0xFF55745a),
                                         unselectedLabelStyle:
                                             robotoRegular.copyWith(
                                                 fontSize:

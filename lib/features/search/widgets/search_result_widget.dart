@@ -105,7 +105,7 @@ class SearchResultWidgetState extends State<SearchResultWidget>
                                           tag: 'xmarket')
                                       .darkTheme
                                   ? Colors.white
-                                  : Colors.black,
+                                  : Color(0xFF55745a),
                               fontSize: Dimensions.fontSizeSmall),
                         ),
                         const SizedBox(width: Dimensions.paddingSizeExtraSmall),

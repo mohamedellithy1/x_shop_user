@@ -342,7 +342,7 @@ class _DrowerItemState extends State<DrowerItem> {
                                   ? 'تغيير المدينة'
                                   : 'تصفية حسب المدينة',
                               style: const TextStyle(
-                                color: Colors.black,
+                                color: Color(0xFF55745a),
                                 fontWeight: FontWeight.w600,
                                 fontSize: 16,
                               ),

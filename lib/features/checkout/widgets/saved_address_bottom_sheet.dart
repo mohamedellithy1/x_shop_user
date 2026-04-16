@@ -85,7 +85,7 @@ class _SavedAddressBottomSheetState extends State<SavedAddressBottomSheet> {
                                                   tag: 'xmarket')
                                               .darkTheme
                                           ? Colors.white
-                                          : Colors.black,
+                                          : Color(0xFF55745a),
                                       fontSize: Dimensions.fontSizeLarge)),
                               InkWell(
                                 onTap: () async {
@@ -117,7 +117,7 @@ class _SavedAddressBottomSheetState extends State<SavedAddressBottomSheet> {
                                                     tag: 'xmarket')
                                                 .darkTheme
                                             ? Colors.white
-                                            : Colors.black)),
+                                            : Color(0xFF55745a))),
                               ),
                             ],
                           ),
@@ -128,7 +128,7 @@ class _SavedAddressBottomSheetState extends State<SavedAddressBottomSheet> {
                                               tag: 'xmarket')
                                           .darkTheme
                                       ? Colors.white70
-                                      : Colors.black)),
+                                      : Color(0xFF55745a))),
                           addressController.addressList != null
                               ? addressController.addressList!.isNotEmpty
                                   ? Flexible(
@@ -229,8 +229,8 @@ class _SavedAddressBottomSheetState extends State<SavedAddressBottomSheet> {
                                                                         .darkTheme
                                                                     ? Colors
                                                                         .white
-                                                                    : Colors
-                                                                        .black,
+                                                                    : Color(
+                                                                        0xFF55745a),
                                                                 fontSize: Dimensions
                                                                     .fontSizeDefault),
                                                           ),
@@ -252,7 +252,7 @@ class _SavedAddressBottomSheetState extends State<SavedAddressBottomSheet> {
                                                                             'xmarket')
                                                                     .darkTheme
                                                                 ? Colors.white70
-                                                                : Colors.black),
+                                                                : Color(0xFF55745a)),
                                                         maxLines: 1,
                                                         overflow: TextOverflow
                                                             .ellipsis,
@@ -337,7 +337,7 @@ class _SavedAddressBottomSheetState extends State<SavedAddressBottomSheet> {
                                                           tag: 'xmarket')
                                                       .darkTheme
                                                   ? Colors.white
-                                                  : Colors.black),
+                                                  : Color(0xFF55745a)),
                                     ),
                                   ]),
                             ),

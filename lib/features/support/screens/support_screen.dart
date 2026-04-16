@@ -115,7 +115,7 @@ class _SupportScreenState extends State<SupportScreen> {
                               color: Theme.of(context).brightness ==
                                       Brightness.dark
                                   ? Colors.white
-                                  : Colors.black,
+                                  : Color(0xFF55745a),
                               height: 1.2,
                             ),
                           ),
@@ -268,7 +268,7 @@ class SupportCard extends StatelessWidget {
                           color:
                               (Theme.of(context).brightness == Brightness.dark
                                       ? Colors.white
-                                      : Colors.black)
+                                      : Color(0xFF55745a))
                                   .withValues(alpha: 0.8),
                         )),
                     const SizedBox(height: Dimensions.paddingSizeExtraSmall),
@@ -287,7 +287,7 @@ class SupportCard extends StatelessWidget {
                             color:
                                 Theme.of(context).brightness == Brightness.dark
                                     ? Colors.white
-                                    : Colors.black),
+                                    : Color(0xFF55745a)),
                       ),
                   ]),
             ),

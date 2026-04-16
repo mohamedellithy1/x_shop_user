@@ -701,7 +701,7 @@ class _CartScreenState extends State<CartScreen> {
                                                 Theme.of(context).brightness ==
                                                         Brightness.dark
                                                     ? Colors.white
-                                                    : Colors.black),
+                                                    : Color(0xFF55745a)),
                                       ),
                                     ),
                                   ),
