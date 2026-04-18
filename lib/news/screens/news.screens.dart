@@ -29,9 +29,13 @@ class _NewsScreenState extends State<NewsScreen> {
         child: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.orange, Colors.red],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFFe3ebd5),
+                Color(0xFFfafff4),
+                Color(0xFFe3ebd5),
+              ],
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
             ),
           ),
           child: AppBar(
@@ -48,8 +52,8 @@ class _NewsScreenState extends State<NewsScreen> {
             title: Padding(
               padding: const EdgeInsets.only(bottom: 10),
               child: const Text(
-                'مجتمع X',
-                style: TextStyle(color: Colors.white),
+                'الاخبار',
+                style: TextStyle(color: Colors.black),
               ),
             ),
           ),
@@ -57,6 +61,7 @@ class _NewsScreenState extends State<NewsScreen> {
       ),
       // drawer: const DrowerItem(),
       body: GetBuilder<NewsController>(
+        init: Get.find<NewsController>(),
         builder: (controller) {
           if (controller.isLoading || controller.newsList == null) {
             return const Center(

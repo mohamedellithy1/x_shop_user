@@ -85,7 +85,13 @@ class _BannerViewState extends State<BannerView>
       builder: (bannerController) {
         if (bannerController.shouldReset) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            _carouselController.jumpToPage(0);
+            if (bannerController.bannerList != null && bannerController.bannerList!.isNotEmpty) {
+              try {
+                _carouselController.jumpToPage(0);
+              } catch (e) {
+                debugPrint("Carousel controller error: $e");
+              }
+            }
             bannerController.acknowledgeReset();
             setState(() {
               activeIndex = 0;

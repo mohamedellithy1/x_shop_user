@@ -354,6 +354,10 @@ class _MenuScreenState extends State<MenuScreen> {
                               //         route: RouteHelper.getUpdateProfileRoute())
                               //     : SizedBox(),
                               PortionWidget(
+                                  icon: Icons.favorite_border_outlined,
+                                  title: 'wishlist'.tr,
+                                  route: RouteHelper.getFavouriteScreen()),
+                              PortionWidget(
                                   icon: XmarketImages.addressIcon,
                                   title: 'my_address'.tr,
                                   route: RouteHelper.getAddressRoute()),

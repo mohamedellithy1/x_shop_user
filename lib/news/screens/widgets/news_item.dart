@@ -103,26 +103,27 @@ class _NewsItemWidgetState extends State<NewsItemWidget> {
 
               const SizedBox(height: Dimensions.paddingSizeSmall),
 
-              // Zone Name
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: Dimensions.paddingSizeSmall,
-                  vertical: Dimensions.paddingSizeExtraSmall,
-                ),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                ),
-                child: Text(
-                  widget.news.zone?.name ?? 'غير محدد',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
-                      ),
-                ),
-              ),
+              // // Zone Name
+              // if (widget.news.zone != null && widget.news.zone?.name != null)
+              //   Container(
+              //     padding: const EdgeInsets.symmetric(
+              //       horizontal: Dimensions.paddingSizeSmall,
+              //       vertical: Dimensions.paddingSizeExtraSmall,
+              //     ),
+              //     decoration: BoxDecoration(
+              //       color: Theme.of(context).primaryColor.withOpacity(0.1),
+              //       borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+              //     ),
+              //     child: Text(
+              //       widget.news.zone?.name ?? '',
+              //       style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              //             color: Colors.black,
+              //             fontWeight: FontWeight.w500,
+              //           ),
+              //     ),
+              //   ),
 
-              const SizedBox(height: Dimensions.paddingSizeSmall),
+              // const SizedBox(height: Dimensions.paddingSizeSmall),
 
               // Bottom Row - Date, Likes, Comments
               Row(
@@ -138,7 +139,7 @@ class _NewsItemWidgetState extends State<NewsItemWidget> {
                         ),
                         const SizedBox(width: Dimensions.paddingSizeExtraSmall),
                         Text(
-                          widget.news.createdAt,
+                          DateConverter.dateTimeStringToDateTime(widget.news.createdAt),
                           style:
                               Theme.of(context).textTheme.bodySmall?.copyWith(
                                     color: Colors.grey[600],

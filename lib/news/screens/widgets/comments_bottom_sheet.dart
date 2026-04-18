@@ -4,6 +4,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:stackfood_multivendor/news/controllers/news_controller.dart';
 import 'package:stackfood_multivendor/news/domain/entities/comments.dart';
 import 'package:stackfood_multivendor/news/domain/entities/news.dart';
+import 'package:stackfood_multivendor/helper/date_converter.dart';
 
 class CommentsBottomSheet extends StatefulWidget {
   final News news;
@@ -609,7 +610,7 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                               ],
                             ),
                             Text(
-                              'منذ ${item.createdAt}',
+                              DateConverter.dateTimeStringToDateTime(item.createdAt),
                               style: TextStyle(
                                 color: Colors.grey[600],
                                 fontSize: isMainComment ? 14 : 12,

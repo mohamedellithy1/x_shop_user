@@ -81,7 +81,7 @@ class DashboardScreenState extends State<DashboardScreen> {
 
     _screens = [
       const XMarketHomeScreen(),
-      const FavouriteScreen(),
+      const NewsScreen(),
       const CartScreen(fromNav: true),
       const OrderScreen(),
       const MenuScreen()
@@ -220,8 +220,8 @@ class DashboardScreenState extends State<DashboardScreen> {
                                         isSelected: _pageIndex == 0,
                                         onTap: () => _setPage(0)),
                                     BottomNavItem(
-                                        iconData: Icons.favorite,
-                                        title: 'wishlist'.tr,
+                                        iconData: Icons.newspaper,
+                                        title: 'الاخبار',
                                         isSelected: _pageIndex == 1,
                                         onTap: () => _setPage(1)),
                                     Expanded(

@@ -37,7 +37,7 @@ class NewsController extends GetxController {
       print("Response body: ${response?.body}");
 
       if (response != null && response.statusCode == 200) {
-        if (response.body != null && response.body['data'] != null) {
+        if (response.body != null && response.body is Map && response.body['data'] != null) {
           final List<dynamic> data = response.body['data'];
           print("Data length: ${data.length}");
           newsList = NewsModel.fromJsonList(data);
