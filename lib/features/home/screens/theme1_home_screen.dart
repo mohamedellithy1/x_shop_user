@@ -204,7 +204,7 @@ class Theme1HomeScreen extends StatelessWidget {
 
         // Banner فوق السيرش
         SliverToBoxAdapter(
-          child: const BannerView(),
+          child: const BannerViewWidget1(),
         ),
         // Banner فوق السيرش
         SliverToBoxAdapter(
@@ -265,7 +265,6 @@ class Theme1HomeScreen extends StatelessWidget {
             width: Dimensions.webMaxWidth,
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const BannerViewWidget1(),
               const SizedBox(height: Dimensions.paddingSizeSmall),
               const BadWeatherWidget(),
               const CategoryWidget1(),

@@ -23,13 +23,13 @@ class CommentModel extends CommentEntity {
 
   factory CommentModel.fromMap(Map<String, dynamic> map) {
     return CommentModel(
-      id: map['id'] ?? 0,
-      userId: map['user_id'] ?? '',
-      userEmail: map['user_email'],
-      user_name: map['user_name'],
-      body: map['body'] ?? '',
-      parentId: map['parent_id'],
-      createdAt: map['created_at'] ?? '',
+      id: map['id'] != null ? int.parse(map['id'].toString()) : 0,
+      userId: map['user_id']?.toString() ?? '',
+      userEmail: map['user_email']?.toString(),
+      user_name: map['user_name']?.toString(),
+      body: map['body']?.toString() ?? '',
+      parentId: map['parent_id'] != null ? int.parse(map['parent_id'].toString()) : null,
+      createdAt: map['created_at']?.toString() ?? '',
       replies: map['replies'] != null
           ? (map['replies'] as List<dynamic>)
               .map((e) => CommentModel.fromMap(e))

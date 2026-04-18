@@ -402,7 +402,7 @@ Future<Map<String, Map<String, String>>> init() async {
   Get.lazyPut(() => dineInServiceInterface, tag: 'xmarket');
 
   Get.lazyPut(() => NewsRepository(Get.find(tag: 'xmarket')));
-  Get.lazyPut(() => BannerRepo(apiClient: Get.find(tag: 'xmarket')));
+  // Get.lazyPut(() => BannerRepo(apiClient: Get.find(tag: 'xmarket')));
 
   /// Controller
   Get.lazyPut(
@@ -484,7 +484,7 @@ Future<Map<String, Map<String, String>>> init() async {
       () => DineInController(dineInServiceInterface: Get.find(tag: 'xmarket')));
   Get.lazyPut(() => ReverbService());
   Get.lazyPut(() => UserRealtimeService());
-  Get.lazyPut(() => BannerController(bannerRepo: Get.find()));
+  // Get.lazyPut(() => BannerController(bannerRepo: Get.find()));
   Get.lazyPut(() => NewsController(newsRepo: Get.find()));
 
   /// Retrieving localized data

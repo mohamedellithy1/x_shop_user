@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
 import 'package:stackfood_multivendor/api/api_checker.dart';
 import 'package:stackfood_multivendor/news/domain/entities/comments.dart';
 import 'package:stackfood_multivendor/news/domain/entities/news.dart';
@@ -81,11 +83,15 @@ class NewsController extends GetxController {
   }
 
   void likeNews(int newsId) async {
-    final response = await newsRepo.likeNews(newsId);
-    if (response != null && response.statusCode == 200) {
-      print("News liked successfully");
+    if (Get.find<MarketAuthController>().isLoggedIn()) {
+      final response = await newsRepo.likeNews(newsId);
+      if (response != null && response.statusCode == 200) {
+        print("News liked successfully");
+      } else {
+        print("Failed to like news");
+      }
     } else {
-      print("Failed to like news");
+      showCustomSnackBar("يجب تسجيل الدخول أولاً لتتمكن من الإعجاب بالخبر");
     }
   }
 
@@ -94,13 +100,16 @@ class NewsController extends GetxController {
     required String body,
     int? parentId,
   }) async {
-    final response = await newsRepo.addComment(
-        postId: postId, body: body, parentId: parentId);
-    if (response != null && response.statusCode == 200) {
-      print("Comment added successfully");
-      getComments(postId);
+    if (Get.find<MarketAuthController>().isLoggedIn()) {
+      final response = await newsRepo.addComment(
+          postId: postId, body: body, parentId: parentId);
+      if (response != null && response.statusCode == 200) {
+        getComments(postId);
+      } else {
+        print("Failed to add comment: ${response?.statusText}");
+      }
     } else {
-      print("Failed to add comment");
+      showCustomSnackBar("يجب تسجيل الدخول أولاً لتتمكن من إضافة تعليق");
     }
   }
 
@@ -148,9 +157,17 @@ class NewsController extends GetxController {
             }
           }
 
-          // تنظيم التعليقات والردود
-          List<CommentEntity> organizedComments =
-              _organizeCommentsAndReplies(allComments);
+          // التحقق مما إذا كانت التعليقات متداخلة بالفعل من الـ API
+          bool isAlreadyNested = allComments.any((c) => c.replies.isNotEmpty);
+          
+          List<CommentEntity> organizedComments;
+          if (isAlreadyNested) {
+            organizedComments = allComments;
+            print("Comments are already nested, skipping reorganization");
+          } else {
+            organizedComments = _organizeCommentsAndReplies(allComments);
+            print("Organizing flat comments list");
+          }
 
           commentsMap[postId] = organizedComments;
           print(

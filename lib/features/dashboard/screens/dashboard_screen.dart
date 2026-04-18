@@ -314,15 +314,15 @@ class DashboardScreenState extends State<DashboardScreen> {
 
   void _setPage(int pageIndex) {
     // لو المستخدم بيبعد عن Home (index 0) أو بيرجعلها
-    final bannerController = Get.find<BannerController>();
-    if (_pageIndex == 0 && pageIndex != 0) {
-      // مسافر من Home - وقف الفيديو وابدأ من الأول
-      bannerController.forcePauseVideo(true);
-      bannerController.resetBanner();
-    } else if (pageIndex == 0 && _pageIndex != 0) {
-      // راجع لـ Home - فك الإيقاف
-      bannerController.forcePauseVideo(false);
-    }
+    // // final bannerController = Get.find<BannerController>();
+    // if (_pageIndex == 0 && pageIndex != 0) {
+    //   // مسافر من Home - وقف الفيديو وابدأ من الأول
+    //   // bannerController.forcePauseVideo(true);
+    //   bannerController.resetBanner();
+    // } else if (pageIndex == 0 && _pageIndex != 0) {
+    //   // راجع لـ Home - فك الإيقاف
+    //   bannerController.forcePauseVideo(false);
+    // }
 
     setState(() {
       _pageController!.jumpToPage(pageIndex);

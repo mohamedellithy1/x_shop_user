@@ -80,7 +80,7 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
+                  color: Color(0xFF9ebc67),
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20),
@@ -244,7 +244,7 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Theme.of(context).primaryColor,
+                            backgroundColor: Color(0xFF9ebc67),
                             foregroundColor: Colors.black,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
@@ -610,7 +610,8 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                               ],
                             ),
                             Text(
-                              DateConverter.dateTimeStringToDateTime(item.createdAt),
+                              DateConverter.dateTimeStringToDateTime(
+                                  item.createdAt),
                               style: TextStyle(
                                 color: Colors.grey[600],
                                 fontSize: isMainComment ? 14 : 12,
@@ -682,7 +683,7 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
             // في حالة فشل تحميل الصورة، نستخدم الحرف X
             return CircleAvatar(
               radius: isMainComment ? 20 : 18,
-              backgroundColor: Theme.of(context).primaryColor,
+              backgroundColor: Colors.white,
               child: Text(
                 'X',
                 style: TextStyle(
@@ -699,9 +700,7 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
       // استخدام الحرف الأول للاسم
       return CircleAvatar(
         radius: isMainComment ? 20 : 18,
-        backgroundColor: isMainComment
-            ? Theme.of(context).primaryColor
-            : Theme.of(context).primaryColor.withOpacity(0.8),
+        backgroundColor: Colors.white,
         child: Text(
           userName.isNotEmpty ? userName.substring(0, 1) : 'م',
           style: TextStyle(

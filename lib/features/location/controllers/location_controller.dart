@@ -108,10 +108,14 @@ class MarketLocationController extends GetxController implements GetxService {
       defaultLatLng,
       LatLng(
         double.parse(Get.find<MarketSplashController>(tag: 'xmarket')
-                .configModel?.defaultLocation?.lat ??
+                .configModel
+                ?.defaultLocation
+                ?.lat ??
             '0'),
         double.parse(Get.find<MarketSplashController>(tag: 'xmarket')
-                .configModel?.defaultLocation?.lng ??
+                .configModel
+                ?.defaultLocation
+                ?.lng ??
             '0'),
       ),
     );
@@ -120,36 +124,52 @@ class MarketLocationController extends GetxController implements GetxService {
     locationServiceInterface.handleMapAnimation(mapController, myPosition);
     String addressFromGeocode = await getAddressFromGeocode(
         LatLng(myPosition.latitude, myPosition.longitude));
-        
+
     try {
       String token = Get.find<MarketAuthController>().getUserToken();
-      final response = await http.post(
-        Uri.parse('https://x-ride.support/api/regions/detect-building'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
-        body: jsonEncode({
-          'lat': myPosition.latitude,
-          'lng': myPosition.longitude,
-        }),
-      ).timeout(const Duration(seconds: 10));
+      final response = await http
+          .post(
+            Uri.parse(
+                'https://xshop.x-ride.support/api/v1/regions/detect-building'),
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
+              'X-Endpoint-Password':
+                  '280b502933cc8c33410c6d5672bb884c103270f339ca650e1b04d7af6a4555c3',
+            },
+            body: jsonEncode({
+              'lat': myPosition.latitude,
+              'lng': myPosition.longitude,
+            }),
+          )
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
         final parsedBody = jsonDecode(response.body);
-        if (kDebugMode) {
-          print('🏢 [DETECT BUILDING RESPONSE XMARKET]: ${response.body}');
-        }
+        print('🏢 [DETECT BUILDING RESPONSE]: $parsedBody');
+
         if (parsedBody['status'] == 'inside') {
           if (parsedBody['type'] == 'famous') {
             addressFromGeocode = parsedBody['famous_building_name'];
           } else if (parsedBody['type'] == 'building') {
-            addressFromGeocode = '${parsedBody['building_name']} المنطقه ${parsedBody['region_name']}';
+            addressFromGeocode =
+                '${parsedBody['building_name']} المنطقه ${parsedBody['region_name']}';
+          } else if (parsedBody['type'] == 'outside') {
+            print(
+                '📍 Location is outside predefined regions, using geocode address.');
+          }
+
+          // تحديث العنوان المختار حالياً في الـ Shared Preferences عشان يظهر فوق
+          AddressModel? currentAddr = AddressHelper.getAddressFromSharedPref();
+          if (currentAddr != null) {
+            currentAddr.address = addressFromGeocode;
+            await AddressHelper.saveAddressInSharedPref(currentAddr);
           }
         }
       } else {
         if (kDebugMode) {
-          print('🏢 [DETECT BUILDING ERROR XMARKET]: ${response.statusCode} - ${response.body}');
+          print(
+              '🏢 [DETECT BUILDING ERROR XMARKET]: ${response.statusCode} - ${response.body}');
         }
       }
     } catch (e) {
@@ -325,8 +345,9 @@ class MarketLocationController extends GetxController implements GetxService {
       Get.back();
     }
     if ((oldAddress == null ||
-        oldAddress.latitude != address.latitude ||
-        oldAddress.longitude != address.longitude) && route != 'home') {
+            oldAddress.latitude != address.latitude ||
+            oldAddress.longitude != address.longitude) &&
+        route != 'home') {
       XMarketHomeScreen.loadData(true);
     }
     Get.find<CheckoutController>().clearPrevData();

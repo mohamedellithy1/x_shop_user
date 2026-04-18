@@ -163,8 +163,8 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
     // تحميل بيانات السادات مباشرة
     try {
       await Future.wait([
-        _fetchRegions(readableId: 3),
-        _fetchFamousRegions(readableId: 3),
+        _fetchRegions(readableId: 1),
+        _fetchFamousRegions(readableId: 1),
       ]);
       if (kDebugMode) {
         print('✅ تم تحميل بيانات السادات بنجاح');
@@ -197,26 +197,36 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
 
     try {
       final response = await http.get(
-        Uri.parse('https://www.x-ride.support/api/regions/regions/$readableId'),
-        headers: {'Content-Type': 'application/json'},
+        Uri.parse(
+            'https://xshop.x-ride.support/api/v1/regions/regions/$readableId'),
+        headers: {
+          'Content-Type': 'application/json',
+          "X-Endpoint-Password":
+              "280b502933cc8c33410c6d5672bb884c103270f339ca650e1b04d7af6a4555c3"
+        },
       ).timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
         final parsedBody = jsonDecode(response.body);
-        final regions = Regions.fromJson(parsedBody);
+        print('✅ Regions Raw Body: ${response.body}');
+        try {
+          final regions = Regions.fromJson(parsedBody);
+          _regionsCache[readableId] = regions;
 
-        _regionsCache[readableId] = regions;
+          if (kDebugMode) {
+            print('✅ Loaded ${regions.data.length} regions successfully');
+          }
 
-        if (kDebugMode) {
-          print('✅ Loaded ${regions.data.length} regions successfully');
-        }
-
-        if (mounted) {
-          setState(() {
-            _regions = regions;
-          });
+          if (mounted) {
+            setState(() {
+              _regions = regions;
+            });
+          }
+        } catch (parseError) {
+          print('❌ Parsing Error in Regions: $parseError');
         }
       } else {
+        print('❌ Regions API Error: ${response.statusCode} - ${response.body}');
         throw Exception('HTTP ${response.statusCode}: Failed to fetch regions');
       }
     } catch (e) {
@@ -229,7 +239,6 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
   Future<void> _fetchFamousRegions({int? readableId}) async {
     if (readableId == null) return;
 
-    // تحقق من الـ cache أولاً
     if (_famousRegionsCache.containsKey(readableId)) {
       if (kDebugMode) {
         print('📦 Using cached famous regions for zone: $readableId');
@@ -249,28 +258,37 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
     try {
       final response = await http.get(
         Uri.parse(
-            'https://www.x-ride.support/api/famous-regions/regions/$readableId'),
-        headers: {'Content-Type': 'application/json'},
+            'https://xshop.x-ride.support/api/v1/famous-regions/regions/$readableId'),
+        headers: {
+          'Content-Type': 'application/json',
+          "X-Endpoint-Password":
+              "280b502933cc8c33410c6d5672bb884c103270f339ca650e1b04d7af6a4555c3"
+        },
       ).timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
         final parsedBody = jsonDecode(response.body);
-        final famousRegions = FamousRegionsResponse.fromJson(parsedBody);
+        print('✅ Famous Regions Raw Body: ${response.body}');
+        try {
+          final famousRegions = FamousRegionsResponse.fromJson(parsedBody);
+          _famousRegionsCache[readableId] = famousRegions;
 
-        // حفظ في الـ cache
-        _famousRegionsCache[readableId] = famousRegions;
+          if (kDebugMode) {
+            print(
+                '✅ Loaded ${famousRegions.data.famousRegions.length} famous regions successfully');
+          }
 
-        if (kDebugMode) {
-          print(
-              '✅ Loaded ${famousRegions.data.famousRegions.length} famous regions successfully');
-        }
-
-        if (mounted) {
-          setState(() {
-            _famousRegions = famousRegions;
-          });
+          if (mounted) {
+            setState(() {
+              _famousRegions = famousRegions;
+            });
+          }
+        } catch (parseError) {
+          print('❌ Parsing Error in Famous Regions: $parseError');
         }
       } else {
+        print(
+            '❌ Famous Regions API Error: ${response.statusCode} - ${response.body}');
         throw Exception(
             'HTTP ${response.statusCode}: Failed to fetch famous regions');
       }
@@ -1613,13 +1631,13 @@ class _LocationGridState extends State<_LocationGrid> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
+                          color: Color(0xFF55745a),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
                           getDisplayName(crumb),
                           style: const TextStyle(
-                            color: Color(0xFF55745a),
+                            color: Colors.white,
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
                           ),
