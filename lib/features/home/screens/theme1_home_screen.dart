@@ -1,3 +1,4 @@
+import 'package:stackfood_multivendor/features/home/widgets/home_category_view_widget.dart';
 import 'package:stackfood_multivendor/features/home/widgets/location_dropdown.dart';
 import 'package:stackfood_multivendor/features/home/screens/home_screen.dart';
 import 'package:stackfood_multivendor/features/home/widgets/bad_weather_widget.dart';
@@ -266,37 +267,39 @@ class Theme1HomeScreen extends StatelessWidget {
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               const SizedBox(height: Dimensions.paddingSizeSmall),
-              const BadWeatherWidget(),
-              const CategoryWidget1(),
-              const ItemCampaignWidget1(),
-              const HighlightWidgetView(),
-              isLogin
-                  ? const PopularStoreWidget1(
-                      isOrderAgainViewed: true, isPopular: false)
-                  : const SizedBox(),
-              isLogin ? const OrderAgainViewWidget() : const SizedBox(),
-              configModel.mostReviewedFoods == 1
-                  ? const BestReviewedItemWidget1()
-                  : const SizedBox(),
-              (configModel.dineInOrderOption ?? false)
-                  ? DineInWidget()
-                  : const SizedBox(),
-              const ReferBannerViewWidget(fromTheme1: true),
+              // const BadWeatherWidget(),
+              // const CategoryWidget1(),
+              const HomeCategoryViewWidget(),
+
+              // const ItemCampaignWidget1(),
+              // const HighlightWidgetView(),
+              // isLogin
+              //     ? const PopularStoreWidget1(
+              //         isOrderAgainViewed: true, isPopular: false)
+              //     : const SizedBox(),
+              // isLogin ? const OrderAgainViewWidget() : const SizedBox(),
+              // configModel.mostReviewedFoods == 1
+              //     ? const BestReviewedItemWidget1()
+              //     : const SizedBox(),
+              // (configModel.dineInOrderOption ?? false)
+              //     ? DineInWidget()
+              //     : const SizedBox(),
+              // const ReferBannerViewWidget(fromTheme1: true),
               /*isLogin
                   ? const PopularStoreWidget1(
                       isPopular: false, isRecentlyViewed: true)
                   : const SizedBox(),*/
-              const CuisinesWidget1(),
-              configModel.popularRestaurant == 1
-                  ? const PopularStoreWidget1(isPopular: true)
-                  : const SizedBox(),
-              // const NearByButtonWidget1(),
-              configModel.popularFood == 1
-                  ? const PopularItemWidget1(isPopular: true)
-                  : const SizedBox(),
-              configModel.newRestaurant == 1
-                  ? const PopularStoreWidget1(isPopular: false)
-                  : const SizedBox(),
+              // const CuisinesWidget1(),
+              // configModel.popularRestaurant == 1
+              //     ? const PopularStoreWidget1(isPopular: true)
+              //     : const SizedBox(),
+              // // const NearByButtonWidget1(),
+              // configModel.popularFood == 1
+              //     ? const PopularItemWidget1(isPopular: true)
+              //     : const SizedBox(),
+              // configModel.newRestaurant == 1
+              //     ? const PopularStoreWidget1(isPopular: false)
+              //     : const SizedBox(),
               // const PromotionalBannerViewWidget(),
               // Padding(
               //   padding: const EdgeInsets.fromLTRB(10, 15, 0, 5),

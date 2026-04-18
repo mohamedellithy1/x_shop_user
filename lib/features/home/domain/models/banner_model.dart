@@ -40,6 +40,7 @@ class Banner {
   String? title;
   String? type;
   String? imageFullUrl;
+  String? mediaType; // الكي الجديد
   Restaurant? restaurant;
   Product? food;
 
@@ -48,6 +49,7 @@ class Banner {
     this.title,
     this.type,
     this.imageFullUrl,
+    this.mediaType,
     this.restaurant,
     this.food,
   });
@@ -57,7 +59,9 @@ class Banner {
     title = json['title'];
     type = json['type'];
     imageFullUrl = json['image_full_url'];
-    restaurant = json['restaurant'] != null ? Restaurant.fromJson(json['restaurant']) : null;
+    mediaType = json['media_type']; // قراءة النوع من الباك إند
+    restaurant =
+        json['restaurant'] != null ? Restaurant.fromJson(json['restaurant']) : null;
     food = json['food'] != null ? Product.fromJson(json['food']) : null;
   }
 
@@ -67,6 +71,7 @@ class Banner {
     data['title'] = title;
     data['type'] = type;
     data['image_full_url'] = imageFullUrl;
+    data['media_type'] = mediaType;
     if (restaurant != null) {
       data['restaurant'] = restaurant!.toJson();
     }

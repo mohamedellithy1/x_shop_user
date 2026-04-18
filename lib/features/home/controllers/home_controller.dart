@@ -18,6 +18,24 @@ class HomeController extends GetxController implements GetxService {
   int _currentIndex = 0;
   int get currentIndex => _currentIndex;
 
+  bool isVideoPausedByForce = false;
+  bool shouldReset = false;
+
+  void forcePauseVideo(bool pause) {
+    isVideoPausedByForce = pause;
+    update();
+  }
+
+  void resetBanner() {
+    shouldReset = true;
+    _currentIndex = 0;
+    update();
+  }
+
+  void acknowledgeReset() {
+    shouldReset = false;
+  }
+
   List<CashBackModel>? _cashBackOfferList;
   List<CashBackModel>? get cashBackOfferList => _cashBackOfferList;
 
@@ -69,13 +87,17 @@ class HomeController extends GetxController implements GetxService {
       for (var campaign in bannerModel.campaigns!) {
         _bannerImageList!.add(campaign.imageFullUrl);
         _bannerDataList!.add(campaign);
+        print('🖼️ [CAMPAIGN IMAGE]: ${campaign.imageFullUrl}');
       }
       for (var banner in bannerModel.banners!) {
-        if (_bannerImageList!.contains(banner.imageFullUrl)) {
+        String? imageUrl = banner.imageFullUrl;
+        print('🖼️ [BANNER IMAGE]: $imageUrl');
+        
+        if (_bannerImageList!.contains(imageUrl)) {
           _bannerImageList!.add(
-              '${banner.imageFullUrl}${bannerModel.banners!.indexOf(banner)}');
+              '${imageUrl}${bannerModel.banners!.indexOf(banner)}');
         } else {
-          _bannerImageList!.add(banner.imageFullUrl);
+          _bannerImageList!.add(imageUrl);
         }
         if (banner.food != null) {
           _bannerDataList!.add(banner.food);
@@ -84,9 +106,8 @@ class HomeController extends GetxController implements GetxService {
         }
       }
     }
-    print('---👇---Prepared Banner Image List---👇---');
+    print('---👇---Final Prepared Banner List---👇---');
     print(_bannerImageList);
-    print('-------------------------------------------');
     update();
   }
 

@@ -401,7 +401,7 @@ Future<Map<String, Map<String, String>>> init() async {
       DineInService(dineInRepositoryInterface: Get.find(tag: 'xmarket'));
   Get.lazyPut(() => dineInServiceInterface, tag: 'xmarket');
 
-  Get.lazyPut(() => NewsRepository(Get.find(tag: 'xmarket')));
+  Get.lazyPut(() => NewsRepository(Get.find(tag: 'xmarket')), fenix: true);
   // Get.lazyPut(() => BannerRepo(apiClient: Get.find(tag: 'xmarket')));
 
   /// Controller
@@ -485,7 +485,7 @@ Future<Map<String, Map<String, String>>> init() async {
   Get.lazyPut(() => ReverbService());
   Get.lazyPut(() => UserRealtimeService());
   // Get.lazyPut(() => BannerController(bannerRepo: Get.find()));
-  Get.lazyPut(() => NewsController(newsRepo: Get.find()));
+  Get.lazyPut(() => NewsController(newsRepo: Get.find()), fenix: true);
 
   /// Retrieving localized data
   /// Note: Language files are already loaded by xride DI, so we return empty map

@@ -775,37 +775,37 @@ class _XMarketHomeScreenState extends State<XMarketHomeScreen> {
                                                                             .start,
                                                                     children: [
                                                                       const BannerViewWidget(),
-                                                                      const BadWeatherWidget(),
+                                                                      // const BadWeatherWidget(),
                                                                       // const WhatOnYourMindViewWidget(),∞
                                                                       // const TodayTrendsViewWidget(),
                                                                       // const LocationBannerViewWidget(),
-                                                                      const HighlightWidgetView(),
+                                                                      // const HighlightWidgetView(),
                                                                       // _isLogin
                                                                       //     ? const OrderAgainViewWidget()
                                                                       // : const SizedBox(),
-                                                                      configModel.mostReviewedFoods ==
-                                                                              1
-                                                                          ? const BestReviewItemViewWidget(
-                                                                              isPopular: false)
-                                                                          : const SizedBox(),
-                                                                      (configModel.dineInOrderOption ??
-                                                                              false)
-                                                                          ? DineInWidget()
-                                                                          : const SizedBox(),
+                                                                      // configModel.mostReviewedFoods ==
+                                                                      //         1
+                                                                      //     ? const BestReviewItemViewWidget(
+                                                                      //         isPopular: false)
+                                                                      //     : const SizedBox(),
+                                                                      // (configModel.dineInOrderOption ??
+                                                                      //         false)
+                                                                      //     ? DineInWidget()
+                                                                      //     : const SizedBox(),
                                                                       const HomeCategoryViewWidget(),
-                                                                      configModel.popularRestaurant ==
-                                                                              1
-                                                                          ? const PopularRestaurantsViewWidget()
-                                                                          : const SizedBox(),
-                                                                      configModel.popularFood ==
-                                                                              1
-                                                                          ? const PopularFoodNearbyViewWidget()
-                                                                          : const SizedBox(),
-                                                                      configModel.newRestaurant ==
-                                                                              1
-                                                                          ? const NewOnStackFoodViewWidget(
-                                                                              isLatest: true)
-                                                                          : const SizedBox(),
+                                                                      // configModel.popularRestaurant ==
+                                                                      //         1
+                                                                      //     ? const PopularRestaurantsViewWidget()
+                                                                      //     : const SizedBox(),
+                                                                      // configModel.popularFood ==
+                                                                      //         1
+                                                                      //     ? const PopularFoodNearbyViewWidget()
+                                                                      //     : const SizedBox(),
+                                                                      // configModel.newRestaurant ==
+                                                                      //         1
+                                                                      //     ? const NewOnStackFoodViewWidget(
+                                                                      //         isLatest: true)
+                                                                      //     : const SizedBox(),
 
                                                                       // const PromotionalBannerViewWidget(),
                                                                     ]),

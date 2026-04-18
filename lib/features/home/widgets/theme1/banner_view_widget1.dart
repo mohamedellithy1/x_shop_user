@@ -1,5 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:stackfood_multivendor/core/navigation/app_navigator_observer.dart';
 import 'package:stackfood_multivendor/features/home/controllers/home_controller.dart';
+import 'package:stackfood_multivendor/features/home/domain/models/banner_model.dart' as banner_mod;
+import 'package:stackfood_multivendor/features/home/widgets/theme1/video_banner_widget.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
 import 'package:stackfood_multivendor/features/product/domain/models/basic_campaign_model.dart';
 import 'package:stackfood_multivendor/common/models/product_model.dart';
@@ -14,8 +17,58 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
-class BannerViewWidget1 extends StatelessWidget {
+class BannerViewWidget1 extends StatefulWidget {
   const BannerViewWidget1({super.key});
+
+  @override
+  State<BannerViewWidget1> createState() => _BannerViewWidget1State();
+}
+
+class _BannerViewWidget1State extends State<BannerViewWidget1> with WidgetsBindingObserver, RouteAware {
+  final CarouselSliderController _carouselController = CarouselSliderController();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (route != null) {
+      appRouteObserver.subscribe(this, route);
+    }
+  }
+
+  @override
+  void dispose() {
+    appRouteObserver.unsubscribe(this);
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didPushNext() {
+    Get.find<HomeController>().forcePauseVideo(true);
+  }
+
+  @override
+  void didPopNext() {
+    Get.find<HomeController>().forcePauseVideo(false);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    final homeController = Get.find<HomeController>();
+    if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive || state == AppLifecycleState.detached) {
+      homeController.forcePauseVideo(true);
+      homeController.resetBanner();
+    } else if (state == AppLifecycleState.resumed) {
+      homeController.forcePauseVideo(false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +76,25 @@ class BannerViewWidget1 extends StatelessWidget {
     return GetBuilder<HomeController>(builder: (homeController) {
       List<String?>? bannerList = homeController.bannerImageList;
       List<dynamic>? bannerDataList = homeController.bannerDataList;
+
+      // تحديد لو العنصر الحالي فيديو عشان نوقف الـ autoPlay
+      bool isCurrentVideo = false;
+      if(bannerList != null && bannerList.isNotEmpty && homeController.currentIndex < bannerList.length) {
+        isCurrentVideo = bannerList[homeController.currentIndex]?.contains('.mp4') ?? false;
+      }
+
+      if (homeController.shouldReset) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (bannerList != null && bannerList.isNotEmpty) {
+            try {
+              _carouselController.jumpToPage(0);
+            } catch (e) {
+              debugPrint("Carousel controller error: $e");
+            }
+          }
+          homeController.acknowledgeReset();
+        });
+      }
 
       return (bannerList == null || bannerList.isEmpty) ? const SizedBox() : Container(
         width: MediaQuery.of(context).size.width,
@@ -33,8 +105,9 @@ class BannerViewWidget1 extends StatelessWidget {
           children: [
             Expanded(
               child: CarouselSlider.builder(
+                carouselController: _carouselController,
                 options: CarouselOptions(
-                  autoPlay: true,
+                  autoPlay: !isCurrentVideo,
                   enlargeCenterPage: true,
                   disableCenter: true,
                   viewportFraction: 0.95,
@@ -45,6 +118,13 @@ class BannerViewWidget1 extends StatelessWidget {
                 ),
                 itemCount: bannerList.length,
                 itemBuilder: (context, index, _) {
+                  String? imageUrl = bannerList[index];
+                  bool isVideo = imageUrl?.contains('.mp4') ?? false;
+                  
+                  if(!isVideo && bannerDataList != null && bannerDataList[index] is banner_mod.Banner) {
+                    isVideo = (bannerDataList[index] as banner_mod.Banner).mediaType == 'video';
+                  }
+
                   return InkWell(
                     onTap: () {
                       if(bannerDataList != null && bannerDataList[index] is Product) {
@@ -75,7 +155,16 @@ class BannerViewWidget1 extends StatelessWidget {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
                         child: GetBuilder<MarketSplashController>(tag: 'xmarket', builder: (splashController) {
-                          return CustomImageWidget(
+                          return isVideo ? VideoBannerWidget(
+                            url: '${bannerList[index]}',
+                             isActive: index == homeController.currentIndex && !homeController.isVideoPausedByForce,
+                             onFinished: () {
+                               _carouselController.nextPage();
+                             },
+                             onTap: () {
+                               // Handle tap for video if needed, currently onTap is handled by InkWell
+                             },
+                          ) : CustomImageWidget(
                             image: '${bannerList[index]}',
                             fit: BoxFit.cover,
                           );

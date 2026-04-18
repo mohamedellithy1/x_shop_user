@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:stackfood_multivendor/features/home/controllers/home_controller.dart';
 import 'package:stackfood_multivendor/theme/dark_theme.dart';
 import 'package:stackfood_multivendor/theme/light_theme.dart';
 
@@ -314,15 +315,15 @@ class DashboardScreenState extends State<DashboardScreen> {
 
   void _setPage(int pageIndex) {
     // لو المستخدم بيبعد عن Home (index 0) أو بيرجعلها
-    // // final bannerController = Get.find<BannerController>();
-    // if (_pageIndex == 0 && pageIndex != 0) {
-    //   // مسافر من Home - وقف الفيديو وابدأ من الأول
-    //   // bannerController.forcePauseVideo(true);
-    //   bannerController.resetBanner();
-    // } else if (pageIndex == 0 && _pageIndex != 0) {
-    //   // راجع لـ Home - فك الإيقاف
-    //   bannerController.forcePauseVideo(false);
-    // }
+    final homeController = Get.find<HomeController>();
+    if (_pageIndex == 0 && pageIndex != 0) {
+      // مسافر من Home - وقف الفيديو وابدأ من الأول
+      homeController.forcePauseVideo(true);
+      homeController.resetBanner();
+    } else if (pageIndex == 0 && _pageIndex != 0) {
+      // راجع لـ Home - فك الإيقاف
+      homeController.forcePauseVideo(false);
+    }
 
     setState(() {
       _pageController!.jumpToPage(pageIndex);
