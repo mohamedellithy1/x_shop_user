@@ -64,15 +64,6 @@ class _BannerViewWidget1State extends State<BannerViewWidget1>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    final homeController = Get.find<HomeController>();
-    if (state == AppLifecycleState.paused ||
-        state == AppLifecycleState.inactive ||
-        state == AppLifecycleState.detached) {
-      homeController.forcePauseVideo(true);
-      homeController.resetBanner();
-    } else if (state == AppLifecycleState.resumed) {
-      homeController.forcePauseVideo(false);
-    }
   }
 
   @override
@@ -117,7 +108,7 @@ class _BannerViewWidget1State extends State<BannerViewWidget1>
                     child: CarouselSlider.builder(
                       carouselController: _carouselController,
                       options: CarouselOptions(
-                        autoPlay: !isCurrentVideo,
+                        autoPlay: !isCurrentVideo && !homeController.isVideoPausedByForce,
                         enlargeCenterPage: false,
                         disableCenter: true,
                         viewportFraction: 1,
@@ -136,7 +127,7 @@ class _BannerViewWidget1State extends State<BannerViewWidget1>
                             bannerDataList[index] is banner_mod.Banner) {
                           isVideo = (bannerDataList[index] as banner_mod.Banner)
                                   .mediaType ==
-                              'video';
+                               'video';
                         }
 
                         return InkWell(
@@ -205,7 +196,11 @@ class _BannerViewWidget1State extends State<BannerViewWidget1>
                                                   !homeController
                                                       .isVideoPausedByForce,
                                               onFinished: () {
-                                                _carouselController.nextPage();
+                                                if (!homeController
+                                                    .isVideoPausedByForce) {
+                                                  _carouselController
+                                                      .nextPage();
+                                                }
                                               },
                                               onTap: () {
                                                 // Handle tap for video if needed, currently onTap is handled by InkWell

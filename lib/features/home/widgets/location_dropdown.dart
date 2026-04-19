@@ -3,6 +3,7 @@ import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart
 import 'package:stackfood_multivendor/features/address/controllers/market_address_controller.dart';
 import 'package:stackfood_multivendor/features/address/domain/models/address_model.dart';
 import 'package:stackfood_multivendor/features/address/widgets/address_card_widget.dart';
+import 'package:stackfood_multivendor/features/home/controllers/home_controller.dart';
 import 'package:stackfood_multivendor/features/location/controllers/location_controller.dart';
 import 'package:stackfood_multivendor/features/location/domain/models/zone_response_model.dart';
 import 'package:stackfood_multivendor/helper/address_helper.dart';
@@ -157,6 +158,8 @@ class _LocationDropdownState extends State<LocationDropdown>
                                                 InkWell(
                                                   onTap: () {
                                                     _close();
+                                                    Get.find<HomeController>()
+                                                        .forcePauseVideo(true);
                                                     Get.toNamed(RouteHelper
                                                         .getAddAddressRoute(
                                                             false, 0));
@@ -292,6 +295,7 @@ class _LocationDropdownState extends State<LocationDropdown>
         );
       } else {
         Get.back();
+        Get.find<HomeController>().forcePauseVideo(true);
         Get.toNamed(
             RouteHelper.getPickMapRoute(RouteHelper.accessLocation, false));
         showCustomSnackBar('service_not_available_in_current_location'.tr);

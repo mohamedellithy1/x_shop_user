@@ -93,7 +93,7 @@ class _VideoBannerWidgetState extends State<VideoBannerWidget>
       _videoPlayerController!.addListener(_videoListener);
 
       // Set initial state based on activity
-      if (widget.isActive) {
+      if (widget.isActive && !Get.find<HomeController>().isVideoPausedByForce) {
         _videoPlayerController!.play();
       } else {
         _videoPlayerController!.pause();
@@ -120,9 +120,12 @@ class _VideoBannerWidgetState extends State<VideoBannerWidget>
   void didUpdateWidget(VideoBannerWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (_initialized && _videoPlayerController != null) {
-      if (widget.isActive && !oldWidget.isActive) {
+      bool isPausedByForce = Get.find<HomeController>().isVideoPausedByForce;
+      if (widget.isActive && !oldWidget.isActive && !isPausedByForce) {
         _videoPlayerController!.play();
       } else if (!widget.isActive && oldWidget.isActive) {
+        _videoPlayerController!.pause();
+      } else if (isPausedByForce) {
         _videoPlayerController!.pause();
       }
     }
@@ -130,6 +133,11 @@ class _VideoBannerWidgetState extends State<VideoBannerWidget>
 
   void _videoListener() {
     if (mounted) {
+      final homeController = Get.find<HomeController>();
+      if (homeController.isVideoPausedByForce) {
+        _videoPlayerController?.pause();
+      }
+
       if (_videoPlayerController != null &&
           _videoPlayerController!.value.position >=
               _videoPlayerController!.value.duration &&

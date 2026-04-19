@@ -1,6 +1,7 @@
 import 'package:stackfood_multivendor/common/widgets/custom_loader_widget.dart';
 import 'package:stackfood_multivendor/features/address/controllers/market_address_controller.dart';
 import 'package:stackfood_multivendor/features/address/domain/models/address_model.dart';
+import 'package:stackfood_multivendor/features/home/controllers/home_controller.dart';
 import 'package:stackfood_multivendor/features/location/controllers/location_controller.dart';
 import 'package:stackfood_multivendor/features/location/domain/models/zone_response_model.dart';
 import 'package:stackfood_multivendor/features/address/widgets/address_card_widget.dart';
@@ -249,9 +250,13 @@ class AddressBottomSheet extends StatelessWidget {
                                         addressController
                                             .addressList!.isNotEmpty
                                     ? TextButton.icon(
-                                        onPressed: () => Get.toNamed(
-                                            RouteHelper.getAddAddressRoute(
-                                                false, 0)),
+                                        onPressed: () {
+                                          Get.find<HomeController>()
+                                              .forcePauseVideo(true);
+                                          Get.toNamed(
+                                              RouteHelper.getAddAddressRoute(
+                                                  false, 0));
+                                        },
                                         icon: const Icon(
                                             Icons.add_circle_outline_sharp,
                                             color: Color(0xFF55745a)),
@@ -290,6 +295,7 @@ class AddressBottomSheet extends StatelessWidget {
         );
       } else {
         Get.back();
+        Get.find<HomeController>().forcePauseVideo(true);
         Get.toNamed(
             RouteHelper.getPickMapRoute(RouteHelper.accessLocation, false));
         showCustomSnackBar('service_not_available_in_current_location'.tr);

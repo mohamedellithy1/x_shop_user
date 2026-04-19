@@ -16,6 +16,7 @@ import 'package:stackfood_multivendor/features/address/controllers/market_addres
 import 'package:stackfood_multivendor/features/address/domain/models/address_model.dart';
 import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
 import 'package:stackfood_multivendor/features/location/controllers/location_controller.dart';
+import 'package:stackfood_multivendor/features/home/controllers/home_controller.dart';
 
 import 'package:stackfood_multivendor/features/location/screens/pick_map_screen.dart';
 import 'package:stackfood_multivendor/features/location/widgets/animated_map_icon_extended.dart';
@@ -87,8 +88,11 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
 
   @override
   void initState() {
+    
     super.initState();
-
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Get.find<HomeController>().forcePauseVideo(true);
+    });
     _initCall();
   }
 

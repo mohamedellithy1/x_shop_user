@@ -57,6 +57,7 @@ class DashboardScreenState extends State<DashboardScreen>
   bool _canExit = GetPlatform.isWeb ? true : false;
   late bool _isLogin;
   bool active = false;
+  bool _isTop = true;
 
   @override
   void initState() {
@@ -117,6 +118,7 @@ class DashboardScreenState extends State<DashboardScreen>
   /// لما يتم الانتقال لشاشة جديدة فوق الـ Dashboard - وقف الفيديو فوراً
   @override
   void didPushNext() {
+    _isTop = false;
     if (_pageIndex == 0) {
       Get.find<HomeController>().forcePauseVideo(true);
     }
@@ -125,6 +127,7 @@ class DashboardScreenState extends State<DashboardScreen>
   /// لما المستخدم يرجع للـ Dashboard - شغل الفيديو تاني
   @override
   void didPopNext() {
+    _isTop = true;
     if (_pageIndex == 0) {
       Get.find<HomeController>().forcePauseVideo(false);
     }
@@ -139,7 +142,7 @@ class DashboardScreenState extends State<DashboardScreen>
         state == AppLifecycleState.detached) {
       homeController.forcePauseVideo(true);
       homeController.resetBanner();
-    } else if (state == AppLifecycleState.resumed && _pageIndex == 0) {
+    } else if (state == AppLifecycleState.resumed && _pageIndex == 0 && _isTop) {
       homeController.forcePauseVideo(false);
     }
   }
@@ -180,12 +183,14 @@ class DashboardScreenState extends State<DashboardScreen>
         Get.find<DashboardController>().showLocationSuggestion &&
         active) {
       Future.delayed(const Duration(seconds: 1), () {
+        Get.find<HomeController>().forcePauseVideo(true);
         showModalBottomSheet(
           context: Get.context!,
           isScrollControlled: true,
           backgroundColor: Colors.transparent,
           builder: (con) => const AddressBottomSheet(),
         ).then((value) {
+          Get.find<HomeController>().forcePauseVideo(false);
           Get.find<DashboardController>().hideSuggestedLocation();
           setState(() {});
         });
