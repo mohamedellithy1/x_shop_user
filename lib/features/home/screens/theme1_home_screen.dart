@@ -105,11 +105,10 @@ class Theme1HomeScreen extends StatelessWidget {
                         // color: Color(0xFFd6e0c4),
                       ),
                       child: Row(children: [
+                        const SizedBox(width: Dimensions.paddingSizeDefault),
                         Expanded(
                             child: LocationDropdown(
                           child: Container(
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: Dimensions.paddingSizeSmall),
                             padding: const EdgeInsets.symmetric(
                                 horizontal: Dimensions.paddingSizeSmall,
                                 vertical: Dimensions.paddingSizeExtraSmall),
@@ -153,6 +152,7 @@ class Theme1HomeScreen extends StatelessWidget {
                             }),
                           ),
                         )),
+                        const SizedBox(width: 20), // مسافة بين العنوان والإشعارات
                         InkWell(
                           child: GetBuilder<MarketNotificationController>(
                               builder: (notificationController) {
@@ -170,26 +170,27 @@ class Theme1HomeScreen extends StatelessWidget {
                                 child: Icon(Icons.notifications,
                                     size: 25, color: Colors.green),
                               ),
-                              notificationController.hasNotification
-                                  ? Positioned(
-                                      top: 0,
-                                      right: 0,
-                                      child: Container(
-                                        height: 10,
-                                        width: 10,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          shape: BoxShape.circle,
-                                          border: Border.all(
-                                              width: 1, color: Colors.white),
-                                        ),
-                                      ))
-                                  : const SizedBox(),
+                              if (notificationController.hasNotification)
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: Container(
+                                    height: 10,
+                                    width: 10,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                          width: 1, color: Colors.white),
+                                    ),
+                                  ),
+                                ),
                             ]);
                           }),
                           onTap: () =>
                               Get.toNamed(RouteHelper.getNotificationRoute()),
                         ),
+                        const SizedBox(width: Dimensions.paddingSizeDefault), // مسافة من حافة الشاشة للايقونة
                       ]),
                     ),
                   ),

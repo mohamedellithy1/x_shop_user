@@ -10,19 +10,25 @@ class SearchFieldWidget extends StatefulWidget {
   final TextEditingController controller;
   final String hint;
   final IconData? suffixIcon;
+  final IconData? prefixIcon;
   final Function? iconPressed;
   final Function? onSubmit;
   final Function? onChanged;
   final Function()? onTap;
-  const SearchFieldWidget(
-      {super.key,
-      required this.controller,
-      required this.hint,
-      this.suffixIcon,
-      this.iconPressed,
-      this.onSubmit,
-      this.onChanged,
-      this.onTap});
+  final Color? iconColor;
+
+  const SearchFieldWidget({
+    super.key,
+    required this.controller,
+    required this.hint,
+    this.suffixIcon,
+    this.prefixIcon,
+    this.iconPressed,
+    this.onSubmit,
+    this.onChanged,
+    this.onTap,
+    this.iconColor,
+  });
 
   @override
   State<SearchFieldWidget> createState() => _SearchFieldWidgetState();
@@ -83,13 +89,25 @@ class _SearchFieldWidgetState extends State<SearchFieldWidget> {
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         hoverColor: Colors.transparent,
+        prefixIcon: widget.prefixIcon != null
+            ? IconButton(
+                icon: Icon(
+                  widget.prefixIcon,
+                  color: widget.iconColor ??
+                      (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+                          ? Colors.black
+                          : Colors.white),
+                ),
+                onPressed: widget.iconPressed as void Function()?,
+              )
+            : null,
         suffixIcon: widget.suffixIcon != null
             ? IconButton(
                 icon: Icon(widget.suffixIcon,
-                    color: Get.find<MarketThemeController>(tag: 'xmarket')
-                            .darkTheme
-                        ? Colors.black
-                        : Colors.white),
+                    color: widget.iconColor ??
+                        (Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
+                            ? Colors.black
+                            : Colors.white)),
                 onPressed: widget.iconPressed as void Function()?,
               )
             : null,

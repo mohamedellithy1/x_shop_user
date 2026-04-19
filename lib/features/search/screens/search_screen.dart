@@ -130,61 +130,30 @@ class SearchScreenState extends State<SearchScreen> {
                                 )
                               : const SizedBox(),
                           Expanded(
-                              child: Container(
-                            width: double.infinity,
+                              child: SizedBox(
+                            key: _searchBarKey,
                             height: 50,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).cardColor,
-                              borderRadius: BorderRadius.circular(50),
-                              border: Border.all(
-                                  color: Theme.of(context)
-                                      .disabledColor
-                                      .withValues(alpha: 0.5)),
+                            child: SearchFieldWidget(
+                              controller: _searchTextEditingController,
+                              hint: 'search_food_or_restaurant'.tr,
+                              prefixIcon: !searchController.isSearchMode
+                                  ? Icons.filter_list
+                                  : CupertinoIcons.search,
+                              iconColor: Theme.of(context).disabledColor,
+                              iconPressed: () {
+                                _actionSearch(context, searchController, false);
+                              },
+                              onChanged: (value) {
+                                _searchSuggestions(value);
+                              },
+                              onSubmit: (value) {
+                                _actionSearch(context, searchController, true);
+                                if (!searchController.isSearchMode &&
+                                    _searchTextEditingController.text.isEmpty) {
+                                  searchController.setSearchMode(true);
+                                }
+                              },
                             ),
-                            child: Row(children: [
-                              IconButton(
-                                key: _searchBarKey,
-                                onPressed: () {
-                                  _actionSearch(
-                                      context, searchController, false);
-                                },
-                                icon: Icon(
-                                    !searchController.isSearchMode
-                                        ? Icons.filter_list
-                                        : CupertinoIcons.search,
-                                    size: 28,
-                                    color: Theme.of(context).disabledColor),
-                              ),
-
-                              Expanded(
-                                  child: SearchFieldWidget(
-                                controller: _searchTextEditingController,
-                                hint: 'search_food_or_restaurant'.tr,
-                                onChanged: (value) {
-                                  _searchSuggestions(value);
-                                },
-                                onSubmit: (value) {
-                                  _actionSearch(
-                                      context, searchController, true);
-                                  if (!searchController.isSearchMode &&
-                                      _searchTextEditingController
-                                          .text.isEmpty) {
-                                    searchController.setSearchMode(true);
-                                  }
-                                },
-                              )),
-
-                              // IconButton(
-                              //   onPressed: () async {
-                              //     await VoicePermissionHandler.openVoiceSearch(
-                              //       context: context,
-                              //       searchTextEditingController: _searchTextEditingController,
-                              //       isDesktop: isDesktop,
-                              //     );
-                              //   },
-                              //   icon: Icon(Icons.keyboard_voice_sharp, size: 28, color: Theme.of(context).disabledColor),
-                              // ),
-                            ]),
                           )),
                           SizedBox(width: isDesktop ? 0 : 30),
                         ])),

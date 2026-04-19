@@ -151,17 +151,20 @@ class _NewsItemWidgetState extends State<NewsItemWidget> {
 
                   // Likes
                   InkWell(
-                    onTap: () {
-                      setState(() {
-                        if (isliked) {
-                          widget.news.likesCount = widget.news.likesCount - 1;
-                          isliked = false;
-                        } else {
-                          widget.news.likesCount = widget.news.likesCount + 1;
-                          isliked = true;
-                        }
-                      });
-                      Get.find<NewsController>().likeNews(widget.news.id);
+                    onTap: () async {
+                      bool? isLikedResponse = await Get.find<NewsController>().likeNews(widget.news.id);
+                      
+                      if (isLikedResponse != null && mounted) {
+                        setState(() {
+                          if (isLikedResponse && !isliked) {
+                            widget.news.likesCount = widget.news.likesCount + 1;
+                            isliked = true;
+                          } else if (!isLikedResponse && isliked) {
+                            widget.news.likesCount = widget.news.likesCount - 1;
+                            isliked = false;
+                          }
+                        });
+                      }
                     },
                     child: Row(
                       children: [

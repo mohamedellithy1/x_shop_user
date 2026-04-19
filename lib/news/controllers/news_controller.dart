@@ -84,16 +84,22 @@ class NewsController extends GetxController {
     update();
   }
 
-  void likeNews(int newsId) async {
+  Future<bool?> likeNews(int newsId) async {
     if (Get.find<MarketAuthController>().isLoggedIn()) {
       final response = await newsRepo.likeNews(newsId);
       if (response != null && response.statusCode == 200) {
         print("News liked successfully");
+        if (response.body != null && response.body is Map && response.body.containsKey('is_liked')) {
+          return response.body['is_liked'] as bool?;
+        }
+        return true;
       } else {
         print("Failed to like news");
+        return null;
       }
     } else {
       showCustomSnackBar("يجب تسجيل الدخول أولاً لتتمكن من الإعجاب بالخبر");
+      return null;
     }
   }
 
