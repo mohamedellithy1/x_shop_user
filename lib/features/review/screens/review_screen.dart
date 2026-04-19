@@ -140,7 +140,9 @@ class _ReviewScreenState extends State<ReviewScreen> {
                     ),
                   )
                 : Center(child: NoDataScreen(title: 'no_review_found'.tr))
-            : const Center(child: CircularProgressIndicator());
+            : const Center(child: CircularProgressIndicator(
+                color: Color(0xFF9ebc67),
+            ));
       }),
     );
   }

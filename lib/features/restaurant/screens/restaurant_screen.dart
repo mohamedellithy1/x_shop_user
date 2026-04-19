@@ -1053,8 +1053,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                                                       width: 20,
                                                                       child:
                                                                           CircularProgressIndicator(
-                                                                        color: Colors
-                                                                            .black,
+                                                                        color: Color(0xFF9ebc67),
                                                                         strokeWidth:
                                                                             2,
                                                                       ),

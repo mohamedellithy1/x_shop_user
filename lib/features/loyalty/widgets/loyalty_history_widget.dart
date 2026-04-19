@@ -57,7 +57,10 @@ class LoyaltyHistoryWidget extends StatelessWidget {
             ? const Center(
                 child: Padding(
                 padding: EdgeInsets.all(Dimensions.paddingSizeSmall),
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(
+                    color: Color(0xFF9ebc67),
+
+                ),
               ))
             : const SizedBox(),
       ]);

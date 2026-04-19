@@ -37,7 +37,8 @@ class BottomViewWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isDesktop = ResponsiveHelper.isDesktop(context);
-    final MarketThemeController themeController = Get.find<MarketThemeController>(tag: 'xmarket');
+    final MarketThemeController themeController =
+        Get.find<MarketThemeController>(tag: 'xmarket');
 
     bool subscription = order.subscription != null;
     bool pending = order.orderStatus == OrderStatus.pending.name;
@@ -317,7 +318,10 @@ class BottomViewWidget extends StatelessWidget {
                                   ),
                                 )
                               : const SizedBox()
-                          : const Center(child: CircularProgressIndicator()),
+                          : const Center(
+                              child: CircularProgressIndicator(
+                              color: Color(0xFF9ebc67),
+                            )),
                     ),
                   )
                 : const SizedBox()

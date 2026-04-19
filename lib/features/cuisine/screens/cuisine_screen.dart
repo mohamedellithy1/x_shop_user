@@ -105,7 +105,10 @@ class _CuisineScreenState extends State<CuisineScreen> {
                                   ),
                                 );
                               })
-                          : const Center(child: CircularProgressIndicator());
+                          : const Center(
+                              child: CircularProgressIndicator(
+                              color: Color(0xFF9ebc67),
+                            ));
                     }),
                   ),
                 ),

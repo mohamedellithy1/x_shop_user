@@ -71,7 +71,7 @@ class CustomButtonWidget extends StatelessWidget {
                                     valueColor: AlwaysStoppedAnimation<Color>(
                                         textColor ?? Colors.white),
                                     strokeWidth: 2,
-                                    color: Colors.orange,
+                                    color: Color(0xFF9ebc67),
                                   ),
                                 ),
                                 const SizedBox(

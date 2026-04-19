@@ -403,8 +403,8 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
               // Only update position if address was not manually selected from bottom sheet
               if (!_isAddressManuallySelected) {
                 if (widget.address != null || !_isFirstTimeMove) {
-                  locationController.updatePosition(_cameraPosition, true);
                   if (_cameraPosition != null) {
+                    locationController.updatePosition(_cameraPosition, true);
                     setState(() {
                       _isAddressChosen = true;
                     });
@@ -414,6 +414,11 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
               }
             },
             onMapCreated: (GoogleMapController controller) {
+              if (locationController.mapController != null) {
+                try {
+                  locationController.mapController!.dispose();
+                } catch (_) {}
+              }
               locationController.setMapController(controller);
               if (widget.address == null) {
                 locationController.getCurrentLocation(true,
@@ -429,9 +434,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
               Factory<VerticalDragGestureRecognizer>(
                   () => VerticalDragGestureRecognizer()),
             },
-            style: Get.isDarkMode
-                ? Get.find<MarketThemeController>(tag: 'xmarket').darkMap
-                : Get.find<MarketThemeController>(tag: 'xmarket').lightMap,
+            // style removed - the light_map.json was causing grey appearance
           ),
 
           // Map Pin Icon
@@ -1573,7 +1576,9 @@ class _LocationGridState extends State<_LocationGrid> {
 
     if (isLoading) {
       return const Center(
-        child: CircularProgressIndicator(),
+        child: CircularProgressIndicator(
+          color: Color(0xFF9ebc67),
+        ),
       );
     }
 

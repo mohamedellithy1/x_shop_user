@@ -123,8 +123,10 @@ class _PickMapScreenState extends State<PickMapScreen> {
               },
               onCameraIdle: () {
                 locationController.updateCameraMovingStatus(false);
-                Get.find<MarketLocationController>()
-                    .updatePosition(_cameraPosition, false);
+                if (_cameraPosition != null) {
+                  Get.find<MarketLocationController>()
+                      .updatePosition(_cameraPosition, false);
+                }
               },
               style: Get.isDarkMode
                   ? Get.find<MarketThemeController>(tag: 'xmarket').darkMap
@@ -198,46 +200,46 @@ class _PickMapScreenState extends State<PickMapScreen> {
                   ),
                 ),
                 const SizedBox(height: Dimensions.paddingSizeDefault),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor,
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.2),
-                          blurRadius: 6,
-                          spreadRadius: 0.5,
-                          offset: const Offset(0, 4))
-                    ],
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Column(children: [
-                    CustomFloatingActionButton(
-                      icon: Icons.add,
-                      heroTag: 'add_button',
-                      onTap: () {
-                        _currentZoomLevel++;
-                        _mapController?.animateCamera(
-                            CameraUpdate.zoomTo(_currentZoomLevel));
-                      },
-                    ),
-                    Container(
-                      width: 20,
-                      height: 1,
-                      color: Theme.of(context)
-                          .disabledColor
-                          .withValues(alpha: 0.5),
-                    ),
-                    CustomFloatingActionButton(
-                      icon: Icons.remove,
-                      heroTag: 'remove_button',
-                      onTap: () {
-                        _currentZoomLevel--;
-                        _mapController?.animateCamera(
-                            CameraUpdate.zoomTo(_currentZoomLevel));
-                      },
-                    ),
-                  ]),
-                ),
+                // Container(
+                //   decoration: BoxDecoration(
+                //     color: Theme.of(context).cardColor,
+                //     boxShadow: [
+                //       BoxShadow(
+                //           color: Colors.black.withValues(alpha: 0.2),
+                //           blurRadius: 6,
+                //           spreadRadius: 0.5,
+                //           offset: const Offset(0, 4))
+                //     ],
+                //     borderRadius: BorderRadius.circular(8),
+                //   ),
+                //   child: Column(children: [
+                //     CustomFloatingActionButton(
+                //       icon: Icons.add,
+                //       heroTag: 'add_button',
+                //       onTap: () {
+                //         _currentZoomLevel++;
+                //         _mapController?.animateCamera(
+                //             CameraUpdate.zoomTo(_currentZoomLevel));
+                //       },
+                //     ),
+                //     Container(
+                //       width: 20,
+                //       height: 1,
+                //       color: Theme.of(context)
+                //           .disabledColor
+                //           .withValues(alpha: 0.5),
+                //     ),
+                //     CustomFloatingActionButton(
+                //       icon: Icons.remove,
+                //       heroTag: 'remove_button',
+                //       onTap: () {
+                //         _currentZoomLevel--;
+                //         _mapController?.animateCamera(
+                //             CameraUpdate.zoomTo(_currentZoomLevel));
+                //       },
+                //     ),
+                //   ]),
+                // ),
               ]),
             ),
             Positioned(

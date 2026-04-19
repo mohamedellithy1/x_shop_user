@@ -235,7 +235,9 @@ class AddressBottomSheet extends StatelessWidget {
                                           )
                                         : const SizedBox()
                                     : const Center(
-                                        child: CircularProgressIndicator()),
+                                        child: CircularProgressIndicator(
+                                        color: Color(0xFF9ebc67),
+                                      )),
                                 SizedBox(
                                     height:
                                         addressController.addressList != null &&

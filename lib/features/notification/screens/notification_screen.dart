@@ -391,7 +391,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             title: 'no_notification'.tr,
                             isCenter: true,
                             isEmptyNotification: true)
-                    : const Center(child: CircularProgressIndicator());
+                    : const Center(
+                        child: CircularProgressIndicator(
+                        color: Color(0xFF9ebc67),
+                      ));
               })
             : NotLoggedInScreen(callBack: (value) {
                 _loadData();

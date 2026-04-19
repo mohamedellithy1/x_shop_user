@@ -159,7 +159,9 @@ class _ComplaintsSuggestionsScreenState
               ),
               const SizedBox(height: Dimensions.paddingSizeExtraLarge * 2),
               controller.isLoading
-                  ? const Center(child: CircularProgressIndicator())
+                  ? const Center(child: CircularProgressIndicator(
+                    color: Color(0xFF9ebc67),
+                  ))
                   : ButtonWidget(
                       textColor: Colors.white,
                       buttonText: 'إرسال',

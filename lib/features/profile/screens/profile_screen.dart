@@ -76,7 +76,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   profileController.userInfoModel == null &&
                   (orderController.runningOrderList == null))
               ? const Center(
-                  child: CircularProgressIndicator(),
+                  child: CircularProgressIndicator(
+                    color: Color(0xFF9ebc67),
+                  ),
                 )
               : Center(
                   child: SingleChildScrollView(

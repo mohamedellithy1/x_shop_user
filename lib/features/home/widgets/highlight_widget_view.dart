@@ -391,7 +391,10 @@ class _HighlightVideoWidgetState extends State<HighlightVideoWidget> {
                             Chewie(controller: _chewieController!),
                           ],
                         )
-                      : const Center(child: CircularProgressIndicator()),
+                      : const Center(
+                          child: CircularProgressIndicator(
+                          color: Color(0xFF9ebc67),
+                        )),
                 ],
               ),
             ),

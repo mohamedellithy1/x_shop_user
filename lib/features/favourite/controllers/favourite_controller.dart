@@ -81,29 +81,27 @@ class FavouriteController extends GetxController implements GetxService {
     }
     Response response = await favouriteServiceInterface.getFavouriteList();
     if (response.statusCode == 200) {
-      if(fromFavScreen){
-        _wishProductList = [];
-        _wishProductIdList = [];
-        _wishRestList = [];
-        _wishRestIdList = [];
-      }
-      update();
-      response.body['food'].forEach((food) async {
+      _wishProductList = [];
+      _wishProductIdList = [];
+      _wishRestList = [];
+      _wishRestIdList = [];
+
+      for (var food in response.body['food']) {
         Product product = Product.fromJson(food);
         _wishProductList!.add(product);
         _wishProductIdList.add(product.id);
-      });
+      }
 
-      response.body['restaurant'].forEach((res) async {
+      for (var res in response.body['restaurant']) {
         Restaurant? restaurant;
-        try{
+        try {
           restaurant = Restaurant.fromJson(res);
-        }catch(e){
-          debugPrint('exception create in restaurant list create : $e');
+          _wishRestList!.add(restaurant);
+          _wishRestIdList.add(restaurant.id);
+        } catch (e) {
+          debugPrint('exception in restaurant list: $e');
         }
-        _wishRestList!.add(restaurant);
-        _wishRestIdList.add(restaurant!.id);
-      });
+      }
     }
     update();
   }

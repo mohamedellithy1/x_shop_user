@@ -80,7 +80,7 @@ class NotificationStatusChangeBottomSheet extends StatelessWidget {
                     )
                   : Center(
                       child: CircularProgressIndicator(
-                          color: Theme.of(context).colorScheme.error)),
+                          color: Color(0xFF9ebc67))),
             ),
             const SizedBox(width: Dimensions.paddingSizeSmall),
             Expanded(

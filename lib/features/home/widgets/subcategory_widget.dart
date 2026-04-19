@@ -40,7 +40,10 @@ class SubCategoryWidget extends StatelessWidget {
                 vertical: Dimensions.paddingSizeExtraSmall,
               ),
               padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
-              child: const Center(child: CircularProgressIndicator()),
+              child: const Center(
+                  child: CircularProgressIndicator(
+                color: Color(0xFF9ebc67),
+              )),
             );
           }
         }

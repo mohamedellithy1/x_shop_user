@@ -507,7 +507,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                     ),
                                   ),
                                 ])
-                          : const Center(child: CircularProgressIndicator())
+                          : const Center(child: CircularProgressIndicator(
+                            color: Color(0xFF9ebc67),
+                          ))
                       : NotLoggedInScreen(callBack: (value) {
                           _initCall();
                           setState(() {});
@@ -733,7 +735,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                           ? XmarketImages.verifiedIcon
                                           : null,
                                     )
-                                  : Center(child: CircularProgressIndicator()),
+                                  : Center(child: CircularProgressIndicator(
+                                    color: Color(0xFF9ebc67),
+                                  )),
                               Positioned(
                                 right: 10,
                                 top: 10,

@@ -290,7 +290,9 @@ class _MapViewScreenState extends State<MapViewScreen> {
                                   : const SizedBox(),
                               _showLoading
                                   ? const Center(
-                                      child: CircularProgressIndicator())
+                                      child: CircularProgressIndicator(
+                                      color: Color(0xFF9ebc67),
+                                    ))
                                   : const SizedBox(),
                               Positioned(
                                 bottom: 30,
@@ -554,7 +556,10 @@ class _MapViewScreenState extends State<MapViewScreen> {
                             )
                           : const SizedBox(),
                       _showLoading
-                          ? const Center(child: CircularProgressIndicator())
+                          ? const Center(
+                              child: CircularProgressIndicator(
+                              color: Color(0xFF9ebc67),
+                            ))
                           : const SizedBox(),
                     ])
                   : const SizedBox();

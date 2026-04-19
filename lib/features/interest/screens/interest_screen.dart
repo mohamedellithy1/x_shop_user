@@ -173,7 +173,10 @@ class _InterestScreenState extends State<InterestScreen> {
                       ),
                     )
                   : NoDataScreen(title: 'no_category_found'.tr)
-              : const Center(child: CircularProgressIndicator());
+              : const Center(
+                  child: CircularProgressIndicator(
+                  color: Color(0xFF9ebc67),
+                ));
         }),
       ),
     );

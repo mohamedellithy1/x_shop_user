@@ -199,7 +199,9 @@ class _GuestTrackOrderScreenState extends State<GuestTrackOrderScreen> {
                         : const Center(
                             child: Padding(
                             padding: EdgeInsets.only(top: 200.0, bottom: 200),
-                            child: CircularProgressIndicator(),
+                            child: CircularProgressIndicator(
+                              color: Color(0xFF9ebc67),
+                            ),
                           )),
                   ),
 

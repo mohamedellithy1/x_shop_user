@@ -120,7 +120,7 @@ class _TrackingMapWidgetState extends State<TrackingMapWidget> {
                     ? Center(
                         child: CircularProgressIndicator(
                             valueColor: AlwaysStoppedAnimation<Color>(
-                                Theme.of(context).primaryColor)))
+                                Color(0xFF9ebc67))))
                     : const SizedBox(),
               ],
             )

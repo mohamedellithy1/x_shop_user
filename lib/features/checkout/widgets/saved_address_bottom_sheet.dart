@@ -252,7 +252,8 @@ class _SavedAddressBottomSheetState extends State<SavedAddressBottomSheet> {
                                                                             'xmarket')
                                                                     .darkTheme
                                                                 ? Colors.white70
-                                                                : Color(0xFF55745a)),
+                                                                : Color(
+                                                                    0xFF55745a)),
                                                         maxLines: 1,
                                                         overflow: TextOverflow
                                                             .ellipsis,
@@ -276,7 +277,9 @@ class _SavedAddressBottomSheetState extends State<SavedAddressBottomSheet> {
                               : Center(
                                   child: Padding(
                                   padding: EdgeInsets.symmetric(vertical: 100),
-                                  child: CircularProgressIndicator(),
+                                  child: CircularProgressIndicator(
+                                    color: Color(0xFF9ebc67),
+                                  ),
                                 )),
                           const SizedBox(height: Dimensions.paddingSizeSmall),
                           Center(

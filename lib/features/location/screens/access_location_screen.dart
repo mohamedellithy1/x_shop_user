@@ -171,7 +171,9 @@ class _AccessLocationScreenState extends State<AccessLocationScreen> {
                                 : const Center(
                                     child: Padding(
                                     padding: EdgeInsets.only(top: 250),
-                                    child: CircularProgressIndicator(),
+                                    child: CircularProgressIndicator(
+                                      color: Color(0xFF9ebc67),
+                                    ),
                                   )),
                             SizedBox(
                                 height: (addressController.addressList !=

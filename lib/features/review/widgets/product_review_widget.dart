@@ -234,7 +234,9 @@ class _ProductReviewWidgetState extends State<ProductReviewWidget> {
                                         },
                                 )
                               : const Center(
-                                  child: CircularProgressIndicator()),
+                                  child: CircularProgressIndicator(
+                                    color: Color(0xFF9ebc67),
+                                  )),
                         ),
                       ]),
                     );

@@ -142,7 +142,8 @@ class _CouponScreenState extends State<CouponScreen> {
                                                                         'xmarket')
                                                                 .darkTheme
                                                             ? Colors.white
-                                                            : Color(0xFF55745a))),
+                                                            : Color(
+                                                                0xFF55745a))),
                                               ),
                                               GridView.builder(
                                                 gridDelegate:
@@ -261,7 +262,8 @@ class _CouponScreenState extends State<CouponScreen> {
                                                                         'xmarket')
                                                                 .darkTheme
                                                             ? Colors.white
-                                                            : Color(0xFF55745a))),
+                                                            : Color(
+                                                                0xFF55745a))),
                                               ),
                                               GridView.builder(
                                                 gridDelegate:
@@ -328,7 +330,10 @@ class _CouponScreenState extends State<CouponScreen> {
                                   title: 'no_coupon_available'.tr,
                                   isEmptyCoupon: true),
                             )
-                  : const Center(child: CircularProgressIndicator());
+                  : const Center(
+                      child: CircularProgressIndicator(
+                      color: Color(0xFF9ebc67),
+                    ));
             })
           : NotLoggedInScreen(callBack: (bool value) {
               _initCall();

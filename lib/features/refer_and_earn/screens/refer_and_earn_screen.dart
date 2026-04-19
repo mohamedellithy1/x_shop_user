@@ -214,7 +214,9 @@ class _ReferAndEarnScreenState extends State<ReferAndEarnScreen> {
                               child: Padding(
                                 padding:
                                     EdgeInsets.all(Dimensions.paddingSizeSmall),
-                                child: CircularProgressIndicator(),
+                                child: CircularProgressIndicator(
+                                  color: Color(0xFF9ebc67),
+                                ),
                               ),
                             ),
                     ),

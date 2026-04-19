@@ -5,6 +5,9 @@ import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:stackfood_multivendor/core/navigation/app_navigator_observer.dart';
+import 'package:stackfood_multivendor/features/home/controllers/home_controller.dart';
 
 class VideoBannerWidget extends StatefulWidget {
   final String url;
@@ -23,7 +26,7 @@ class VideoBannerWidget extends StatefulWidget {
 }
 
 class _VideoBannerWidgetState extends State<VideoBannerWidget>
-    with WidgetsBindingObserver {
+    with WidgetsBindingObserver, RouteAware {
   VideoPlayerController? _videoPlayerController;
   ChewieController? _chewieController;
   bool _initialized = false;
@@ -38,15 +41,37 @@ class _VideoBannerWidgetState extends State<VideoBannerWidget>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (route != null) {
+      appRouteObserver.subscribe(this, route);
+    }
+  }
+
+  @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (_initialized && _videoPlayerController != null) {
       if (state == AppLifecycleState.resumed) {
-        if (widget.isActive) {
+        if (widget.isActive &&
+            !Get.find<HomeController>().isVideoPausedByForce) {
           _videoPlayerController!.play();
         }
       } else {
         _videoPlayerController!.pause();
       }
+    }
+  }
+
+  @override
+  void didPushNext() {
+    _videoPlayerController?.pause();
+  }
+
+  @override
+  void didPopNext() {
+    if (widget.isActive && !Get.find<HomeController>().isVideoPausedByForce) {
+      _videoPlayerController?.play();
     }
   }
 
@@ -137,6 +162,7 @@ class _VideoBannerWidgetState extends State<VideoBannerWidget>
 
   @override
   void dispose() {
+    appRouteObserver.unsubscribe(this);
     WidgetsBinding.instance.removeObserver(this);
     _videoPlayerController?.removeListener(_videoListener);
     _videoPlayerController?.dispose();
@@ -154,24 +180,33 @@ class _VideoBannerWidgetState extends State<VideoBannerWidget>
           alignment: Alignment.center,
           children: [
             if (_initialized && _chewieController != null)
-              GestureDetector(
-                onTap: widget
-                    .onTap, // يفتح اللينك عند الضغط على أي مكان في الفيديو
-                child: SizedBox.expand(
-                  child: FittedBox(
-                    fit: BoxFit.cover,
-                    child: SizedBox(
-                      width: _videoPlayerController!.value.size.width,
-                      height: _videoPlayerController!.value.size.height,
-                      child: Chewie(controller: _chewieController!),
+              GetBuilder<HomeController>(builder: (homeController) {
+                if (homeController.isVideoPausedByForce) {
+                  _videoPlayerController?.pause();
+                }
+
+                return GestureDetector(
+                  onTap: widget
+                      .onTap, // يفتح اللينك عند الضغط على أي مكان في الفيديو
+                  child: SizedBox.expand(
+                    child: FittedBox(
+                      fit: BoxFit.cover,
+                      child: SizedBox(
+                        width: _videoPlayerController!.value.size.width,
+                        height: _videoPlayerController!.value.size.height,
+                        child: Chewie(controller: _chewieController!),
+                      ),
                     ),
                   ),
-                ),
-              )
+                );
+              })
             else if (_error)
               const Icon(Icons.error_outline, color: Colors.white54)
             else
-              const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+              const Center(
+                  child: CircularProgressIndicator(
+                color: Color(0xFF9ebc67),
+              )),
 
             // أيقونات التحكم المخصصة في الهوم سكرين (Play/Pause و Fullscreen)
             if (_initialized && _videoPlayerController != null)

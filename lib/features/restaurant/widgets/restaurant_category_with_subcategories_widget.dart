@@ -70,14 +70,16 @@ class _RestaurantCategoryWithSubcategoriesWidgetState
           });
         }
         // Show loading while we switch context
-        return const Center(child: CircularProgressIndicator());
+        return const Center(child: CircularProgressIndicator(
+          color: Color(0xFF9ebc67),
+        ));
       }
 
       if (categoryController.isLoading) {
         return const Center(
             child: Padding(
           padding: EdgeInsets.all(Dimensions.paddingSizeLarge),
-          child: CircularProgressIndicator(),
+          child: CircularProgressIndicator(color: Color(0xFF9ebc67)),
         ));
       }
 
@@ -262,7 +264,7 @@ class _RestaurantCategoryWithSubcategoriesWidgetState
                           height: 20,
                           width: 20,
                           child: CircularProgressIndicator(
-                            color: Color(0xFF55745a),
+                            color: Color(0xFF9ebc67),
                             strokeWidth: 2,
                           ),
                         ),

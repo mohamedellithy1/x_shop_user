@@ -323,7 +323,9 @@ class _PickMapDialogState extends State<PickMapDialog> {
                       child: !locationController.loading
                           ? Image.asset(XmarketImages.pickMarker,
                               height: 50, width: 50)
-                          : const CircularProgressIndicator()),
+                          : const CircularProgressIndicator(
+                              color: Color(0xFF9ebc67),
+                            )),
                   Positioned(
                     top: Dimensions.paddingSizeLarge,
                     left: Dimensions.paddingSizeSmall,

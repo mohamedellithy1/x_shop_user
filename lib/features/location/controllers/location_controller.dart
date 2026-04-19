@@ -243,12 +243,12 @@ class MarketLocationController extends GetxController implements GetxService {
   }
 
   void updatePosition(CameraPosition? position, bool fromAddress) async {
-    if (_updateAddressData) {
+    if (_updateAddressData && position != null) {
       _loading = true;
       update();
       if (fromAddress) {
         _position = Position(
-          latitude: position!.target.latitude,
+          latitude: position.target.latitude,
           longitude: position.target.longitude,
           timestamp: DateTime.now(),
           heading: 1,
@@ -261,7 +261,7 @@ class MarketLocationController extends GetxController implements GetxService {
         );
       } else {
         _pickPosition = Position(
-          latitude: position!.target.latitude,
+          latitude: position.target.latitude,
           longitude: position.target.longitude,
           timestamp: DateTime.now(),
           heading: 1,

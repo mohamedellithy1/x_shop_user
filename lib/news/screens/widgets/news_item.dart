@@ -67,7 +67,9 @@ class _NewsItemWidgetState extends State<NewsItemWidget> {
                     placeholder: (context, url) => Container(
                       color: Colors.grey[300],
                       child: const Center(
-                        child: CircularProgressIndicator(),
+                        child: CircularProgressIndicator(
+                          color: Color(0xFF9ebc67),
+                        ),
                       ),
                     ),
                     errorWidget: (context, url, error) => Container(

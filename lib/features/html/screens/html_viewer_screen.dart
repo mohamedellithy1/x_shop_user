@@ -134,7 +134,10 @@ class _HtmlViewerScreenState extends State<HtmlViewerScreen> {
                   ),
                 ),
               )
-            : Center(child: CircularProgressIndicator());
+            : Center(
+                child: CircularProgressIndicator(
+                color: Color(0xFF9ebc67),
+              ));
       }),
     );
   }

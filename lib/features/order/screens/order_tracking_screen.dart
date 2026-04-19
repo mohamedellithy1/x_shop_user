@@ -201,7 +201,10 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen>
                                   .lightMap,
                         ),
                         _isLoading
-                            ? const Center(child: CircularProgressIndicator())
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                color: Color(0xFF9ebc67),
+                              ))
                             : const SizedBox(),
                         Positioned(
                           right: 10,
@@ -302,7 +305,10 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen>
                                   }),
                             ),
                     )))
-            : const Center(child: CircularProgressIndicator());
+            : const Center(
+                child: CircularProgressIndicator(
+                color: Color(0xFF9ebc67),
+              ));
       }),
     );
   }

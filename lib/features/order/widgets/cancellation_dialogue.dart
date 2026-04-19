@@ -169,7 +169,8 @@ class _CancellationDialogueState extends State<CancellationDialogue> {
                                                                           'xmarket')
                                                                   .darkTheme
                                                               ? Colors.white
-                                                              : Color(0xFF55745a)),
+                                                              : Color(
+                                                                  0xFF55745a)),
                                                       maxLines: 3,
                                                       overflow: TextOverflow
                                                           .ellipsis)),
@@ -185,7 +186,9 @@ class _CancellationDialogueState extends State<CancellationDialogue> {
                               child: Padding(
                                   padding: EdgeInsets.symmetric(
                                       vertical: Dimensions.paddingSizeDefault),
-                                  child: CircularProgressIndicator())),
+                                  child: CircularProgressIndicator(
+                                    color: Color(0xFF9ebc67),
+                                  ))),
                       Text(
                         'comments'.tr,
                         style: robotoBold.copyWith(
@@ -265,7 +268,10 @@ class _CancellationDialogueState extends State<CancellationDialogue> {
                         },
                       )),
                     ])
-                  : const Center(child: CircularProgressIndicator()),
+                  : const Center(
+                      child: CircularProgressIndicator(
+                      color: Color(0xFF9ebc67),
+                    )),
             ),
           ]),
         );

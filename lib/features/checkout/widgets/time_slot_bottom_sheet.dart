@@ -349,7 +349,9 @@ class _TimeSlotBottomSheetState extends State<TimeSlotBottomSheet> {
                                                             : Color(
                                                                 0xFF55745a))))
                                         : const Center(
-                                            child: CircularProgressIndicator()),
+                                            child: CircularProgressIndicator(
+                                            color: Color(0xFF9ebc67),
+                                          )),
                           ]),
                     ),
                   ),

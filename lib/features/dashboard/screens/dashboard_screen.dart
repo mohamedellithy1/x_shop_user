@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:stackfood_multivendor/core/navigation/app_navigator_observer.dart';
 import 'package:stackfood_multivendor/features/home/controllers/home_controller.dart';
 import 'package:stackfood_multivendor/theme/dark_theme.dart';
 import 'package:stackfood_multivendor/theme/light_theme.dart';
@@ -47,7 +48,8 @@ class DashboardScreen extends StatefulWidget {
   DashboardScreenState createState() => DashboardScreenState();
 }
 
-class DashboardScreenState extends State<DashboardScreen> {
+class DashboardScreenState extends State<DashboardScreen>
+    with WidgetsBindingObserver, RouteAware {
   PageController? _pageController;
   int _pageIndex = 0;
   late List<Widget> _screens;
@@ -59,7 +61,7 @@ class DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     super.initState();
-
+    WidgetsBinding.instance.addObserver(this);
     _isLogin = Get.find<MarketAuthController>().isLoggedIn();
 
     _showRegistrationSuccessBottomSheet();
@@ -92,6 +94,54 @@ class DashboardScreenState extends State<DashboardScreen> {
     Future.delayed(const Duration(seconds: 1), () {
       setState(() {});
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // اشتراك في الـ RouteObserver عشان نراقب أي Navigation
+    final route = ModalRoute.of(context);
+    if (route != null) {
+      appRouteObserver.subscribe(this, route);
+    }
+  }
+
+  @override
+  void dispose() {
+    appRouteObserver.unsubscribe(this);
+    WidgetsBinding.instance.removeObserver(this);
+    _pageController?.dispose();
+    super.dispose();
+  }
+
+  /// لما يتم الانتقال لشاشة جديدة فوق الـ Dashboard - وقف الفيديو فوراً
+  @override
+  void didPushNext() {
+    if (_pageIndex == 0) {
+      Get.find<HomeController>().forcePauseVideo(true);
+    }
+  }
+
+  /// لما المستخدم يرجع للـ Dashboard - شغل الفيديو تاني
+  @override
+  void didPopNext() {
+    if (_pageIndex == 0) {
+      Get.find<HomeController>().forcePauseVideo(false);
+    }
+  }
+
+  /// لو التطبيق راح Background - وقف الفيديو
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    final homeController = Get.find<HomeController>();
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.detached) {
+      homeController.forcePauseVideo(true);
+      homeController.resetBanner();
+    } else if (state == AppLifecycleState.resumed && _pageIndex == 0) {
+      homeController.forcePauseVideo(false);
+    }
   }
 
   void _showRegistrationSuccessBottomSheet() {

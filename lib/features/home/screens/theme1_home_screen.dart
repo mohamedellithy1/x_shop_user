@@ -158,8 +158,8 @@ class Theme1HomeScreen extends StatelessWidget {
                               builder: (notificationController) {
                             return Stack(children: [
                               Container(
-                                width: 30,
-                                height: 30,
+                                width: 35,
+                                height: 35,
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(
@@ -168,7 +168,7 @@ class Theme1HomeScreen extends StatelessWidget {
                                       color: Colors.white, width: 1.2),
                                 ),
                                 child: Icon(Icons.notifications,
-                                    size: 25, color: Colors.green),
+                                    size: 30, color: Colors.green),
                               ),
                               if (notificationController.hasNotification)
                                 Positioned(
@@ -200,18 +200,18 @@ class Theme1HomeScreen extends StatelessWidget {
           ),
           actions: const [SizedBox()],
         ),
-        SliverToBoxAdapter(
-          child: SizedBox(height: 10),
-        ),
+        // SliverToBoxAdapter(
+        //   child: SizedBox(height: 1),
+        // ),
 
         // Banner فوق السيرش
         SliverToBoxAdapter(
           child: const BannerViewWidget1(),
         ),
         // Banner فوق السيرش
-        SliverToBoxAdapter(
-          child: SizedBox(height: 10),
-        ),
+        // SliverToBoxAdapter(
+        //   child: SizedBox(height: 10),
+        // ),
 
         // Search Button
         SliverPersistentHeader(

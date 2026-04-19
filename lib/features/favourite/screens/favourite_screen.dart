@@ -73,16 +73,20 @@ class FavouriteScreenState extends State<FavouriteScreen> {
                 return authController.isLoggedIn()
                     ? GetBuilder<FavouriteController>(
                         builder: (favouriteController) {
-                        bool hasData = (favouriteController.wishProductList !=
-                                    null &&
-                                favouriteController
-                                    .wishProductList!.isNotEmpty) ||
-                            (favouriteController.wishRestList != null &&
-                                favouriteController.wishRestList!.isNotEmpty);
+                        if (favouriteController.wishProductList == null ||
+                            favouriteController.wishRestList == null) {
+                          return const Center(
+                              child: CircularProgressIndicator(
+                                  color: Color(0xFF9ebc67)));
+                        }
+
+                        bool hasData =
+                            favouriteController.wishProductList!.isNotEmpty ||
+                                favouriteController.wishRestList!.isNotEmpty;
 
                         return SafeArea(
                             child: RefreshIndicator(
-                          color: Colors.orange,
+                          color: Colors.greenAccent,
                           onRefresh: () async {
                             await favouriteController.getFavouriteList();
                           },

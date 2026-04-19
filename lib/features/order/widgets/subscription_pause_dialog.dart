@@ -205,7 +205,9 @@ class _SubscriptionPauseDialogState extends State<SubscriptionPauseDialog> {
                                 height: 50,
                               )),
                             ])
-                          : const Center(child: CircularProgressIndicator());
+                          : const Center(child: CircularProgressIndicator(
+                            color: Color(0xFF9ebc67),
+                          ));
                     }),
                   ]);
                 }),

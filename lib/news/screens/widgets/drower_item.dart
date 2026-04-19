@@ -115,7 +115,9 @@ class _DrowerItemState extends State<DrowerItem> {
                     // Zones List
                     Expanded(
                       child: _zones == null
-                          ? const Center(child: CircularProgressIndicator())
+                          ? const Center(child: CircularProgressIndicator(
+                            color: Color(0xFF9ebc67),
+                          ))
                           : ListView.builder(
                               padding: const EdgeInsets.all(16),
                               itemCount: _zones!.length,

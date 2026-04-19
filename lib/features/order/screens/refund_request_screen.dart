@@ -278,7 +278,9 @@ class _RefundRequestScreenState extends State<RefundRequestScreen> {
                             : const Center(child: CircularProgressIndicator()),
                       ]),
                 )
-              : const CircularProgressIndicator(),
+              : const CircularProgressIndicator(
+                  color: Color(0xFF9ebc67),
+                ),
         );
       }),
     );

@@ -65,9 +65,7 @@ class _NewsScreenState extends State<NewsScreen> {
         builder: (controller) {
           if (controller.isLoading || controller.newsList == null) {
             return const Center(
-              child: CircularProgressIndicator(
-                color: Colors.black,
-              ),
+              child: CircularProgressIndicator(color: Color(0xFF9ebc67)),
             );
           }
 
