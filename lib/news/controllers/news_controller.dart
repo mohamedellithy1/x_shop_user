@@ -39,7 +39,9 @@ class NewsController extends GetxController {
       print("Response body: ${response?.body}");
 
       if (response != null && response.statusCode == 200) {
-        if (response.body != null && response.body is Map && response.body['data'] != null) {
+        if (response.body != null &&
+            response.body is Map &&
+            response.body['data'] != null) {
           final List<dynamic> data = response.body['data'];
           print("Data length: ${data.length}");
           newsList = NewsModel.fromJsonList(data);
@@ -159,7 +161,7 @@ class NewsController extends GetxController {
 
           // التحقق مما إذا كانت التعليقات متداخلة بالفعل من الـ API
           bool isAlreadyNested = allComments.any((c) => c.replies.isNotEmpty);
-          
+
           List<CommentEntity> organizedComments;
           if (isAlreadyNested) {
             organizedComments = allComments;

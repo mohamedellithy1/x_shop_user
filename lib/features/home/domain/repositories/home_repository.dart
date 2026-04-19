@@ -29,7 +29,7 @@ class HomeRepository implements HomeRepositoryInterface {
           print(response.body);
           print('-----------------------------------------');
           bannerModel = BannerModel.fromJson(response.body);
-          LocalClient.organize(DataSourceEnum.client, cacheId, jsonEncode(response.body), apiClient.getHeader());
+          // LocalClient.organize(DataSourceEnum.client, cacheId, jsonEncode(response.body), apiClient.getHeader());
         }
 
       case DataSourceEnum.local:

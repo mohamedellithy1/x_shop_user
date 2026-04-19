@@ -366,7 +366,7 @@ class ProductWidget extends StatelessWidget {
           textDirection: TextDirection.ltr,
           style: robotoMedium.copyWith(
             fontSize: Dimensions.fontSizeSmall,
-            color: Colors.orange,
+            color: Color(0xFF55745a),
           ),
         ),
         const SizedBox(width: Dimensions.paddingSizeExtraSmall),
@@ -425,7 +425,7 @@ class ProductWidget extends StatelessWidget {
                 height: 30,
                 width: 80,
                 decoration: BoxDecoration(
-                  color: Colors.orange,
+                  color: Color(0xFF55745a),
                   borderRadius: BorderRadius.circular(50),
                 ),
                 child: Row(
@@ -435,14 +435,14 @@ class ProductWidget extends StatelessWidget {
                       '${cardData.foodsCount! > 11 ? '12 +' : '${cardData.foodsCount! - 4} +'} ',
                       style: robotoBold.copyWith(
                         fontSize: Dimensions.fontSizeSmall,
-                        color: Colors.orange,
+                        color: Color(0xFF55745a),
                       ),
                     ),
                     Text(
                       'items'.tr,
                       style: robotoRegular.copyWith(
                         fontSize: 10,
-                        color: Colors.orange,
+                        color: Color(0xFF55745a),
                       ),
                     ),
                   ],
@@ -526,7 +526,7 @@ class ProductWidget extends StatelessWidget {
         child: Icon(
           Icons.add,
           size: 25,
-          color: Colors.orange,
+          color: Color(0xFF55745a),
         ),
       ),
     );
@@ -555,7 +555,7 @@ class ProductWidget extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.orange,
+        color: Color(0xFF55745a),
         borderRadius: BorderRadius.circular(Dimensions.radiusExtraLarge),
       ),
       child: Row(
@@ -579,14 +579,14 @@ class ProductWidget extends StatelessWidget {
                 color: Colors.white,
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: Colors.orange,
+                  color: Color(0xFF55745a),
                 ),
               ),
               padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
               child: Icon(
                 Icons.remove,
                 size: 16,
-                color: Colors.orange,
+                color: Color(0xFF55745a),
               ),
             ),
           ),
@@ -624,7 +624,7 @@ class ProductWidget extends StatelessWidget {
               child: Icon(
                 Icons.add,
                 size: 16,
-                color: Colors.orange,
+                color: Color(0xFF55745a),
               ),
             ),
           ),

@@ -46,7 +46,7 @@ class HomeController extends GetxController implements GetxService {
   bool get showFavButton => _showFavButton;
 
   Future<void> getBannerList(bool reload,
-      {DataSourceEnum dataSource = DataSourceEnum.local,
+      {DataSourceEnum dataSource = DataSourceEnum.client,
       bool fromRecall = false}) async {
     print(
         '🚀 [HomeController] getBannerList called (dataSource: $dataSource, reload: $reload)');
@@ -55,28 +55,18 @@ class HomeController extends GetxController implements GetxService {
         _bannerImageList = null;
       }
       BannerModel? bannerModel;
-      if (dataSource == DataSourceEnum.local) {
-        bannerModel = await homeServiceInterface.getBannerList(
-            source: DataSourceEnum.local);
-        if (bannerModel != null) {
-          print('📦 [HomeController] Local Banner Data Found');
-        }
-        _prepareBannerList(bannerModel);
-        getBannerList(false,
-            dataSource: DataSourceEnum.client, fromRecall: true);
+      
+      print('🌐 [HomeController] Fetching Banners from Client (API)...');
+      bannerModel = await homeServiceInterface.getBannerList(
+          source: DataSourceEnum.client);
+      if (bannerModel != null) {
+        print('---👇---Banner API Response Content---👇---');
+        print(bannerModel.toJson());
+        print('-----------------------------------------');
       } else {
-        print('🌐 [HomeController] Fetching Banners from Client (API)...');
-        bannerModel = await homeServiceInterface.getBannerList(
-            source: DataSourceEnum.client);
-        if (bannerModel != null) {
-          print('---👇---Banner API Response Content---👇---');
-          print(bannerModel.toJson());
-          print('-----------------------------------------');
-        } else {
-          print('❌ [HomeController] Banner API returned NULL');
-        }
-        _prepareBannerList(bannerModel);
+        print('❌ [HomeController] Banner API returned NULL');
       }
+      _prepareBannerList(bannerModel);
     }
   }
 

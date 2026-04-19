@@ -33,11 +33,14 @@ class NewsRepository {
     required String body,
     int? parentId,
   }) async {
-    return await apiClient
-        .postData('${AppConstants.newsBaseUrl}${AppConstants.addCommentUei}', {
-      'post_id': postId,
-      'body': body,
-      'parent_id': parentId,
-    });
+    return await apiClient.postData(
+      '${AppConstants.newsBaseUrl}${AppConstants.addCommentUei}',
+      {
+        'post_id': postId,
+        'body': body,
+        'parent_id': parentId,
+      },
+      handleError: false,
+    );
   }
 }

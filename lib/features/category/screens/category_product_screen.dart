@@ -167,12 +167,12 @@ class CategoryProductScreenState extends State<CategoryProductScreen> {
                     title: Text(widget.categoryName,
                         style: robotoMedium.copyWith(
                           fontSize: Dimensions.fontSizeLarge,
-                          color: Colors.white,
+                          color: Colors.black,
                         )),
                     centerTitle: true,
                     leading: IconButton(
                       icon: const Icon(Icons.arrow_back_ios),
-                      color: Colors.white,
+                      color: Colors.black,
                       onPressed: () => Get.back(),
                     ),
                     backgroundColor: Colors.transparent,

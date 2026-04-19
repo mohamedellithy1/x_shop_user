@@ -32,6 +32,7 @@ import 'package:get/get.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
 import 'package:stackfood_multivendor/features/home/controllers/banner_controller.dart';
 import 'package:stackfood_multivendor/news/screens/news.screens.dart';
+import 'package:stackfood_multivendor/news/controllers/news_controller.dart';
 
 final ThemeData darkTheme = dark;
 final ThemeData lightTheme = light;
@@ -323,6 +324,10 @@ class DashboardScreenState extends State<DashboardScreen> {
     } else if (pageIndex == 0 && _pageIndex != 0) {
       // راجع لـ Home - فك الإيقاف
       homeController.forcePauseVideo(false);
+    }
+
+    if (pageIndex == 1 && _pageIndex != 1) {
+      Get.find<NewsController>().refreshNews();
     }
 
     setState(() {
