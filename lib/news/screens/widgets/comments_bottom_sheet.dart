@@ -276,7 +276,7 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                                     Icons.send,
                                     color: Color(
                                         0xFF9ebc67), // Facebook messenger blue color
-                                    size: 28,
+                                    size: 43,
                                   ),
                                 ),
                               ),

@@ -152,7 +152,8 @@ class Theme1HomeScreen extends StatelessWidget {
                             }),
                           ),
                         )),
-                        const SizedBox(width: 20), // مسافة بين العنوان والإشعارات
+                        const SizedBox(
+                            width: 20), // مسافة بين العنوان والإشعارات
                         InkWell(
                           child: GetBuilder<MarketNotificationController>(
                               builder: (notificationController) {
@@ -178,7 +179,7 @@ class Theme1HomeScreen extends StatelessWidget {
                                     height: 10,
                                     width: 10,
                                     decoration: BoxDecoration(
-                                      color: Colors.white,
+                                      color: Color(0xFF9ebc67),
                                       shape: BoxShape.circle,
                                       border: Border.all(
                                           width: 1, color: Colors.white),
@@ -190,7 +191,9 @@ class Theme1HomeScreen extends StatelessWidget {
                           onTap: () =>
                               Get.toNamed(RouteHelper.getNotificationRoute()),
                         ),
-                        const SizedBox(width: Dimensions.paddingSizeDefault), // مسافة من حافة الشاشة للايقونة
+                        const SizedBox(
+                            width: Dimensions
+                                .paddingSizeDefault), // مسافة من حافة الشاشة للايقونة
                       ]),
                     ),
                   ),

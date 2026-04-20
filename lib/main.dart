@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
 import 'package:stackfood_multivendor/features/cart/controllers/cart_controller.dart';
 // import 'package:stackfood_multivendor/features/theme/controllers/theme_controller.dart';
@@ -87,6 +88,15 @@ Future<void> main() async {
           await FirebaseMessaging.instance.getInitialMessage();
       if (remoteMessage != null) {
         body = NotificationHelper.convertNotification(remoteMessage.data);
+      } else {
+        final NotificationAppLaunchDetails? notificationAppLaunchDetails =
+            await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+        if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
+          if (notificationAppLaunchDetails!.notificationResponse?.payload != null) {
+            body = NotificationBodyModel.fromJson(
+                jsonDecode(notificationAppLaunchDetails.notificationResponse!.payload!));
+          }
+        }
       }
       await NotificationHelper.initialize(flutterLocalNotificationsPlugin);
       FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);

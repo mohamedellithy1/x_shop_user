@@ -592,7 +592,15 @@ class _XMarketHomeScreenState extends State<XMarketHomeScreen> {
                                                                                                   height: 10,
                                                                                                   width: 10,
                                                                                                   decoration: BoxDecoration(
-                                                                                                    color: Theme.of(context).brightness == Brightness.dark ? Colors.black : Colors.white,
+                                                                                                    gradient: LinearGradient(
+                                                                                                      colors: [
+                                                                                                        Color(0xFFe3ebd5),
+                                                                                                        Color(0xFFfafff4),
+                                                                                                        Color(0xFFe3ebd5),
+                                                                                                      ],
+                                                                                                      begin: Alignment.centerLeft,
+                                                                                                      end: Alignment.centerRight,
+                                                                                                    ),
                                                                                                     shape: BoxShape.circle,
                                                                                                     border: Border.all(width: 1, color: Theme.of(context).primaryColor),
                                                                                                   ),
