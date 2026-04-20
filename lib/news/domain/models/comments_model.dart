@@ -4,8 +4,11 @@ class CommentModel extends CommentEntity {
   CommentModel({
     required int id,
     required String userId,
+    int? admin_id,
+    String? comment_by,
     String? userEmail,
     String? user_name,
+    String? user_image,
     required String body,
     int? parentId,
     required String createdAt,
@@ -13,8 +16,11 @@ class CommentModel extends CommentEntity {
   }) : super(
           id: id,
           userId: userId,
+          admin_id: admin_id,
+          comment_by: comment_by,
           userEmail: userEmail,
           user_name: user_name,
+          user_image: user_image,
           body: body,
           parentId: parentId,
           createdAt: createdAt,
@@ -25,10 +31,13 @@ class CommentModel extends CommentEntity {
     return CommentModel(
       id: map['id'] != null ? int.parse(map['id'].toString()) : 0,
       userId: map['user_id']?.toString() ?? '',
+      admin_id: map['admin_id'] != null ? int.tryParse(map['admin_id'].toString()) : null,
+      comment_by: map['comment_by']?.toString(),
       userEmail: map['user_email']?.toString(),
       user_name: map['user_name']?.toString(),
+      user_image: map['user_image']?.toString(),
       body: map['body']?.toString() ?? '',
-      parentId: map['parent_id'] != null ? int.parse(map['parent_id'].toString()) : null,
+      parentId: map['parent_id'] != null ? int.tryParse(map['parent_id'].toString()) : null,
       createdAt: map['created_at']?.toString() ?? '',
       replies: map['replies'] != null
           ? (map['replies'] as List<dynamic>)
@@ -42,8 +51,11 @@ class CommentModel extends CommentEntity {
     return {
       'id': id,
       'user_id': userId,
+      'admin_id': admin_id,
+      'comment_by': comment_by,
       'user_email': userEmail,
       'user_name': user_name,
+      'user_image': user_image,
       'body': body,
       'parent_id': parentId,
       'created_at': createdAt,

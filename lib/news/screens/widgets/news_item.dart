@@ -25,13 +25,12 @@ class NewsItemWidget extends StatefulWidget {
 }
 
 class _NewsItemWidgetState extends State<NewsItemWidget> {
-  bool isliked = false;
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(
         horizontal: Dimensions.paddingSizeDefault,
-        vertical: Dimensions.paddingSizeSmall,
+        // vertical: Dimensions.paddingSizeSmall,
       ),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
@@ -47,11 +46,41 @@ class _NewsItemWidgetState extends State<NewsItemWidget> {
       ),
       child: Material(
         color: Colors.transparent,
-        child: Padding(
-          padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(
+                top: Dimensions.paddingSizeDefault,
+                left: Dimensions.paddingSizeDefault,
+                right: Dimensions.paddingSizeDefault,
+                bottom: Dimensions.paddingSizeSmall,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+              // Time Badge at the top right of the card itself
+              Padding(
+                padding:
+                    const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.access_time,
+                      size: 16,
+                      color: Colors.grey[600],
+                    ),
+                    const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                    Text(
+                      DateConverter.getRelativeTime(widget.news.createdAt),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Colors.grey[600],
+                            fontWeight: FontWeight.w600,
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+
               // News Image
               Container(
                 width: double.infinity,
@@ -126,97 +155,132 @@ class _NewsItemWidgetState extends State<NewsItemWidget> {
               //   ),
 
               // const SizedBox(height: Dimensions.paddingSizeSmall),
+                ],
+              ),
+            ),
 
               // Bottom Row - Date, Likes, Comments
-              Row(
-                children: [
-                  // Date
-                  Expanded(
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.access_time,
-                          size: 16,
-                          color: Colors.grey[600],
-                        ),
-                        const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                        Text(
-                          DateConverter.dateTimeStringToDateTime(widget.news.createdAt),
-                          style:
-                              Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: Colors.grey[600],
-                                  ),
-                        ),
-                      ],
-                    ),
+              Container(
+                height: 40,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(Dimensions.radiusDefault),
+                    bottomRight: Radius.circular(Dimensions.radiusDefault),
                   ),
-
-                  // Likes
-                  InkWell(
-                    onTap: () async {
-                      bool? isLikedResponse = await Get.find<NewsController>().likeNews(widget.news.id);
-                      
-                      if (isLikedResponse != null && mounted) {
-                        setState(() {
-                          if (isLikedResponse && !isliked) {
-                            widget.news.likesCount = widget.news.likesCount + 1;
-                            isliked = true;
-                          } else if (!isLikedResponse && isliked) {
-                            widget.news.likesCount = widget.news.likesCount - 1;
-                            isliked = false;
-                          }
-                        });
-                      }
-                    },
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.thumb_up_outlined,
-                          size: 25,
-                          color: Colors.grey[600],
-                        ),
-                        const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                        Text(
-                          '${widget.news.likesCount}',
-                          style:
-                              Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: Colors.grey[600],
-                                  ),
-                        ),
-                      ],
-                    ),
+                  border: Border.all(
+                    color: Color(0xFF9ebc67),
                   ),
+                  // gradient: const LinearGradient(
+                  //   colors: [
+                  //     Color(0xFFe3ebd5),
+                  //     Color(0xFFfafff4),
+                  //     Color(0xFFe3ebd5),
+                  //   ],
+                  //   begin: Alignment.centerLeft,
+                  //   end: Alignment.centerRight,
+                  // ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Date
+                    // Expanded(
+                    //   child: Row(
+                    //     children: [
+                    //       Icon(
+                    //         Icons.access_time,
+                    //         size: 16,
+                    //         color: Colors.grey[600],
+                    //       ),
+                    //       const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                    //       Text(
+                    //         DateConverter.dateTimeStringToDateTime(
+                    //             widget.news.createdAt),
+                    //         style:
+                    //             Theme.of(context).textTheme.bodySmall?.copyWith(
+                    //                   color: Colors.grey[600],
+                    //                 ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
 
-                  const SizedBox(width: Dimensions.paddingSizeDefault),
+                    // Likes
+                    InkWell(
+                      onTap: () async {
+                        bool? isLikedResponse = await Get.find<NewsController>()
+                            .likeNews(widget.news.id);
 
-                  // Comments
-                  InkWell(
-                    onTap: () {
-                      _showCommentsBottomSheet(context, widget.news);
-                    },
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.comment_outlined,
-                          size: 25,
-                          color: Colors.grey[600],
-                        ),
-                        const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                        Text(
-                          '${widget.news.commentsCount}',
-                          style:
-                              Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: Colors.grey[600],
-                                  ),
-                        ),
-                      ],
+                        if (isLikedResponse != null && mounted) {
+                          setState(() {
+                            widget.news.isLiked = isLikedResponse;
+                            if (isLikedResponse) {
+                              widget.news.likesCount =
+                                  widget.news.likesCount + 1;
+                            } else {
+                              widget.news.likesCount =
+                                  widget.news.likesCount - 1;
+                            }
+                          });
+                        }
+                      },
+                      child: Row(
+                        children: [
+                          Icon(
+                            widget.news.isLiked
+                                ? Icons.thumb_up
+                                : Icons.thumb_up_outlined,
+                            size: 25,
+                            color: widget.news.isLiked
+                                ? Color(0xFF9ebc67)
+                                : Colors.grey[600],
+                          ),
+                          const SizedBox(
+                              width: Dimensions.paddingSizeExtraSmall),
+                          Text(
+                            '${widget.news.likesCount}',
+                            style:
+                                Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: widget.news.isLiked
+                                          ? Theme.of(context).primaryColor
+                                          : Colors.grey[600],
+                                    ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+
+                    const SizedBox(width: Dimensions.paddingSizeExtraOverLarge),
+
+                    // Comments
+                    InkWell(
+                      onTap: () {
+                        _showCommentsBottomSheet(context, widget.news);
+                      },
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.comment_outlined,
+                            size: 25,
+                            color: Colors.grey[600],
+                          ),
+                          const SizedBox(
+                              width: Dimensions.paddingSizeExtraSmall),
+                          Text(
+                            '${widget.news.commentsCount}',
+                            style:
+                                Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: Colors.grey[600],
+                                    ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
-        ),
       ),
     );
   }

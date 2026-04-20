@@ -477,21 +477,14 @@ class RouteHelper {
         middlewares: [MarketMiddleware()]),
     GetPage(
         name: splash,
-        page: () => const XMarkSplashScreen()),
-//                 : '');
-//             data =
-//                 NotificationBodyModel.fromJson(jsonDecode(utf8.decode(decode)));
-//           }
-//           if (Get.parameters['link'] != 'null') {
-//             List<int> decode =
-//                 base64Decode(Get.parameters['link']!.replaceAll(' ', '+'));
-//             linkData = DeepLinkBody.fromJson(jsonDecode(utf8.decode(decode)));
-//           }
-//           return XMarkSplashScreen(notificationBody: data, linkBody: linkData);
-//         }),
-    // GetPage(
-    //     name: language,
-    //     page: () => LanguageScreen(fromMenu: Get.parameters['page'] == 'menu')),
+        page: () {
+          NotificationBodyModel? body;
+          if (Get.parameters['data'] != 'null') {
+            List<int> decode = base64Decode(Get.parameters['data']!.replaceAll(' ', '+'));
+            body = NotificationBodyModel.fromJson(jsonDecode(utf8.decode(decode)));
+          }
+          return XMarkSplashScreen(body: body);
+        }),
     GetPage(name: onBoarding, page: () => OnBoardingScreen()),
     GetPage(
         name: signIn,
@@ -577,8 +570,10 @@ class RouteHelper {
         page: () => getRoute(DashboardScreen(
               pageIndex: Get.parameters['page'] == 'home'
                   ? 0
-                  : Get.parameters['page'] == 'favourite'
+                  : Get.parameters['page'] == 'news'
                       ? 1
+                      : Get.parameters['page'] == 'favourite'
+                          ? 1
                       : Get.parameters['page'] == 'cart'
                           ? 2
                           : Get.parameters['page'] == 'order'
@@ -797,12 +792,6 @@ class RouteHelper {
             forceProductView: Get.parameters['force_product_view'] == 'true',
           ));
         }),
-
-    /*GetPage(name: categoryProduct, page: () {
-      List<int> decode = base64Decode(Get.parameters['name']!.replaceAll(' ', '+'));
-      String data = utf8.decode(decode);
-      return getRoute(CategoryProductScreen(categoryID: Get.parameters['id'], categoryName: data));
-    }),*/
 
     // Popular Foods Route
     GetPage(

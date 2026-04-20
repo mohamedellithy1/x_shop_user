@@ -321,4 +321,70 @@ class DateConverter {
 
     return formatter.format(createdDate);
   }
+
+  static String getRelativeTime(String dateTime) {
+    if (dateTime == null || dateTime.isEmpty) return '';
+    // ignore: avoid_print
+    print("Raw Server DateTime: $dateTime");
+    DateTime date;
+    try {
+      String cleanDateTime = dateTime.trim();
+      if (cleanDateTime.contains('Z') || cleanDateTime.contains('+')) {
+        date = DateTime.parse(cleanDateTime).toLocal();
+      } else {
+        // Assume UTC if no timezone is specified (common in Laravel/MySQL)
+        // Convert "2023-10-27 10:00:00" to "2023-10-27T10:00:00Z"
+        String formatted = cleanDateTime.replaceAll(' ', 'T');
+        if (!formatted.contains('T')) {
+           // Fallback for date-only or weird formats
+           date = DateTime.parse(cleanDateTime).toLocal();
+        } else {
+           date = DateTime.parse('${formatted}Z').toLocal();
+        }
+      }
+    } catch (e) {
+      try {
+        date = DateTime.parse(dateTime).toLocal();
+      } catch (e) {
+        return '';
+      }
+    }
+
+    // ignore: avoid_print
+    print("Parsed Local DateTime: $date");
+    Duration diff = DateTime.now().difference(date);
+    // ignore: avoid_print
+    print("Current DateTime: ${DateTime.now()}");
+    // ignore: avoid_print
+    print("Time Difference: ${diff.inHours} hours, ${diff.inMinutes} minutes");
+    
+    // If the time is in the future (due to clock mismatch), show "الآن"
+    if (diff.isNegative) {
+      return 'الآن';
+    }
+
+    if (diff.inDays > 365) {
+      int years = (diff.inDays / 365).floor();
+      return 'منذ $years سنة';
+    } else if (diff.inDays > 30) {
+      int months = (diff.inDays / 30).floor();
+      return 'منذ $months شهر';
+    } else if (diff.inDays > 0) {
+      return 'منذ ${diff.inDays} يوم';
+    } else if (diff.inHours > 0) {
+      int hours = diff.inHours;
+      if (hours >= 3 && hours <= 10) {
+        return 'منذ $hours ساعات';
+      }
+      return 'منذ $hours ساعة';
+    } else if (diff.inMinutes > 0) {
+      int minutes = diff.inMinutes;
+      if (minutes >= 3 && minutes <= 10) {
+        return 'منذ $minutes دقائق';
+      }
+      return 'منذ $minutes دقيقة';
+    } else {
+      return 'الآن';
+    }
+  }
 }

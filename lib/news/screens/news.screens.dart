@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:stackfood_multivendor/news/controllers/news_controller.dart';
 import 'package:stackfood_multivendor/news/domain/repositories/news_repository.dart';
 import 'package:stackfood_multivendor/news/screens/widgets/news_item.dart';
+import 'package:stackfood_multivendor/news/screens/widgets/comments_bottom_sheet.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/xmarket_images.dart';
 
@@ -63,6 +64,31 @@ class _NewsScreenState extends State<NewsScreen> {
       body: GetBuilder<NewsController>(
         init: Get.find<NewsController>(),
         builder: (controller) {
+          if (controller.newsList != null && controller.pendingNotification != null) {
+            final notification = controller.pendingNotification!;
+            // ignore: avoid_print
+            print("Notification Post ID: ${notification.postId}");
+            final newsIndex = controller.newsList!.indexWhere((n) => n.id == notification.postId);
+            // ignore: avoid_print
+            print("News Index Found: $newsIndex");
+            if (newsIndex != -1) {
+              final news = controller.newsList![newsIndex];
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (Get.isBottomSheetOpen == false) {
+                  Get.bottomSheet(
+                    CommentsBottomSheet(
+                      news: news,
+                      highlightedCommentId: notification.commentId,
+                      highlightedParentId: notification.parentId,
+                    ),
+                    isScrollControlled: true,
+                  );
+                  controller.setPendingNotification(null);
+                }
+              });
+            }
+          }
+
           if (controller.isLoading || controller.newsList == null) {
             return const Center(
               child: CircularProgressIndicator(color: Color(0xFF9ebc67)),
@@ -111,7 +137,7 @@ class _NewsScreenState extends State<NewsScreen> {
                       news: news,
                       comments: news.comments,
                     ),
-                    const SizedBox(height: 50),
+                    const SizedBox(height: 10),
                   ],
                 );
               },

@@ -179,7 +179,7 @@ class _MyAppState extends State<MyApp> {
                                   AppConstants.languages[0].countryCode),
                               initialRoute: GetPlatform.isWeb
                                   ? RouteHelper.getInitialRoute()
-                                  : RouteHelper.splash,
+                                  : RouteHelper.getSplashRoute(widget.body, widget.linkBody),
                               getPages: RouteHelper.routes,
                               navigatorObservers: [appRouteObserver],
                               defaultTransition: Transition.topLevel,

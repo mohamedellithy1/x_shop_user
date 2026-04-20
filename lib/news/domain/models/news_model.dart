@@ -10,6 +10,7 @@ class NewsModel extends News {
     required super.body,
     required super.commentsCount,
     required super.likesCount,
+    required super.isLiked,
     required super.createdAt,
     required super.zone,
     required super.comments,
@@ -23,6 +24,7 @@ class NewsModel extends News {
       body: json['body']?.toString() ?? '',
       commentsCount: json['comments_count'] ?? 0,
       likesCount: json['likes_count'] ?? 0,
+      isLiked: (json['is_liked'] == 1 || json['is_liked'] == true),
       createdAt: json['created_at']?.toString() ?? '',
       comments: json['comments'] != null
           ? (json['comments'] as List<dynamic>)

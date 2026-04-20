@@ -8,6 +8,7 @@ class News {
   final String body;
   final int commentsCount;
   int likesCount;
+  bool isLiked;
   final String createdAt;
   final List<CommentEntity> comments;
   final ZoneNews? zone;
@@ -20,6 +21,7 @@ class News {
     required this.body,
     required this.commentsCount,
     required this.likesCount,
+    required this.isLiked,
     required this.createdAt,
     required this.zone,
   });

@@ -15,6 +15,7 @@ import 'package:stackfood_multivendor/common/enums/user_type.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:stackfood_multivendor/news/controllers/news_controller.dart';
 import 'package:stackfood_multivendor/util/app_constants.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
@@ -72,6 +73,10 @@ class NotificationHelper {
               payload.notificationType == NotificationType.referral_earn ||
               payload.notificationType == NotificationType.CashBack) {
             Get.toNamed(RouteHelper.getWalletRoute(fromNotification: true));
+          } else if (payload.notificationType ==
+              NotificationType.news_comment_reply) {
+            Get.find<NewsController>().setPendingNotification(payload);
+            Get.toNamed(RouteHelper.getMainRoute('news'));
           } else {
             Get.toNamed(
                 RouteHelper.getNotificationRoute(fromNotification: true));
@@ -176,6 +181,10 @@ class NotificationHelper {
                   NotificationType.referral_earn ||
               notificationBody.notificationType == NotificationType.CashBack) {
             Get.toNamed(RouteHelper.getWalletRoute(fromNotification: true));
+          } else if (notificationBody.notificationType ==
+              NotificationType.news_comment_reply) {
+            Get.find<NewsController>().setPendingNotification(notificationBody);
+            Get.toNamed(RouteHelper.getMainRoute('news'));
           } else {
             Get.toNamed(
                 RouteHelper.getNotificationRoute(fromNotification: true));
@@ -323,12 +332,14 @@ class NotificationHelper {
   }
 
   static NotificationBodyModel convertNotification(Map<String, dynamic> data) {
-    if (data['type'] == 'referral_code') {
-      return NotificationBodyModel(notificationType: NotificationType.general);
-    } else if (data['type'] == 'order_status') {
+    // ignore: avoid_print
+    print("Converting notification data: $data");
+    // ignore: avoid_print
+    print("Check Keys: post_id=${data['post_id']}, comment_id=${data['comment_id']}, parent_id=${data['parent_id']}");
+    if (data['type'] == 'order_status') {
       return NotificationBodyModel(
           notificationType: NotificationType.order,
-          orderId: int.parse(data['order_id']));
+          orderId: int.parse(data['order_id'].toString()));
     } else if (data['type'] == 'message') {
       return NotificationBodyModel(
         notificationType: NotificationType.message,
@@ -350,6 +361,23 @@ class NotificationHelper {
       return NotificationBodyModel(notificationType: NotificationType.unblock);
     } else if (data['type'] == 'add_fund') {
       return NotificationBodyModel(notificationType: NotificationType.add_fund);
+    } else if (data['type'] == 'news_comment_reply') {
+      return NotificationBodyModel(
+        notificationType: NotificationType.news_comment_reply,
+        postId: (data['post_id'] ?? data['postId'] ?? data['data_id']) != null
+            ? int.tryParse((data['post_id'] ?? data['postId'] ?? data['data_id']).toString())
+            : null,
+        commentId: data['comment_id'] != null
+            ? int.tryParse(data['comment_id'].toString())
+            : (data['commentId'] != null
+                ? int.tryParse(data['commentId'].toString())
+                : null),
+        parentId: data['parent_id'] != null
+            ? int.tryParse(data['parent_id'].toString())
+            : (data['parentId'] != null
+                ? int.tryParse(data['parentId'].toString())
+                : null),
+      );
     } else {
       return NotificationBodyModel(notificationType: NotificationType.general);
     }

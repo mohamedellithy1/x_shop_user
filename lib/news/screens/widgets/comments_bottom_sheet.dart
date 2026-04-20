@@ -9,9 +9,14 @@ import 'package:stackfood_multivendor/helper/date_converter.dart';
 class CommentsBottomSheet extends StatefulWidget {
   final News news;
 
+  final int? highlightedCommentId;
+  final int? highlightedParentId;
+
   const CommentsBottomSheet({
     super.key,
     required this.news,
+    this.highlightedCommentId,
+    this.highlightedParentId,
   });
 
   @override
@@ -21,19 +26,35 @@ class CommentsBottomSheet extends StatefulWidget {
 class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
   final TextEditingController _commentController = TextEditingController();
   final FocusNode _commentFocusNode = FocusNode();
+  final ScrollController _scrollController = ScrollController();
   String? _replyingTo;
   int? _replyingToCommentId;
+  final Set<int> _expandedComments = {};
+  final GlobalKey _highlightKey = GlobalKey();
+  bool _hasScrolled = false;
+  int _maxCommentsToShow = 10;
 
   @override
   void initState() {
     super.initState();
     Get.find<NewsController>().getComments(widget.news.id);
+
+    // تلقائياً افتح التعليق الأب إذا كان هناك ريبلاي محدد
+    if (widget.highlightedParentId != null) {
+      _expandedComments.add(widget.highlightedParentId!);
+    }
+    
+    // إذا كان هناك إشعار يحولني لتعليق معين، نعرض كل التعليقات للبحث عنه
+    if (widget.highlightedCommentId != null) {
+      _maxCommentsToShow = 10000;
+    }
   }
 
   @override
   void dispose() {
     _commentController.dispose();
     _commentFocusNode.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -41,9 +62,21 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
     setState(() {
       _replyingTo = userName;
       _replyingToCommentId = commentId;
-      _commentController.text = '@$userName ';
+      _commentController.clear();
       _commentFocusNode.requestFocus();
     });
+  }
+
+  bool _findAndExpand(CommentEntity parent, int targetId, int rootId) {
+    if (parent.id == targetId) return true;
+    for (var reply in parent.replies) {
+      if (_findAndExpand(reply, targetId, rootId)) {
+        _expandedComments.add(rootId);
+        _expandedComments.add(parent.id);
+        return true;
+      }
+    }
+    return false;
   }
 
   void _cancelReply() {
@@ -58,209 +91,237 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
   Widget build(BuildContext context) {
     return GetBuilder<NewsController>(
       builder: (newsController) {
-        final comments = newsController.getCommentsForPost(widget.news.id);
+        final comments =
+            newsController.getCommentsForPost(widget.news.id).reversed.toList();
 
-        // إضافة debug prints
-        print("Building CommentsBottomSheet for news ID: ${widget.news.id}");
-        print("Comments count: ${comments.length}");
-        print("Comments: $comments");
-
-        return Container(
-          height: MediaQuery.of(context).size.height * 0.8,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
+        if (widget.highlightedCommentId != null &&
+            comments.isNotEmpty &&
+            !_hasScrolled) {
+          for (var comment in comments) {
+            if (_findAndExpand(
+                comment, widget.highlightedCommentId!, comment.id)) {
+              // ignore: avoid_print
+              print(
+                  "Deep found target comment ${widget.highlightedCommentId}. Expanded necessary parents.");
+            }
+          }
+        }
+        return Directionality(
+          textDirection: TextDirection.rtl,
+          child: Container(
+            height: MediaQuery.of(context).size.height * 0.8,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
             ),
-          ),
-          child: Column(
-            children: [
-              // Header
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Color(0xFF9ebc67),
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
+            child: Column(
+              children: [
+                // Header
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: const Icon(Icons.close, color: Color(0xFF9ebc67)),
+                      ),
+                      Expanded(
+                        child: Text(
+                          'التعليقات (${comments.length})',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF9ebc67),
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      const SizedBox(width: 48),
+                    ],
                   ),
                 ),
-                child: Row(
-                  children: [
-                    IconButton(
-                      onPressed: () => Navigator.pop(context),
-                      icon: const Icon(Icons.close, color: Colors.black),
-                    ),
-                    Expanded(
-                      child: Text(
-                        'التعليقات (${comments.length})',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                        textAlign: TextAlign.center,
+
+                Expanded(
+                  child: _buildCommentsList(comments),
+                ),
+                const SizedBox(height: 16),
+
+                // Add Comment Section
+                Container(
+                  padding: const EdgeInsets.only(
+                    left: 16,
+                    right: 16,
+                    top: 12,
+                    bottom: 16,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.1),
+                        blurRadius: 4,
+                        offset: const Offset(0, -2),
                       ),
-                    ),
-                    const SizedBox(width: 48),
-                  ],
-                ),
-              ),
-
-              Expanded(
-                child: _buildCommentsList(comments),
-              ),
-              const SizedBox(height: 16),
-
-              // Add Comment Section
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.grey[50],
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.black),
-                ),
-                child: Column(
-                  children: [
-                    // Reply Indicator
-                    if (_replyingTo != null)
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 12),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 8),
-                        decoration: BoxDecoration(
-                          color:
-                              Theme.of(context).primaryColor.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.black),
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Reply Indicator
+                      if (_replyingTo != null)
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 8),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[100],
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.reply,
+                                size: 16,
+                                color: Colors.grey[700],
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  'الرد على @$_replyingTo',
+                                  style: TextStyle(
+                                    color: Colors.grey[800],
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ),
+                              InkWell(
+                                onTap: _cancelReply,
+                                child: Icon(
+                                  Icons.close,
+                                  size: 18,
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.reply,
-                              size: 16,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                'الرد على @$_replyingTo',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 12,
+
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          ValueListenableBuilder<TextEditingValue>(
+                            valueListenable: _commentController,
+                            builder: (context, value, child) {
+                              if (value.text.trim().isEmpty) {
+                                return const SizedBox.shrink();
+                              }
+                              return Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  child!,
+                                  const SizedBox(width: 8),
+                                ],
+                              );
+                            },
+                            child: InkWell(
+                              onTap: () {
+                                if (_commentController.text.trim().isNotEmpty) {
+                                  final newsController =
+                                      Get.find<NewsController>();
+
+                                  if (_replyingTo != null &&
+                                      _replyingToCommentId != null) {
+                                    newsController.addComment(
+                                      postId: widget.news.id,
+                                      body: _commentController.text.trim(),
+                                      parentId: _replyingToCommentId,
+                                    );
+                                  } else {
+                                    // إرسال تعليق جديد بدون parentId
+                                    newsController.addComment(
+                                      postId: widget.news.id,
+                                      body: _commentController.text.trim(),
+                                    );
+                                  }
+
+                                  _commentController.clear();
+                                  _replyingTo = null;
+                                  _replyingToCommentId = null;
+                                  _commentFocusNode.unfocus();
+
+                                  Future.delayed(
+                                      const Duration(milliseconds: 500), () {
+                                    newsController.getComments(widget.news.id);
+                                  });
+                                }
+                              },
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.only(bottom: 6, right: 4),
+                                child: Directionality(
+                                  textDirection: TextDirection
+                                      .ltr, // To make the send icon point right like Facebook
+                                  child: const Icon(
+                                    Icons.send,
+                                    color: Color(
+                                        0xFF9ebc67), // Facebook messenger blue color
+                                    size: 28,
+                                  ),
                                 ),
                               ),
                             ),
-                            InkWell(
-                              onTap: _cancelReply,
-                              child: Icon(
-                                Icons.close,
-                                size: 16,
-                                color: Colors.black,
+                          ),
+                          // TextField
+                          Expanded(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Color(0xFF9ebc67)),
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(24),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                    TextField(
-                      controller: _commentController,
-                      focusNode: _commentFocusNode,
-                      decoration: InputDecoration(
-                        fillColor: Colors.white,
-                        filled: true,
-                        hintStyle: TextStyle(color: Colors.black),
-                        hintText: _replyingTo != null
-                            ? 'اكتب ردك...'
-                            : 'أضف تعليقك...',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide(color: Colors.black),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide(color: Colors.black),
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 8,
-                        ),
-                      ),
-                      maxLines: 3,
-                      minLines: 1,
-                    ),
-                    const SizedBox(height: 12),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        if (_replyingTo != null)
-                          TextButton(
-                            onPressed: _cancelReply,
-                            child: Text(
-                              'إلغاء',
-                              style: TextStyle(
-                                color: Colors.grey[600],
+                              child: TextField(
+                                cursorColor: Colors.black,
+                                controller: _commentController,
+                                focusNode: _commentFocusNode,
+                                decoration: InputDecoration(
+                                  hintStyle: TextStyle(
+                                      color: Colors.grey[600], fontSize: 14),
+                                  hintText: _replyingTo != null
+                                      ? 'اكتب ردك...'
+                                      : 'أضف تعليقك...',
+                                  border: InputBorder.none,
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 12,
+                                  ),
+                                ),
+                                maxLines: 5,
+                                minLines: 1,
                               ),
                             ),
                           ),
-                        const SizedBox(width: 8),
-                        ElevatedButton(
-                          onPressed: () {
-                            if (_commentController.text.trim().isNotEmpty) {
-                              final newsController = Get.find<NewsController>();
-
-                              if (_replyingTo != null &&
-                                  _replyingToCommentId != null) {
-                                newsController.addComment(
-                                  postId: widget.news.id,
-                                  body: _commentController.text.trim(),
-                                  parentId: _replyingToCommentId,
-                                );
-                                print(
-                                    'إرسال رد على تعليق $_replyingToCommentId: ${_commentController.text}');
-                              } else {
-                                // إرسال تعليق جديد بدون parentId
-                                newsController.addComment(
-                                  postId: widget.news.id,
-                                  body: _commentController.text.trim(),
-                                  // لا نرسل parentId للتعليقات الجديدة
-                                );
-                                print(
-                                    'إرسال تعليق جديد: ${_commentController.text}');
-                              }
-
-                              _commentController.clear();
-                              _replyingTo = null;
-                              _replyingToCommentId = null;
-                              _commentFocusNode.unfocus();
-
-                              Future.delayed(const Duration(milliseconds: 500),
-                                  () {
-                                newsController.getComments(widget.news.id);
-                              });
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xFF9ebc67),
-                            foregroundColor: Colors.black,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          child: Text(
-                              _replyingTo != null ? 'إرسال الرد' : 'إرسال'),
-                        ),
-                      ],
-                    ),
-                  ],
+                          const SizedBox(width: 8),
+                          // Send Button
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
 
-              // Comments List
-            ],
+                // Comments List
+              ],
+            ),
           ),
         );
       },
@@ -282,24 +343,24 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
 
     // Create flat list of all comments and replies with thread indicators
     List<Widget> flatItems = [];
+    int displayLimit = comments.length < _maxCommentsToShow ? comments.length : _maxCommentsToShow;
 
-    for (int commentIndex = 0; commentIndex < comments.length; commentIndex++) {
+    for (int commentIndex = 0; commentIndex < displayLimit; commentIndex++) {
       var comment = comments[commentIndex];
 
       // Add main comment
       flatItems.add(_buildFlatCommentItem(
         comment,
         isMainComment: true,
-        showTopLine: false,
-        showBottomLine: comment.replies.isNotEmpty,
       ));
 
       // Add all replies with proper threading
-      _addAllRepliesWithThreading(
-          flatItems, comment.replies, comment.user_name ?? 'غير معروف', 1);
+      _addAllRepliesWithThreading(flatItems, comment.replies,
+          comment.user_name ?? 'غير معروف', 1, comment.id,
+          isParentLast: commentIndex == displayLimit - 1);
 
       // Add divider between different comment threads
-      if (commentIndex < comments.length - 1) {
+      if (commentIndex < displayLimit - 1) {
         flatItems.add(Container(
           margin: const EdgeInsets.symmetric(vertical: 16),
           child: Row(
@@ -316,22 +377,6 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                         Colors.transparent,
                       ],
                     ),
-                  ),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 12),
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.grey[100],
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey[300]!),
-                ),
-                child: Text(
-                  '• • •',
-                  style: TextStyle(
-                    color: Colors.grey[500],
-                    fontSize: 12,
                   ),
                 ),
               ),
@@ -356,26 +401,112 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
       }
     }
 
-    return ListView.builder(
+    if (comments.length > _maxCommentsToShow) {
+      flatItems.add(
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16.0),
+          child: Center(
+            child: InkWell(
+              onTap: () {
+                setState(() {
+                  _maxCommentsToShow += 10;
+                });
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                decoration: BoxDecoration(
+                  border: Border.all(color: const Color(0xFF9ebc67)),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Text(
+                  'عرض مزيد من التعليقات',
+                  style: TextStyle(
+                    color: Color(0xFF9ebc67),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        )
+      );
+    }
+
+    // مراقبة تحديثات القائمة والمحاولة مرة أخرى إذا وصلت بيانات جديدة
+    if (widget.highlightedCommentId != null &&
+        !_hasScrolled &&
+        comments.isNotEmpty) {
+      // ignore: avoid_print
+      print(
+          "Comments list loaded (Count: ${comments.length}). Searching for ID: ${widget.highlightedCommentId}");
+
+      bool found = false;
+      for (var comment in comments) {
+        if (_findAndExpand(comment, widget.highlightedCommentId!, comment.id)) {
+          found = true;
+          // ignore: avoid_print
+          print(
+              "Deep found target comment ${widget.highlightedCommentId}. Expanded necessary parents.");
+        }
+      }
+
+      if (found) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) return;
+          // Step 1: Call setState so Flutter rebuilds with the expanded replies visible in the tree
+          setState(() {
+            // _expandedComments already updated by _findAndExpand above
+          });
+          // Step 2: After rebuild, scroll to the highlighted comment
+          Future.delayed(const Duration(milliseconds: 350), () {
+            if (!mounted) return;
+            if (_highlightKey.currentContext != null) {
+              // ignore: avoid_print
+              print(
+                  "Scrolling via GlobalKey to comment ${widget.highlightedCommentId}...");
+              Scrollable.ensureVisible(
+                _highlightKey.currentContext!,
+                duration: const Duration(milliseconds: 600),
+                curve: Curves.easeOut,
+                alignment: 0.3,
+              );
+              setState(() {
+                _hasScrolled = true;
+              });
+            } else {
+              // ignore: avoid_print
+              print(
+                  "GlobalKey still null after rebuild — comment may not be in list.");
+              setState(() {
+                _hasScrolled = true;
+              }); // prevent infinite retries
+            }
+          });
+        });
+      } else {
+        // ignore: avoid_print
+        print(
+            "Target ID ${widget.highlightedCommentId} NOT in the current list yet.");
+      }
+    }
+
+    return ListView(
+      controller: _scrollController,
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      itemCount: flatItems.length,
-      itemBuilder: (context, index) {
-        return flatItems[index];
-      },
+      children: flatItems,
     );
   }
 
   void _addAllRepliesWithThreading(List<Widget> flatItems,
-      List<CommentEntity> replies, String parentUser, int level,
-      {Color? inheritedColor}) {
-    for (int i = 0; i < replies.length; i++) {
+      List<CommentEntity> replies, String parentUser, int level, int parentId,
+      {Color? inheritedColor, bool isParentLast = false}) {
+    bool isExpanded = _expandedComments.contains(parentId);
+    int displayCount = (replies.length > 2 && !isExpanded) ? 2 : replies.length;
+
+    for (int i = 0; i < displayCount; i++) {
       var reply = replies[i];
       bool hasMoreReplies = reply.replies.isNotEmpty;
-      bool isLastInLevel = i == replies.length - 1;
-
-      // Determine if we need connecting lines
-      bool showTopLine = level > 0;
-      bool showBottomLine = hasMoreReplies || (!isLastInLevel && level > 0);
+      bool isLastInLevel = i == displayCount - 1;
 
       // Assign color: inherit from parent or get new color for level 1
       Color replyColor = inheritedColor ?? _getReplyColor(i);
@@ -384,20 +515,57 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
         reply,
         isMainComment: false,
         replyToUser: parentUser,
-        showTopLine: showTopLine,
-        showBottomLine: showBottomLine,
         threadLevel: level,
-        isDirectReply: level == 1,
+        isLastChild: isLastInLevel,
+        hasMoreReplies: hasMoreReplies,
         replyColor: replyColor,
       ));
 
       // Recursively add nested replies with same color
       if (hasMoreReplies) {
-        _addAllRepliesWithThreading(
-            flatItems, reply.replies, reply.user_name ?? 'غير معروف', level + 1,
-            inheritedColor: replyColor);
+        _addAllRepliesWithThreading(flatItems, reply.replies,
+            reply.user_name ?? 'غير معروف', level + 1, reply.id,
+            inheritedColor: replyColor, isParentLast: isLastInLevel);
       }
     }
+
+    if (!isExpanded && replies.length > 2) {
+      flatItems
+          .add(_buildSeeMoreRepliesButton(parentId, replies.length - 2, level));
+    }
+  }
+
+  Widget _buildSeeMoreRepliesButton(
+      int parentId, int remainingCount, int level) {
+    return InkWell(
+      onTap: () {
+        setState(() {
+          _expandedComments.add(parentId);
+        });
+      },
+      child: Padding(
+        padding: EdgeInsetsDirectional.only(
+          start: 48.0 + (level * 16.0),
+          top: 4,
+          bottom: 12,
+          end: 16,
+        ),
+        child: Row(
+          children: [
+            Icon(Icons.keyboard_arrow_down, size: 18, color: Color(0xFF9ebc67)),
+            const SizedBox(width: 4),
+            Text(
+              'عرض $remainingCount ردود إضافية',
+              style: TextStyle(
+                color: Color(0xFF9ebc67),
+                fontSize: 13,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Color _getReplyColor(int index) {
@@ -416,289 +584,270 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
     return replyColors[index % replyColors.length];
   }
 
-  // Color _getThreadLevelColor(int level) {
-  //   // Keep this for backwards compatibility, but it won't be used much now
-  //   switch (level) {
-  //     case 1:
-  //       return Colors.orange.withOpacity(0.8);
-  //     case 2:
-  //       return Colors.purple.withOpacity(0.8);
-  //     case 3:
-  //       return Colors.green.withOpacity(0.8);
-  //     case 4:
-  //       return Colors.red.withOpacity(0.8);
-  //     default:
-  //       return Colors.grey.withOpacity(0.8);
-  //   }
-  // }
-
-  // IconData _getThreadLevelIcon(int level) {
-  //   switch (level) {
-  //     case 1:
-  //       return Icons.reply;
-  //     case 2:
-  //       return Icons.subdirectory_arrow_right;
-  //     case 3:
-  //       return Icons.keyboard_return;
-  //     case 4:
-  //       return Icons.trending_flat;
-  //     default:
-  //       return Icons.more_horiz;
-  //   }
-  // }
-
   Widget _buildFlatCommentItem(CommentEntity item,
       {required bool isMainComment,
       String? replyToUser,
-      bool showTopLine = false,
-      bool showBottomLine = false,
       int threadLevel = 0,
-      bool isDirectReply = false,
+      bool isLastChild = false,
+      bool hasMoreReplies = false,
       Color? replyColor}) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Thread indicator column
-          // Container(
-          //   width: 40,
-          //   child: Column(
-          //     children: [
-          //       // Top connecting line
-          //       // if (showTopLine)
-          //       //   Container(
-          //       //     width: 2,
-          //       //     height: 20,
-          //       //     color: isMainComment
-          //       //         ? Theme.of(context).primaryColor.withOpacity(0.4)
-          //       //         : (replyColor ?? Theme.of(context).primaryColor)
-          //       //             .withOpacity(0.4),
-          //       //   ),
-
-          //       // Center indicator with thread level styling
-          //       // Container(
-          //       //   width: isMainComment ? 16 : (18 + threadLevel * 2).toDouble(),
-          //       //   height:
-          //       //       isMainComment ? 16 : (18 + threadLevel * 2).toDouble(),
-          //       //   margin: const EdgeInsets.symmetric(vertical: 4),
-          //       //   decoration: BoxDecoration(
-          //       //     color: isMainComment
-          //       //         ? Theme.of(context).primaryColor
-          //       //         : (replyColor ?? Colors.black),
-          //       //     shape: isMainComment ? BoxShape.circle : BoxShape.rectangle,
-          //       //     borderRadius: isMainComment
-          //       //         ? null
-          //       //         : BorderRadius.circular((4 + threadLevel).toDouble()),
-          //       //     border: Border.all(
-          //       //       color: Colors.white,
-          //       //       width: 2,
-          //       //     ),
-          //       //     boxShadow: [
-          //       //       BoxShadow(
-          //       //         color: Colors.grey.withOpacity(0.3),
-          //       //         spreadRadius: 1,
-          //       //         blurRadius: 2,
-          //       //       ),
-          //       //     ],
-          //       //   ),
-          //       //   child: isMainComment
-          //       //       ? Icon(
-          //       //           Icons.chat,
-          //       //           size: 8,
-          //       //           color: Colors.black,
-          //       //         )
-          //       //       : null
-
-          //       // ),
-
-          //       // Bottom connecting line
-          //       if (showBottomLine)
-          //         Container(
-          //           width: 2,
-          //           height: 20,
-          //           color: isMainComment
-          //               ? Theme.of(context).primaryColor.withOpacity(0.4)
-          //               : (replyColor ?? Theme.of(context).primaryColor)
-          //                   .withOpacity(0.4),
-          //         ),
-          //     ],
-          //   ),
-          // ),
-
-          // Content container
-          Expanded(
-            child: Container(
-              constraints: const BoxConstraints(
-                minHeight: 120, // Fixed minimum height for all items
-              ),
-              margin: const EdgeInsets.only(left: 8),
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: isMainComment
-                      ? Colors.blue[300]!
-                      : Colors.orange.withAlpha(40),
-                  width: isMainComment ? 2 : 1,
+      key: widget.highlightedCommentId == item.id ? _highlightKey : null,
+      margin: EdgeInsetsDirectional.only(
+        start: isMainComment ? 0 : 8,
+        top: 4,
+        bottom: 4,
+        end: 0,
+      ),
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Thread lines for replies
+            if (!isMainComment)
+              Container(
+                width: 40,
+                child: Stack(
+                  children: [
+                    // Vertical line from top
+                    Positioned(
+                      top: 0,
+                      bottom: isLastChild ? 20 : 0,
+                      right: 18,
+                      child: Container(
+                        width: 2,
+                        color: Colors.grey[300],
+                      ),
+                    ),
+                    // Horizontal curve to avatar
+                    Positioned(
+                      top: 20,
+                      right: 18,
+                      left: 0,
+                      child: Container(
+                        height: 2,
+                        color: Colors.grey[300],
+                      ),
+                    ),
+                  ],
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.1),
-                    spreadRadius: 1,
-                    blurRadius: 3,
-                    offset: const Offset(0, 1),
-                  ),
-                ],
               ),
+
+            // Content container
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Header
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // User Avatar
                       _buildUserAvatar(
                         item.user_name ?? '',
+                        item.user_image,
                         isMainComment,
                         context,
                       ),
-                      const SizedBox(width: 12),
-                      // User Info
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  item.user_name ?? 'غير معروف',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: isMainComment ? 16 : 14,
-                                  ),
-                                ),
-                                // Reply indicator for replies
-                                if (!isMainComment && replyToUser != null) ...[
-                                  const SizedBox(width: 4),
-                                  Icon(
-                                    Icons.arrow_back,
-                                    size: 12,
-                                    color: Colors.grey[600],
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 6, vertical: 2),
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(context)
-                                          .primaryColor
-                                          .withOpacity(0.1),
-                                      borderRadius: BorderRadius.circular(10),
+                      const SizedBox(width: 8),
+                      // Text Bubble
+                      Flexible(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 8),
+                          decoration: BoxDecoration(
+                            // color: widget.highlightedCommentId == item.id
+                            //     ? Colors.yellow[100] // Highlight color
+                            //     : Colors.grey[100],
+                            borderRadius: BorderRadius.circular(16),
+                            border: widget.highlightedCommentId == item.id
+                                ? Border.all(color: Color(0xFF9ebc67), width: 1)
+                                : null,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Name and Time
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    item.user_name ?? 'غير معروف',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                      color: Colors.black,
                                     ),
-                                    child: Text(
-                                      replyToUser,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.w500,
-                                      ),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    '•',
+                                    style: TextStyle(
+                                        color: Colors.grey[600], fontSize: 12),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    DateConverter.getRelativeTime(
+                                        item.createdAt),
+                                    style: TextStyle(
+                                      color: Colors.grey[600],
+                                      fontSize: 12,
                                     ),
                                   ),
                                 ],
-                              ],
-                            ),
-                            Text(
-                              DateConverter.dateTimeStringToDateTime(
-                                  item.createdAt),
-                              style: TextStyle(
-                                color: Colors.grey[600],
-                                fontSize: isMainComment ? 14 : 12,
                               ),
-                            ),
-                          ],
+                              const SizedBox(height: 2),
+                              // Content with mentions
+                              Builder(
+                                builder: (context) {
+                                  String displayBody = item.body;
+                                  if (!isMainComment && replyToUser != null) {
+                                    String prefixToRemove = '@$replyToUser';
+                                    if (displayBody.trimLeft().startsWith(prefixToRemove)) {
+                                      displayBody = displayBody.trimLeft().substring(prefixToRemove.length).trimLeft();
+                                    }
+                                  }
+
+                                  return RichText(
+                                    textDirection: TextDirection.rtl,
+                                    text: TextSpan(
+                                      style: const TextStyle(
+                                          color: Colors.black, fontSize: 14),
+                                      children: [
+                                        if (!isMainComment && replyToUser != null)
+                                          TextSpan(
+                                            text: '\u200F$replyToUser\u200F ', // RLM around name
+                                            style: const TextStyle(
+                                              color: Color(0xFF9ebc67),
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        TextSpan(text: '\u200F$displayBody'), // RLM before body
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
-                  // Content
-                  Text(
-                    item.body,
-                    style: TextStyle(
-                      fontSize: isMainComment ? 16 : 14,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  // Reply Button
-                  InkWell(
-                    onTap: () {
-                      _startReply(item.user_name ?? 'غير معروف', item.id);
-                    },
+                  // Actions (Reply and Likes)
+                  Padding(
+                    padding: const EdgeInsetsDirectional.only(
+                        start: 48, top: 2, bottom: 4),
                     child: Row(
-                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(
-                          Icons.reply,
-                          size: 16,
-                          color: Colors.grey[600],
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          'رد',
-                          style: TextStyle(
-                            color: Colors.grey[600],
-                            fontSize: 12,
+                        InkWell(
+                          onTap: () => _startReply(
+                              item.user_name ?? 'غير معروف', item.id),
+                          child: Text(
+                            'رد',
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                            ),
                           ),
                         ),
+                        const SizedBox(width: 16),
+                        // Simulated Likes for UI matching
+                        // Icon(Icons.thumb_up, size: 12, color: Colors.blue[700]),
+                        // const SizedBox(width: 4),
+                        // Text(
+                        //   '${(item.id % 20) + 1}', // Dynamic-looking dummy likes
+                        //   style:
+                        //       TextStyle(color: Colors.grey[600], fontSize: 12),
+                        // ),
                       ],
                     ),
                   ),
                 ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
+}
 
-  // دالة لبناء Avatar المستخدم
-  Widget _buildUserAvatar(
-      String userName, bool isMainComment, BuildContext context) {
-    // فحص إذا كان الاسم "xride" (case insensitive)
-    bool isXride = userName.toLowerCase().trim() == 'xride' ||
-        userName.toLowerCase().trim() == 'x ride';
+// دالة لبناء Avatar المستخدم
+Widget _buildUserAvatar(String userName, String? userImage, bool isMainComment,
+    BuildContext context) {
+  // فحص إذا كان الاسم "xride" (case insensitive)
+  bool isXride = userName.toLowerCase().trim() == 'xride' ||
+      userName.toLowerCase().trim() == 'x ride';
 
-    if (isXride) {
-      // استخدام صورة لـ xride
-      return ClipOval(
-        child: Image.asset(
-          'assets/image/splash_logo.JPG', // يمكن تغييرها لأي صورة
-          width: (isMainComment ? 20 : 18) * 2,
-          height: (isMainComment ? 20 : 18) * 2,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            // في حالة فشل تحميل الصورة، نستخدم الحرف X
-            return CircleAvatar(
+  if (isXride) {
+    // استخدام صورة لـ xride
+    return ClipOval(
+      child: Image.asset(
+        'assets/image/splash_logo.JPG', // يمكن تغييرها لأي صورة
+        width: (isMainComment ? 20 : 18) * 2,
+        height: (isMainComment ? 20 : 18) * 2,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          // في حالة فشل تحميل الصورة، نستخدم الحرف X
+          return Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Color(0xFF9ebc67)),
+            ),
+            child: CircleAvatar(
               radius: isMainComment ? 20 : 18,
               backgroundColor: Colors.white,
               child: Text(
                 'X',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: isMainComment ? 16 : 14,
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  } else if (userImage != null && userImage.isNotEmpty) {
+    // استخدام الصورة القادمة من الـ API
+    return ClipOval(
+      child: Image.network(
+        userImage,
+        width: (isMainComment ? 20 : 18) * 2,
+        height: (isMainComment ? 20 : 18) * 2,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          // Fallback to initial if image fails
+          return Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Color(0xFF9ebc67)),
+            ),
+            child: CircleAvatar(
+              radius: isMainComment ? 20 : 18,
+              backgroundColor: Colors.white,
+              child: Text(
+                userName.isNotEmpty ? userName.substring(0, 1) : 'م',
                 style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
                   fontSize: isMainComment ? 16 : 14,
                 ),
               ),
-            );
-          },
-        ),
-      );
-    } else {
-      // استخدام الحرف الأول للاسم
-      return CircleAvatar(
+            ),
+          );
+        },
+      ),
+    );
+  } else {
+    // استخدام الحرف الأول للاسم
+    return Container(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: Color(0xFF9ebc67)),
+      ),
+      child: CircleAvatar(
         radius: isMainComment ? 20 : 18,
         backgroundColor: Colors.white,
         child: Text(
@@ -709,7 +858,7 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
             fontSize: isMainComment ? 16 : 14,
           ),
         ),
-      );
-    }
+      ),
+    );
   }
 }

@@ -7,9 +7,13 @@ import 'package:stackfood_multivendor/features/splash/controllers/splash_control
 import 'package:stackfood_multivendor/helper/route_helper.dart';
 import 'package:stackfood_multivendor/helper/permission_helper.dart';
 import 'package:stackfood_multivendor/util/xmarket_images.dart';
-
+import 'package:stackfood_multivendor/util/xmarket_images.dart';
+import 'package:stackfood_multivendor/features/notification/domain/models/notification_body_model.dart';
+import 'package:stackfood_multivendor/news/controllers/news_controller.dart';
 class XMarkSplashScreen extends StatefulWidget {
-  const XMarkSplashScreen({super.key});
+  final NotificationBodyModel? body;
+
+  const XMarkSplashScreen({super.key, this.body});
 
   @override
   XMarkSplashScreenState createState() => XMarkSplashScreenState();
@@ -54,6 +58,22 @@ class XMarkSplashScreenState extends State<XMarkSplashScreen> {
 
     if (Get.find<MarketAuthController>().isLoggedIn()) {
       Get.offAllNamed(RouteHelper.getInitialRoute());
+      if (widget.body != null) {
+        if (widget.body!.notificationType == NotificationType.order) {
+          Get.toNamed(RouteHelper.getOrderDetailsRoute(widget.body!.orderId, fromNotification: true));
+        } else if (widget.body!.notificationType == NotificationType.message) {
+          Get.toNamed(RouteHelper.getChatRoute(notificationBody: widget.body, conversationID: widget.body!.conversationId, fromNotification: true));
+        } else if (widget.body!.notificationType == NotificationType.block || widget.body!.notificationType == NotificationType.unblock) {
+          Get.toNamed(RouteHelper.getSignInRoute(RouteHelper.notification));
+        } else if (widget.body!.notificationType == NotificationType.add_fund || widget.body!.notificationType == NotificationType.referral_earn || widget.body!.notificationType == NotificationType.CashBack) {
+          Get.toNamed(RouteHelper.getWalletRoute(fromNotification: true));
+        } else if (widget.body!.notificationType == NotificationType.news_comment_reply) {
+          Get.find<NewsController>().setPendingNotification(widget.body);
+          Get.toNamed(RouteHelper.getMainRoute('news'));
+        } else {
+          Get.toNamed(RouteHelper.getNotificationRoute(fromNotification: true));
+        }
+      }
     } else {
       Get.offAllNamed(RouteHelper.getSignInRoute(RouteHelper.splash));
     }

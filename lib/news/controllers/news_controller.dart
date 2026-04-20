@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
 import 'package:stackfood_multivendor/api/api_checker.dart';
+import 'package:stackfood_multivendor/features/notification/domain/models/notification_body_model.dart';
 import 'package:stackfood_multivendor/news/domain/entities/comments.dart';
 import 'package:stackfood_multivendor/news/domain/entities/news.dart';
 import 'package:stackfood_multivendor/news/domain/models/comments_model.dart';
@@ -19,6 +20,14 @@ class NewsController extends GetxController {
 
   // إضافة متغير لتخزين التعليقات
   Map<int, List<CommentEntity>> commentsMap = {};
+
+  NotificationBodyModel? _pendingNotification;
+  NotificationBodyModel? get pendingNotification => _pendingNotification;
+
+  void setPendingNotification(NotificationBodyModel? notification) {
+    _pendingNotification = notification;
+    update();
+  }
 
   @override
   void onInit() {
@@ -89,8 +98,10 @@ class NewsController extends GetxController {
       final response = await newsRepo.likeNews(newsId);
       if (response != null && response.statusCode == 200) {
         print("News liked successfully");
-        if (response.body != null && response.body is Map && response.body.containsKey('is_liked')) {
-          return response.body['is_liked'] as bool?;
+        if (response.body != null &&
+            response.body is Map &&
+            response.body.containsKey('is_liked')) {
+          return (response.body['is_liked'] == 1 || response.body['is_liked'] == true);
         }
         return true;
       } else {

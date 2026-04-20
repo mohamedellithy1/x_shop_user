@@ -1,4 +1,4 @@
-enum NotificationType{
+enum NotificationType {
   message,
   order,
   general,
@@ -12,6 +12,7 @@ enum NotificationType{
   unblock,
   // ignore: constant_identifier_names
   add_fund,
+  news_comment_reply,
 }
 
 class NotificationBodyModel {
@@ -26,6 +27,9 @@ class NotificationBodyModel {
   String? image;
   String? name;
   String? receiverType;
+  int? postId;
+  int? commentId;
+  int? parentId;
 
   NotificationBodyModel({
     this.notificationType,
@@ -39,6 +43,9 @@ class NotificationBodyModel {
     this.image,
     this.name,
     this.receiverType,
+    this.postId,
+    this.commentId,
+    this.parentId,
   });
 
   NotificationBodyModel.fromJson(Map<String, dynamic> json) {
@@ -53,6 +60,17 @@ class NotificationBodyModel {
     image = json['image'];
     name = json['name'];
     receiverType = json['receiver_type'];
+    postId = (json['post_id'] ?? json['postId'] ?? json['data_id']) != null ? int.tryParse((json['post_id'] ?? json['postId'] ?? json['data_id']).toString().trim()) : null;
+    commentId = json['comment_id'] != null
+        ? int.tryParse(json['comment_id'].toString())
+        : (json['commentId'] != null
+            ? int.tryParse(json['commentId'].toString())
+            : null);
+    parentId = json['parent_id'] != null
+        ? int.tryParse(json['parent_id'].toString())
+        : (json['parentId'] != null
+            ? int.tryParse(json['parentId'].toString())
+            : null);
   }
 
   Map<String, dynamic> toJson() {
@@ -68,30 +86,37 @@ class NotificationBodyModel {
     data['image'] = image;
     data['name'] = name;
     data['receiver_type'] = receiverType;
+    data['post_id'] = postId;
+    data['postId'] = postId;
+    data['comment_id'] = commentId;
+    data['commentId'] = commentId;
+    data['parent_id'] = parentId;
+    data['parentId'] = parentId;
     return data;
   }
 
   NotificationType convertToEnum(String? enumString) {
-    if(enumString == NotificationType.general.toString()) {
+    if (enumString == NotificationType.general.toString()) {
       return NotificationType.general;
-    }else if(enumString == NotificationType.order.toString()) {
+    } else if (enumString == NotificationType.order.toString()) {
       return NotificationType.order;
-    }else if(enumString == NotificationType.message.toString()) {
+    } else if (enumString == NotificationType.message.toString()) {
       return NotificationType.message;
-    } else if(enumString == NotificationType.referral_code.toString()) {
+    } else if (enumString == NotificationType.referral_code.toString()) {
       return NotificationType.referral_code;
-    }else if(enumString == NotificationType.referral_earn.toString()) {
+    } else if (enumString == NotificationType.referral_earn.toString()) {
       return NotificationType.referral_earn;
-    }else if(enumString == NotificationType.CashBack.toString()) {
+    } else if (enumString == NotificationType.CashBack.toString()) {
       return NotificationType.CashBack;
-    }else if(enumString == NotificationType.block.toString()) {
+    } else if (enumString == NotificationType.block.toString()) {
       return NotificationType.block;
-    }else if(enumString == NotificationType.unblock.toString()) {
+    } else if (enumString == NotificationType.unblock.toString()) {
       return NotificationType.unblock;
-    }else if(enumString == NotificationType.add_fund.toString()) {
+    } else if (enumString == NotificationType.add_fund.toString()) {
       return NotificationType.add_fund;
+    } else if (enumString == NotificationType.news_comment_reply.toString()) {
+      return NotificationType.news_comment_reply;
     }
     return NotificationType.general;
   }
-
 }
