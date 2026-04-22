@@ -181,8 +181,8 @@ class CustomTextFieldWidgetState extends State<CustomTextFieldWidget> {
                     style: widget.showBorder
                         ? BorderStyle.solid
                         : BorderStyle.none,
-                    width: 0.3,
-                    color: Theme.of(context).disabledColor),
+                    width: 1,
+                    color: const Color(0xFF55745a)),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
@@ -191,7 +191,7 @@ class CustomTextFieldWidgetState extends State<CustomTextFieldWidget> {
                         ? BorderStyle.solid
                         : BorderStyle.none,
                     width: 1,
-                    color: Theme.of(context).primaryColor),
+                    color: const Color(0xFF55745a)),
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
@@ -199,8 +199,8 @@ class CustomTextFieldWidgetState extends State<CustomTextFieldWidget> {
                     style: widget.showBorder
                         ? BorderStyle.solid
                         : BorderStyle.none,
-                    width: 0.3,
-                    color: Theme.of(context).primaryColor),
+                    width: 1,
+                    color: const Color(0xFF55745a)),
               ),
               errorBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
@@ -224,8 +224,8 @@ class CustomTextFieldWidgetState extends State<CustomTextFieldWidget> {
                     style: widget.showBorder
                         ? BorderStyle.solid
                         : BorderStyle.none,
-                    width: 0.3,
-                    color: Theme.of(context).disabledColor),
+                    width: 1,
+                    color: const Color(0xFF55745a)),
               ),
               isDense: true,
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -242,7 +242,7 @@ class CustomTextFieldWidgetState extends State<CustomTextFieldWidget> {
                   color:
                       Get.find<MarketThemeController>(tag: 'xmarket').darkTheme
                           ? Colors.white
-                          : Theme.of(context).hintColor.withValues(alpha: 0.7)),
+                          : Colors.black),
               filled: true,
               labelStyle: widget.showLabelText
                   ? robotoRegular.copyWith(
@@ -250,7 +250,7 @@ class CustomTextFieldWidgetState extends State<CustomTextFieldWidget> {
                       color: Get.find<MarketThemeController>(tag: 'xmarket')
                               .darkTheme
                           ? Colors.white
-                          : Theme.of(context).hintColor)
+                          : Colors.black)
                   : null,
               errorStyle:
                   robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
@@ -261,19 +261,16 @@ class CustomTextFieldWidgetState extends State<CustomTextFieldWidget> {
                         style: robotoRegular.copyWith(
                           fontSize:
                               widget.levelTextSize ?? Dimensions.fontSizeLarge,
-                          color: ((widget.focusNode?.hasFocus == true ||
-                                      widget.controller!.text.isNotEmpty) &&
+                          color: (widget.focusNode?.hasFocus == true &&
                                   widget.isEnabled)
                               ? (Get.find<MarketThemeController>(tag: 'xmarket')
                                       .darkTheme
                                   ? Colors.white
-                                  : Theme.of(context).primaryColor)
+                                  : Colors.black)
                               : (Get.find<MarketThemeController>(tag: 'xmarket')
                                       .darkTheme
                                   ? Colors.white
-                                  : Theme.of(context)
-                                      .hintColor
-                                      .withValues(alpha: .75)),
+                                  : Colors.black),
                         ),
                       ),
                       if (widget.required && (widget.labelText != null || widget.titleText.isNotEmpty))

@@ -124,7 +124,7 @@ class ManualLoginWidget extends StatelessWidget {
                   child: Checkbox(
                     side: BorderSide(color: Theme.of(context).hintColor),
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    activeColor: Theme.of(context).primaryColor,
+                    activeColor: const Color(0xFF55745a),
                     value: authController.isActiveRememberMe,
                     onChanged: (bool? isChecked) =>
                         authController.toggleRememberMe(),
@@ -312,7 +312,7 @@ class ManualLoginWidget extends StatelessWidget {
                       child: Checkbox(
                         side: BorderSide(color: Theme.of(context).hintColor),
                         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        activeColor: Theme.of(context).primaryColor,
+                        activeColor: const Color(0xFF55745a),
                         value: authController.isActiveRememberMe,
                         onChanged: (bool? isChecked) =>
                             authController.toggleRememberMe(),

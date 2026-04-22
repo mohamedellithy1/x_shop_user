@@ -791,7 +791,7 @@ class _MenuScreenState extends State<MenuScreen> {
                                         padding: const EdgeInsets.all(2),
                                         decoration: const BoxDecoration(
                                             shape: BoxShape.circle,
-                                            color: Colors.red),
+                                            color: Color(0xFF9ebc67)),
                                         child: Icon(
                                             Icons.power_settings_new_sharp,
                                             size: 14,

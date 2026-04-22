@@ -25,7 +25,7 @@ class _BodyWidgetState extends State<BodyWidget> {
           borderRadius: const BorderRadius.only(
             topRight: Radius.circular(25), topLeft: Radius.circular(25),
         ),
-          color: Theme.of(context).cardColor,
+          color:Color(0xFFfafef5),
         ),
         child: ClipRRect(
           borderRadius: const BorderRadius.only(topRight: Radius.circular(25), topLeft: Radius.circular(25)),

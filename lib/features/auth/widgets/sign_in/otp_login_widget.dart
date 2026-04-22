@@ -79,7 +79,7 @@ class OtpLoginWidget extends StatelessWidget {
                   child: Checkbox(
                     side: BorderSide(color: Theme.of(context).hintColor),
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    activeColor: Theme.of(context).primaryColor,
+                    activeColor: const Color(0xFF55745a),
                     value: authController.isActiveRememberMeForOtp,
                     onChanged: (bool? isChecked) =>
                         authController.toggleRememberMeForOtp(),
