@@ -145,15 +145,16 @@ class ShoppingPlanPreviewScreen extends StatelessWidget {
                           width: double.infinity,
                           height: 50,
                           child: ElevatedButton(
-                            onPressed: () {
-                              // Action to add to cart
-                              Get.snackbar('X-Market', 'جاري الإضافة للسلة...');
+                            onPressed: controller.isAddToCartLoading ? null : () {
+                              controller.addToCart();
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFF55745a),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Dimensions.radiusDefault)),
                             ),
-                            child: Text('إضافة للسلة وتأكيد الطلب', style: robotoBold.copyWith(color: Colors.white)),
+                            child: controller.isAddToCartLoading 
+                              ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                              : Text('إضافة للسلة وتأكيد الطلب', style: robotoBold.copyWith(color: Colors.white)),
                           ),
                         ),
                       ],

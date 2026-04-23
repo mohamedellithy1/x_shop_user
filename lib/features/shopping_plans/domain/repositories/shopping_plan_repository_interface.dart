@@ -5,4 +5,5 @@ abstract class ShoppingPlanRepositoryInterface {
   Future<ShoppingPlanDetailsModel?> getShoppingPlanVariants(int planId);
   Future<VariantItemsDetailsModel?> getVariantItems(int variantId);
   Future<VariantItemsDetailsModel?> getVariantPreview(int variantId, Map<String, dynamic> body);
+  Future<dynamic> addToCart(int variantId, Map<String, dynamic> body);
 }

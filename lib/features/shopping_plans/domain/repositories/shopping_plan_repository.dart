@@ -50,4 +50,9 @@ class ShoppingPlanRepository implements ShoppingPlanRepositoryInterface {
     }
     return variantDetails;
   }
+
+  @override
+  Future<Response> addToCart(int variantId, Map<String, dynamic> body) async {
+    return await apiClient.postData('${AppConstants.variantDetailsUri}$variantId/add-to-cart', body);
+  }
 }

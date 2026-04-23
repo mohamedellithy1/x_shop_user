@@ -194,7 +194,6 @@ class _ShoppingPlanCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Header banner
-              _buildHeader(),
               // Body
               Padding(
                 padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),

@@ -1,6 +1,9 @@
 import 'package:stackfood_multivendor/features/shopping_plans/domain/models/shopping_plan_model.dart';
 import 'package:stackfood_multivendor/features/shopping_plans/domain/services/shopping_plan_service_interface.dart';
 import 'package:get/get.dart';
+import 'package:stackfood_multivendor/helper/auth_helper.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
+import 'package:stackfood_multivendor/helper/route_helper.dart';
 
 class ShoppingPlanController extends GetxController implements GetxService {
   final ShoppingPlanServiceInterface shoppingPlanServiceInterface;
@@ -22,6 +25,9 @@ class ShoppingPlanController extends GetxController implements GetxService {
 
   bool _isPreviewLoading = false;
   bool get isPreviewLoading => _isPreviewLoading;
+
+  bool _isAddToCartLoading = false;
+  bool get isAddToCartLoading => _isAddToCartLoading;
 
   Future<void> getShoppingPlanList() async {
     _isLoading = true;
@@ -70,27 +76,27 @@ class ShoppingPlanController extends GetxController implements GetxService {
 
   void decrementQuantity(int index) {
     if (_variantItemsDetails != null && _variantItemsDetails!.items![index].allowUserIncrement!) {
-       if (_variantItemsDetails!.items![index].isWeightBased!) {
-         double currentWeight = _variantItemsDetails!.items![index].requestedWeight ?? 0;
-         double originalWeight = _originalVariantItemsDetails!.items!.firstWhere((it) => it.foodId == _variantItemsDetails!.items![index].foodId).requestedWeight ?? 0;
-         
-         if (currentWeight > originalWeight) {
-           _variantItemsDetails!.items![index].requestedWeight = currentWeight - 1.0;
-           _getPreview();
-         }
-       } else {
-         int currentQty = _variantItemsDetails!.items![index].quantity ?? 0;
-         int originalQty = _originalVariantItemsDetails!.items!.firstWhere((it) => it.foodId == _variantItemsDetails!.items![index].foodId).quantity ?? 0;
+      if (_variantItemsDetails!.items![index].isWeightBased!) {
+        double currentWeight = _variantItemsDetails!.items![index].requestedWeight ?? 0;
+        double originalWeight = _originalVariantItemsDetails!.items!.firstWhere((it) => it.foodId == _variantItemsDetails!.items![index].foodId).requestedWeight ?? 0;
+        
+        if (currentWeight > originalWeight) {
+          _variantItemsDetails!.items![index].requestedWeight = currentWeight - 1.0;
+          _getPreview();
+        }
+      } else {
+        int currentQty = _variantItemsDetails!.items![index].quantity ?? 0;
+        int originalQty = _originalVariantItemsDetails!.items!.firstWhere((it) => it.foodId == _variantItemsDetails!.items![index].foodId).quantity ?? 0;
 
-         if (currentQty > originalQty) {
-           _variantItemsDetails!.items![index].quantity = currentQty - 1;
-           _getPreview();
-         } else if (_variantItemsDetails!.items![index].isOptional!) {
-           removeItem(index);
-         }
-       }
+        if (currentQty > originalQty) {
+          _variantItemsDetails!.items![index].quantity = currentQty - 1;
+          _getPreview();
+        } else if (_variantItemsDetails!.items![index].isOptional!) {
+          removeItem(index);
+        }
+      }
     } else if (_variantItemsDetails != null && _variantItemsDetails!.items![index].isOptional!) {
-       removeItem(index);
+      removeItem(index);
     }
   }
 
@@ -107,6 +113,22 @@ class ShoppingPlanController extends GetxController implements GetxService {
     _isPreviewLoading = true;
     update();
 
+    List<Map<String, dynamic>> customizations = _getCustomizations();
+
+    VariantItemsDetailsModel? previewResponse = await shoppingPlanServiceInterface.getVariantPreview(
+      _variantItemsDetails!.variant!.id!,
+      {"customizations": customizations},
+    );
+
+    if (previewResponse != null) {
+      _variantItemsDetails = previewResponse;
+    }
+    
+    _isPreviewLoading = false;
+    update();
+  }
+
+  List<Map<String, dynamic>> _getCustomizations() {
     List<Map<String, dynamic>> customizations = [];
     
     // Check for removed items
@@ -122,7 +144,8 @@ class ShoppingPlanController extends GetxController implements GetxService {
 
     // Check for weight/quantity increments
     for (var currentItem in _variantItemsDetails!.items!) {
-      var originalItem = _originalVariantItemsDetails!.items!.firstWhere((it) => it.foodId == currentItem.foodId);
+      var originalItem = _originalVariantItemsDetails!.items!.firstWhereOrNull((it) => it.foodId == currentItem.foodId);
+      if (originalItem == null) continue; // Should not happen if only increments/removals allowed
       
       if (currentItem.isWeightBased!) {
         double deltaWeight = (currentItem.requestedWeight ?? 0) - (originalItem.requestedWeight ?? 0);
@@ -142,17 +165,37 @@ class ShoppingPlanController extends GetxController implements GetxService {
         }
       }
     }
+    return customizations;
+  }
 
-    VariantItemsDetailsModel? previewResponse = await shoppingPlanServiceInterface.getVariantPreview(
+  Future<void> addToCart() async {
+    if (_variantItemsDetails == null || _variantItemsDetails!.variant == null) return;
+
+    _isAddToCartLoading = true;
+    update();
+
+    Map<String, dynamic> body = {
+      "customizations": _getCustomizations(),
+    };
+
+    if (!AuthHelper.isLoggedIn()) {
+      body["guest_id"] = AuthHelper.getGuestId();
+    }
+
+    Response response = await shoppingPlanServiceInterface.addToCart(
       _variantItemsDetails!.variant!.id!,
-      {"customizations": customizations},
+      body,
     );
 
-    if (previewResponse != null) {
-      _variantItemsDetails = previewResponse;
+    if (response.statusCode == 200) {
+      showCustomSnackBar('تمت الإضافة للسلة بنجاح'.tr);
+      Get.offAllNamed(RouteHelper.getCartRoute()); // Go directly to Cart
+    } else {
+       // ApiClient usually handles errors, but we can be explicit
+       showCustomSnackBar(response.statusText ?? 'حدث خطأ ما'.tr);
     }
-    
-    _isPreviewLoading = false;
+
+    _isAddToCartLoading = false;
     update();
   }
 }
