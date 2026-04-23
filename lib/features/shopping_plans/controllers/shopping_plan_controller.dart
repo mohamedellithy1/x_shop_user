@@ -15,8 +15,13 @@ class ShoppingPlanController extends GetxController implements GetxService {
   VariantItemsDetailsModel? _variantItemsDetails;
   VariantItemsDetailsModel? get variantItemsDetails => _variantItemsDetails;
 
+  VariantItemsDetailsModel? _originalVariantItemsDetails;
+
   bool _isLoading = false;
   bool get isLoading => _isLoading;
+
+  bool _isPreviewLoading = false;
+  bool get isPreviewLoading => _isPreviewLoading;
 
   Future<void> getShoppingPlanList() async {
     _isLoading = true;
@@ -39,61 +44,115 @@ class ShoppingPlanController extends GetxController implements GetxService {
   Future<void> getVariantItems(int variantId) async {
     _isLoading = true;
     _variantItemsDetails = null;
+    _originalVariantItemsDetails = null;
     update();
-    _variantItemsDetails = await shoppingPlanServiceInterface.getVariantItems(variantId);
+    VariantItemsDetailsModel? details = await shoppingPlanServiceInterface.getVariantItems(variantId);
+    if (details != null) {
+      _variantItemsDetails = details;
+      // Store a deep copy for original comparison
+      _originalVariantItemsDetails = VariantItemsDetailsModel.fromJson(details.toJson());
+    }
     _isLoading = false;
     update();
   }
 
   void incrementQuantity(int index) {
     if (_variantItemsDetails != null && _variantItemsDetails!.items![index].allowUserIncrement!) {
-      _variantItemsDetails!.items![index].quantity = (_variantItemsDetails!.items![index].quantity ?? 0) + 1;
-      _calculateTotal();
-      update();
+      if (_variantItemsDetails!.items![index].isWeightBased!) {
+        // Increment weight by 1 (or common step)
+        _variantItemsDetails!.items![index].requestedWeight = (_variantItemsDetails!.items![index].requestedWeight ?? 0) + 1.0;
+      } else {
+        _variantItemsDetails!.items![index].quantity = (_variantItemsDetails!.items![index].quantity ?? 0) + 1;
+      }
+      _getPreview();
     }
   }
 
   void decrementQuantity(int index) {
-    if (_variantItemsDetails != null && 
-        _variantItemsDetails!.items![index].allowUserIncrement! && 
-        _variantItemsDetails!.items![index].quantity! > 1) {
-      _variantItemsDetails!.items![index].quantity = _variantItemsDetails!.items![index].quantity! - 1;
-      _calculateTotal();
-      update();
-    } else if (_variantItemsDetails != null && 
-               _variantItemsDetails!.items![index].isOptional! && 
-               _variantItemsDetails!.items![index].quantity! == 1) {
-      removeItem(index);
+    if (_variantItemsDetails != null && _variantItemsDetails!.items![index].allowUserIncrement!) {
+       if (_variantItemsDetails!.items![index].isWeightBased!) {
+         double currentWeight = _variantItemsDetails!.items![index].requestedWeight ?? 0;
+         double originalWeight = _originalVariantItemsDetails!.items!.firstWhere((it) => it.foodId == _variantItemsDetails!.items![index].foodId).requestedWeight ?? 0;
+         
+         if (currentWeight > originalWeight) {
+           _variantItemsDetails!.items![index].requestedWeight = currentWeight - 1.0;
+           _getPreview();
+         }
+       } else {
+         int currentQty = _variantItemsDetails!.items![index].quantity ?? 0;
+         int originalQty = _originalVariantItemsDetails!.items!.firstWhere((it) => it.foodId == _variantItemsDetails!.items![index].foodId).quantity ?? 0;
+
+         if (currentQty > originalQty) {
+           _variantItemsDetails!.items![index].quantity = currentQty - 1;
+           _getPreview();
+         } else if (_variantItemsDetails!.items![index].isOptional!) {
+           removeItem(index);
+         }
+       }
+    } else if (_variantItemsDetails != null && _variantItemsDetails!.items![index].isOptional!) {
+       removeItem(index);
     }
   }
 
   void removeItem(int index) {
     if (_variantItemsDetails != null && _variantItemsDetails!.items![index].isOptional!) {
       _variantItemsDetails!.items!.removeAt(index);
-      _calculateTotal();
-      update();
+      _getPreview();
     }
   }
 
-  void _calculateTotal() {
-    double total = 0;
-    int count = 0;
-    for (var item in _variantItemsDetails!.items!) {
-      double itemPrice = item.unitPrice ?? 0;
-      if (item.isWeightBased!) {
-        // Line total for weight based items might be unitPrice * weight * quantity
-        // Based on the example: requested_weight: 2.5, unit_price: 25, line_total: 62.5 (25 * 2.5)
-        total += itemPrice * (item.requestedWeight ?? 1) * (item.quantity ?? 1);
-      } else {
-        total += itemPrice * (item.quantity ?? 1);
+  Future<void> _getPreview() async {
+    if (_variantItemsDetails == null || _originalVariantItemsDetails == null) return;
+
+    _isPreviewLoading = true;
+    update();
+
+    List<Map<String, dynamic>> customizations = [];
+    
+    // Check for removed items
+    for (var originalItem in _originalVariantItemsDetails!.items!) {
+      bool stillExists = _variantItemsDetails!.items!.any((it) => it.foodId == originalItem.foodId);
+      if (!stillExists) {
+        customizations.add({
+          "food_id": originalItem.foodId,
+          "remove": true,
+        });
       }
-      count++;
     }
-    _variantItemsDetails = VariantItemsDetailsModel(
-      plan: _variantItemsDetails!.plan,
-      variant: _variantItemsDetails!.variant,
-      items: _variantItemsDetails!.items,
-      summary: PlanSummaryModel(itemsCount: count, estimatedTotal: total),
+
+    // Check for weight/quantity increments
+    for (var currentItem in _variantItemsDetails!.items!) {
+      var originalItem = _originalVariantItemsDetails!.items!.firstWhere((it) => it.foodId == currentItem.foodId);
+      
+      if (currentItem.isWeightBased!) {
+        double deltaWeight = (currentItem.requestedWeight ?? 0) - (originalItem.requestedWeight ?? 0);
+        if (deltaWeight > 0) {
+          customizations.add({
+            "food_id": currentItem.foodId,
+            "extra_weight": deltaWeight,
+          });
+        }
+      } else {
+        int deltaQty = (currentItem.quantity ?? 0) - (originalItem.quantity ?? 0);
+        if (deltaQty > 0) {
+          customizations.add({
+            "food_id": currentItem.foodId,
+            "extra_quantity": deltaQty,
+          });
+        }
+      }
+    }
+
+    VariantItemsDetailsModel? previewResponse = await shoppingPlanServiceInterface.getVariantPreview(
+      _variantItemsDetails!.variant!.id!,
+      {"customizations": customizations},
     );
+
+    if (previewResponse != null) {
+      _variantItemsDetails = previewResponse;
+    }
+    
+    _isPreviewLoading = false;
+    update();
   }
 }

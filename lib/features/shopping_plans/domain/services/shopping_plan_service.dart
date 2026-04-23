@@ -20,4 +20,9 @@ class ShoppingPlanService implements ShoppingPlanServiceInterface {
   Future<VariantItemsDetailsModel?> getVariantItems(int variantId) async {
     return await shoppingPlanRepositoryInterface.getVariantItems(variantId);
   }
+
+  @override
+  Future<VariantItemsDetailsModel?> getVariantPreview(int variantId, Map<String, dynamic> body) async {
+    return await shoppingPlanRepositoryInterface.getVariantPreview(variantId, body);
+  }
 }

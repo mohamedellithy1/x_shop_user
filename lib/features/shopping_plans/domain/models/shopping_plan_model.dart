@@ -69,7 +69,7 @@ class ShoppingPlanRestaurant {
 
   ShoppingPlanRestaurant({this.id, this.name, this.logo});
 
-  String get logoFullUrl => '${AppConstants.baseUrl}/storage/restaurant/$logo';
+  String get logoFullUrl => '${AppConstants.baseUrl}/$logo';
 
   factory ShoppingPlanRestaurant.fromJson(Map<String, dynamic> json) {
     return ShoppingPlanRestaurant(
@@ -117,7 +117,9 @@ class ShoppingPlanDetailsModel {
 
   factory ShoppingPlanDetailsModel.fromJson(Map<String, dynamic> json) {
     return ShoppingPlanDetailsModel(
-      plan: json['plan'] != null ? ShoppingPlanModel.fromJson(json['plan']) : null,
+      plan: json['plan'] != null
+          ? ShoppingPlanModel.fromJson(json['plan'])
+          : null,
       variants: json['variants'] != null
           ? List<PlanVariantModel>.from(
               json['variants'].map((x) => PlanVariantModel.fromJson(x)))
@@ -159,42 +161,71 @@ class PlanVariantModel {
       basePriceCached: (json['base_price_cached'] as num?)?.toDouble(),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'shopping_plan_id': shoppingPlanId,
+      'period_type': periodType,
+      'people_count': peopleCount,
+      'title': title,
+      'notes': notes,
+      'items_count': itemsCount,
+      'base_price_cached': basePriceCached,
+    };
+  }
 }
 
 class VariantItemsDetailsModel {
-  final ShoppingPlanModel? plan;
-  final PlanVariantModel? variant;
-  final List<PlanItemModel>? items;
-  final PlanSummaryModel? summary;
+  ShoppingPlanModel? plan;
+  PlanVariantModel? variant;
+  List<PlanItemModel>? items;
+  PlanSummaryModel? summary;
 
   VariantItemsDetailsModel({this.plan, this.variant, this.items, this.summary});
 
   factory VariantItemsDetailsModel.fromJson(Map<String, dynamic> json) {
     return VariantItemsDetailsModel(
-      plan: json['plan'] != null ? ShoppingPlanModel.fromJson(json['plan']) : null,
-      variant: json['variant'] != null ? PlanVariantModel.fromJson(json['variant']) : null,
-      items: json['items'] != null
-          ? List<PlanItemModel>.from(json['items'].map((x) => PlanItemModel.fromJson(x)))
+      plan: json['plan'] != null
+          ? ShoppingPlanModel.fromJson(json['plan'])
           : null,
-      summary: json['summary'] != null ? PlanSummaryModel.fromJson(json['summary']) : null,
+      variant: json['variant'] != null
+          ? PlanVariantModel.fromJson(json['variant'])
+          : null,
+      items: json['items'] != null
+          ? List<PlanItemModel>.from(
+              json['items'].map((x) => PlanItemModel.fromJson(x)))
+          : null,
+      summary: json['summary'] != null
+          ? PlanSummaryModel.fromJson(json['summary'])
+          : null,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'plan': plan?.toJson(),
+      'variant': variant?.toJson(),
+      'items': items?.map((x) => x.toJson()).toList(),
+      'summary': summary?.toJson(),
+    };
   }
 }
 
 class PlanItemModel {
-  final int? foodId;
-  final String? name;
-  final String? image;
-  final int? categoryId;
-  final int? restaurantId;
-  final bool? isWeightBased;
-  final double? requestedWeight;
-  final String? weightUnit;
+  int? foodId;
+  String? name;
+  String? image;
+  int? categoryId;
+  int? restaurantId;
+  bool? isWeightBased;
+  double? requestedWeight;
+  String? weightUnit;
   int? quantity;
-  final double? unitPrice;
-  final double? lineTotal;
-  final bool? isOptional;
-  final bool? allowUserIncrement;
+  double? unitPrice;
+  double? lineTotal;
+  bool? isOptional;
+  bool? allowUserIncrement;
 
   PlanItemModel({
     this.foodId,
@@ -212,7 +243,7 @@ class PlanItemModel {
     this.allowUserIncrement,
   });
 
-  String get imageFullUrl => '${AppConstants.baseUrl}/storage/product/$image';
+  String get imageFullUrl => '${AppConstants.baseUrl}/$image';
 
   factory PlanItemModel.fromJson(Map<String, dynamic> json) {
     return PlanItemModel(
@@ -231,11 +262,29 @@ class PlanItemModel {
       allowUserIncrement: json['allow_user_increment'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'food_id': foodId,
+      'name': name,
+      'image': image,
+      'category_id': categoryId,
+      'restaurant_id': restaurantId,
+      'is_weight_based': isWeightBased,
+      'requested_weight': requestedWeight,
+      'weight_unit': weightUnit,
+      'quantity': quantity,
+      'unit_price': unitPrice,
+      'line_total': lineTotal,
+      'is_optional': isOptional,
+      'allow_user_increment': allowUserIncrement,
+    };
+  }
 }
 
 class PlanSummaryModel {
-  final int? itemsCount;
-  final double? estimatedTotal;
+  int? itemsCount;
+  double? estimatedTotal;
 
   PlanSummaryModel({this.itemsCount, this.estimatedTotal});
 
@@ -244,5 +293,12 @@ class PlanSummaryModel {
       itemsCount: json['items_count'],
       estimatedTotal: (json['estimated_total'] as num?)?.toDouble(),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'items_count': itemsCount,
+      'estimated_total': estimatedTotal,
+    };
   }
 }

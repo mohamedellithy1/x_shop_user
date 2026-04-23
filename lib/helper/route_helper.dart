@@ -4,6 +4,7 @@ import 'package:stackfood_multivendor/common/widgets/image_viewer_screen_widget.
 import 'package:stackfood_multivendor/common/widgets/not_found_widget.dart';
 import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
 import 'package:stackfood_multivendor/features/auth/screens/new_user_setup_screen.dart';
+import 'package:stackfood_multivendor/features/shopping_plans/screens/shopping_plan_preview_screen.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
 import 'package:stackfood_multivendor/theme/dark_theme.dart'
     as dark_theme;
@@ -166,6 +167,7 @@ class RouteHelper {
   static const String shoppingPlans = '/shopping-plans';
   static const String planVariants = '/plan-variants';
   static const String variantItems = '/variant-items';
+  static const String shoppingPlanOrderPreview = '/shopping-plan-preview';
 
   static String getInitialRoute({bool fromSplash = false}) =>
       '$initial?from-splash=$fromSplash';
@@ -476,6 +478,7 @@ class RouteHelper {
   static String getShoppingPlansRoute() => shoppingPlans;
   static String getPlanVariantsRoute(int? id, String? name) => '$planVariants?id=$id&name=$name';
   static String getVariantItemsRoute(int? id, String? title) => '$variantItems?id=$id&title=$title';
+  static String getShoppingPlanOrderPreviewRoute() => shoppingPlanOrderPreview;
 
   static List<GetPage> routes = [
     GetPage(
@@ -1110,6 +1113,9 @@ class RouteHelper {
               variantId: int.parse(Get.parameters['id']!),
               variantTitle: Get.parameters['title']!,
             ))),
+    GetPage(
+        name: shoppingPlanOrderPreview,
+        page: () => getRoute(const ShoppingPlanPreviewScreen())),
   ];
 
   static Widget getRoute(Widget navigateTo, {bool byPuss = false}) {

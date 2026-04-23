@@ -4,4 +4,5 @@ abstract class ShoppingPlanServiceInterface {
   Future<List<ShoppingPlanModel>?> getShoppingPlanList();
   Future<ShoppingPlanDetailsModel?> getShoppingPlanVariants(int planId);
   Future<VariantItemsDetailsModel?> getVariantItems(int variantId);
+  Future<VariantItemsDetailsModel?> getVariantPreview(int variantId, Map<String, dynamic> body);
 }

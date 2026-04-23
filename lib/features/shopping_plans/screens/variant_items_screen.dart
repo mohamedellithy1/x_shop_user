@@ -5,6 +5,7 @@ import 'package:stackfood_multivendor/features/shopping_plans/controllers/shoppi
 import 'package:stackfood_multivendor/features/shopping_plans/domain/models/shopping_plan_model.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
 import 'package:stackfood_multivendor/helper/price_converter.dart';
+import 'package:stackfood_multivendor/helper/route_helper.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_image_widget.dart';
@@ -50,32 +51,46 @@ class _VariantItemsScreenState extends State<VariantItemsScreen> {
               final items = details.items ?? [];
               final summary = details.summary;
 
-              return Column(
+              return Stack(
                 children: [
-                  Expanded(
-                    child: RefreshIndicator(
-                      color: const Color(0xFF55745a),
-                      onRefresh: () =>
-                          controller.getVariantItems(widget.variantId),
-                      child: ListView.builder(
-                        padding:
-                            const EdgeInsets.all(Dimensions.paddingSizeDefault),
-                        itemCount: items.length,
-                        itemBuilder: (context, index) {
-                          return _ItemCard(
-                            item: items[index],
-                            isDark: isDark,
-                            onRemove: () => controller.removeItem(index),
-                            onIncrement: () => controller.incrementQuantity(index),
-                            onDecrement: () => controller.decrementQuantity(index),
-                          );
-                        },
+                  Column(
+                    children: [
+                      Expanded(
+                        child: RefreshIndicator(
+                          color: const Color(0xFF55745a),
+                          onRefresh: () =>
+                              controller.getVariantItems(widget.variantId),
+                          child: ListView.builder(
+                            padding:
+                                const EdgeInsets.all(Dimensions.paddingSizeDefault),
+                            itemCount: items.length,
+                            itemBuilder: (context, index) {
+                              return _ItemCard(
+                                item: items[index],
+                                isDark: isDark,
+                                onRemove: () => controller.removeItem(index),
+                                onIncrement: () => controller.incrementQuantity(index),
+                                onDecrement: () => controller.decrementQuantity(index),
+                              );
+                            },
+                          ),
+                        ),
                       ),
-                    ),
+
+                      // Summary Bottom Bar
+                      if (summary != null) _buildBottomBar(summary, isDark),
+                    ],
                   ),
 
-                  // Summary Bottom Bar
-                  if (summary != null) _buildBottomBar(summary, isDark),
+                  if (controller.isPreviewLoading)
+                    Positioned.fill(
+                      child: Container(
+                        color: Colors.white24,
+                        child: const Center(
+                          child: CircularProgressIndicator(color: Color(0xFF55745a)),
+                        ),
+                      ),
+                    ),
                 ],
               );
             },
@@ -128,7 +143,7 @@ class _VariantItemsScreenState extends State<VariantItemsScreen> {
             height: 50,
             child: ElevatedButton(
               onPressed: () {
-                // Future: Action to subscribe or buy
+                Get.toNamed(RouteHelper.getShoppingPlanOrderPreviewRoute());
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF55745a),
@@ -166,12 +181,7 @@ class _ItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double displayPrice = (item.unitPrice ?? 0) * (item.quantity ?? 1);
-    if (item.isWeightBased!) {
-      displayPrice = (item.unitPrice ?? 0) *
-          (item.requestedWeight ?? 1) *
-          (item.quantity ?? 1);
-    }
+    double displayPrice = item.lineTotal ?? 0;
 
     return Container(
       margin: const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
@@ -269,7 +279,7 @@ class _ItemCard extends StatelessWidget {
                     padding: EdgeInsets.zero,
                   ),
                   Text(
-                    '${item.quantity}',
+                    '${item.isWeightBased! ? item.requestedWeight : item.quantity}',
                     style:
                         robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall),
                   ),
@@ -286,5 +296,4 @@ class _ItemCard extends StatelessWidget {
       ),
     );
   }
-
-  }
+}

@@ -40,4 +40,14 @@ class ShoppingPlanRepository implements ShoppingPlanRepositoryInterface {
     }
     return variantDetails;
   }
+
+  @override
+  Future<VariantItemsDetailsModel?> getVariantPreview(int variantId, Map<String, dynamic> body) async {
+    VariantItemsDetailsModel? variantDetails;
+    Response response = await apiClient.postData('${AppConstants.variantDetailsUri}$variantId/preview', body);
+    if (response.statusCode == 200) {
+      variantDetails = VariantItemsDetailsModel.fromJson(response.body);
+    }
+    return variantDetails;
+  }
 }

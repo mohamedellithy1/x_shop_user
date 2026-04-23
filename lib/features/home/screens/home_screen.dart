@@ -145,7 +145,7 @@ class _XMarketHomeScreenState extends State<XMarketHomeScreen> {
         Get.find<MarketLocationController>()
             .getCurrentLocation(true, notify: false)
             .then((address) {
-          if (address.latitude != null && address.address != null) {
+          if (mounted && address.latitude != null && address.address != null) {
             Get.find<MarketLocationController>().saveAddressAndNavigate(address,
                 false, 'home', false, ResponsiveHelper.isDesktop(context));
           }
@@ -188,7 +188,11 @@ class _XMarketHomeScreenState extends State<XMarketHomeScreen> {
             false) &&
         Get.find<MarketSplashController>(tag: 'xmarket').showReferBottomSheet) {
       Future.delayed(
-          const Duration(milliseconds: 500), () => _showReferBottomSheet());
+          const Duration(milliseconds: 500), () {
+            if (mounted) {
+              _showReferBottomSheet();
+            }
+          });
     }
 
     // Initialize WebSocket connection after data is loaded
