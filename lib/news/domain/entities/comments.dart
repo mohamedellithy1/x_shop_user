@@ -11,6 +11,8 @@ class CommentEntity {
   final String createdAt;
   final bool isEdited;
   final List<CommentEntity> replies;
+  String? myReaction;
+  Map<String, int> reactionsCount;
 
   CommentEntity({
     required this.id,
@@ -25,5 +27,7 @@ class CommentEntity {
     required this.createdAt,
     required this.isEdited,
     required this.replies,
+    this.myReaction,
+    this.reactionsCount = const {},
   });
 }

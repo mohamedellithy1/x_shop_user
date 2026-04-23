@@ -23,6 +23,8 @@ class NewsModel extends News {
     super.canDeleteComment,
     super.canDeleteReply,
     super.canDeleteReplyReply,
+    super.myReaction,
+    super.reactionsCount = const {},
   });
 
   factory NewsModel.fromJson(Map<String, dynamic> json) {
@@ -74,6 +76,10 @@ class NewsModel extends News {
           ? true
           : (json['can_delete_reply_reply'] == 1 ||
               json['can_delete_reply_reply'] == true),
+      myReaction: json['my_reaction']?.toString(),
+      reactionsCount: json['reactions_count'] != null
+          ? Map<String, int>.from(json['reactions_count'] as Map)
+          : {},
     );
   }
 

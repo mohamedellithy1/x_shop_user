@@ -93,24 +93,25 @@ class NewsController extends GetxController {
     update();
   }
 
-  Future<bool?> likeNews(int newsId) async {
+  Future<Map<String, dynamic>?> reactToItem(String targetType, int targetId, String reaction) async {
     if (Get.find<MarketAuthController>().isLoggedIn()) {
-      final response = await newsRepo.likeNews(newsId);
+      final response = await newsRepo.reactToItem(
+        targetType: targetType,
+        targetId: targetId,
+        reaction: reaction,
+      );
       if (response != null && response.statusCode == 200) {
-        print("News liked successfully");
-        if (response.body != null &&
-            response.body is Map &&
-            response.body.containsKey('is_liked')) {
-          return (response.body['is_liked'] == 1 ||
-              response.body['is_liked'] == true);
+        print("Item reacted successfully");
+        if (response.body != null && response.body is Map) {
+          return response.body as Map<String, dynamic>;
         }
-        return true;
+        return {'success': true}; // Fallback
       } else {
-        print("Failed to like news");
+        print("Failed to react: ${response?.statusText}");
         return null;
       }
     } else {
-      showCustomSnackBar("يجب تسجيل الدخول أولاً لتتمكن من الإعجاب بالخبر");
+      showCustomSnackBar("يجب تسجيل الدخول أولاً لتتمكن من التفاعل");
       return null;
     }
   }
@@ -296,6 +297,8 @@ class NewsController extends GetxController {
             parentId: comment.parentId,
             createdAt: comment.createdAt,
             isEdited: comment.isEdited,
+            myReaction: comment.myReaction,
+            reactionsCount: comment.reactionsCount,
             replies: addRepliesToComment(replies), // إضافة الردود بشكل متداخل
           ));
         } else {

@@ -21,6 +21,8 @@ class News {
   final bool canDeleteComment;
   final bool canDeleteReply;
   final bool canDeleteReplyReply;
+  String? myReaction;
+  Map<String, int> reactionsCount;
 
   News({
     required this.id,
@@ -42,5 +44,7 @@ class News {
     this.canDeleteComment = true,
     this.canDeleteReply = true,
     this.canDeleteReplyReply = true,
+    this.myReaction,
+    this.reactionsCount = const {},
   });
 }

@@ -16,10 +16,16 @@ class NewsRepository {
     return await apiClient.getData('${AppConstants.newsBaseUrl}$url');
   }
 
-  Future<Response?> likeNews(int newsId) async {
+  Future<Response?> reactToItem({
+    required String targetType,
+    required int targetId,
+    required String reaction,
+  }) async {
     return await apiClient
-        .postData('${AppConstants.newsBaseUrl}${AppConstants.likeNewsUei}', {
-      'post_id': newsId,
+        .postData('${AppConstants.newsBaseUrl}${AppConstants.reactNewsUri}', {
+      'target_type': targetType,
+      'target_id': targetId,
+      'reaction': reaction,
     });
   }
 

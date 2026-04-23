@@ -211,18 +211,31 @@ class _NewsItemWidgetState extends State<NewsItemWidget> {
                         _showReactionsPopup(context, details.globalPosition);
                       },
                       onTap: () async {
-                        bool? isLikedResponse = await Get.find<NewsController>()
-                            .likeNews(widget.news.id);
+                        // If already reacted, send the same reaction to remove it. Else default to 'like'.
+                        String reactionToSend = widget.news.myReaction ?? 'like';
+                        
+                        final response = await Get.find<NewsController>()
+                            .reactToItem('post', widget.news.id, reactionToSend);
 
-                        if (isLikedResponse != null && mounted) {
+                        if (response != null && mounted) {
                           setState(() {
-                            widget.news.isLiked = isLikedResponse;
-                            if (isLikedResponse) {
-                              widget.news.likesCount =
-                                  widget.news.likesCount + 1;
-                            } else {
-                              widget.news.likesCount =
-                                  widget.news.likesCount - 1;
+                            // Update values dynamically based on API response
+                            if (response.containsKey('my_reaction')) {
+                              widget.news.myReaction = response['my_reaction']?.toString();
+                              // Sync isLiked with whether user has any reaction
+                              widget.news.isLiked = widget.news.myReaction != null;
+                            }
+                            if (response.containsKey('reactions_count') && response['reactions_count'] != null) {
+                              widget.news.reactionsCount = Map<String, int>.from(response['reactions_count'] as Map);
+                              // Sync total likesCount by summing all reaction counts
+                              widget.news.likesCount = widget.news.reactionsCount.values.fold(0, (sum, val) => sum + val);
+                            }
+                            // Fallbacks if backend actually provides them directly
+                            if (response.containsKey('is_liked')) {
+                              widget.news.isLiked = response['is_liked'] == 1 || response['is_liked'] == true;
+                            }
+                            if (response.containsKey('likes_count')) {
+                              widget.news.likesCount = int.tryParse(response['likes_count'].toString()) ?? widget.news.likesCount;
                             }
                           });
                         }
@@ -290,10 +303,24 @@ class _NewsItemWidgetState extends State<NewsItemWidget> {
     );
   }
 
-  String? _selectedReaction; // Local state for the selected emoji/reaction
+  final Map<String, String> _reactionToEmoji = {
+    'like': '👍',
+    'love': '❤️',
+    'haha': '😂',
+    'wow': '😮',
+    'sad': '😢',
+    'angry': '😡',
+  };
 
   Widget _buildReactionIcon() {
-    if (!widget.news.isLiked) {
+    if (widget.news.myReaction == null || !_reactionToEmoji.containsKey(widget.news.myReaction)) {
+      if (widget.news.isLiked) { // fallback
+         return const Icon(
+            Icons.thumb_up,
+            size: 25,
+            color: Color(0xFF9ebc67),
+          );
+      }
       return Icon(
         Icons.thumb_up_outlined,
         size: 25,
@@ -301,29 +328,20 @@ class _NewsItemWidgetState extends State<NewsItemWidget> {
       );
     }
 
-    // Default to Like if liked but no reaction selected yet
-    if (_selectedReaction == null) {
-      return const Icon(
-        Icons.thumb_up,
-        size: 25,
-        color: Color(0xFF9ebc67),
-      );
-    }
-
     return Text(
-      _selectedReaction!,
+      _reactionToEmoji[widget.news.myReaction!]!,
       style: const TextStyle(fontSize: 22),
     );
   }
 
   void _showReactionsPopup(BuildContext context, Offset position) {
     final List<Map<String, String>> reactions = [
-      {'emoji': '👍', 'name': 'Like'},
-      {'emoji': '❤️', 'name': 'Love'},
-      {'emoji': '😂', 'name': 'Haha'},
-      {'emoji': '😮', 'name': 'Wow'},
-      {'emoji': '😢', 'name': 'Sad'},
-      {'emoji': '😡', 'name': 'Angry'},
+      {'emoji': '👍', 'name': 'like'},
+      {'emoji': '❤️', 'name': 'love'},
+      {'emoji': '😂', 'name': 'haha'},
+      {'emoji': '😮', 'name': 'wow'},
+      {'emoji': '😢', 'name': 'sad'},
+      {'emoji': '😡', 'name': 'angry'},
     ];
 
     OverlayEntry? overlayEntry;
@@ -362,22 +380,35 @@ class _NewsItemWidgetState extends State<NewsItemWidget> {
                     return GestureDetector(
                       onTap: () async {
                         overlayEntry?.remove();
+                        // Update optimistically for instant feedback
                         setState(() {
-                          _selectedReaction = reaction['emoji'];
+                          widget.news.myReaction = reaction['name'];
+                          widget.news.isLiked = true;
                         });
 
-                        // Call API if not already liked
-                        if (!widget.news.isLiked) {
-                          bool? success = await Get.find<NewsController>()
-                              .likeNews(widget.news.id);
-                          if (success != null && mounted) {
-                            setState(() {
-                              widget.news.isLiked = success;
-                              if (success) {
-                                widget.news.likesCount++;
-                              }
-                            });
-                          }
+                        final response = await Get.find<NewsController>()
+                            .reactToItem('post', widget.news.id, reaction['name']!);
+
+                        if (response != null && mounted) {
+                          setState(() {
+                            // Update values dynamically based on API response
+                            if (response.containsKey('my_reaction')) {
+                              widget.news.myReaction = response['my_reaction']?.toString();
+                              widget.news.isLiked = widget.news.myReaction != null;
+                            }
+                            if (response.containsKey('reactions_count') && response['reactions_count'] != null) {
+                              widget.news.reactionsCount = Map<String, int>.from(response['reactions_count'] as Map);
+                              widget.news.likesCount = widget.news.reactionsCount.values.fold(0, (sum, val) => sum + val);
+                            }
+                            
+                            // Fallbacks
+                            if (response.containsKey('is_liked')) {
+                              widget.news.isLiked = response['is_liked'] == 1 || response['is_liked'] == true;
+                            }
+                            if (response.containsKey('likes_count')) {
+                              widget.news.likesCount = int.tryParse(response['likes_count'].toString()) ?? widget.news.likesCount;
+                            }
+                          });
                         }
                       },
                       child: Padding(

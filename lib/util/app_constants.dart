@@ -22,7 +22,7 @@ class AppConstants {
   static const String newsBaseUrl = 'https://xshop.x-ride.support';
   static const String newsUei = '/api/v1/news';
   static const String newsUeiWithZoneId = 'zone_id=';
-  static const String likeNewsUei = '/api/v1/news/like';
+  static const String reactNewsUri = '/api/v1/news/react';
   static const String getCommentsById = '/api/v1/news/';
   static const String addCommentUei = '/api/v1/news/comments';
   static const String editCommentUei = '/api/v1/news/comments/';

@@ -150,7 +150,7 @@ class SettingsButton extends StatelessWidget {
               ? CupertinoSwitch(
                   value: isButtonActive!,
                   onChanged: (bool isActive) => onTap(),
-                  activeTrackColor: Colors.orange,
+                  activeTrackColor: Color(0xFF9ebc67),
                   inactiveTrackColor:
                       Theme.of(context).disabledColor.withValues(alpha: 0.5),
                 )

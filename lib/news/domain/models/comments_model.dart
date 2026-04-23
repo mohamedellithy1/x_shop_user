@@ -13,6 +13,8 @@ class CommentModel extends CommentEntity {
     int? parentId,
     required String createdAt,
     required bool isEdited,
+    String? myReaction,
+    Map<String, int> reactionsCount = const {},
     required List<CommentEntity> replies,
   }) : super(
           id: id,
@@ -26,6 +28,8 @@ class CommentModel extends CommentEntity {
           parentId: parentId,
           createdAt: createdAt,
           isEdited: isEdited,
+          myReaction: myReaction,
+          reactionsCount: reactionsCount,
           replies: replies,
         );
 
@@ -43,6 +47,10 @@ class CommentModel extends CommentEntity {
           map['parent_id'] != null ? int.tryParse(map['parent_id'].toString()) : null,
       createdAt: map['created_at']?.toString() ?? '',
       isEdited: map['is_edited'] == 1 || map['is_edited'] == true,
+      myReaction: map['my_reaction']?.toString(),
+      reactionsCount: map['reactions_count'] != null
+          ? Map<String, int>.from(map['reactions_count'] as Map)
+          : {},
       replies: map['replies'] != null
           ? (map['replies'] as List<dynamic>)
               .map((e) => CommentModel.fromMap(e))
@@ -64,6 +72,8 @@ class CommentModel extends CommentEntity {
       'parent_id': parentId,
       'created_at': createdAt,
       'is_edited': isEdited,
+      'my_reaction': myReaction,
+      'reactions_count': reactionsCount,
       'replies': replies.map((e) => (e as CommentModel).toMap()).toList(),
     };
   }
