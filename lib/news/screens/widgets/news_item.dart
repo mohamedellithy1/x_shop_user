@@ -58,236 +58,253 @@ class _NewsItemWidgetState extends State<NewsItemWidget> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-              // Time Badge at the top right of the card itself
-              Padding(
-                padding:
-                    const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.access_time,
-                      size: 16,
-                      color: Colors.grey[600],
+                  // Time Badge at the top right of the card itself
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        bottom: Dimensions.paddingSizeSmall),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.access_time,
+                          size: 16,
+                          color: Colors.grey[600],
+                        ),
+                        const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                        Text(
+                          DateConverter.getRelativeTime(widget.news.createdAt),
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: Colors.grey[600],
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                    Text(
-                      DateConverter.getRelativeTime(widget.news.createdAt),
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.grey[600],
-                            fontWeight: FontWeight.w600,
-                          ),
-                    ),
-                  ],
-                ),
-              ),
+                  ),
 
-              // News Image
-              Container(
-                width: double.infinity,
-                height: 200,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                  child: CachedNetworkImage(
-                    imageUrl: widget.news.image,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => Container(
-                      color: Colors.grey[300],
-                      child: const Center(
-                        child: CircularProgressIndicator(
-                          color: Color(0xFF9ebc67),
+                  // News Image
+                  Container(
+                    width: double.infinity,
+                    height: 200,
+                    decoration: BoxDecoration(
+                      borderRadius:
+                          BorderRadius.circular(Dimensions.radiusSmall),
+                    ),
+                    child: ClipRRect(
+                      borderRadius:
+                          BorderRadius.circular(Dimensions.radiusSmall),
+                      child: CachedNetworkImage(
+                        imageUrl: widget.news.image,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => Container(
+                          color: Colors.grey[300],
+                          child: const Center(
+                            child: CircularProgressIndicator(
+                              color: Color(0xFF9ebc67),
+                            ),
+                          ),
+                        ),
+                        errorWidget: (context, url, error) => Container(
+                          color: Colors.grey[300],
+                          child: const Icon(Icons.error),
                         ),
                       ),
                     ),
-                    errorWidget: (context, url, error) => Container(
-                      color: Colors.grey[300],
-                      child: const Icon(Icons.error),
-                    ),
                   ),
-                ),
-              ),
 
-              const SizedBox(height: Dimensions.paddingSizeSmall),
+                  const SizedBox(height: Dimensions.paddingSizeSmall),
 
-              // News Title
-              Text(
-                widget.news.title,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
+                  // News Title
+                  Text(
+                    widget.news.title,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+
+                  const SizedBox(height: Dimensions.paddingSizeSmall),
+
+                  // News Body
+                  if (widget.news.body.isNotEmpty)
+                    Text(
+                      widget.news.body,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      maxLines: 200,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
 
-              const SizedBox(height: Dimensions.paddingSizeSmall),
+                  const SizedBox(height: Dimensions.paddingSizeSmall),
 
-              // News Body
-              if (widget.news.body.isNotEmpty)
-                Text(
-                  widget.news.body,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                  maxLines: 200,
-                  overflow: TextOverflow.ellipsis,
-                ),
+                  // // Zone Name
+                  // if (widget.news.zone != null && widget.news.zone?.name != null)
+                  //   Container(
+                  //     padding: const EdgeInsets.symmetric(
+                  //       horizontal: Dimensions.paddingSizeSmall,
+                  //       vertical: Dimensions.paddingSizeExtraSmall,
+                  //     ),
+                  //     decoration: BoxDecoration(
+                  //       color: Theme.of(context).primaryColor.withOpacity(0.1),
+                  //       borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                  //     ),
+                  //     child: Text(
+                  //       widget.news.zone?.name ?? '',
+                  //       style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  //             color: Colors.black,
+                  //             fontWeight: FontWeight.w500,
+                  //           ),
+                  //     ),
+                  //   ),
 
-              const SizedBox(height: Dimensions.paddingSizeSmall),
-
-              // // Zone Name
-              // if (widget.news.zone != null && widget.news.zone?.name != null)
-              //   Container(
-              //     padding: const EdgeInsets.symmetric(
-              //       horizontal: Dimensions.paddingSizeSmall,
-              //       vertical: Dimensions.paddingSizeExtraSmall,
-              //     ),
-              //     decoration: BoxDecoration(
-              //       color: Theme.of(context).primaryColor.withOpacity(0.1),
-              //       borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-              //     ),
-              //     child: Text(
-              //       widget.news.zone?.name ?? '',
-              //       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              //             color: Colors.black,
-              //             fontWeight: FontWeight.w500,
-              //           ),
-              //     ),
-              //   ),
-
-              // const SizedBox(height: Dimensions.paddingSizeSmall),
-                 ],
+                  // const SizedBox(height: Dimensions.paddingSizeSmall),
+                ],
               ),
             ),
 
-              // Facebook-style reactions summary row
-              _buildReactionSummary(),
+            // Facebook-style reactions summary row
+            _buildReactionSummary(),
 
-              // Bottom Row - Action Buttons
-              Container(
-                height: 40,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(Dimensions.radiusDefault),
-                    bottomRight: Radius.circular(Dimensions.radiusDefault),
-                  ),
-                  border: Border.all(
-                    color: Color(0xFF9ebc67),
-                  ),
-                  // gradient: const LinearGradient(
-                  //   colors: [
-                  //     Color(0xFFe3ebd5),
-                  //     Color(0xFFfafff4),
-                  //     Color(0xFFe3ebd5),
-                  //   ],
-                  //   begin: Alignment.centerLeft,
-                  //   end: Alignment.centerRight,
-                  // ),
+            // Bottom Row - Action Buttons
+            Container(
+              height: 40,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(Dimensions.radiusDefault),
+                  bottomRight: Radius.circular(Dimensions.radiusDefault),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Date
-                    // Expanded(
-                    //   child: Row(
-                    //     children: [
-                    //       Icon(
-                    //         Icons.access_time,
-                    //         size: 16,
-                    //         color: Colors.grey[600],
-                    //       ),
-                    //       const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                    //       Text(
-                    //         DateConverter.dateTimeStringToDateTime(
-                    //             widget.news.createdAt),
-                    //         style:
-                    //             Theme.of(context).textTheme.bodySmall?.copyWith(
-                    //                   color: Colors.grey[600],
-                    //                 ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
+                border: Border.all(
+                  color: Color(0xFF9ebc67),
+                ),
+                // gradient: const LinearGradient(
+                //   colors: [
+                //     Color(0xFFe3ebd5),
+                //     Color(0xFFfafff4),
+                //     Color(0xFFe3ebd5),
+                //   ],
+                //   begin: Alignment.centerLeft,
+                //   end: Alignment.centerRight,
+                // ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Date
+                  // Expanded(
+                  //   child: Row(
+                  //     children: [
+                  //       Icon(
+                  //         Icons.access_time,
+                  //         size: 16,
+                  //         color: Colors.grey[600],
+                  //       ),
+                  //       const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                  //       Text(
+                  //         DateConverter.dateTimeStringToDateTime(
+                  //             widget.news.createdAt),
+                  //         style:
+                  //             Theme.of(context).textTheme.bodySmall?.copyWith(
+                  //                   color: Colors.grey[600],
+                  //                 ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
 
-                    // Likes with Reactions
-                    GestureDetector(
-                      onLongPressStart: (details) {
-                        _showReactionsPopup(context, details.globalPosition);
-                      },
-                      onTap: () async {
-                        // If already reacted, send the same reaction to remove it. Else default to 'like'.
-                        String reactionToSend = widget.news.myReaction ?? 'like';
-                        
-                        final response = await Get.find<NewsController>()
-                            .reactToItem('post', widget.news.id, reactionToSend);
+                  // Likes with Reactions
+                  GestureDetector(
+                    onLongPressStart: (details) {
+                      _showReactionsPopup(context, details.globalPosition);
+                    },
+                    onTap: () async {
+                      // If already reacted, send the same reaction to remove it. Else default to 'like'.
+                      String reactionToSend = widget.news.myReaction ?? 'like';
 
-                        if (response != null && mounted) {
-                          setState(() {
-                            // Update values dynamically based on API response
-                            if (response.containsKey('my_reaction')) {
-                              widget.news.myReaction = response['my_reaction']?.toString();
-                              // Sync isLiked with whether user has any reaction
-                              widget.news.isLiked = widget.news.myReaction != null;
-                            }
-                            if (response.containsKey('reactions_count') && response['reactions_count'] != null) {
-                              widget.news.reactionsCount = Map<String, int>.from(response['reactions_count'] as Map);
-                              // Sync total likesCount by summing all reaction counts
-                              widget.news.likesCount = widget.news.reactionsCount.values.fold(0, (sum, val) => sum + val);
-                            }
-                            // Fallbacks if backend actually provides them directly
-                            if (response.containsKey('is_liked')) {
-                              widget.news.isLiked = response['is_liked'] == 1 || response['is_liked'] == true;
-                            }
-                            if (response.containsKey('likes_count')) {
-                              widget.news.likesCount = int.tryParse(response['likes_count'].toString()) ?? widget.news.likesCount;
-                            }
-                          });
-                        }
+                      final response = await Get.find<NewsController>()
+                          .reactToItem('post', widget.news.id, reactionToSend);
+
+                      if (response != null && mounted) {
+                        setState(() {
+                          // Update values dynamically based on API response
+                          if (response.containsKey('my_reaction')) {
+                            widget.news.myReaction =
+                                response['my_reaction']?.toString();
+                            // Sync isLiked with whether user has any reaction
+                            widget.news.isLiked =
+                                widget.news.myReaction != null;
+                          }
+                          if (response.containsKey('reactions_count') &&
+                              response['reactions_count'] != null) {
+                            widget.news.reactionsCount = Map<String, int>.from(
+                                response['reactions_count'] as Map);
+                            // Sync total likesCount by summing all reaction counts
+                            widget.news.likesCount = widget
+                                .news.reactionsCount.values
+                                .fold(0, (sum, val) => sum + val);
+                          }
+                          // Fallbacks if backend actually provides them directly
+                          if (response.containsKey('is_liked')) {
+                            widget.news.isLiked = response['is_liked'] == 1 ||
+                                response['is_liked'] == true;
+                          }
+                          if (response.containsKey('likes_count')) {
+                            widget.news.likesCount = int.tryParse(
+                                    response['likes_count'].toString()) ??
+                                widget.news.likesCount;
+                          }
+                        });
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        _buildReactionIcon(),
+                        const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                        Text(
+                          _getReactionText(),
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: _getReactionColor(),
+                                    fontWeight: widget.news.myReaction != null
+                                        ? FontWeight.bold
+                                        : FontWeight.normal,
+                                  ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(width: Dimensions.paddingSizeExtraOverLarge),
+
+                  // Comments
+                  if (widget.news.canComment)
+                    InkWell(
+                      onTap: () {
+                        _showCommentsBottomSheet(context, widget.news);
                       },
                       child: Row(
                         children: [
-                          _buildReactionIcon(),
-                          const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                          Icon(
+                            Icons.comment_outlined,
+                            size: 25,
+                            color: Colors.grey[600],
+                          ),
+                          const SizedBox(
+                              width: Dimensions.paddingSizeExtraSmall),
                           Text(
-                            _getReactionText(),
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: _getReactionColor(),
-                                  fontWeight: widget.news.myReaction != null ? FontWeight.bold : FontWeight.normal,
-                                ),
+                            'تعليق',
+                            style:
+                                Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: Colors.grey[600],
+                                    ),
                           ),
                         ],
                       ),
                     ),
-
-                    const SizedBox(width: Dimensions.paddingSizeExtraOverLarge),
-
-                    // Comments
-                    if (widget.news.canComment)
-                      InkWell(
-                        onTap: () {
-                          _showCommentsBottomSheet(context, widget.news);
-                        },
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.comment_outlined,
-                              size: 25,
-                              color: Colors.grey[600],
-                            ),
-                            const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                            Text(
-                              'تعليق',
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: Colors.grey[600],
-                                  ),
-                            ),
-                          ],
-                        ),
-                      ),
-                  ],
-                ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -309,17 +326,19 @@ class _NewsItemWidgetState extends State<NewsItemWidget> {
   };
 
   Widget _buildReactionSummary() {
-    if (widget.news.likesCount == 0 && widget.news.commentsCount == 0) return const SizedBox.shrink();
+    if (widget.news.likesCount == 0 && widget.news.commentsCount == 0)
+      return const SizedBox.shrink();
 
     var sortedReactions = widget.news.reactionsCount.entries
         .where((e) => e.value > 0)
         .toList()
-        ..sort((a, b) => b.value.compareTo(a.value));
+      ..sort((a, b) => b.value.compareTo(a.value));
 
     var topReactions = sortedReactions.take(3).toList();
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault, vertical: 8),
+      padding: const EdgeInsets.symmetric(
+          horizontal: Dimensions.paddingSizeDefault, vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -347,11 +366,11 @@ class _NewsItemWidgetState extends State<NewsItemWidget> {
                     }),
                   ),
                 ),
-              if (widget.news.likesCount > 0)
-                Text(
-                  '${widget.news.likesCount}',
-                  style: TextStyle(color: Colors.grey[600], fontSize: 13),
-                ),
+              // if (widget.news.likesCount > 0)
+              //   Text(
+              //     '${widget.news.likesCount}',
+              //     style: TextStyle(color: Colors.grey[600], fontSize: 13),
+              //   ),
             ],
           ),
           if (widget.news.commentsCount > 0)
@@ -367,37 +386,53 @@ class _NewsItemWidgetState extends State<NewsItemWidget> {
   String _getReactionText() {
     if (widget.news.myReaction == null) return 'إعجاب';
     switch (widget.news.myReaction) {
-      case 'like': return 'إعجاب';
-      case 'love': return 'أحببته';
-      case 'haha': return 'هاها';
-      case 'wow': return 'واو';
-      case 'sad': return 'أحزنني';
-      case 'angry': return 'أغضبني';
-      default: return 'إعجاب';
+      case 'like':
+        return 'إعجاب';
+      case 'love':
+        return 'أحببته';
+      case 'haha':
+        return 'هاها';
+      case 'wow':
+        return 'واو';
+      case 'sad':
+        return 'أحزنني';
+      case 'angry':
+        return 'أغضبني';
+      default:
+        return 'إعجاب';
     }
   }
 
   Color _getReactionColor() {
     if (widget.news.myReaction == null) return Colors.grey[600]!;
     switch (widget.news.myReaction) {
-      case 'like': return const Color(0xFF9ebc67);
-      case 'love': return Colors.red;
-      case 'haha': return Colors.orange;
-      case 'wow': return Colors.orange;
-      case 'sad': return Colors.orange;
-      case 'angry': return Colors.red;
-      default: return const Color(0xFF9ebc67);
+      case 'like':
+        return const Color(0xFF9ebc67);
+      case 'love':
+        return Colors.red;
+      case 'haha':
+        return Colors.orange;
+      case 'wow':
+        return Colors.orange;
+      case 'sad':
+        return Colors.orange;
+      case 'angry':
+        return Colors.red;
+      default:
+        return const Color(0xFF9ebc67);
     }
   }
 
   Widget _buildReactionIcon() {
-    if (widget.news.myReaction == null || !_reactionToEmoji.containsKey(widget.news.myReaction)) {
-      if (widget.news.isLiked) { // fallback
-         return const Icon(
-            Icons.thumb_up,
-            size: 25,
-            color: Color(0xFF9ebc67),
-          );
+    if (widget.news.myReaction == null ||
+        !_reactionToEmoji.containsKey(widget.news.myReaction)) {
+      if (widget.news.isLiked) {
+        // fallback
+        return const Icon(
+          Icons.thumb_up,
+          size: 25,
+          color: Color(0xFF9ebc67),
+        );
       }
       return Icon(
         Icons.thumb_up_outlined,
@@ -440,7 +475,8 @@ class _NewsItemWidgetState extends State<NewsItemWidget> {
             child: Material(
               color: Colors.transparent,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(30),
@@ -465,26 +501,37 @@ class _NewsItemWidgetState extends State<NewsItemWidget> {
                         });
 
                         final response = await Get.find<NewsController>()
-                            .reactToItem('post', widget.news.id, reaction['name']!);
+                            .reactToItem(
+                                'post', widget.news.id, reaction['name']!);
 
                         if (response != null && mounted) {
                           setState(() {
                             // Update values dynamically based on API response
                             if (response.containsKey('my_reaction')) {
-                              widget.news.myReaction = response['my_reaction']?.toString();
-                              widget.news.isLiked = widget.news.myReaction != null;
+                              widget.news.myReaction =
+                                  response['my_reaction']?.toString();
+                              widget.news.isLiked =
+                                  widget.news.myReaction != null;
                             }
-                            if (response.containsKey('reactions_count') && response['reactions_count'] != null) {
-                              widget.news.reactionsCount = Map<String, int>.from(response['reactions_count'] as Map);
-                              widget.news.likesCount = widget.news.reactionsCount.values.fold(0, (sum, val) => sum + val);
+                            if (response.containsKey('reactions_count') &&
+                                response['reactions_count'] != null) {
+                              widget.news.reactionsCount =
+                                  Map<String, int>.from(
+                                      response['reactions_count'] as Map);
+                              widget.news.likesCount = widget
+                                  .news.reactionsCount.values
+                                  .fold(0, (sum, val) => sum + val);
                             }
-                            
+
                             // Fallbacks
                             if (response.containsKey('is_liked')) {
-                              widget.news.isLiked = response['is_liked'] == 1 || response['is_liked'] == true;
+                              widget.news.isLiked = response['is_liked'] == 1 ||
+                                  response['is_liked'] == true;
                             }
                             if (response.containsKey('likes_count')) {
-                              widget.news.likesCount = int.tryParse(response['likes_count'].toString()) ?? widget.news.likesCount;
+                              widget.news.likesCount = int.tryParse(
+                                      response['likes_count'].toString()) ??
+                                  widget.news.likesCount;
                             }
                           });
                         }

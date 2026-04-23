@@ -128,6 +128,17 @@ class ShoppingPlanController extends GetxController implements GetxService {
     update();
   }
 
+  void setManualQuantity(int index, double value) {
+    if (_variantItemsDetails != null && _variantItemsDetails!.items![index].allowUserIncrement!) {
+      if (_variantItemsDetails!.items![index].isWeightBased!) {
+        _variantItemsDetails!.items![index].requestedWeight = value;
+      } else {
+        _variantItemsDetails!.items![index].quantity = value.toInt();
+      }
+      _getPreview();
+    }
+  }
+
   List<Map<String, dynamic>> _getCustomizations() {
     List<Map<String, dynamic>> customizations = [];
     
@@ -171,16 +182,17 @@ class ShoppingPlanController extends GetxController implements GetxService {
   Future<void> addToCart() async {
     if (_variantItemsDetails == null || _variantItemsDetails!.variant == null) return;
 
+    if (!AuthHelper.isLoggedIn()) {
+      showCustomSnackBar('يجب تسجيل الدخول أولاً لإضافة الخطة للسلة'.tr);
+      return;
+    }
+
     _isAddToCartLoading = true;
     update();
 
     Map<String, dynamic> body = {
       "customizations": _getCustomizations(),
     };
-
-    if (!AuthHelper.isLoggedIn()) {
-      body["guest_id"] = AuthHelper.getGuestId();
-    }
 
     Response response = await shoppingPlanServiceInterface.addToCart(
       _variantItemsDetails!.variant!.id!,
@@ -189,9 +201,8 @@ class ShoppingPlanController extends GetxController implements GetxService {
 
     if (response.statusCode == 200) {
       showCustomSnackBar('تمت الإضافة للسلة بنجاح'.tr);
-      Get.offAllNamed(RouteHelper.getCartRoute()); // Go directly to Cart
+      Get.offAllNamed(RouteHelper.getMainRoute('cart')); // Properly navigate to Dashboard Cart tab
     } else {
-       // ApiClient usually handles errors, but we can be explicit
        showCustomSnackBar(response.statusText ?? 'حدث خطأ ما'.tr);
     }
 

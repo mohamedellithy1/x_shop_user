@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_app_bar_widget.dart';
 import 'package:stackfood_multivendor/common/widgets/menu_drawer_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/not_logged_in_screen.dart';
-import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
 import 'package:stackfood_multivendor/features/shopping_plans/controllers/shopping_plan_controller.dart';
 import 'package:stackfood_multivendor/features/shopping_plans/domain/models/shopping_plan_model.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
@@ -13,7 +11,7 @@ import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
 import 'package:stackfood_multivendor/theme/dark_theme.dart';
 import 'package:stackfood_multivendor/theme/light_theme.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_image_widget.dart';
+
 
 class ShoppingPlansScreen extends StatefulWidget {
   const ShoppingPlansScreen({super.key});
@@ -33,9 +31,7 @@ class _ShoppingPlansScreenState extends State<ShoppingPlansScreen> {
   }
 
   void _initCall() {
-    if (Get.find<MarketAuthController>().isLoggedIn()) {
-      Get.find<ShoppingPlanController>().getShoppingPlanList();
-    }
+    Get.find<ShoppingPlanController>().getShoppingPlanList();
   }
 
   String _getScopeLabel(String? scope) {
@@ -67,49 +63,37 @@ class _ShoppingPlansScreenState extends State<ShoppingPlansScreen> {
             ),
             endDrawer: const MenuDrawerWidget(),
             endDrawerEnableOpenDragGesture: false,
-            body: GetBuilder<MarketAuthController>(
-              builder: (authController) {
-                return authController.isLoggedIn()
-                    ? GetBuilder<ShoppingPlanController>(
-                        builder: (controller) {
-                          if (controller.isLoading ||
-                              controller.shoppingPlanList == null) {
-                            return const Center(
-                              child: CircularProgressIndicator(
-                                color: Color(0xFF55745a),
-                              ),
-                            );
-                          }
+            body: GetBuilder<ShoppingPlanController>(
+              builder: (controller) {
+                if (controller.isLoading || controller.shoppingPlanList == null) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: Color(0xFF55745a),
+                    ),
+                  );
+                }
 
-                          if (controller.shoppingPlanList!.isEmpty) {
-                            return _buildEmptyState(isDark);
-                          }
+                if (controller.shoppingPlanList!.isEmpty) {
+                  return _buildEmptyState(isDark);
+                }
 
-                          return RefreshIndicator(
-                            color: const Color(0xFF55745a),
-                            onRefresh: () => controller.getShoppingPlanList(),
-                            child: ListView.builder(
-                              padding: const EdgeInsets.all(
-                                  Dimensions.paddingSizeDefault),
-                              itemCount: controller.shoppingPlanList!.length,
-                              itemBuilder: (context, index) {
-                                return _ShoppingPlanCard(
-                                  plan: controller.shoppingPlanList![index],
-                                  isDark: isDark,
-                                  scopeLabel: _getScopeLabel(
-                                    controller
-                                        .shoppingPlanList![index].planScope,
-                                  ),
-                                );
-                              },
-                            ),
-                          );
-                        },
-                      )
-                    : NotLoggedInScreen(callBack: (value) {
-                        _initCall();
-                        setState(() {});
-                      });
+                return RefreshIndicator(
+                  color: const Color(0xFF55745a),
+                  onRefresh: () => controller.getShoppingPlanList(),
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
+                    itemCount: controller.shoppingPlanList!.length,
+                    itemBuilder: (context, index) {
+                      return _ShoppingPlanCard(
+                        plan: controller.shoppingPlanList![index],
+                        isDark: isDark,
+                        scopeLabel: _getScopeLabel(
+                          controller.shoppingPlanList![index].planScope,
+                        ),
+                      );
+                    },
+                  ),
+                );
               },
             ),
           ),
@@ -291,75 +275,6 @@ class _ShoppingPlanCard extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildHeader() {
-    final bool hasImage = plan.image != null && plan.image!.isNotEmpty;
-
-    return Container(
-      height: 130,
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF3d6b42), Color(0xFF7fad5c)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-      child: Stack(
-        children: [
-          // Background pattern
-          Positioned.fill(
-            child: Opacity(
-              opacity: 0.08,
-              child: GridView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 8,
-                  crossAxisSpacing: 8,
-                  mainAxisSpacing: 8,
-                ),
-                itemCount: 64,
-                itemBuilder: (_, __) => const Icon(
-                  Icons.shopping_basket,
-                  color: Colors.white,
-                  size: 14,
-                ),
-              ),
-            ),
-          ),
-          // Centered image or icon
-          Center(
-            child: hasImage
-                ? ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: CustomImageWidget(
-                      image: plan.imageFullUrl,
-                      height: 80,
-                      width: 80,
-                      fit: BoxFit.cover,
-                    ),
-                  )
-                : _defaultIcon(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _defaultIcon() {
-    return Container(
-      width: 72,
-      height: 72,
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.2),
-        shape: BoxShape.circle,
-      ),
-      child: const Icon(
-        Icons.shopping_cart_rounded,
-        color: Colors.white,
-        size: 36,
       ),
     );
   }

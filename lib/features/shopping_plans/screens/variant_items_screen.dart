@@ -71,6 +71,7 @@ class _VariantItemsScreenState extends State<VariantItemsScreen> {
                                 onRemove: () => controller.removeItem(index),
                                 onIncrement: () => controller.incrementQuantity(index),
                                 onDecrement: () => controller.decrementQuantity(index),
+                                onManualSet: (val) => controller.setManualQuantity(index, val),
                               );
                             },
                           ),
@@ -170,6 +171,7 @@ class _ItemCard extends StatelessWidget {
   final VoidCallback onRemove;
   final VoidCallback onIncrement;
   final VoidCallback onDecrement;
+  final Function(double) onManualSet;
 
   const _ItemCard({
     required this.item,
@@ -177,6 +179,7 @@ class _ItemCard extends StatelessWidget {
     required this.onRemove,
     required this.onIncrement,
     required this.onDecrement,
+    required this.onManualSet,
   });
 
   @override
@@ -268,7 +271,7 @@ class _ItemCard extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 color: const Color(0xFF55745a).withValues(alpha: 0.05),
-                borderRadius: BorderRadius.circular(50),
+                borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
               ),
               child: Row(
                 children: [
@@ -278,10 +281,17 @@ class _ItemCard extends StatelessWidget {
                     constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
                     padding: EdgeInsets.zero,
                   ),
-                  Text(
-                    '${item.isWeightBased! ? item.requestedWeight : item.quantity}',
-                    style:
-                        robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall),
+                  InkWell(
+                    onTap: () {
+                      _showManualInputDialog(context);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: Text(
+                        '${item.isWeightBased! ? item.requestedWeight : item.quantity}',
+                        style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: const Color(0xFF55745a)),
+                      ),
+                    ),
                   ),
                   IconButton(
                     icon: const Icon(Icons.add, size: 18),
@@ -292,6 +302,40 @@ class _ItemCard extends StatelessWidget {
                 ],
               ),
             ),
+        ],
+      ),
+    );
+  }
+
+  void _showManualInputDialog(BuildContext context) {
+    TextEditingController controller = TextEditingController(
+      text: '${item.isWeightBased! ? item.requestedWeight : item.quantity}',
+    );
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(item.isWeightBased! ? 'تعديل الوزن' : 'تعديل الكمية', style: robotoBold),
+        content: TextField(
+          controller: controller,
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          autofocus: true,
+          decoration: InputDecoration(
+            hintText: 'أدخل القيمة الجديدة',
+            suffixText: item.isWeightBased! ? item.weightUnit : 'عدد',
+          ),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: Text('إلغاء'.tr)),
+          TextButton(
+            onPressed: () {
+              double? val = double.tryParse(controller.text);
+              if (val != null && val > 0) {
+                onManualSet(val);
+                Navigator.pop(context);
+              }
+            },
+            child: Text('تعديل'.tr),
+          ),
         ],
       ),
     );
