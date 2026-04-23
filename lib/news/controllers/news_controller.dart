@@ -287,10 +287,15 @@ class NewsController extends GetxController {
           result.add(CommentModel(
             id: comment.id,
             userId: comment.userId,
+            admin_id: comment.admin_id,
+            comment_by: comment.comment_by,
             userEmail: comment.userEmail,
+            user_name: comment.user_name,
+            user_image: comment.user_image,
             body: comment.body,
             parentId: comment.parentId,
             createdAt: comment.createdAt,
+            isEdited: comment.isEdited,
             replies: addRepliesToComment(replies), // إضافة الردود بشكل متداخل
           ));
         } else {

@@ -9,6 +9,7 @@ class CommentEntity {
   final String? user_name;
   final String? user_image;
   final String createdAt;
+  final bool isEdited;
   final List<CommentEntity> replies;
 
   CommentEntity({
@@ -22,6 +23,7 @@ class CommentEntity {
     required this.body,
     this.parentId,
     required this.createdAt,
+    required this.isEdited,
     required this.replies,
   });
 }

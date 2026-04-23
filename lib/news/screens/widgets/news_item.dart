@@ -205,8 +205,11 @@ class _NewsItemWidgetState extends State<NewsItemWidget> {
                     //   ),
                     // ),
 
-                    // Likes
-                    InkWell(
+                    // Likes with Reactions
+                    GestureDetector(
+                      onLongPressStart: (details) {
+                        _showReactionsPopup(context, details.globalPosition);
+                      },
                       onTap: () async {
                         bool? isLikedResponse = await Get.find<NewsController>()
                             .likeNews(widget.news.id);
@@ -226,15 +229,7 @@ class _NewsItemWidgetState extends State<NewsItemWidget> {
                       },
                       child: Row(
                         children: [
-                          Icon(
-                            widget.news.isLiked
-                                ? Icons.thumb_up
-                                : Icons.thumb_up_outlined,
-                            size: 25,
-                            color: widget.news.isLiked
-                                ? Color(0xFF9ebc67)
-                                : Colors.grey[600],
-                          ),
+                          _buildReactionIcon(),
                           const SizedBox(
                               width: Dimensions.paddingSizeExtraSmall),
                           Text(
@@ -242,7 +237,7 @@ class _NewsItemWidgetState extends State<NewsItemWidget> {
                             style:
                                 Theme.of(context).textTheme.bodySmall?.copyWith(
                                       color: widget.news.isLiked
-                                          ? Theme.of(context).primaryColor
+                                          ? const Color(0xFF9ebc67)
                                           : Colors.grey[600],
                                     ),
                           ),
@@ -293,5 +288,118 @@ class _NewsItemWidgetState extends State<NewsItemWidget> {
       CommentsBottomSheet(news: news),
       isScrollControlled: true,
     );
+  }
+
+  String? _selectedReaction; // Local state for the selected emoji/reaction
+
+  Widget _buildReactionIcon() {
+    if (!widget.news.isLiked) {
+      return Icon(
+        Icons.thumb_up_outlined,
+        size: 25,
+        color: Colors.grey[600],
+      );
+    }
+
+    // Default to Like if liked but no reaction selected yet
+    if (_selectedReaction == null) {
+      return const Icon(
+        Icons.thumb_up,
+        size: 25,
+        color: Color(0xFF9ebc67),
+      );
+    }
+
+    return Text(
+      _selectedReaction!,
+      style: const TextStyle(fontSize: 22),
+    );
+  }
+
+  void _showReactionsPopup(BuildContext context, Offset position) {
+    final List<Map<String, String>> reactions = [
+      {'emoji': '👍', 'name': 'Like'},
+      {'emoji': '❤️', 'name': 'Love'},
+      {'emoji': '😂', 'name': 'Haha'},
+      {'emoji': '😮', 'name': 'Wow'},
+      {'emoji': '😢', 'name': 'Sad'},
+      {'emoji': '😡', 'name': 'Angry'},
+    ];
+
+    OverlayEntry? overlayEntry;
+
+    overlayEntry = OverlayEntry(
+      builder: (context) => Stack(
+        children: [
+          // Background listener to close on tap outside
+          Positioned.fill(
+            child: GestureDetector(
+              onTap: () => overlayEntry?.remove(),
+              child: Container(color: Colors.transparent),
+            ),
+          ),
+          Positioned(
+            left: position.dx > 200 ? position.dx - 200 : 20,
+            top: position.dy - 80,
+            child: Material(
+              color: Colors.transparent,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(30),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 10,
+                      spreadRadius: 2,
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: reactions.map((reaction) {
+                    return GestureDetector(
+                      onTap: () async {
+                        overlayEntry?.remove();
+                        setState(() {
+                          _selectedReaction = reaction['emoji'];
+                        });
+
+                        // Call API if not already liked
+                        if (!widget.news.isLiked) {
+                          bool? success = await Get.find<NewsController>()
+                              .likeNews(widget.news.id);
+                          if (success != null && mounted) {
+                            setState(() {
+                              widget.news.isLiked = success;
+                              if (success) {
+                                widget.news.likesCount++;
+                              }
+                            });
+                          }
+                        }
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Transform.scale(
+                          scale: 1.2,
+                          child: Text(
+                            reaction['emoji']!,
+                            style: const TextStyle(fontSize: 24),
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    Overlay.of(context).insert(overlayEntry);
   }
 }

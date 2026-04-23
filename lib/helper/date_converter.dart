@@ -325,7 +325,7 @@ class DateConverter {
   static String getRelativeTime(String dateTime) {
     if (dateTime == null || dateTime.isEmpty) return '';
     // ignore: avoid_print
-    print("Raw Server DateTime: $dateTime");
+    // print("Raw Server DateTime: $dateTime");
     DateTime date;
     try {
       String cleanDateTime = dateTime.trim();
@@ -351,12 +351,12 @@ class DateConverter {
     }
 
     // ignore: avoid_print
-    print("Parsed Local DateTime: $date");
+    // print("Parsed Local DateTime: $date");
     Duration diff = DateTime.now().difference(date);
     // ignore: avoid_print
-    print("Current DateTime: ${DateTime.now()}");
+    // print("Current DateTime: ${DateTime.now()}");
     // ignore: avoid_print
-    print("Time Difference: ${diff.inHours} hours, ${diff.inMinutes} minutes");
+    // print("Time Difference: ${diff.inHours} hours, ${diff.inMinutes} minutes");
     
     // If the time is in the future (due to clock mismatch), show "الآن"
     if (diff.isNegative) {

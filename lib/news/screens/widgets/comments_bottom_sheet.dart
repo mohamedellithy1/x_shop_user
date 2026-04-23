@@ -772,9 +772,7 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                                     DateConverter.getRelativeTime(
                                         item.createdAt),
                                     style: TextStyle(
-                                      color: Colors.grey[600],
-                                      fontSize: 12,
-                                    ),
+                                        color: Colors.grey[600], fontSize: 12),
                                   ),
                                 ],
                               ),
@@ -814,6 +812,14 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                                         TextSpan(
                                             text:
                                                 '\u200F$displayBody'), // RLM before body
+                                        if (item.isEdited)
+                                          TextSpan(
+                                            text: ' تم التعديل ',
+                                            style: TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 14,
+                                            ),
+                                          ),
                                       ],
                                     ),
                                   );
