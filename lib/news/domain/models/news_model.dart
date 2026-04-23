@@ -14,6 +14,15 @@ class NewsModel extends News {
     required super.createdAt,
     required super.zone,
     required super.comments,
+    super.canComment,
+    super.canReplyComment,
+    super.canReplyReply,
+    super.canEditComment,
+    super.canEditReply,
+    super.canEditReplyReply,
+    super.canDeleteComment,
+    super.canDeleteReply,
+    super.canDeleteReplyReply,
   });
 
   factory NewsModel.fromJson(Map<String, dynamic> json) {
@@ -34,6 +43,37 @@ class NewsModel extends News {
       zone: json['zone'] != null
           ? ZoneModel.fromJson(json['zone'])
           : ZoneModel(id: '', name: 'غير محدد', readableId: 0),
+      canComment: json['can_comment'] == null
+          ? true
+          : (json['can_comment'] == 1 || json['can_comment'] == true),
+      canReplyComment: json['can_reply_comment'] == null
+          ? true
+          : (json['can_reply_comment'] == 1 ||
+              json['can_reply_comment'] == true),
+      canReplyReply: json['can_reply_reply'] == null
+          ? true
+          : (json['can_reply_reply'] == 1 || json['can_reply_reply'] == true),
+      canEditComment: json['can_edit_comment'] == null
+          ? true
+          : (json['can_edit_comment'] == 1 || json['can_edit_comment'] == true),
+      canEditReply: json['can_edit_reply'] == null
+          ? true
+          : (json['can_edit_reply'] == 1 || json['can_edit_reply'] == true),
+      canEditReplyReply: json['can_edit_reply_reply'] == null
+          ? true
+          : (json['can_edit_reply_reply'] == 1 ||
+              json['can_edit_reply_reply'] == true),
+      canDeleteComment: json['can_delete_comment'] == null
+          ? true
+          : (json['can_delete_comment'] == 1 ||
+              json['can_delete_comment'] == true),
+      canDeleteReply: json['can_delete_reply'] == null
+          ? true
+          : (json['can_delete_reply'] == 1 || json['can_delete_reply'] == true),
+      canDeleteReplyReply: json['can_delete_reply_reply'] == null
+          ? true
+          : (json['can_delete_reply_reply'] == 1 ||
+              json['can_delete_reply_reply'] == true),
     );
   }
 

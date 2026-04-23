@@ -253,29 +253,32 @@ class _NewsItemWidgetState extends State<NewsItemWidget> {
                     const SizedBox(width: Dimensions.paddingSizeExtraOverLarge),
 
                     // Comments
-                    InkWell(
-                      onTap: () {
-                        _showCommentsBottomSheet(context, widget.news);
-                      },
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.comment_outlined,
-                            size: 25,
-                            color: Colors.grey[600],
-                          ),
-                          const SizedBox(
-                              width: Dimensions.paddingSizeExtraSmall),
-                          Text(
-                            '${widget.news.commentsCount}',
-                            style:
-                                Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: Colors.grey[600],
-                                    ),
-                          ),
-                        ],
+                    if (widget.news.canComment)
+                      InkWell(
+                        onTap: () {
+                          _showCommentsBottomSheet(context, widget.news);
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.comment_outlined,
+                              size: 25,
+                              color: Colors.grey[600],
+                            ),
+                            const SizedBox(
+                                width: Dimensions.paddingSizeExtraSmall),
+                            Text(
+                              '${widget.news.commentsCount}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(
+                                    color: Colors.grey[600],
+                                  ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
                   ],
                 ),
               ),

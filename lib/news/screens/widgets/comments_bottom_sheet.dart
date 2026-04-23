@@ -831,18 +831,26 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                         start: 48, top: 2, bottom: 4),
                     child: Row(
                       children: [
-                        InkWell(
-                          onTap: () => _startReply(
-                              item.user_name ?? 'غير معروف', item.id),
-                          child: Text(
-                            'رد',
-                            style: TextStyle(
-                              color: Colors.grey[600],
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12,
+                        // CHECK PERMISSION: Can Reply?
+                        if ((isMainComment && widget.news.canReplyComment) ||
+                            (!isMainComment &&
+                                threadLevel == 1 &&
+                                widget.news.canReplyReply) ||
+                            (!isMainComment &&
+                                threadLevel >= 2 &&
+                                widget.news.canReplyReply))
+                          InkWell(
+                            onTap: () => _startReply(
+                                item.user_name ?? 'غير معروف', item.id),
+                            child: Text(
+                              'رد',
+                              style: TextStyle(
+                                color: Colors.grey[600],
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                              ),
                             ),
                           ),
-                        ),
                         if (Get.find<MarketProfileController>().userInfoModel != null &&
                             item.userId ==
                                 Get.find<MarketProfileController>()
@@ -851,63 +859,82 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                                     .toString())
                           Row(
                             children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsetsDirectional.only(start: 16),
-                                child: InkWell(
-                                  onTap: () => _startEdit(item),
-                                  child: Text(
-                                    'تعديل',
-                                    style: TextStyle(
-                                      color: const Color(0xFF9ebc67),
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsetsDirectional.only(start: 16),
-                                child: InkWell(
-                                  onTap: () {
-                                    Get.dialog(
-                                      AlertDialog(
-                                        title: const Text('حذف التعليق'),
-                                        content: const Text(
-                                            'هل أنت متأكد من رغبتك في حذف هذا التعليق؟'),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () => Get.back(),
-                                            child: const Text('إلغاء',
-                                                style: TextStyle(
-                                                    color: Colors.grey)),
-                                          ),
-                                          TextButton(
-                                            onPressed: () {
-                                              Get.back();
-                                              Get.find<NewsController>()
-                                                  .deleteComment(
-                                                      widget.news.id, item.id);
-                                            },
-                                            child: const Text('حذف',
-                                                style: TextStyle(
-                                                    color: Colors.red)),
-                                          ),
-                                        ],
+                              // CHECK PERMISSION: Can Edit?
+                              if ((isMainComment &&
+                                      widget.news.canEditComment) ||
+                                  (!isMainComment &&
+                                      threadLevel == 1 &&
+                                      widget.news.canEditReply) ||
+                                  (!isMainComment &&
+                                      threadLevel >= 2 &&
+                                      widget.news.canEditReplyReply))
+                                Padding(
+                                  padding: const EdgeInsetsDirectional.only(
+                                      start: 16),
+                                  child: InkWell(
+                                    onTap: () => _startEdit(item),
+                                    child: Text(
+                                      'تعديل',
+                                      style: TextStyle(
+                                        color: const Color(0xFF9ebc67),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12,
                                       ),
-                                    );
-                                  },
-                                  child: Text(
-                                    'حذف',
-                                    style: TextStyle(
-                                      color: Colors.red[400],
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12,
                                     ),
                                   ),
                                 ),
-                              ),
+                              // CHECK PERMISSION: Can Delete?
+                              if ((isMainComment &&
+                                      widget.news.canDeleteComment) ||
+                                  (!isMainComment &&
+                                      threadLevel == 1 &&
+                                      widget.news.canDeleteReply) ||
+                                  (!isMainComment &&
+                                      threadLevel >= 2 &&
+                                      widget.news.canDeleteReplyReply))
+                                Padding(
+                                  padding: const EdgeInsetsDirectional.only(
+                                      start: 16),
+                                  child: InkWell(
+                                    onTap: () {
+                                      Get.dialog(
+                                        AlertDialog(
+                                          title: const Text('حذف التعليق'),
+                                          content: const Text(
+                                              'هل أنت متأكد من رغبتك في حذف هذا التعليق؟'),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () => Get.back(),
+                                              child: const Text('إلغاء',
+                                                  style: TextStyle(
+                                                      color: Colors.grey)),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                Get.back();
+                                                Get.find<NewsController>()
+                                                    .deleteComment(
+                                                        widget.news.id,
+                                                        item.id);
+                                              },
+                                              child: const Text('حذف',
+                                                  style: TextStyle(
+                                                      color: Colors.red)),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      'حذف',
+                                      style: TextStyle(
+                                        color: Colors.red[400],
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                             ],
                           ),
                         const SizedBox(width: 16),

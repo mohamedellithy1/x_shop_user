@@ -12,6 +12,15 @@ class News {
   final String createdAt;
   final List<CommentEntity> comments;
   final ZoneNews? zone;
+  final bool canComment;
+  final bool canReplyComment;
+  final bool canReplyReply;
+  final bool canEditComment;
+  final bool canEditReply;
+  final bool canEditReplyReply;
+  final bool canDeleteComment;
+  final bool canDeleteReply;
+  final bool canDeleteReplyReply;
 
   News({
     required this.id,
@@ -24,5 +33,14 @@ class News {
     required this.isLiked,
     required this.createdAt,
     required this.zone,
+    this.canComment = true,
+    this.canReplyComment = true,
+    this.canReplyReply = true,
+    this.canEditComment = true,
+    this.canEditReply = true,
+    this.canEditReplyReply = true,
+    this.canDeleteComment = true,
+    this.canDeleteReply = true,
+    this.canDeleteReplyReply = true,
   });
 }
