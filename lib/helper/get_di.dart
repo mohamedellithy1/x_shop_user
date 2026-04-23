@@ -31,6 +31,11 @@ import 'package:stackfood_multivendor/features/checkout/domain/repositories/chec
 import 'package:stackfood_multivendor/features/checkout/domain/services/checkout_service.dart';
 import 'package:stackfood_multivendor/features/checkout/domain/services/checkout_service_interface.dart';
 import 'package:stackfood_multivendor/features/coupon/controllers/coupon_controller.dart';
+import 'package:stackfood_multivendor/features/shopping_plans/controllers/shopping_plan_controller.dart';
+import 'package:stackfood_multivendor/features/shopping_plans/domain/repositories/shopping_plan_repository.dart';
+import 'package:stackfood_multivendor/features/shopping_plans/domain/repositories/shopping_plan_repository_interface.dart';
+import 'package:stackfood_multivendor/features/shopping_plans/domain/services/shopping_plan_service.dart';
+import 'package:stackfood_multivendor/features/shopping_plans/domain/services/shopping_plan_service_interface.dart';
 import 'package:stackfood_multivendor/features/home/controllers/home_controller.dart';
 import 'package:stackfood_multivendor/features/home/domain/repositories/home_repository.dart';
 import 'package:stackfood_multivendor/features/home/domain/repositories/home_repository_interface.dart';
@@ -254,6 +259,12 @@ Future<Map<String, Map<String, String>>> init() async {
   CouponServiceInterface couponServiceInterface =
       CouponService(couponRepositoryInterface: Get.find(tag: 'xmarket'));
   Get.lazyPut(() => couponServiceInterface, tag: 'xmarket');
+  ShoppingPlanRepositoryInterface shoppingPlanRepositoryInterface =
+      ShoppingPlanRepository(apiClient: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => shoppingPlanRepositoryInterface, tag: 'xmarket');
+  ShoppingPlanServiceInterface shoppingPlanServiceInterface =
+      ShoppingPlanService(shoppingPlanRepositoryInterface: Get.find(tag: 'xmarket'));
+  Get.lazyPut(() => shoppingPlanServiceInterface, tag: 'xmarket');
   ChatRepositoryInterface chatRepositoryInterface =
       ChatRepository(apiClient: Get.find(tag: 'xmarket'));
   Get.lazyPut(() => chatRepositoryInterface, tag: 'xmarket');
@@ -472,6 +483,8 @@ Future<Map<String, Map<String, String>>> init() async {
       () => SearchController(searchServiceInterface: Get.find(tag: 'xmarket')));
   Get.lazyPut(() =>
       MarketCouponController(couponServiceInterface: Get.find(tag: 'xmarket')));
+  Get.lazyPut(() => ShoppingPlanController(
+      shoppingPlanServiceInterface: Get.find(tag: 'xmarket')));
   Get.lazyPut(
       () => OrderController(orderServiceInterface: Get.find(tag: 'xmarket')));
   Get.lazyPut(() =>

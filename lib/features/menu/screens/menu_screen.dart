@@ -384,11 +384,15 @@ class _MenuScreenState extends State<MenuScreen> {
                                 horizontal: Dimensions.paddingSizeLarge,
                                 vertical: Dimensions.paddingSizeDefault),
                             child: Column(children: [
-                              PortionWidget(
+                               PortionWidget(
                                   icon: XmarketImages.couponIcon,
                                   title: 'coupon'.tr,
                                   route: RouteHelper.getCouponRoute(
                                       fromCheckout: false)),
+                              PortionWidget(
+                                  icon: Icons.shopping_cart_checkout_rounded,
+                                  title: 'خطط تسويقية',
+                                  route: RouteHelper.getShoppingPlansRoute()),
                               configModel!.loyaltyPointStatus!
                                   ? PortionWidget(
                                       icon: XmarketImages.pointIcon,

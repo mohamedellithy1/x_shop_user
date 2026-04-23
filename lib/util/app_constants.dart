@@ -155,6 +155,11 @@ class AppConstants {
   static const String orderAgainUri = '/api/v1/customer/order-again';
   static const String guestLoginUri = '/api/v1/auth/guest/request';
   static const String changeLanguage = '/api/customer/change-language';
+  static const String shoppingPlansUri = '/api/v1/customer/shopping-plans/list';
+  static const String shoppingPlanVariantsUri = '/api/v1/customer/shopping-plans/';
+  static const String variantDetailsUri = '/api/v1/customer/shopping-plans/variants/';
+
+
 
   static const String offlineMethodListUri =
       '/api/v1/offline_payment_method_list';

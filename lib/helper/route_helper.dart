@@ -68,6 +68,9 @@ import 'package:stackfood_multivendor/features/chat/domain/models/conversation_m
 import 'package:stackfood_multivendor/features/chat/screens/chat_screen.dart';
 import 'package:stackfood_multivendor/features/chat/screens/conversation_screen.dart';
 import 'package:stackfood_multivendor/features/coupon/screens/coupon_screen.dart';
+import 'package:stackfood_multivendor/features/shopping_plans/screens/plan_variants_screen.dart';
+import 'package:stackfood_multivendor/features/shopping_plans/screens/variant_items_screen.dart';
+import 'package:stackfood_multivendor/features/shopping_plans/screens/shopping_plans_screen.dart';
 import 'package:stackfood_multivendor/features/cuisine/screens/cuisine_restaurant_screen.dart';
 import 'package:stackfood_multivendor/features/cuisine/screens/cuisine_screen.dart';
 import 'package:stackfood_multivendor/features/dashboard/screens/dashboard_screen.dart';
@@ -160,6 +163,9 @@ class RouteHelper {
   static const String newUserSetupScreen = '/new-user-setup-screen';
   static const String dineInRestaurant = '/dine-in-restaurant';
   static const String settings = '/settings';
+  static const String shoppingPlans = '/shopping-plans';
+  static const String planVariants = '/plan-variants';
+  static const String variantItems = '/variant-items';
 
   static String getInitialRoute({bool fromSplash = false}) =>
       '$initial?from-splash=$fromSplash';
@@ -467,6 +473,9 @@ class RouteHelper {
 
   static String getDineInRestaurantScreen() => dineInRestaurant;
   static String getSettingsRoute() => settings;
+  static String getShoppingPlansRoute() => shoppingPlans;
+  static String getPlanVariantsRoute(int? id, String? name) => '$planVariants?id=$id&name=$name';
+  static String getVariantItemsRoute(int? id, String? title) => '$variantItems?id=$id&title=$title';
 
   static List<GetPage> routes = [
     GetPage(
@@ -1086,6 +1095,21 @@ class RouteHelper {
         name: dineInRestaurant,
         page: () => getRoute(const DineInRestaurantScreen())),
     GetPage(name: settings, page: () => const SettingsScreen()),
+    GetPage(
+        name: shoppingPlans,
+        page: () => getRoute(const ShoppingPlansScreen())),
+    GetPage(
+        name: planVariants,
+        page: () => getRoute(PlanVariantsScreen(
+              planId: int.parse(Get.parameters['id']!),
+              planName: Get.parameters['name']!,
+            ))),
+    GetPage(
+        name: variantItems,
+        page: () => getRoute(VariantItemsScreen(
+              variantId: int.parse(Get.parameters['id']!),
+              variantTitle: Get.parameters['title']!,
+            ))),
   ];
 
   static Widget getRoute(Widget navigateTo, {bool byPuss = false}) {

@@ -54,6 +54,12 @@ class MenuDrawerWidgetState extends State<MenuDrawerWidget>
           Get.offNamed(RouteHelper.getCouponRoute(fromCheckout: false));
         }),
     Menu(
+        icon: Icons.shopping_cart_checkout_rounded,
+        title: 'خطط تسويقية',
+        onTap: () {
+          Get.offNamed(RouteHelper.getShoppingPlansRoute());
+        }),
+    Menu(
         icon: XmarketImages.support,
         title: 'help_support'.tr,
         onTap: () {
