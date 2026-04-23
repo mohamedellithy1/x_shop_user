@@ -48,122 +48,133 @@ class _NewsItemWidgetState extends State<NewsItemWidget> {
         color: Colors.transparent,
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                top: Dimensions.paddingSizeDefault,
-                left: Dimensions.paddingSizeDefault,
-                right: Dimensions.paddingSizeDefault,
-                bottom: Dimensions.paddingSizeSmall,
+            InkWell(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(Dimensions.radiusDefault),
+                topRight: Radius.circular(Dimensions.radiusDefault),
               ),
+              onTap: () => _showCommentsBottomSheet(context, widget.news),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Time Badge at the top right of the card itself
                   Padding(
                     padding: const EdgeInsets.only(
-                        bottom: Dimensions.paddingSizeSmall),
-                    child: Row(
+                      top: Dimensions.paddingSizeDefault,
+                      left: Dimensions.paddingSizeDefault,
+                      right: Dimensions.paddingSizeDefault,
+                      bottom: Dimensions.paddingSizeSmall,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(
-                          Icons.access_time,
-                          size: 16,
-                          color: Colors.grey[600],
+                        // Time Badge at the top right of the card itself
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              bottom: Dimensions.paddingSizeSmall),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.access_time,
+                                size: 16,
+                                color: Colors.grey[600],
+                              ),
+                              const SizedBox(
+                                  width: Dimensions.paddingSizeExtraSmall),
+                              Text(
+                                DateConverter.getRelativeTime(
+                                    widget.news.createdAt),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(
+                                      color: Colors.grey[600],
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                              ),
+                            ],
+                          ),
                         ),
-                        const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                        Text(
-                          DateConverter.getRelativeTime(widget.news.createdAt),
-                          style:
-                              Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: Colors.grey[600],
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                        ),
-                      ],
-                    ),
-                  ),
 
-                  // News Image
-                  Container(
-                    width: double.infinity,
-                    height: 200,
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.circular(Dimensions.radiusSmall),
-                    ),
-                    child: ClipRRect(
-                      borderRadius:
-                          BorderRadius.circular(Dimensions.radiusSmall),
-                      child: CachedNetworkImage(
-                        imageUrl: widget.news.image,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => Container(
-                          color: Colors.grey[300],
-                          child: const Center(
-                            child: CircularProgressIndicator(
-                              color: Color(0xFF9ebc67),
+                        // News Image
+                        Container(
+                          width: double.infinity,
+                          height: 200,
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.circular(Dimensions.radiusSmall),
+                          ),
+                          child: ClipRRect(
+                            borderRadius:
+                                BorderRadius.circular(Dimensions.radiusSmall),
+                            child: CachedNetworkImage(
+                              imageUrl: widget.news.image,
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) => Container(
+                                color: Colors.grey[300],
+                                child: const Center(
+                                  child: CircularProgressIndicator(
+                                    color: Color(0xFF9ebc67),
+                                  ),
+                                ),
+                              ),
+                              errorWidget: (context, url, error) => Container(
+                                color: Colors.grey[300],
+                                child: const Icon(Icons.error),
+                              ),
                             ),
                           ),
                         ),
-                        errorWidget: (context, url, error) => Container(
-                          color: Colors.grey[300],
-                          child: const Icon(Icons.error),
+
+                        const SizedBox(height: Dimensions.paddingSizeSmall),
+
+                        // News Title
+                        Text(
+                          widget.news.title,
+                          style:
+                              Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
+
+                        const SizedBox(height: Dimensions.paddingSizeSmall),
+
+                        // News Body
+                        if (widget.news.body.isNotEmpty)
+                          Text(
+                            widget.news.body,
+                            style: Theme.of(context).textTheme.bodyMedium,
+                            maxLines: 200,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+
+                        const SizedBox(height: Dimensions.paddingSizeSmall),
+
+                        // // Zone Name
+                        // if (widget.news.zone != null && widget.news.zone?.name != null)
+                        //   Container(
+                        //     padding: const EdgeInsets.symmetric(
+                        //       horizontal: Dimensions.paddingSizeSmall,
+                        //       vertical: Dimensions.paddingSizeExtraSmall,
+                        //     ),
+                        //     decoration: BoxDecoration(
+                        //       color: Theme.of(context).primaryColor.withOpacity(0.1),
+                        //       borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                        //     ),
+                        //     child: Text(
+                        //       widget.news.zone?.name ?? '',
+                        //       style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        //             color: Colors.black,
+                        //             fontWeight: FontWeight.w500,
+                        //           ),
+                        //     ),
+                      ],
                     ),
                   ),
-
-                  const SizedBox(height: Dimensions.paddingSizeSmall),
-
-                  // News Title
-                  Text(
-                    widget.news.title,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-
-                  const SizedBox(height: Dimensions.paddingSizeSmall),
-
-                  // News Body
-                  if (widget.news.body.isNotEmpty)
-                    Text(
-                      widget.news.body,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                      maxLines: 200,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-
-                  const SizedBox(height: Dimensions.paddingSizeSmall),
-
-                  // // Zone Name
-                  // if (widget.news.zone != null && widget.news.zone?.name != null)
-                  //   Container(
-                  //     padding: const EdgeInsets.symmetric(
-                  //       horizontal: Dimensions.paddingSizeSmall,
-                  //       vertical: Dimensions.paddingSizeExtraSmall,
-                  //     ),
-                  //     decoration: BoxDecoration(
-                  //       color: Theme.of(context).primaryColor.withOpacity(0.1),
-                  //       borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                  //     ),
-                  //     child: Text(
-                  //       widget.news.zone?.name ?? '',
-                  //       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  //             color: Colors.black,
-                  //             fontWeight: FontWeight.w500,
-                  //           ),
-                  //     ),
-                  //   ),
-
-                  // const SizedBox(height: Dimensions.paddingSizeSmall),
+                  _buildReactionSummary(),
                 ],
               ),
             ),
-
-            // Facebook-style reactions summary row
-            _buildReactionSummary(),
 
             // Bottom Row - Action Buttons
             Container(
