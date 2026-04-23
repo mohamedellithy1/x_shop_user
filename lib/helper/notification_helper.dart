@@ -76,7 +76,10 @@ class NotificationHelper {
           } else if (payload.notificationType ==
               NotificationType.news_comment_reply) {
             Get.find<NewsController>().setPendingNotification(payload);
-            Get.toNamed(RouteHelper.getMainRoute('news'));
+            if (Get.isBottomSheetOpen ?? false) {
+              Get.back();
+            }
+            Get.offAllNamed(RouteHelper.getMainRoute('news'));
           } else {
             Get.toNamed(
                 RouteHelper.getNotificationRoute(fromNotification: true));
@@ -184,7 +187,10 @@ class NotificationHelper {
           } else if (notificationBody.notificationType ==
               NotificationType.news_comment_reply) {
             Get.find<NewsController>().setPendingNotification(notificationBody);
-            Get.toNamed(RouteHelper.getMainRoute('news'));
+            if (Get.isBottomSheetOpen ?? false) {
+              Get.back();
+            }
+            Get.offAllNamed(RouteHelper.getMainRoute('news'));
           } else {
             Get.toNamed(
                 RouteHelper.getNotificationRoute(fromNotification: true));

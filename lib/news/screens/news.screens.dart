@@ -64,11 +64,13 @@ class _NewsScreenState extends State<NewsScreen> {
       body: GetBuilder<NewsController>(
         init: Get.find<NewsController>(),
         builder: (controller) {
-          if (controller.newsList != null && controller.pendingNotification != null) {
+          if (controller.newsList != null &&
+              controller.pendingNotification != null) {
             final notification = controller.pendingNotification!;
             // ignore: avoid_print
             print("Notification Post ID: ${notification.postId}");
-            final newsIndex = controller.newsList!.indexWhere((n) => n.id == notification.postId);
+            final newsIndex = controller.newsList!
+                .indexWhere((n) => n.id == notification.postId);
             // ignore: avoid_print
             print("News Index Found: $newsIndex");
             if (newsIndex != -1) {
