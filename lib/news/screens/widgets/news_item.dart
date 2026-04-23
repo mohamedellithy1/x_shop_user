@@ -25,6 +25,8 @@ class NewsItemWidget extends StatefulWidget {
 }
 
 class _NewsItemWidgetState extends State<NewsItemWidget> {
+  Offset? _tapPosition;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -224,12 +226,22 @@ class _NewsItemWidgetState extends State<NewsItemWidget> {
 
                   // Likes with Reactions
                   GestureDetector(
+                    onTapDown: (details) {
+                      _tapPosition = details.globalPosition;
+                    },
                     onLongPressStart: (details) {
                       _showReactionsPopup(context, details.globalPosition);
                     },
                     onTap: () async {
-                      // If already reacted, send the same reaction to remove it. Else default to 'like'.
-                      String reactionToSend = widget.news.myReaction ?? 'like';
+                      if (widget.news.myReaction == null) {
+                        if (_tapPosition != null) {
+                          _showReactionsPopup(context, _tapPosition!);
+                        }
+                        return;
+                      }
+
+                      // If already reacted, send the same reaction to remove it.
+                      String reactionToSend = widget.news.myReaction!;
 
                       final response = await Get.find<NewsController>()
                           .reactToItem('post', widget.news.id, reactionToSend);
