@@ -669,6 +669,78 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
     );
   }
 
+  Widget _buildCommentReactionSummary(CommentEntity item) {
+    final total = item.reactionsCount.values.fold(0, (sum, val) => sum + val);
+    if (total == 0) return const SizedBox.shrink();
+
+    var sortedReactions = item.reactionsCount.entries
+        .where((e) => e.value > 0)
+        .toList()
+        ..sort((a, b) => b.value.compareTo(a.value));
+
+    var topReactions = sortedReactions.take(3).toList();
+
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(start: 48, bottom: 2),
+      child: Row(
+        children: [
+          SizedBox(
+            width: topReactions.length * 18.0 + 4,
+            height: 20,
+            child: Stack(
+              children: List.generate(topReactions.length, (index) {
+                return Positioned(
+                  right: index * 14.0,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                    ),
+                    child: Text(
+                      _reactionToEmoji[topReactions[index].key] ?? '👍',
+                      style: const TextStyle(fontSize: 13),
+                    ),
+                  ),
+                );
+              }),
+            ),
+          ),
+          const SizedBox(width: 4),
+          Text(
+            '$total',
+            style: TextStyle(color: Colors.grey[600], fontSize: 12),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _getCommentReactionText(CommentEntity item) {
+    if (item.myReaction == null) return 'إعجاب';
+    switch (item.myReaction) {
+      case 'like': return 'إعجاب';
+      case 'love': return 'أحببته';
+      case 'haha': return 'هاها';
+      case 'wow': return 'واو';
+      case 'sad': return 'أحزنني';
+      case 'angry': return 'أغضبني';
+      default: return 'إعجاب';
+    }
+  }
+
+  Color _getCommentReactionColor(CommentEntity item) {
+    if (item.myReaction == null) return Colors.grey[600]!;
+    switch (item.myReaction) {
+      case 'like': return const Color(0xFF9ebc67);
+      case 'love': return Colors.red;
+      case 'haha': return Colors.orange;
+      case 'wow': return Colors.orange;
+      case 'sad': return Colors.orange;
+      case 'angry': return Colors.red;
+      default: return const Color(0xFF9ebc67);
+    }
+  }
+
   void _showReactionsPopupForComment(BuildContext context, Offset position, CommentEntity item) {
     final List<Map<String, String>> reactions = [
       {'emoji': '👍', 'name': 'like'},
@@ -940,6 +1012,10 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                       ),
                     ],
                   ),
+
+                  // Facebook-style reactions summary on comment bubble
+                  _buildCommentReactionSummary(item),
+
                   // Actions (Reply and Likes)
                   Padding(
                     padding: const EdgeInsetsDirectional.only(
@@ -1080,9 +1156,10 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                               _buildCommentReactionIcon(item),
                               const SizedBox(width: 4),
                               Text(
-                                '${item.reactionsCount.values.fold(0, (sum, val) => sum + (val as int)) > 0 ? item.reactionsCount.values.fold(0, (sum, val) => sum + (val as int)) : ''}',
+                                _getCommentReactionText(item),
                                 style: TextStyle(
-                                  color: item.myReaction != null ? const Color(0xFF9ebc67) : Colors.grey[600],
+                                  color: _getCommentReactionColor(item),
+                                  fontWeight: item.myReaction != null ? FontWeight.bold : FontWeight.normal,
                                   fontSize: 12,
                                 ),
                               ),

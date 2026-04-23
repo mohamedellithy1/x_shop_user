@@ -155,11 +155,14 @@ class _NewsItemWidgetState extends State<NewsItemWidget> {
               //   ),
 
               // const SizedBox(height: Dimensions.paddingSizeSmall),
-                ],
+                 ],
               ),
             ),
 
-              // Bottom Row - Date, Likes, Comments
+              // Facebook-style reactions summary row
+              _buildReactionSummary(),
+
+              // Bottom Row - Action Buttons
               Container(
                 height: 40,
                 decoration: BoxDecoration(
@@ -243,16 +246,13 @@ class _NewsItemWidgetState extends State<NewsItemWidget> {
                       child: Row(
                         children: [
                           _buildReactionIcon(),
-                          const SizedBox(
-                              width: Dimensions.paddingSizeExtraSmall),
+                          const SizedBox(width: Dimensions.paddingSizeExtraSmall),
                           Text(
-                            '${widget.news.likesCount}',
-                            style:
-                                Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: widget.news.isLiked
-                                          ? const Color(0xFF9ebc67)
-                                          : Colors.grey[600],
-                                    ),
+                            _getReactionText(),
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                  color: _getReactionColor(),
+                                  fontWeight: widget.news.myReaction != null ? FontWeight.bold : FontWeight.normal,
+                                ),
                           ),
                         ],
                       ),
@@ -273,14 +273,10 @@ class _NewsItemWidgetState extends State<NewsItemWidget> {
                               size: 25,
                               color: Colors.grey[600],
                             ),
-                            const SizedBox(
-                                width: Dimensions.paddingSizeExtraSmall),
+                            const SizedBox(width: Dimensions.paddingSizeExtraSmall),
                             Text(
-                              '${widget.news.commentsCount}',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
-                                  ?.copyWith(
+                              'تعليق',
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                     color: Colors.grey[600],
                                   ),
                             ),
@@ -311,6 +307,88 @@ class _NewsItemWidgetState extends State<NewsItemWidget> {
     'sad': '😢',
     'angry': '😡',
   };
+
+  Widget _buildReactionSummary() {
+    if (widget.news.likesCount == 0 && widget.news.commentsCount == 0) return const SizedBox.shrink();
+
+    var sortedReactions = widget.news.reactionsCount.entries
+        .where((e) => e.value > 0)
+        .toList()
+        ..sort((a, b) => b.value.compareTo(a.value));
+
+    var topReactions = sortedReactions.take(3).toList();
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault, vertical: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              if (topReactions.isNotEmpty)
+                SizedBox(
+                  width: topReactions.length * 18.0 + 4,
+                  height: 20,
+                  child: Stack(
+                    children: List.generate(topReactions.length, (index) {
+                      return Positioned(
+                        right: index * 14.0, // RTL layout
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white,
+                          ),
+                          child: Text(
+                            _reactionToEmoji[topReactions[index].key] ?? '👍',
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
+                ),
+              if (widget.news.likesCount > 0)
+                Text(
+                  '${widget.news.likesCount}',
+                  style: TextStyle(color: Colors.grey[600], fontSize: 13),
+                ),
+            ],
+          ),
+          if (widget.news.commentsCount > 0)
+            Text(
+              '${widget.news.commentsCount} تعليق',
+              style: TextStyle(color: Colors.grey[600], fontSize: 13),
+            ),
+        ],
+      ),
+    );
+  }
+
+  String _getReactionText() {
+    if (widget.news.myReaction == null) return 'إعجاب';
+    switch (widget.news.myReaction) {
+      case 'like': return 'إعجاب';
+      case 'love': return 'أحببته';
+      case 'haha': return 'هاها';
+      case 'wow': return 'واو';
+      case 'sad': return 'أحزنني';
+      case 'angry': return 'أغضبني';
+      default: return 'إعجاب';
+    }
+  }
+
+  Color _getReactionColor() {
+    if (widget.news.myReaction == null) return Colors.grey[600]!;
+    switch (widget.news.myReaction) {
+      case 'like': return const Color(0xFF9ebc67);
+      case 'love': return Colors.red;
+      case 'haha': return Colors.orange;
+      case 'wow': return Colors.orange;
+      case 'sad': return Colors.orange;
+      case 'angry': return Colors.red;
+      default: return const Color(0xFF9ebc67);
+    }
+  }
 
   Widget _buildReactionIcon() {
     if (widget.news.myReaction == null || !_reactionToEmoji.containsKey(widget.news.myReaction)) {
