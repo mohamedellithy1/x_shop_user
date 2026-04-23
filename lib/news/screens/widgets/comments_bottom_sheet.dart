@@ -43,12 +43,15 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
     if (widget.highlightedParentId != null) {
       _expandedComments.add(widget.highlightedParentId!);
     }
-    
+
     // إذا كان هناك إشعار يحولني لتعليق معين، نعرض كل التعليقات للبحث عنه
     if (widget.highlightedCommentId != null) {
       _maxCommentsToShow = 10000;
     }
   }
+
+  // إضافة متغير للتحكم في بريق التظليل
+  double _highlightOpacity = 0.0;
 
   @override
   void dispose() {
@@ -68,9 +71,14 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
   }
 
   bool _findAndExpand(CommentEntity parent, int targetId, int rootId) {
-    if (parent.id == targetId) return true;
+    if (parent.id == targetId) {
+      print("Found target comment $targetId matching parent.id ${parent.id}");
+      return true;
+    }
     for (var reply in parent.replies) {
       if (_findAndExpand(reply, targetId, rootId)) {
+        print(
+            "Target comment found in replies of ${parent.id}. Expanding parent.");
         _expandedComments.add(rootId);
         _expandedComments.add(parent.id);
         return true;
@@ -87,6 +95,52 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
     });
   }
 
+  void _triggerScrollAndHighlight() {
+    _hasScrolled = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+
+      // Step 1: Force a rebuild to expand parents and render the target comment
+      setState(() {});
+
+      // Step 2: Try to scroll multiple times with increasing delays to handle complex layouts
+      void attemptScroll(int retryCount) {
+        if (!mounted || retryCount <= 0) {
+          print("Scroll attempts exhausted or unmounted.");
+          return;
+        }
+
+        final delay = 600 + (5 - retryCount) * 300;
+        print("Attempting scroll ($retryCount) after ${delay}ms delay...");
+
+        Future.delayed(Duration(milliseconds: delay), () {
+          if (!mounted) return;
+          if (_highlightKey.currentContext != null) {
+            print(
+                "Context found for highlight key. Executing ensureVisible...");
+            Scrollable.ensureVisible(
+              _highlightKey.currentContext!,
+              duration: const Duration(milliseconds: 1000),
+              curve: Curves.easeInOutQuart,
+              alignment: 0.3,
+            );
+
+            // Animation for visual highlighting
+            setState(() => _highlightOpacity = 1.0);
+            Future.delayed(const Duration(seconds: 3), () {
+              if (mounted) setState(() => _highlightOpacity = 0.0);
+            });
+          } else {
+            print("Context NOT found for highlight key. Retrying...");
+            attemptScroll(retryCount - 1);
+          }
+        });
+      }
+
+      attemptScroll(5); // Increase retries
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<NewsController>(
@@ -97,13 +151,21 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
         if (widget.highlightedCommentId != null &&
             comments.isNotEmpty &&
             !_hasScrolled) {
+          bool found = false;
           for (var comment in comments) {
             if (_findAndExpand(
                 comment, widget.highlightedCommentId!, comment.id)) {
-              // ignore: avoid_print
-              print(
-                  "Deep found target comment ${widget.highlightedCommentId}. Expanded necessary parents.");
+              found = true;
+              break;
             }
+          }
+          if (found) {
+            print(
+                "Target comment ${widget.highlightedCommentId} found in list. Triggering scroll...");
+            _triggerScrollAndHighlight();
+          } else {
+            print(
+                "Target comment ${widget.highlightedCommentId} NOT found in current comments list of size ${comments.length}");
           }
         }
         return Directionality(
@@ -343,7 +405,9 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
 
     // Create flat list of all comments and replies with thread indicators
     List<Widget> flatItems = [];
-    int displayLimit = comments.length < _maxCommentsToShow ? comments.length : _maxCommentsToShow;
+    int displayLimit = comments.length < _maxCommentsToShow
+        ? comments.length
+        : _maxCommentsToShow;
 
     for (int commentIndex = 0; commentIndex < displayLimit; commentIndex++) {
       var comment = comments[commentIndex];
@@ -402,98 +466,41 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
     }
 
     if (comments.length > _maxCommentsToShow) {
-      flatItems.add(
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
-          child: Center(
-            child: InkWell(
-              onTap: () {
-                setState(() {
-                  _maxCommentsToShow += 10;
-                });
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                decoration: BoxDecoration(
-                  border: Border.all(color: const Color(0xFF9ebc67)),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: const Text(
-                  'عرض مزيد من التعليقات',
-                  style: TextStyle(
-                    color: Color(0xFF9ebc67),
-                    fontWeight: FontWeight.bold,
-                  ),
+      flatItems.add(Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        child: Center(
+          child: InkWell(
+            onTap: () {
+              setState(() {
+                _maxCommentsToShow += 10;
+              });
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+              decoration: BoxDecoration(
+                border: Border.all(color: const Color(0xFF9ebc67)),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: const Text(
+                'عرض مزيد من التعليقات',
+                style: TextStyle(
+                  color: Color(0xFF9ebc67),
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
           ),
-        )
-      );
+        ),
+      ));
     }
 
-    // مراقبة تحديثات القائمة والمحاولة مرة أخرى إذا وصلت بيانات جديدة
-    if (widget.highlightedCommentId != null &&
-        !_hasScrolled &&
-        comments.isNotEmpty) {
-      // ignore: avoid_print
-      print(
-          "Comments list loaded (Count: ${comments.length}). Searching for ID: ${widget.highlightedCommentId}");
-
-      bool found = false;
-      for (var comment in comments) {
-        if (_findAndExpand(comment, widget.highlightedCommentId!, comment.id)) {
-          found = true;
-          // ignore: avoid_print
-          print(
-              "Deep found target comment ${widget.highlightedCommentId}. Expanded necessary parents.");
-        }
-      }
-
-      if (found) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (!mounted) return;
-          // Step 1: Call setState so Flutter rebuilds with the expanded replies visible in the tree
-          setState(() {
-            // _expandedComments already updated by _findAndExpand above
-          });
-          // Step 2: After rebuild, scroll to the highlighted comment
-          Future.delayed(const Duration(milliseconds: 350), () {
-            if (!mounted) return;
-            if (_highlightKey.currentContext != null) {
-              // ignore: avoid_print
-              print(
-                  "Scrolling via GlobalKey to comment ${widget.highlightedCommentId}...");
-              Scrollable.ensureVisible(
-                _highlightKey.currentContext!,
-                duration: const Duration(milliseconds: 600),
-                curve: Curves.easeOut,
-                alignment: 0.3,
-              );
-              setState(() {
-                _hasScrolled = true;
-              });
-            } else {
-              // ignore: avoid_print
-              print(
-                  "GlobalKey still null after rebuild — comment may not be in list.");
-              setState(() {
-                _hasScrolled = true;
-              }); // prevent infinite retries
-            }
-          });
-        });
-      } else {
-        // ignore: avoid_print
-        print(
-            "Target ID ${widget.highlightedCommentId} NOT in the current list yet.");
-      }
-    }
-
-    return ListView(
+    // Removed old scrolling logic from here as it's now in _triggerScrollAndHighlight
+    return SingleChildScrollView(
       controller: _scrollController,
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      children: flatItems,
+      child: Column(
+        children: flatItems,
+      ),
     );
   }
 
@@ -599,8 +606,12 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
         bottom: 4,
         end: 0,
       ),
-      child: IntrinsicHeight(
-        child: Row(
+      child: Builder(builder: (context) {
+        if (widget.highlightedCommentId == item.id) {
+          print("BUILDING flagged comment ${item.id} with highlight KEY");
+        }
+        return IntrinsicHeight(
+            child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Thread lines for replies
@@ -649,18 +660,23 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                         context,
                       ),
                       const SizedBox(width: 8),
+
                       // Text Bubble
                       Flexible(
                         child: Container(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 12, vertical: 8),
                           decoration: BoxDecoration(
-                            // color: widget.highlightedCommentId == item.id
-                            //     ? Colors.yellow[100] // Highlight color
-                            //     : Colors.grey[100],
+                            color: widget.highlightedCommentId == item.id
+                                ? Color(0xFF9ebc67)
+                                    .withOpacity(_highlightOpacity * 0.15)
+                                : Colors.grey[100],
                             borderRadius: BorderRadius.circular(16),
                             border: widget.highlightedCommentId == item.id
-                                ? Border.all(color: Color(0xFF9ebc67), width: 1)
+                                ? Border.all(
+                                    color: Color(0xFF9ebc67).withOpacity(
+                                        0.5 + _highlightOpacity * 0.5),
+                                    width: 1.5)
                                 : null,
                           ),
                           child: Column(
@@ -702,8 +718,13 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                                   String displayBody = item.body;
                                   if (!isMainComment && replyToUser != null) {
                                     String prefixToRemove = '@$replyToUser';
-                                    if (displayBody.trimLeft().startsWith(prefixToRemove)) {
-                                      displayBody = displayBody.trimLeft().substring(prefixToRemove.length).trimLeft();
+                                    if (displayBody
+                                        .trimLeft()
+                                        .startsWith(prefixToRemove)) {
+                                      displayBody = displayBody
+                                          .trimLeft()
+                                          .substring(prefixToRemove.length)
+                                          .trimLeft();
                                     }
                                   }
 
@@ -713,15 +734,19 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                                       style: const TextStyle(
                                           color: Colors.black, fontSize: 14),
                                       children: [
-                                        if (!isMainComment && replyToUser != null)
+                                        if (!isMainComment &&
+                                            replyToUser != null)
                                           TextSpan(
-                                            text: '\u200F$replyToUser\u200F ', // RLM around name
+                                            text:
+                                                '\u200F$replyToUser\u200F ', // RLM around name
                                             style: const TextStyle(
                                               color: Color(0xFF9ebc67),
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
-                                        TextSpan(text: '\u200F$displayBody'), // RLM before body
+                                        TextSpan(
+                                            text:
+                                                '\u200F$displayBody'), // RLM before body
                                       ],
                                     ),
                                   );
@@ -767,8 +792,8 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
               ),
             ),
           ],
-        ),
-      ),
+        ));
+      }),
     );
   }
 }

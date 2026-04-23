@@ -365,17 +365,17 @@ class NotificationHelper {
       return NotificationBodyModel(
         notificationType: NotificationType.news_comment_reply,
         postId: (data['post_id'] ?? data['postId'] ?? data['data_id']) != null
-            ? int.tryParse((data['post_id'] ?? data['postId'] ?? data['data_id']).toString())
+            ? int.tryParse((data['post_id'] ?? data['postId'] ?? data['data_id']).toString().trim())
             : null,
         commentId: data['comment_id'] != null
-            ? int.tryParse(data['comment_id'].toString())
+            ? int.tryParse(data['comment_id'].toString().trim())
             : (data['commentId'] != null
-                ? int.tryParse(data['commentId'].toString())
+                ? int.tryParse(data['commentId'].toString().trim())
                 : null),
         parentId: data['parent_id'] != null
-            ? int.tryParse(data['parent_id'].toString())
+            ? int.tryParse(data['parent_id'].toString().trim())
             : (data['parentId'] != null
-                ? int.tryParse(data['parentId'].toString())
+                ? int.tryParse(data['parentId'].toString().trim())
                 : null),
       );
     } else {
