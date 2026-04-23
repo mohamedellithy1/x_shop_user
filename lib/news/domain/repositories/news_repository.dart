@@ -56,4 +56,10 @@ class NewsRepository {
       handleError: false,
     );
   }
+
+  Future<Response?> deleteComment(int commentId) async {
+    return await apiClient.deleteData(
+      '${AppConstants.newsBaseUrl}${AppConstants.editCommentUei}$commentId',
+    );
+  }
 }

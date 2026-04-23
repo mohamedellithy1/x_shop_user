@@ -101,7 +101,8 @@ class NewsController extends GetxController {
         if (response.body != null &&
             response.body is Map &&
             response.body.containsKey('is_liked')) {
-          return (response.body['is_liked'] == 1 || response.body['is_liked'] == true);
+          return (response.body['is_liked'] == 1 ||
+              response.body['is_liked'] == true);
         }
         return true;
       } else {
@@ -148,6 +149,21 @@ class NewsController extends GetxController {
       } else {
         print("Failed to edit comment: ${response?.statusText}");
         showCustomSnackBar("فشل تعديل التعليق");
+      }
+    } else {
+      showCustomSnackBar("يجب تسجيل الدخول أولاً");
+    }
+  }
+
+  void deleteComment(int postId, int commentId) async {
+    if (Get.find<MarketAuthController>().isLoggedIn()) {
+      final response = await newsRepo.deleteComment(commentId);
+      if (response != null && response.statusCode == 200) {
+        getComments(postId);
+        showCustomSnackBar("تم حذف التعليق بنجاح");
+      } else {
+        print("Failed to delete comment: ${response?.statusText}");
+        showCustomSnackBar("فشل حذف التعليق");
       }
     } else {
       showCustomSnackBar("يجب تسجيل الدخول أولاً");

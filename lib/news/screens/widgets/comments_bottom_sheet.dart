@@ -843,27 +843,72 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                             ),
                           ),
                         ),
-                        if (Get.find<MarketProfileController>().userInfoModel !=
-                                null &&
+                        if (Get.find<MarketProfileController>().userInfoModel != null &&
                             item.userId ==
                                 Get.find<MarketProfileController>()
                                     .userInfoModel!
                                     .id
                                     .toString())
-                          Padding(
-                            padding:
-                                const EdgeInsetsDirectional.only(start: 16),
-                            child: InkWell(
-                              onTap: () => _startEdit(item),
-                              child: Text(
-                                'تعديل',
-                                style: TextStyle(
-                                  color: const Color(0xFF9ebc67),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12,
+                          Row(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsetsDirectional.only(start: 16),
+                                child: InkWell(
+                                  onTap: () => _startEdit(item),
+                                  child: Text(
+                                    'تعديل',
+                                    style: TextStyle(
+                                      color: const Color(0xFF9ebc67),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
+                              Padding(
+                                padding:
+                                    const EdgeInsetsDirectional.only(start: 16),
+                                child: InkWell(
+                                  onTap: () {
+                                    Get.dialog(
+                                      AlertDialog(
+                                        title: const Text('حذف التعليق'),
+                                        content: const Text(
+                                            'هل أنت متأكد من رغبتك في حذف هذا التعليق؟'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Get.back(),
+                                            child: const Text('إلغاء',
+                                                style: TextStyle(
+                                                    color: Colors.grey)),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              Get.back();
+                                              Get.find<NewsController>()
+                                                  .deleteComment(
+                                                      widget.news.id, item.id);
+                                            },
+                                            child: const Text('حذف',
+                                                style: TextStyle(
+                                                    color: Colors.red)),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    'حذف',
+                                    style: TextStyle(
+                                      color: Colors.red[400],
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         const SizedBox(width: 16),
                         // Simulated Likes for UI matching
