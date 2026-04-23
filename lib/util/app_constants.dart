@@ -25,6 +25,7 @@ class AppConstants {
   static const String likeNewsUei = '/api/v1/news/like';
   static const String getCommentsById = '/api/v1/news/';
   static const String addCommentUei = '/api/v1/news/comments';
+  static const String editCommentUei = '/api/v1/news/comments/';
   static const String bannerUei =
       '/api/customer/banner/list?limit=100&offset=1';
   static const String bannerCountUpdate =

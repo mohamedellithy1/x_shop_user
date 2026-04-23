@@ -132,6 +132,28 @@ class NewsController extends GetxController {
     }
   }
 
+  void editComment({
+    required int postId,
+    required int commentId,
+    required String body,
+  }) async {
+    if (Get.find<MarketAuthController>().isLoggedIn()) {
+      final response = await newsRepo.editComment(
+        commentId: commentId,
+        body: body,
+      );
+      if (response != null && response.statusCode == 200) {
+        getComments(postId);
+        showCustomSnackBar("تم تعديل التعليق بنجاح");
+      } else {
+        print("Failed to edit comment: ${response?.statusText}");
+        showCustomSnackBar("فشل تعديل التعليق");
+      }
+    } else {
+      showCustomSnackBar("يجب تسجيل الدخول أولاً");
+    }
+  }
+
   void getComments(int postId) async {
     try {
       final response = await newsRepo.getComments(postId);

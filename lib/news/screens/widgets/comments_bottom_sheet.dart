@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:stackfood_multivendor/features/profile/controllers/profile_controller.dart';
 import 'package:stackfood_multivendor/news/controllers/news_controller.dart';
 import 'package:stackfood_multivendor/news/domain/entities/comments.dart';
 import 'package:stackfood_multivendor/news/domain/entities/news.dart';
@@ -29,6 +30,7 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
   final ScrollController _scrollController = ScrollController();
   String? _replyingTo;
   int? _replyingToCommentId;
+  int? _editingCommentId;
   final Set<int> _expandedComments = {};
   final GlobalKey _highlightKey = GlobalKey();
   bool _hasScrolled = false;
@@ -65,7 +67,18 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
     setState(() {
       _replyingTo = userName;
       _replyingToCommentId = commentId;
+      _editingCommentId = null;
       _commentController.clear();
+      _commentFocusNode.requestFocus();
+    });
+  }
+
+  void _startEdit(CommentEntity comment) {
+    setState(() {
+      _editingCommentId = comment.id;
+      _commentController.text = comment.body;
+      _replyingTo = null;
+      _replyingToCommentId = null;
       _commentFocusNode.requestFocus();
     });
   }
@@ -92,6 +105,14 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
       _replyingTo = null;
       _replyingToCommentId = null;
       _commentController.clear();
+    });
+  }
+
+  void _cancelEdit() {
+    setState(() {
+      _editingCommentId = null;
+      _commentController.clear();
+      _commentFocusNode.unfocus();
     });
   }
 
@@ -239,6 +260,47 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      // Edit Indicator
+                      if (_editingCommentId != null)
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 8),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 8),
+                          decoration: BoxDecoration(
+                            // color: Color(0xFF55745a),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Color(0xFF55745a)),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.edit,
+                                size: 16,
+                                color: Color(0xFF55745a),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  'تعديل التعليق...',
+                                  style: TextStyle(
+                                    color: Color(0xFF55745a),
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ),
+                              InkWell(
+                                onTap: _cancelEdit,
+                                child: Icon(
+                                  Icons.close,
+                                  size: 18,
+                                  color: Colors.blue[600],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
                       // Reply Indicator
                       if (_replyingTo != null)
                         Container(
@@ -302,7 +364,14 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                                   final newsController =
                                       Get.find<NewsController>();
 
-                                  if (_replyingTo != null &&
+                                  if (_editingCommentId != null) {
+                                    newsController.editComment(
+                                      postId: widget.news.id,
+                                      commentId: _editingCommentId!,
+                                      body: _commentController.text.trim(),
+                                    );
+                                    _editingCommentId = null;
+                                  } else if (_replyingTo != null &&
                                       _replyingToCommentId != null) {
                                     newsController.addComment(
                                       postId: widget.news.id,
@@ -359,9 +428,11 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                                 decoration: InputDecoration(
                                   hintStyle: TextStyle(
                                       color: Colors.grey[600], fontSize: 14),
-                                  hintText: _replyingTo != null
-                                      ? 'اكتب ردك...'
-                                      : 'أضف تعليقك...',
+                                  hintText: _editingCommentId != null
+                                      ? 'تعديل التعليق...'
+                                      : _replyingTo != null
+                                          ? 'اكتب ردك...'
+                                          : 'أضف تعليقك...',
                                   border: InputBorder.none,
                                   contentPadding: const EdgeInsets.symmetric(
                                     horizontal: 16,
@@ -667,10 +738,6 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 12, vertical: 8),
                           decoration: BoxDecoration(
-                            color: widget.highlightedCommentId == item.id
-                                ? Color(0xFF9ebc67)
-                                    .withOpacity(_highlightOpacity * 0.15)
-                                : Colors.grey[100],
                             borderRadius: BorderRadius.circular(16),
                             border: widget.highlightedCommentId == item.id
                                 ? Border.all(
@@ -776,6 +843,28 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                             ),
                           ),
                         ),
+                        if (Get.find<MarketProfileController>().userInfoModel !=
+                                null &&
+                            item.userId ==
+                                Get.find<MarketProfileController>()
+                                    .userInfoModel!
+                                    .id
+                                    .toString())
+                          Padding(
+                            padding:
+                                const EdgeInsetsDirectional.only(start: 16),
+                            child: InkWell(
+                              onTap: () => _startEdit(item),
+                              child: Text(
+                                'تعديل',
+                                style: TextStyle(
+                                  color: const Color(0xFF9ebc67),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          ),
                         const SizedBox(width: 16),
                         // Simulated Likes for UI matching
                         // Icon(Icons.thumb_up, size: 12, color: Colors.blue[700]),

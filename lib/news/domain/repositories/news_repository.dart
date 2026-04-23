@@ -43,4 +43,17 @@ class NewsRepository {
       handleError: false,
     );
   }
+
+  Future<Response?> editComment({
+    required int commentId,
+    required String body,
+  }) async {
+    return await apiClient.postData(
+      '${AppConstants.newsBaseUrl}${AppConstants.editCommentUei}$commentId',
+      {
+        'body': body,
+      },
+      handleError: false,
+    );
+  }
 }
