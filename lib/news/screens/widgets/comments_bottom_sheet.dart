@@ -646,6 +646,115 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
     );
   }
 
+  final Map<String, String> _reactionToEmoji = {
+    'like': '👍',
+    'love': '❤️',
+    'haha': '😂',
+    'wow': '😮',
+    'sad': '😢',
+    'angry': '😡',
+  };
+
+  Widget _buildCommentReactionIcon(CommentEntity item) {
+    if (item.myReaction == null || !_reactionToEmoji.containsKey(item.myReaction)) {
+      return Icon(
+        Icons.thumb_up_outlined,
+        size: 14,
+        color: Colors.grey[600],
+      );
+    }
+    return Text(
+      _reactionToEmoji[item.myReaction!]!,
+      style: const TextStyle(fontSize: 14),
+    );
+  }
+
+  void _showReactionsPopupForComment(BuildContext context, Offset position, CommentEntity item) {
+    final List<Map<String, String>> reactions = [
+      {'emoji': '👍', 'name': 'like'},
+      {'emoji': '❤️', 'name': 'love'},
+      {'emoji': '😂', 'name': 'haha'},
+      {'emoji': '😮', 'name': 'wow'},
+      {'emoji': '😢', 'name': 'sad'},
+      {'emoji': '😡', 'name': 'angry'},
+    ];
+
+    OverlayEntry? overlayEntry;
+
+    overlayEntry = OverlayEntry(
+      builder: (context) => Stack(
+        children: [
+          Positioned.fill(
+            child: GestureDetector(
+              onTap: () => overlayEntry?.remove(),
+              child: Container(color: Colors.transparent),
+            ),
+          ),
+          Positioned(
+            left: position.dx > 200 ? position.dx - 200 : 20,
+            top: position.dy - 60,
+            child: Material(
+              color: Colors.transparent,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(30),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 8,
+                      spreadRadius: 1,
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: reactions.map((reaction) {
+                    return GestureDetector(
+                      onTap: () async {
+                        overlayEntry?.remove();
+                        setState(() {
+                          item.myReaction = reaction['name'];
+                        });
+
+                        final response = await Get.find<NewsController>()
+                            .reactToItem('comment', item.id, reaction['name']!);
+
+                        if (response != null && mounted) {
+                          setState(() {
+                            if (response.containsKey('my_reaction')) {
+                              item.myReaction = response['my_reaction']?.toString();
+                            }
+                            if (response.containsKey('reactions_count') && response['reactions_count'] != null) {
+                              item.reactionsCount = Map<String, int>.from(response['reactions_count'] as Map);
+                            }
+                          });
+                        }
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                        child: Transform.scale(
+                          scale: 1.2,
+                          child: Text(
+                            reaction['emoji']!,
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    Overlay.of(context).insert(overlayEntry);
+  }
+
   Color _getReplyColor(int index) {
     // Different colors for different reply chains
     List<Color> replyColors = [
@@ -944,14 +1053,42 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                             ],
                           ),
                         const SizedBox(width: 16),
-                        // Simulated Likes for UI matching
-                        // Icon(Icons.thumb_up, size: 12, color: Colors.blue[700]),
-                        // const SizedBox(width: 4),
-                        // Text(
-                        //   '${(item.id % 20) + 1}', // Dynamic-looking dummy likes
-                        //   style:
-                        //       TextStyle(color: Colors.grey[600], fontSize: 12),
-                        // ),
+                        const SizedBox(width: 16),
+                        // Real Likes logic
+                        GestureDetector(
+                          onLongPressStart: (details) {
+                            _showReactionsPopupForComment(context, details.globalPosition, item);
+                          },
+                          onTap: () async {
+                            String reactionToSend = item.myReaction ?? 'like';
+                            final response = await Get.find<NewsController>()
+                                .reactToItem('comment', item.id, reactionToSend);
+
+                            if (response != null && mounted) {
+                              setState(() {
+                                if (response.containsKey('my_reaction')) {
+                                  item.myReaction = response['my_reaction']?.toString();
+                                }
+                                if (response.containsKey('reactions_count') && response['reactions_count'] != null) {
+                                  item.reactionsCount = Map<String, int>.from(response['reactions_count'] as Map);
+                                }
+                              });
+                            }
+                          },
+                          child: Row(
+                            children: [
+                              _buildCommentReactionIcon(item),
+                              const SizedBox(width: 4),
+                              Text(
+                                '${item.reactionsCount.values.fold(0, (sum, val) => sum + (val as int)) > 0 ? item.reactionsCount.values.fold(0, (sum, val) => sum + (val as int)) : ''}',
+                                style: TextStyle(
+                                  color: item.myReaction != null ? const Color(0xFF9ebc67) : Colors.grey[600],
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
