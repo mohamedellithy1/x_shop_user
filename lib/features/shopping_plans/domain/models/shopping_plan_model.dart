@@ -25,7 +25,7 @@ class ShoppingPlanModel {
     this.priceRange,
   });
 
-  String get imageFullUrl => '${AppConstants.baseUrl}/storage/app/public/shopping-plan/$image';
+  String get imageFullUrl => '${AppConstants.baseUrl}/storage/product/$image';
 
   factory ShoppingPlanModel.fromJson(Map<String, dynamic> json) {
     return ShoppingPlanModel(
@@ -69,7 +69,7 @@ class ShoppingPlanRestaurant {
 
   ShoppingPlanRestaurant({this.id, this.name, this.logo});
 
-  String get logoFullUrl => '${AppConstants.baseUrl}/storage/app/public/restaurant/$logo';
+  String get logoFullUrl => '${AppConstants.baseUrl}/storage/product/$logo';
 
   factory ShoppingPlanRestaurant.fromJson(Map<String, dynamic> json) {
     return ShoppingPlanRestaurant(
@@ -243,7 +243,7 @@ class PlanItemModel {
     this.allowUserIncrement,
   });
 
-  String get imageFullUrl => '${AppConstants.baseUrl}/storage/app/public/product/$image';
+  String get imageFullUrl => '${AppConstants.baseUrl}/storage/product/$image';
 
   factory PlanItemModel.fromJson(Map<String, dynamic> json) {
     return PlanItemModel(
