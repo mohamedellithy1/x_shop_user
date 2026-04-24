@@ -134,13 +134,19 @@ class MarketCartController extends GetxController implements GetxService {
 
       _variationPrice += variationPrice;
       _itemPrice = _itemPrice + price;
-      _itemDiscountPrice = _itemDiscountPrice +
-          discountPrice +
-          (variationPrice - variationWithoutDiscountPrice);
+      
+      double totalDiscount = discountPrice + (variationPrice - variationWithoutDiscountPrice);
+      if (cartModel.isFromPlan == true && cartModel.planDiscountAmount != null) {
+        totalDiscount += cartModel.planDiscountAmount!;
+      }
+      
+      _itemDiscountPrice = _itemDiscountPrice + totalDiscount;
+
 
       debugPrint(
-          '==check : ${_cartList.indexOf(cartModel)} ====> $_itemDiscountPrice = $_itemDiscountPrice + $discountPrice + ($variationPrice - $variationWithoutDiscountPrice)');
+          '==check : ${_cartList.indexOf(cartModel)} ====> $_itemDiscountPrice = $_itemDiscountPrice + $totalDiscount');
     }
+
     _subTotal =
         (_itemPrice - _itemDiscountPrice) + _addOnsPrice + _variationPrice;
 

@@ -16,6 +16,11 @@ class OnlineCartModel {
   String? updatedAt;
   Product? product;
   double? requestedWeight;
+  bool? isFromPlan;
+  int? shoppingPlanId;
+  int? shoppingPlanVariantId;
+  double? planDiscountAmount;
+
 
   OnlineCartModel(
       {this.id,
@@ -31,7 +36,12 @@ class OnlineCartModel {
         this.createdAt,
         this.updatedAt,
         this.product,
-        this.requestedWeight});
+        this.requestedWeight,
+        this.isFromPlan,
+        this.shoppingPlanId,
+        this.shoppingPlanVariantId,
+        this.planDiscountAmount});
+
 
   OnlineCartModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -53,7 +63,13 @@ class OnlineCartModel {
     updatedAt = json['updated_at'];
     product = json['item'] != null ? Product.fromJson(json['item']) : null;
     requestedWeight = json['requested_weight'] != null ? double.tryParse(json['requested_weight'].toString()) : null;
+    isFromPlan = json['is_from_plan'] == 1 || json['is_from_plan'] == true;
+    shoppingPlanId = json['shopping_plan_id'];
+    shoppingPlanVariantId = json['shopping_plan_variant_id'];
+    planDiscountAmount = json['plan_discount_amount'] != null ? double.tryParse(json['plan_discount_amount'].toString()) : null;
   }
+
+
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -75,8 +91,13 @@ class OnlineCartModel {
       data['item'] = product!.toJson();
     }
     data['requested_weight'] = requestedWeight;
+    data['is_from_plan'] = isFromPlan;
+    data['shopping_plan_id'] = shoppingPlanId;
+    data['shopping_plan_variant_id'] = shoppingPlanVariantId;
+    data['plan_discount_amount'] = planDiscountAmount;
     return data;
   }
+
 }
 
 class Variation {

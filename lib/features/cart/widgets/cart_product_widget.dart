@@ -188,23 +188,29 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                                   (widget.cart.product!.isWeightBased ?? false)
                                                       ? (widget.cart.product!.price! * (widget.cart.requestedWeight ?? 1.0) * (widget.cart.quantity ?? 1).toDouble())
                                                       : widget.cart.product!.price,
-                                                  discount: discount,
-                                                  discountType: discountType),
+                                                  discount: (widget.cart.isFromPlan == true && widget.cart.planDiscountAmount != null && widget.cart.planDiscountAmount! > 0)
+                                                      ? widget.cart.planDiscountAmount
+                                                      : discount,
+                                                  discountType: (widget.cart.isFromPlan == true && widget.cart.planDiscountAmount != null && widget.cart.planDiscountAmount! > 0)
+                                                      ? 'amount'
+                                                      : discountType),
+
                                               style: robotoMedium.copyWith(
                                                   fontSize:
                                                       Dimensions.fontSizeSmall),
                                               textDirection: TextDirection.ltr,
                                             ),
                                             SizedBox(
-                                                width: discount! > 0
+                                                width: (discount! > 0 || (widget.cart.isFromPlan == true && widget.cart.planDiscountAmount! > 0))
                                                     ? Dimensions
                                                         .paddingSizeExtraSmall
                                                     : 0),
-                                            discount > 0
+                                            (discount > 0 || (widget.cart.isFromPlan == true && widget.cart.planDiscountAmount != null && widget.cart.planDiscountAmount! > 0))
                                                 ? Text(
                                                     PriceConverter.convertPrice(
-                                                        widget.cart.product!
-                                                            .price),
+                                                        (widget.cart.product!.isWeightBased ?? false)
+                                                            ? (widget.cart.product!.price! * (widget.cart.requestedWeight ?? 1.0) * (widget.cart.quantity ?? 1).toDouble())
+                                                            : widget.cart.product!.price),
                                                     textDirection:
                                                         TextDirection.ltr,
                                                     style: robotoMedium.copyWith(
@@ -216,9 +222,11 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                                             TextDecoration
                                                                 .lineThrough),
                                                   )
+
                                                 : const SizedBox(),
                                           ],
                                         ),
+
                                         addOnText.isNotEmpty ||
                                                 variationText.isNotEmpty
                                             ? InkWell(

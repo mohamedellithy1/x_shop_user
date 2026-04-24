@@ -106,10 +106,29 @@ class ShoppingPlanPreviewScreen extends StatelessWidget {
                                       ],
                                     ),
                                   ),
-                                  Text(
-                                    PriceConverter.convertPrice(item.lineTotal),
-                                    style: robotoMedium.copyWith(color: const Color(0xFF55745a)),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      if (item.discountAmount != null && item.discountAmount! > 0)
+                                        Text(
+                                          PriceConverter.convertPrice(
+                                            item.lineTotalBeforeDiscount,
+                                            discount: item.discountAmount,
+                                            discountType: 'amount',
+                                          ),
+                                          style: robotoRegular.copyWith(
+                                            fontSize: Dimensions.fontSizeExtraSmall,
+                                            color: Colors.red,
+                                            decoration: TextDecoration.lineThrough,
+                                          ),
+                                        ),
+                                      Text(
+                                        PriceConverter.convertPrice(item.lineTotal),
+                                        style: robotoMedium.copyWith(color: const Color(0xFF55745a)),
+                                      ),
+                                    ],
                                   ),
+
                                 ],
                               ),
                             );
@@ -130,6 +149,20 @@ class ShoppingPlanPreviewScreen extends StatelessWidget {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        if (summary?.totalDiscount != null && summary!.totalDiscount! > 0) ...[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('توفير الخطة', style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Colors.red)),
+                              Text(
+                                '- ${PriceConverter.convertPrice(summary.totalDiscount)}',
+                                style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault, color: Colors.red),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                        ],
+
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -140,6 +173,7 @@ class ShoppingPlanPreviewScreen extends StatelessWidget {
                             ),
                           ],
                         ),
+
                         const SizedBox(height: Dimensions.paddingSizeDefault),
                         SizedBox(
                           width: double.infinity,

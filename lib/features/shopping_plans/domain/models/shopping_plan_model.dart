@@ -226,6 +226,11 @@ class PlanItemModel {
   double? lineTotal;
   bool? isOptional;
   bool? allowUserIncrement;
+  double? lineTotalBeforeDiscount;
+  String? discountType;
+  double? discountValue;
+  double? discountAmount;
+  double? lineTotalAfterDiscount;
 
   PlanItemModel({
     this.foodId,
@@ -241,7 +246,13 @@ class PlanItemModel {
     this.lineTotal,
     this.isOptional,
     this.allowUserIncrement,
+    this.lineTotalBeforeDiscount,
+    this.discountType,
+    this.discountValue,
+    this.discountAmount,
+    this.lineTotalAfterDiscount,
   });
+
 
   String get imageFullUrl => '${AppConstants.baseUrl}/storage/product/$image';
 
@@ -260,8 +271,15 @@ class PlanItemModel {
       lineTotal: (json['line_total'] as num?)?.toDouble(),
       isOptional: json['is_optional'],
       allowUserIncrement: json['allow_user_increment'],
+      lineTotalBeforeDiscount: json['line_total_before_discount'] != null ? double.tryParse(json['line_total_before_discount'].toString()) : null,
+      discountType: json['discount_type'],
+      discountValue: json['discount_value'] != null ? double.tryParse(json['discount_value'].toString()) : null,
+      discountAmount: json['discount_amount'] != null ? double.tryParse(json['discount_amount'].toString()) : null,
+      lineTotalAfterDiscount: json['line_total_after_discount'] != null ? double.tryParse(json['line_total_after_discount'].toString()) : null,
     );
   }
+
+
 
   Map<String, dynamic> toJson() {
     return {
@@ -278,27 +296,43 @@ class PlanItemModel {
       'line_total': lineTotal,
       'is_optional': isOptional,
       'allow_user_increment': allowUserIncrement,
+      'line_total_before_discount': lineTotalBeforeDiscount,
+      'discount_type': discountType,
+      'discount_value': discountValue,
+      'discount_amount': discountAmount,
+      'line_total_after_discount': lineTotalAfterDiscount,
     };
   }
+
 }
 
 class PlanSummaryModel {
   int? itemsCount;
   double? estimatedTotal;
+  double? totalBeforeDiscount;
+  double? totalDiscount;
 
-  PlanSummaryModel({this.itemsCount, this.estimatedTotal});
+  PlanSummaryModel({this.itemsCount, this.estimatedTotal, this.totalBeforeDiscount, this.totalDiscount});
+
 
   factory PlanSummaryModel.fromJson(Map<String, dynamic> json) {
     return PlanSummaryModel(
       itemsCount: json['items_count'],
-      estimatedTotal: (json['estimated_total'] as num?)?.toDouble(),
+      estimatedTotal: json['estimated_total'] != null ? double.tryParse(json['estimated_total'].toString()) : null,
+      totalBeforeDiscount: json['total_before_discount'] != null ? double.tryParse(json['total_before_discount'].toString()) : null,
+      totalDiscount: json['total_discount'] != null ? double.tryParse(json['total_discount'].toString()) : null,
     );
   }
+
+
 
   Map<String, dynamic> toJson() {
     return {
       'items_count': itemsCount,
       'estimated_total': estimatedTotal,
+      'total_before_discount': totalBeforeDiscount,
+      'total_discount': totalDiscount,
     };
   }
+
 }

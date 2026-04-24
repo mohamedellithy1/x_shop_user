@@ -65,8 +65,13 @@ class CartService implements CartServiceInterface {
           cart.id, price, discountedPrice, discountAmount, quantity, addOnIdList,
           addOnsList, false, cart.product, selectedFoodVariations, quantityLimit, variationsStock,
           requestedWeight: cart.requestedWeight,
+          isFromPlan: cart.isFromPlan,
+          shoppingPlanId: cart.shoppingPlanId,
+          shoppingPlanVariantId: cart.shoppingPlanVariantId,
+          planDiscountAmount: cart.planDiscountAmount,
         ),
       );
+
     }
     return cartList;
   }

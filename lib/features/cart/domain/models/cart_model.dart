@@ -15,6 +15,11 @@ class CartModel {
   int? _quantityLimit;
   List<List<int?>>? _variationsStock;
   double? _requestedWeight;
+  bool? _isFromPlan;
+  int? _shoppingPlanId;
+  int? _shoppingPlanVariantId;
+  double? _planDiscountAmount;
+
 
   CartModel(
       int? id,
@@ -29,7 +34,12 @@ class CartModel {
       List<List<bool?>> variations,
       int? quantityLimit,
       List<List<int?>> variationsStock,
-      {double? requestedWeight}) {
+      {double? requestedWeight,
+      bool? isFromPlan,
+      int? shoppingPlanId,
+      int? shoppingPlanVariantId,
+      double? planDiscountAmount}) {
+
     _id = id;
     _price = price;
     _discountedPrice = discountedPrice;
@@ -43,7 +53,12 @@ class CartModel {
     _quantityLimit = quantityLimit;
     _variationsStock = variationsStock;
     _requestedWeight = requestedWeight;
+    _isFromPlan = isFromPlan;
+    _shoppingPlanId = shoppingPlanId;
+    _shoppingPlanVariantId = shoppingPlanVariantId;
+    _planDiscountAmount = planDiscountAmount;
   }
+
 
   int? get id => _id;
   double? get price => _price;
@@ -62,6 +77,11 @@ class CartModel {
   List<List<int?>>? get variationsStock => _variationsStock;
   double? get requestedWeight => _requestedWeight;
   set requestedWeight(double? weight) => _requestedWeight = weight;
+  bool? get isFromPlan => _isFromPlan;
+  int? get shoppingPlanId => _shoppingPlanId;
+  int? get shoppingPlanVariantId => _shoppingPlanVariantId;
+  double? get planDiscountAmount => _planDiscountAmount;
+
 
   CartModel.fromJson(Map<String, dynamic> json) {
     _id = json['cart_id'];
@@ -109,7 +129,13 @@ class CartModel {
     if (json['requested_weight'] != null) {
       _requestedWeight = double.tryParse(json['requested_weight'].toString());
     }
+    _isFromPlan = json['is_from_plan'] == 1 || json['is_from_plan'] == true;
+    _shoppingPlanId = json['shopping_plan_id'];
+    _shoppingPlanVariantId = json['shopping_plan_variant_id'];
+    _planDiscountAmount = json['plan_discount_amount'] != null ? double.tryParse(json['plan_discount_amount'].toString()) : null;
   }
+
+
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -130,8 +156,13 @@ class CartModel {
     if (_requestedWeight != null) {
       data['requested_weight'] = _requestedWeight;
     }
+    data['is_from_plan'] = _isFromPlan;
+    data['shopping_plan_id'] = _shoppingPlanId;
+    data['shopping_plan_variant_id'] = _shoppingPlanVariantId;
+    data['plan_discount_amount'] = _planDiscountAmount;
     return data;
   }
+
 }
 
 class AddOn {
