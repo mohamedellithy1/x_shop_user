@@ -19,6 +19,9 @@ class CartModel {
   int? _shoppingPlanId;
   int? _shoppingPlanVariantId;
   double? _planDiscountAmount;
+  String? _periodType;
+  int? _peopleCount;
+
 
 
   CartModel(
@@ -38,7 +41,9 @@ class CartModel {
       bool? isFromPlan,
       int? shoppingPlanId,
       int? shoppingPlanVariantId,
-      double? planDiscountAmount}) {
+      double? planDiscountAmount,
+      String? periodType,
+      int? peopleCount}) {
 
     _id = id;
     _price = price;
@@ -57,7 +62,10 @@ class CartModel {
     _shoppingPlanId = shoppingPlanId;
     _shoppingPlanVariantId = shoppingPlanVariantId;
     _planDiscountAmount = planDiscountAmount;
+    _periodType = periodType;
+    _peopleCount = peopleCount;
   }
+
 
 
   int? get id => _id;
@@ -81,6 +89,9 @@ class CartModel {
   int? get shoppingPlanId => _shoppingPlanId;
   int? get shoppingPlanVariantId => _shoppingPlanVariantId;
   double? get planDiscountAmount => _planDiscountAmount;
+  String? get periodType => _periodType;
+  int? get peopleCount => _peopleCount;
+
 
 
   CartModel.fromJson(Map<String, dynamic> json) {
@@ -133,7 +144,10 @@ class CartModel {
     _shoppingPlanId = json['shopping_plan_id'];
     _shoppingPlanVariantId = json['shopping_plan_variant_id'];
     _planDiscountAmount = json['plan_discount_amount'] != null ? double.tryParse(json['plan_discount_amount'].toString()) : null;
+    _periodType = json['period_type'];
+    _peopleCount = json['people_count'] != null ? int.tryParse(json['people_count'].toString()) : null;
   }
+
 
 
 

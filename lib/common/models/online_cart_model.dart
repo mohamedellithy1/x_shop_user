@@ -20,6 +20,9 @@ class OnlineCartModel {
   int? shoppingPlanId;
   int? shoppingPlanVariantId;
   double? planDiscountAmount;
+  String? periodType;
+  int? peopleCount;
+
 
 
   OnlineCartModel(
@@ -67,7 +70,10 @@ class OnlineCartModel {
     shoppingPlanId = json['shopping_plan_id'];
     shoppingPlanVariantId = json['shopping_plan_variant_id'];
     planDiscountAmount = json['plan_discount_amount'] != null ? double.tryParse(json['plan_discount_amount'].toString()) : null;
+    periodType = json['period_type'];
+    peopleCount = json['people_count'] != null ? int.tryParse(json['people_count'].toString()) : null;
   }
+
 
 
 

@@ -3,6 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stackfood_multivendor/features/cart/domain/models/cart_model.dart';
 import 'package:stackfood_multivendor/theme/dark_theme.dart';
 import 'package:stackfood_multivendor/theme/light_theme.dart';
 
@@ -15,7 +16,10 @@ import 'package:stackfood_multivendor/common/widgets/web_constrained_box.dart';
 import 'package:stackfood_multivendor/common/widgets/web_page_title_widget.dart';
 import 'package:stackfood_multivendor/features/cart/controllers/cart_controller.dart';
 import 'package:stackfood_multivendor/features/cart/widgets/cart_product_widget.dart';
+import 'package:stackfood_multivendor/features/cart/widgets/cart_plan_group_widget.dart';
 import 'package:stackfood_multivendor/features/cart/widgets/checkout_button_widget.dart';
+
+
 import 'package:stackfood_multivendor/features/cart/widgets/pricing_view_widget.dart';
 import 'package:stackfood_multivendor/features/checkout/controllers/checkout_controller.dart';
 import 'package:stackfood_multivendor/common/models/restaurant_model.dart';
@@ -438,16 +442,27 @@ class _CartScreenState extends State<CartScreen> {
                                                                                     right: Dimensions.paddingSizeDefault,
                                                                                     top: Dimensions.paddingSizeDefault,
                                                                                   ),
-                                                                                  itemCount: cartController.cartList.length,
+                                                                                  itemCount: _getGroupedCartList(cartController.cartList).length,
                                                                                   itemBuilder: (context, index) {
-                                                                                    return CartProductWidget(
-                                                                                      cart: cartController.cartList[index],
-                                                                                      cartIndex: index,
-                                                                                      addOns: cartController.addOnsList[index],
-                                                                                      isAvailable: cartController.availableList[index],
-                                                                                      isRestaurantOpen: isRestaurantOpen,
-                                                                                    );
+                                                                                    var item = _getGroupedCartList(cartController.cartList)[index];
+                                                                                    if (item is int) {
+                                                                                      return CartProductWidget(
+                                                                                        cart: cartController.cartList[item],
+                                                                                        cartIndex: item,
+                                                                                        addOns: cartController.addOnsList[item],
+                                                                                        isAvailable: cartController.availableList[item],
+                                                                                        isRestaurantOpen: isRestaurantOpen,
+                                                                                      );
+                                                                                    } else if (item is List<int>) {
+                                                                                      return CartPlanGroupWidget(
+                                                                                        planItems: item.map((idx) => cartController.cartList[idx]).toList(),
+                                                                                        originalIndices: item,
+                                                                                        isRestaurantOpen: isRestaurantOpen,
+                                                                                      );
+                                                                                    }
+                                                                                    return const SizedBox();
                                                                                   },
+
                                                                                 ),
                                                                               ),
                                                                               !isRestaurantOpen
@@ -737,4 +752,32 @@ class _CartScreenState extends State<CartScreen> {
       showCustomSnackBar(text);
     }
   }
+
+  List<dynamic> _getGroupedCartList(List<CartModel> cartList) {
+    List<dynamic> result = [];
+    Set<String> processedGroups = {};
+
+    for (int i = 0; i < cartList.length; i++) {
+      CartModel cart = cartList[i];
+      if (cart.isFromPlan == true && cart.shoppingPlanId != null) {
+        String key = "${cart.shoppingPlanId}_${cart.shoppingPlanVariantId}";
+        if (!processedGroups.contains(key)) {
+          List<int> indices = [];
+          for (int j = 0; j < cartList.length; j++) {
+            if (cartList[j].isFromPlan == true &&
+                cartList[j].shoppingPlanId == cart.shoppingPlanId &&
+                cartList[j].shoppingPlanVariantId == cart.shoppingPlanVariantId) {
+              indices.add(j);
+            }
+          }
+          result.add(indices);
+          processedGroups.add(key);
+        }
+      } else {
+        result.add(i);
+      }
+    }
+    return result;
+  }
 }
+

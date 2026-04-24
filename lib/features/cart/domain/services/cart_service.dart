@@ -69,8 +69,11 @@ class CartService implements CartServiceInterface {
           shoppingPlanId: cart.shoppingPlanId,
           shoppingPlanVariantId: cart.shoppingPlanVariantId,
           planDiscountAmount: cart.planDiscountAmount,
+          periodType: cart.periodType,
+          peopleCount: cart.peopleCount,
         ),
       );
+
 
     }
     return cartList;
