@@ -11,6 +11,9 @@ import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
 import 'package:stackfood_multivendor/theme/dark_theme.dart';
 import 'package:stackfood_multivendor/theme/light_theme.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_bottom_sheet_widget.dart';
+import 'package:stackfood_multivendor/features/shopping_plans/screens/widgets/plan_variants_bottom_sheet.dart';
+
 
 
 class ShoppingPlansScreen extends StatefulWidget {
@@ -156,7 +159,16 @@ class _ShoppingPlanCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Get.toNamed(RouteHelper.getPlanVariantsRoute(plan.id, plan.name)),
+      onTap: () {
+        showCustomBottomSheet(
+          child: PlanVariantsBottomSheet(
+            plans: Get.find<ShoppingPlanController>().shoppingPlanList!,
+            initialIndex: Get.find<ShoppingPlanController>().shoppingPlanList!.indexOf(plan),
+          ),
+        );
+      },
+
+
       child: Container(
         margin: const EdgeInsets.only(bottom: Dimensions.paddingSizeDefault),
         decoration: BoxDecoration(
