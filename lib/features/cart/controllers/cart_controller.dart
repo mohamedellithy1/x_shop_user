@@ -9,6 +9,7 @@ import 'package:stackfood_multivendor/features/cart/domain/services/cart_service
 import 'package:stackfood_multivendor/features/checkout/domain/models/place_order_body_model.dart';
 import 'package:stackfood_multivendor/features/product/controllers/product_controller.dart';
 import 'package:stackfood_multivendor/features/restaurant/controllers/restaurant_controller.dart';
+import 'package:stackfood_multivendor/features/shopping_plans/controllers/shopping_plan_controller.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
 import 'package:stackfood_multivendor/helper/address_helper.dart';
 import 'package:stackfood_multivendor/helper/auth_helper.dart';
@@ -190,6 +191,16 @@ class MarketCartController extends GetxController implements GetxService {
     calculationCart();
     await updateCartQuantityOnline(_cartList[index].id!,
         _cartList[index].price!, _cartList[index].quantity!);
+
+    // Sync with ShoppingPlanController if it's a plan item
+    if (_cartList[index].isFromPlan == true && _cartList[index].shoppingPlanVariantId != null) {
+      Get.find<ShoppingPlanController>().updateExtraItemQuantityByProductId(
+        _cartList[index].shoppingPlanVariantId!,
+        _cartList[index].product!.id!,
+        isIncrement,
+      );
+    }
+
     _isLoading = false;
     update();
   }
@@ -197,9 +208,20 @@ class MarketCartController extends GetxController implements GetxService {
   void removeFromCart(int index) {
     _isLoading = true;
     int cartId = _cartList[index].id!;
+    CartModel removedItem = _cartList[index];
     _cartList.removeAt(index);
     update();
     removeCartItemOnline(cartId);
+
+    // Sync with ShoppingPlanController if it's a plan item
+    if (removedItem.isFromPlan == true && removedItem.shoppingPlanVariantId != null) {
+      final planController = Get.find<ShoppingPlanController>();
+      final extraItems = planController.getExtraItems(removedItem.shoppingPlanVariantId!);
+      final extraIdx = extraItems.indexWhere((e) => e.product?.id == removedItem.product?.id);
+      if (extraIdx >= 0) {
+        planController.removeExtraItem(removedItem.shoppingPlanVariantId!, extraIdx);
+      }
+    }
   }
 
   void removeAddOn(int index, int addOnIndex) {

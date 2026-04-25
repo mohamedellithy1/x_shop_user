@@ -39,19 +39,15 @@ class _CartPlanGroupWidgetState extends State<CartPlanGroupWidget> {
         : 'أسبوعية';
 
     return Container(
-      margin: const EdgeInsets.symmetric(
-          horizontal: Dimensions.paddingSizeDefault,
-          vertical: Dimensions.paddingSizeExtraSmall),
+      margin: const EdgeInsets.only(bottom: Dimensions.paddingSizeDefault),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-        border:
-            Border.all(color: const Color(0xFF55745a).withValues(alpha: 0.2)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+            color: Colors.black.withValues(alpha: 0.1),
+            blurRadius: 5,
+            spreadRadius: 1,
           )
         ],
       ),
@@ -67,11 +63,9 @@ class _CartPlanGroupWidgetState extends State<CartPlanGroupWidget> {
             },
             borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
             child: Container(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: Dimensions.paddingSizeDefault,
-                  vertical: Dimensions.paddingSizeSmall),
+              padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
               decoration: BoxDecoration(
-                color: const Color(0xFF55745a).withValues(alpha: 0.05),
+                // color: const Color(0xFF55745a).withValues(alpha: 0.05),
                 borderRadius: BorderRadius.vertical(
                   top: const Radius.circular(Dimensions.radiusDefault),
                   bottom: Radius.circular(
@@ -81,14 +75,15 @@ class _CartPlanGroupWidgetState extends State<CartPlanGroupWidget> {
               child: Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(6),
+                    height: 60,
+                    width: 60,
                     decoration: BoxDecoration(
                       color: const Color(0xFF55745a),
                       borderRadius:
-                          BorderRadius.circular(Dimensions.radiusSmall),
+                          BorderRadius.circular(Dimensions.radiusDefault),
                     ),
                     child: const Icon(Icons.auto_awesome_motion_outlined,
-                        color: Colors.white, size: 18),
+                        color: Colors.white, size: 24),
                   ),
                   const SizedBox(width: Dimensions.paddingSizeSmall),
                   Expanded(
@@ -101,6 +96,7 @@ class _CartPlanGroupWidgetState extends State<CartPlanGroupWidget> {
                               fontSize: Dimensions.fontSizeDefault,
                               color: const Color(0xFF55745a)),
                         ),
+                        const SizedBox(height: 2),
                         Row(
                           children: [
                             if (widget.planItems.isNotEmpty &&
@@ -108,14 +104,14 @@ class _CartPlanGroupWidgetState extends State<CartPlanGroupWidget> {
                               Text(
                                 'تكفي لـ ${widget.planItems[0].peopleCount} أفراد  •  ',
                                 style: robotoRegular.copyWith(
-                                    fontSize: Dimensions.fontSizeDefault,
+                                    fontSize: Dimensions.fontSizeExtraSmall,
                                     color: Theme.of(context).disabledColor),
                               ),
                             if (totalPlanDiscount > 0)
                               Text(
                                 'وفر حتى ${PriceConverter.convertPrice(totalPlanDiscount)}',
                                 style: robotoMedium.copyWith(
-                                    fontSize: Dimensions.fontSizeDefault,
+                                    fontSize: Dimensions.fontSizeExtraSmall,
                                     color: Colors.red),
                               ),
                           ],

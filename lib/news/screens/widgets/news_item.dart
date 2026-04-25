@@ -6,6 +6,7 @@ import 'package:stackfood_multivendor/news/domain/models/news_model.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/helper/date_converter.dart';
 import 'package:get/get.dart';
+import 'dart:async';
 import 'comments_bottom_sheet.dart';
 
 import '../../domain/entities/news.dart';
@@ -26,6 +27,14 @@ class NewsItemWidget extends StatefulWidget {
 
 class _NewsItemWidgetState extends State<NewsItemWidget> {
   Offset? _tapPosition;
+  Timer? _reactionTimer;
+  bool _isPopupOpen = false;
+
+  @override
+  void dispose() {
+    _reactionTimer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -228,11 +237,17 @@ class _NewsItemWidgetState extends State<NewsItemWidget> {
                   GestureDetector(
                     onTapDown: (details) {
                       _tapPosition = details.globalPosition;
+                      _isPopupOpen = false;
+                      _reactionTimer?.cancel();
+                      _reactionTimer = Timer(const Duration(milliseconds: 250), () {
+                        _isPopupOpen = true;
+                        _showReactionsPopup(context, details.globalPosition);
+                      });
                     },
-                    onLongPressStart: (details) {
-                      _showReactionsPopup(context, details.globalPosition);
-                    },
+                    onTapUp: (_) => _reactionTimer?.cancel(),
+                    onTapCancel: () => _reactionTimer?.cancel(),
                     onTap: () async {
+                      if (_isPopupOpen) return;
                       if (widget.news.myReaction == null) {
                         if (_tapPosition != null) {
                           _showReactionsPopup(context, _tapPosition!);

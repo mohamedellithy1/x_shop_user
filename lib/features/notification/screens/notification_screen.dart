@@ -1,5 +1,7 @@
 import 'package:stackfood_multivendor/common/enums/order_status.dart';
 import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
+import 'package:stackfood_multivendor/news/controllers/news_controller.dart';
+import 'package:stackfood_multivendor/features/notification/domain/models/notification_body_model.dart';
 import 'package:stackfood_multivendor/features/notification/controllers/notification_controller.dart';
 import 'package:stackfood_multivendor/features/notification/widgets/add_fund_bottom_sheet.dart';
 import 'package:stackfood_multivendor/features/notification/widgets/notification_bottom_sheet.dart';
@@ -312,6 +314,24 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                                             notificationModel:
                                                                                 notificationController.notificationList![index])),
                                                                   );
+                                                          } else if (notificationController.notificationList![index].data!.type == 'news_comment_reply') {
+                                                            NotificationBodyModel payload = NotificationBodyModel(
+                                                              notificationType: NotificationType.news_comment_reply,
+                                                              postId: notificationController.notificationList![index].data!.postId,
+                                                              commentId: notificationController.notificationList![index].data!.commentId,
+                                                              parentId: notificationController.notificationList![index].data!.parentId,
+                                                            );
+                                                            print('=== News Comment Reply Tapped ===');
+                                                            print('Post ID: ${payload.postId}');
+                                                            print('Comment ID: ${payload.commentId}');
+                                                            print('Parent ID: ${payload.parentId}');
+                                                            print('Raw Notification Data: ${notificationController.notificationList![index].data!.toJson()}');
+                                                            print('==================================');
+                                                            Get.find<NewsController>().setPendingNotification(payload);
+                                                            if (Get.isBottomSheetOpen ?? false) {
+                                                              Get.back();
+                                                            }
+                                                            Get.offAllNamed(RouteHelper.getMainRoute('news'));
                                                           }
                                                         },
                                                         child: Padding(

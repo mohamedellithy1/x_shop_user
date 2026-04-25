@@ -297,17 +297,33 @@ class RouteHelper {
   static String getCancellationPolicyRoute() => cancellationPolicy;
   static String getRefundPolicyRoute() => refundPolicy;
   static String getAboutUsRoute() => aboutUs;
-  static String getCategoryRoute() => categories;
+  static String getCategoryRoute({int? planId, int? variantId, String? variantTitle}) {
+    String url = categories;
+    if (planId != null && variantId != null) {
+      url += '?planId=$planId&variantId=$variantId';
+      if (variantTitle != null) {
+        url += '&variantTitle=$variantTitle';
+      }
+    }
+    return url;
+  }
 
   static String getCategoryProductRoute(int? id, String name,
-      {bool forceProductView = false}) {
+      {bool forceProductView = false, int? planId, int? variantId, String? variantTitle}) {
     List<int> encoded = utf8.encode(name);
     String data = base64Encode(encoded);
 
     // Use ID as slug for reliable routing, especially with Arabic names
     String slug = id != null ? id.toString() : 'category';
 
-    return '$categoryProduct/$slug?id=$id&name=$data&force_product_view=$forceProductView';
+    String url = '$categoryProduct/$slug?id=$id&name=$data&force_product_view=$forceProductView';
+    if (planId != null && variantId != null) {
+      url += '&planId=$planId&variantId=$variantId';
+      if (variantTitle != null) {
+        url += '&variantTitle=$variantTitle';
+      }
+    }
+    return url;
   }
 
 /*  static String getCategoryProductRoute(int? id, String name) {

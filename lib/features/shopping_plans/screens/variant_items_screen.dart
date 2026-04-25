@@ -9,6 +9,9 @@ import 'package:stackfood_multivendor/helper/route_helper.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_image_widget.dart';
+import 'package:stackfood_multivendor/features/cart/domain/models/cart_model.dart'
+    as cart_model;
+import 'package:stackfood_multivendor/features/cart/controllers/cart_controller.dart';
 
 class VariantItemsScreen extends StatefulWidget {
   final int variantId;
@@ -38,7 +41,8 @@ class _VariantItemsScreenState extends State<VariantItemsScreen> {
         return Scaffold(
           backgroundColor: isDark ? Colors.black : const Color(0xFFfafef5),
           appBar: CustomAppBarWidget(
-              title: widget.variantTitle, isBackButtonExist: true),
+              title: widget.variantTitle,
+              isBackButtonExist: true),
           body: GetBuilder<ShoppingPlanController>(
             builder: (controller) {
               if (controller.isLoading ||
@@ -56,39 +60,200 @@ class _VariantItemsScreenState extends State<VariantItemsScreen> {
                   Column(
                     children: [
                       Expanded(
-                        child: RefreshIndicator(
-                          color: const Color(0xFF55745a),
-                          onRefresh: () =>
-                              controller.getVariantItems(widget.variantId),
-                          child: ListView.builder(
-                            padding:
-                                const EdgeInsets.all(Dimensions.paddingSizeDefault),
-                            itemCount: items.length,
-                            itemBuilder: (context, index) {
-                              return _ItemCard(
-                                item: items[index],
-                                isDark: isDark,
-                                onRemove: () => controller.removeItem(index),
-                                onIncrement: () => controller.incrementQuantity(index),
-                                onDecrement: () => controller.decrementQuantity(index),
-                                onManualSet: (val) => controller.setManualQuantity(index, val),
-                              );
-                            },
-                          ),
+                        child: GetBuilder<ShoppingPlanController>(
+                          builder: (planController) {
+                            final extraItems =
+                                planController.getExtraItems(widget.variantId);
+
+                            return RefreshIndicator(
+                              color: const Color(0xFF55745a),
+                              onRefresh: () =>
+                                  controller.getVariantItems(widget.variantId),
+                              child: ListView.builder(
+                                padding: const EdgeInsets.all(
+                                    Dimensions.paddingSizeDefault),
+                                itemCount: items.length +
+                                    (extraItems.isNotEmpty
+                                        ? extraItems.length + 1
+                                        : 0) +
+                                    1,
+                                itemBuilder: (context, index) {
+                                  if (index < items.length) {
+                                    return _ItemCard(
+                                      item: items[index],
+                                      isDark: isDark,
+                                      onRemove: () =>
+                                          controller.removeItem(index),
+                                      onIncrement: () =>
+                                          controller.incrementQuantity(index),
+                                      onDecrement: () =>
+                                          controller.decrementQuantity(index),
+                                      onManualSet: (val) => controller
+                                          .setManualQuantity(index, val),
+                                    );
+                                  } else if (extraItems.isNotEmpty &&
+                                      index == items.length) {
+                                    return Column(
+                                      children: [
+                                        const Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical:
+                                                  Dimensions.paddingSizeSmall),
+                                          child: Divider(
+                                              thickness: 1, color: Colors.grey),
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text('منتجات إضافية من المتجر',
+                                                style: robotoBold.copyWith(
+                                                    fontSize: Dimensions
+                                                        .fontSizeDefault,
+                                                    color: const Color(
+                                                        0xFF55745a))),
+                                            TextButton.icon(
+                                              onPressed: () {
+                                                planController.clearExtraItems(
+                                                    widget.variantId);
+                                              },
+                                              icon: const Icon(
+                                                  Icons.delete_sweep,
+                                                  color: Colors.red,
+                                                  size: 18),
+                                              label: Text('حذف الكل',
+                                                  style: robotoRegular.copyWith(
+                                                      color: Colors.red,
+                                                      fontSize: Dimensions
+                                                          .fontSizeSmall)),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                            height: Dimensions
+                                                .paddingSizeExtraSmall),
+                                      ],
+                                    );
+                                  } else if (extraItems.isNotEmpty &&
+                                      index <
+                                          items.length +
+                                              extraItems.length +
+                                              1) {
+                                    final extraItem =
+                                        extraItems[index - items.length - 1];
+                                    final extraIndex = index - items.length - 1;
+                                    return _CartItemCard(
+                                      cartItem: extraItem,
+                                      isDark: isDark,
+                                      onIncrement: () {
+                                        planController.incrementExtraItem(
+                                            widget.variantId, extraIndex);
+                                      },
+                                      onDecrement: () {
+                                        planController.decrementExtraItem(
+                                            widget.variantId, extraIndex);
+                                      },
+                                    );
+                                  } else {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: Dimensions.paddingSizeDefault,
+                                          bottom:
+                                              Dimensions.paddingSizeExtraLarge),
+                                      child: InkWell(
+                                        onTap: () {
+                                          // Store active plan context so ProductBottomSheet can find it
+                                          Get.find<ShoppingPlanController>()
+                                              .setActivePlanContext(
+                                            controller
+                                                .variantItemsDetails?.plan?.id,
+                                            controller.variantItemsDetails
+                                                    ?.variant?.id ??
+                                                widget.variantId,
+                                          );
+                                          Get.toNamed(
+                                              RouteHelper.getCategoryRoute(
+                                            planId: controller
+                                                .variantItemsDetails?.plan?.id,
+                                            variantId: controller
+                                                .variantItemsDetails
+                                                ?.variant
+                                                ?.id,
+                                            variantTitle: widget.variantTitle,
+                                          ));
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 15),
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xFF55745a)
+                                                .withValues(alpha: 0.1),
+                                            borderRadius: BorderRadius.circular(
+                                                Dimensions.radiusDefault),
+                                            border: Border.all(
+                                                color: const Color(0xFF55745a)
+                                                    .withValues(alpha: 0.3)),
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              const Icon(Icons.add_circle,
+                                                  color: Color(0xFF55745a),
+                                                  size: 24),
+                                              const SizedBox(
+                                                  width: Dimensions
+                                                      .paddingSizeSmall),
+                                              Text(
+                                                'أضف منتجات خارج الخطط',
+                                                style: robotoBold.copyWith(
+                                                    fontSize: Dimensions
+                                                        .fontSizeDefault,
+                                                    color: const Color(
+                                                        0xFF55745a)),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
+                              ),
+                            );
+                          },
                         ),
                       ),
 
                       // Summary Bottom Bar
-                      if (summary != null) _buildBottomBar(summary, isDark),
+                      if (summary != null)
+                        GetBuilder<ShoppingPlanController>(
+                          builder: (planCtrl) {
+                            final extraList =
+                                planCtrl.getExtraItems(widget.variantId);
+                            double extraTotal = 0;
+                            for (var item in extraList) {
+                              extraTotal +=
+                                  ((item.price ?? 0) * (item.quantity ?? 0));
+                            }
+                            int totalItems =
+                                (summary.itemsCount ?? 0) + extraList.length;
+                            double totalCost =
+                                (summary.estimatedTotal ?? 0) + extraTotal;
+
+                            return _buildBottomBar(
+                                totalItems, totalCost, isDark);
+                          },
+                        ),
                     ],
                   ),
-
                   if (controller.isPreviewLoading)
                     Positioned.fill(
                       child: Container(
                         color: Colors.white24,
                         child: const Center(
-                          child: CircularProgressIndicator(color: Color(0xFF55745a)),
+                          child: CircularProgressIndicator(
+                              color: Color(0xFF55745a)),
                         ),
                       ),
                     ),
@@ -101,7 +266,7 @@ class _VariantItemsScreenState extends State<VariantItemsScreen> {
     );
   }
 
-  Widget _buildBottomBar(PlanSummaryModel summary, bool isDark) {
+  Widget _buildBottomBar(int itemsCount, double totalCost, bool isDark) {
     return Container(
       padding: const EdgeInsets.all(Dimensions.paddingSizeLarge),
       decoration: BoxDecoration(
@@ -125,12 +290,12 @@ class _VariantItemsScreenState extends State<VariantItemsScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'إجمالي الأصناف (${summary.itemsCount ?? 0})',
+                'إجمالي الأصناف ($itemsCount)',
                 style:
                     robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge),
               ),
               Text(
-                PriceConverter.convertPrice(summary.estimatedTotal),
+                PriceConverter.convertPrice(totalCost),
                 style: robotoBold.copyWith(
                   fontSize: Dimensions.fontSizeExtraLarge,
                   color: const Color(0xFF55745a),
@@ -154,9 +319,148 @@ class _VariantItemsScreenState extends State<VariantItemsScreen> {
                 ),
                 elevation: 0,
               ),
-              child: Text('تأكيد ', style: robotoBold.copyWith(
-                color: Colors.white
-              )),
+              child: Text('تأكيد ',
+                  style: robotoBold.copyWith(color: Colors.white)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CartItemCard extends StatelessWidget {
+  final cart_model.CartModel cartItem;
+  final bool isDark;
+  final VoidCallback onIncrement;
+  final VoidCallback onDecrement;
+
+  const _CartItemCard({
+    required this.cartItem,
+    required this.isDark,
+    required this.onIncrement,
+    required this.onDecrement,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
+      padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
+      decoration: BoxDecoration(
+        color: isDark
+            ? const Color(0xFF1C1C1E).withValues(alpha: 0.5)
+            : Colors.white,
+        borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+        border: Border.all(
+            color: const Color(0xFF55745a).withValues(alpha: 0.2), width: 1),
+      ),
+      child: Row(
+        children: [
+          // Remove button (always allowed for added items)
+          IconButton(
+            icon: const Icon(Icons.remove_circle_outline,
+                color: Colors.redAccent, size: 22),
+            onPressed: onDecrement,
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+          ),
+
+          const SizedBox(width: 8),
+
+          // Food Image
+          ClipRRect(
+            borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+            child: CustomImageWidget(
+              image: cartItem.product?.imageFullUrl ?? '',
+              height: 50,
+              width: 50,
+              fit: BoxFit.cover,
+            ),
+          ),
+          const SizedBox(width: Dimensions.paddingSizeDefault),
+
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      cartItem.product?.name ?? '',
+                      style: robotoMedium.copyWith(
+                          fontSize: Dimensions.fontSizeDefault),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(width: 4),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 4, vertical: 1),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF55745a).withValues(alpha: 0.1),
+                        borderRadius:
+                            BorderRadius.circular(Dimensions.radiusSmall),
+                      ),
+                      child: Text('إضافي',
+                          style: robotoRegular.copyWith(
+                              fontSize: 8, color: const Color(0xFF55745a))),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'الكمية: ${cartItem.quantity}',
+                  style: robotoRegular.copyWith(
+                    fontSize: Dimensions.fontSizeExtraSmall,
+                    color: Colors.grey,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  PriceConverter.convertPrice(
+                      (cartItem.price ?? 0) * (cartItem.quantity ?? 0)),
+                  style: robotoBold.copyWith(
+                    fontSize: Dimensions.fontSizeDefault,
+                    color: isDark ? Colors.white70 : const Color(0xFF55745a),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Increment/Decrement controls
+          Container(
+            decoration: BoxDecoration(
+              color: const Color(0xFF55745a).withValues(alpha: 0.05),
+              borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
+            ),
+            child: Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.remove, size: 18),
+                  onPressed: onDecrement,
+                  constraints:
+                      const BoxConstraints(minWidth: 32, minHeight: 32),
+                  padding: EdgeInsets.zero,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Text(
+                    '${cartItem.quantity}',
+                    style: robotoMedium.copyWith(
+                        fontSize: Dimensions.fontSizeSmall,
+                        color: const Color(0xFF55745a)),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.add, size: 18),
+                  onPressed: onIncrement,
+                  constraints:
+                      const BoxConstraints(minWidth: 32, minHeight: 32),
+                  padding: EdgeInsets.zero,
+                ),
+              ],
             ),
           ),
         ],
@@ -228,8 +532,8 @@ class _ItemCard extends StatelessWidget {
               children: [
                 Text(
                   item.name ?? '',
-                  style:
-                      robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault),
+                  style: robotoMedium.copyWith(
+                      fontSize: Dimensions.fontSizeDefault),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -278,7 +582,8 @@ class _ItemCard extends StatelessWidget {
                   IconButton(
                     icon: const Icon(Icons.remove, size: 18),
                     onPressed: onDecrement,
-                    constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+                    constraints:
+                        const BoxConstraints(minWidth: 32, minHeight: 32),
                     padding: EdgeInsets.zero,
                   ),
                   InkWell(
@@ -289,14 +594,17 @@ class _ItemCard extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 4),
                       child: Text(
                         '${item.isWeightBased! ? item.requestedWeight : item.quantity}',
-                        style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: const Color(0xFF55745a)),
+                        style: robotoMedium.copyWith(
+                            fontSize: Dimensions.fontSizeSmall,
+                            color: const Color(0xFF55745a)),
                       ),
                     ),
                   ),
                   IconButton(
                     icon: const Icon(Icons.add, size: 18),
                     onPressed: onIncrement,
-                    constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+                    constraints:
+                        const BoxConstraints(minWidth: 32, minHeight: 32),
                     padding: EdgeInsets.zero,
                   ),
                 ],
@@ -314,7 +622,8 @@ class _ItemCard extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(item.isWeightBased! ? 'تعديل الوزن' : 'تعديل الكمية', style: robotoBold),
+        title: Text(item.isWeightBased! ? 'تعديل الوزن' : 'تعديل الكمية',
+            style: robotoBold),
         content: TextField(
           controller: controller,
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
@@ -325,7 +634,8 @@ class _ItemCard extends StatelessWidget {
           ),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: Text('إلغاء'.tr)),
+          TextButton(
+              onPressed: () => Navigator.pop(context), child: Text('إلغاء'.tr)),
           TextButton(
             onPressed: () {
               double? val = double.tryParse(controller.text);

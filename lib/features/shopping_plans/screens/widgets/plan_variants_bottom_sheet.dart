@@ -99,6 +99,41 @@ class _PlanVariantsBottomSheetState extends State<PlanVariantsBottomSheet> {
                       },
                     ),
                   ),
+
+                  // Padding(
+                  //   padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
+                  //   child: InkWell(
+                  //     onTap: () {
+                  //       final controller = Get.find<ShoppingPlanController>();
+                  //       Get.toNamed(RouteHelper.getCategoryRoute(
+                  //         planId: controller.shoppingPlanDetails?.plan?.id,
+                  //         variantId: controller.shoppingPlanDetails?.variants?.isNotEmpty == true 
+                  //           ? controller.shoppingPlanDetails?.variants![0].id 
+                  //           : null,
+                  //       ));
+                  //     },
+                  //     child: Container(
+                  //       padding: const EdgeInsets.symmetric(vertical: 12),
+                  //       decoration: BoxDecoration(
+                  //         color: const Color(0xFF55745a).withValues(alpha: 0.1),
+                  //         borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                  //         border: Border.all(color: const Color(0xFF55745a).withValues(alpha: 0.3)),
+                  //       ),
+                  //       child: Row(
+                  //         mainAxisAlignment: MainAxisAlignment.center,
+                  //         children: [
+                  //           const Icon(Icons.add_circle_outline, color: const Color(0xFF55745a), size: 20),
+                  //           const SizedBox(width: Dimensions.paddingSizeSmall),
+                  //           Text(
+                  //             'أضف منتجات خارج الخطط',
+                  //             style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault, color: const Color(0xFF55745a)),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  const SizedBox(height: Dimensions.paddingSizeSmall),
                 ],
               ),
             );

@@ -93,19 +93,23 @@ class CustomButtonWidget extends StatelessWidget {
                                           color: textColor ?? Colors.white),
                                     )
                                   : const SizedBox(),
-                              Text(buttonText,
-                                  textAlign: TextAlign.center,
-                                  style: isBold
-                                      ? robotoBold.copyWith(
-                                          color: textColor ?? Colors.white,
-                                          fontSize: fontSize ??
-                                              Dimensions.fontSizeLarge,
-                                        )
-                                      : robotoRegular.copyWith(
-                                          color: textColor ?? Colors.white,
-                                          fontSize: fontSize ??
-                                              Dimensions.fontSizeLarge,
-                                        )),
+                              Flexible(
+                                child: Text(buttonText,
+                                    textAlign: TextAlign.center,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: isBold
+                                        ? robotoBold.copyWith(
+                                            color: textColor ?? Colors.white,
+                                            fontSize: fontSize ??
+                                                Dimensions.fontSizeLarge,
+                                          )
+                                        : robotoRegular.copyWith(
+                                            color: textColor ?? Colors.white,
+                                            fontSize: fontSize ??
+                                                Dimensions.fontSizeLarge,
+                                          )),
+                              ),
                             ]),
                 ),
               ))),

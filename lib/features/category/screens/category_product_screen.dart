@@ -274,6 +274,9 @@ class CategoryProductScreenState extends State<CategoryProductScreen> {
                                       sub.id,
                                       sub.name ?? '',
                                       forceProductView: true,
+                                      planId: int.tryParse(Get.parameters['planId'] ?? ''),
+                                      variantId: int.tryParse(Get.parameters['variantId'] ?? ''),
+                                      variantTitle: Get.parameters['variantTitle'],
                                     ))?.then((value) {
                                       if (widget.forceProductView) {
                                         Get.find<MarketCategoryController>()

@@ -25,6 +25,7 @@ import 'package:stackfood_multivendor/features/checkout/screens/checkout_screen.
 import 'package:stackfood_multivendor/features/favourite/controllers/favourite_controller.dart';
 import 'package:stackfood_multivendor/features/product/controllers/product_controller.dart';
 import 'package:stackfood_multivendor/features/product/widgets/product_review_bottom_sheet.dart';
+import 'package:stackfood_multivendor/features/shopping_plans/controllers/shopping_plan_controller.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
 import 'package:stackfood_multivendor/helper/address_helper.dart';
@@ -1740,12 +1741,14 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                             isLoading: cartController.isLoading,
                                             buttonText: widget.isCampaign
                                                 ? 'order_now'.tr
-                                                : (widget.cart != null ||
-                                                        productController
-                                                                .cartIndex !=
-                                                            -1)
-                                                    ? 'update_in_cart'.tr
-                                                    : 'add_to_cart'.tr,
+                                                : (Get.find<ShoppingPlanController>().activeVariantId != null || Get.parameters['planId'] != null || Get.parameters['variantId'] != null)
+                                                    ? 'أضف إلى الخطط التسويقية'
+                                                    : (widget.cart != null ||
+                                                            productController
+                                                                    .cartIndex !=
+                                                                -1)
+                                                        ? 'update_in_cart'.tr
+                                                        : 'add_to_cart'.tr,
                                             onPressed: (widget.cart != null &&
                                                     productController
                                                             .checkOutOfStockVariationSelected(
@@ -1852,7 +1855,18 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
         product!.cartQuantityLimit,
         productController.variationsStock,
         requestedWeight: _totalWeights,
+        isFromPlan: Get.parameters['planId'] != null || Get.parameters['variantId'] != null,
+        shoppingPlanId: int.tryParse(Get.parameters['planId'] ?? ''),
+        shoppingPlanVariantId: int.tryParse(Get.parameters['variantId'] ?? ''),
       );
+
+      // Register in ShoppingPlanController using stored active context (more reliable than URL params)
+      final planController = Get.find<ShoppingPlanController>();
+      final activeVariantId = planController.activeVariantId;
+      if (activeVariantId != null) {
+        planController.addExtraItem(activeVariantId, cartModel);
+      }
+
       OnlineCart onlineCart = await _processOnlineCart(productController,
           cartController, addOnIdList, addOnsList, priceWithAddonsVariation);
 
@@ -1951,7 +1965,10 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
         listOfAddOnQty,
         'Food',
         variationOptionIds: optionsIdList,
-        requestedWeight: _totalWeights);
+        requestedWeight: _totalWeights,
+        shoppingPlanId: int.tryParse(Get.parameters['planId'] ?? ''),
+        shoppingPlanVariantId: int.tryParse(Get.parameters['variantId'] ?? ''),
+    );
     return onlineCart;
   }
 

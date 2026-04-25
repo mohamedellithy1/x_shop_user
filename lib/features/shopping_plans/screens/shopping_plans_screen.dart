@@ -30,7 +30,9 @@ class _ShoppingPlansScreenState extends State<ShoppingPlansScreen> {
   @override
   void initState() {
     super.initState();
-    _initCall();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initCall();
+    });
   }
 
   void _initCall() {
@@ -63,6 +65,7 @@ class _ShoppingPlansScreenState extends State<ShoppingPlansScreen> {
             appBar: CustomAppBarWidget(
               title: 'خطط تسويقية',
               isBackButtonExist: true,
+              onBackPressed: () => Get.offAllNamed(RouteHelper.getInitialRoute()),
             ),
             endDrawer: const MenuDrawerWidget(),
             endDrawerEnableOpenDragGesture: false,

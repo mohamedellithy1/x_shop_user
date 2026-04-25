@@ -10,7 +10,7 @@ import 'package:stackfood_multivendor/common/widgets/confirmation_dialog_widget.
 import 'package:stackfood_multivendor/common/widgets/product_bottom_sheet_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
-import 'package:stackfood_multivendor/features/category/controllers/category_controller.dart';
+import 'package:stackfood_multivendor/features/shopping_plans/controllers/shopping_plan_controller.dart';
 import 'package:get/get.dart';
 import 'package:stackfood_multivendor/util/xmarket_images.dart';
 
@@ -105,17 +105,21 @@ class ProductController extends GetxController implements GetxService {
   }
 
   void _preparePopularProductList(List<Product>? popularProductList) {
-    print('🔵 [ProductController] _preparePopularProductList called. Input: ${popularProductList?.length ?? "null"} products');
+    print(
+        '🔵 [ProductController] _preparePopularProductList called. Input: ${popularProductList?.length ?? "null"} products');
     if (popularProductList != null) {
       // Print restaurant names before filtering
-      final names = popularProductList.map((p) => '${p.restaurantName}(id:${p.restaurantId})').toSet();
+      final names = popularProductList
+          .map((p) => '${p.restaurantName}(id:${p.restaurantId})')
+          .toSet();
       print('🔵 [ProductController] Restaurants in list: $names');
-      
+
       _popularProductList = [];
-      _popularProductList = Get.find<MarketSplashController>(tag: 'xmarket').filterXMarketProducts(popularProductList);
-      
-      print('🔵 [ProductController] After filter: ${_popularProductList?.length} products');
-      
+      _popularProductList = Get.find<MarketSplashController>(tag: 'xmarket')
+          .filterXMarketProducts(popularProductList);
+
+      print(
+          '🔵 [ProductController] After filter: ${_popularProductList?.length} products');
     }
     update();
   }
@@ -267,13 +271,19 @@ class ProductController extends GetxController implements GetxService {
   }
 
   void productDirectlyAddToCart(Product? product, BuildContext context,
-      {bool inStore = false, bool isCampaign = false, double? requestedWeight}) {
+      {bool inStore = false,
+      bool isCampaign = false,
+      double? requestedWeight}) {
     if (product!.variations == null ||
         (product.variations != null && product.variations!.isEmpty)) {
       double price = product.price!;
       double discount = product.discount!;
       double discountPrice = PriceConverter.convertWithDiscount(
           price, discount, product.discountType)!;
+
+      final planController = Get.find<ShoppingPlanController>();
+      final activePlanId = planController.activePlanId;
+      final activeVariantId = planController.activeVariantId;
 
       CartModel cartModel = CartModel(
         null,
@@ -289,6 +299,9 @@ class ProductController extends GetxController implements GetxService {
         product.cartQuantityLimit,
         [],
         requestedWeight: requestedWeight,
+        isFromPlan: activeVariantId != null,
+        shoppingPlanId: activePlanId,
+        shoppingPlanVariantId: activeVariantId,
       );
 
       OnlineCart onlineCart = OnlineCart(
@@ -303,7 +316,13 @@ class ProductController extends GetxController implements GetxService {
         [],
         'Food',
         requestedWeight: requestedWeight,
+        shoppingPlanId: activePlanId,
+        shoppingPlanVariantId: activeVariantId,
       );
+
+      if (activeVariantId != null) {
+        planController.addExtraItem(activeVariantId, cartModel);
+      }
 
       setExistInCart(product);
 

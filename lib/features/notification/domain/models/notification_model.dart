@@ -41,6 +41,9 @@ class Data {
   dynamic orderId;
   String? orderStatus;
   String? amount;
+  int? postId;
+  int? commentId;
+  int? parentId;
 
   Data({
     this.title,
@@ -58,6 +61,19 @@ class Data {
     orderId = json['order_id'];
     orderStatus = json['order_status'];
     amount = json['amount']?.toString();
+    postId = (json['post_id'] ?? json['postId'] ?? json['data_id']) != null
+        ? int.tryParse((json['post_id'] ?? json['postId'] ?? json['data_id']).toString().trim())
+        : null;
+    commentId = json['comment_id'] != null
+        ? int.tryParse(json['comment_id'].toString().trim())
+        : (json['commentId'] != null
+            ? int.tryParse(json['commentId'].toString().trim())
+            : null);
+    parentId = json['parent_id'] != null
+        ? int.tryParse(json['parent_id'].toString().trim())
+        : (json['parentId'] != null
+            ? int.tryParse(json['parentId'].toString().trim())
+            : null);
   }
 
   Map<String, dynamic> toJson() {
@@ -68,6 +84,9 @@ class Data {
     data['order_id'] = orderId;
     data['order_status'] = orderStatus;
     data['amount'] = amount;
+    data['post_id'] = postId;
+    data['comment_id'] = commentId;
+    data['parent_id'] = parentId;
     return data;
   }
 }

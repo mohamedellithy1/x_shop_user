@@ -446,6 +446,8 @@ class OnlineCart {
   String? _itemType;
   List<int?>? _variationOptionIds;
   double? _requestedWeight;
+  int? _shoppingPlanId;
+  int? _shoppingPlanVariantId;
 
   OnlineCart(
     int? cartId,
@@ -461,6 +463,8 @@ class OnlineCart {
     String? itemType,
     List<int?>? variationOptionIds,
     double? requestedWeight,
+    int? shoppingPlanId,
+    int? shoppingPlanVariantId,
   }) {
     _cartId = cartId;
     _itemId = itemId;
@@ -475,6 +479,8 @@ class OnlineCart {
     _itemType = itemType;
     _variationOptionIds = variationOptionIds;
     _requestedWeight = requestedWeight;
+    _shoppingPlanId = shoppingPlanId;
+    _shoppingPlanVariantId = shoppingPlanVariantId;
   }
 
   int? get cartId => _cartId;
@@ -490,6 +496,8 @@ class OnlineCart {
   String? get itemType => _itemType;
   List<int?>? get variationOptionIds => _variationOptionIds;
   double? get requestedWeight => _requestedWeight;
+  int? get shoppingPlanId => _shoppingPlanId;
+  int? get shoppingPlanVariantId => _shoppingPlanVariantId;
 
   OnlineCart.fromJson(Map<String, dynamic> json) {
     _cartId = json['cart_id'];
@@ -519,6 +527,8 @@ class OnlineCart {
     if (json['requested_weight'] != null) {
       _requestedWeight = double.tryParse(json['requested_weight'].toString());
     }
+    _shoppingPlanId = json['shopping_plan_id'];
+    _shoppingPlanVariantId = json['shopping_plan_variant_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -544,6 +554,8 @@ class OnlineCart {
     if (_requestedWeight != null) {
       data['requested_weight'] = _requestedWeight;
     }
+    data['shopping_plan_id'] = _shoppingPlanId;
+    data['shopping_plan_variant_id'] = _shoppingPlanVariantId;
     return data;
   }
 }

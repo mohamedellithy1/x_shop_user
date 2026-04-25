@@ -6,6 +6,7 @@ import 'package:stackfood_multivendor/news/controllers/news_controller.dart';
 import 'package:stackfood_multivendor/news/domain/entities/comments.dart';
 import 'package:stackfood_multivendor/news/domain/entities/news.dart';
 import 'package:stackfood_multivendor/helper/date_converter.dart';
+import 'dart:async';
 
 class CommentsBottomSheet extends StatefulWidget {
   final News news;
@@ -35,6 +36,8 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
   final GlobalKey _highlightKey = GlobalKey();
   bool _hasScrolled = false;
   int _maxCommentsToShow = 10;
+  final Map<int, Timer?> _commentReactionTimers = {};
+  final Map<int, bool> _commentPopupOpen = {};
 
   @override
   void initState() {
@@ -60,6 +63,9 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
     _commentController.dispose();
     _commentFocusNode.dispose();
     _scrollController.dispose();
+    for (var timer in _commentReactionTimers.values) {
+      timer?.cancel();
+    }
     super.dispose();
   }
 
@@ -1132,10 +1138,18 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                         const SizedBox(width: 16),
                         // Real Likes logic
                         GestureDetector(
-                          onLongPressStart: (details) {
-                            _showReactionsPopupForComment(context, details.globalPosition, item);
+                          onTapDown: (details) {
+                            _commentPopupOpen[item.id] = false;
+                            _commentReactionTimers[item.id]?.cancel();
+                            _commentReactionTimers[item.id] = Timer(const Duration(milliseconds: 250), () {
+                              _commentPopupOpen[item.id] = true;
+                              _showReactionsPopupForComment(context, details.globalPosition, item);
+                            });
                           },
+                          onTapUp: (_) => _commentReactionTimers[item.id]?.cancel(),
+                          onTapCancel: () => _commentReactionTimers[item.id]?.cancel(),
                           onTap: () async {
+                            if (_commentPopupOpen[item.id] == true) return;
                             String reactionToSend = item.myReaction ?? 'like';
                             final response = await Get.find<NewsController>()
                                 .reactToItem('comment', item.id, reactionToSend);

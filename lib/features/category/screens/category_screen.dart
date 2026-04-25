@@ -225,6 +225,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                           catController.categoryList![index].id,
                                           catController
                                               .categoryList![index].name!,
+                                          planId: int.tryParse(Get.parameters['planId'] ?? ''),
+                                          variantId: int.tryParse(Get.parameters['variantId'] ?? ''),
+                                          variantTitle: Get.parameters['variantTitle'],
                                         )),
                                         radius: Dimensions.radiusDefault,
                                         child: Column(

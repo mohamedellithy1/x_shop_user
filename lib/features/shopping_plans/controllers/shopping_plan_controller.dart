@@ -1,5 +1,6 @@
 import 'package:stackfood_multivendor/features/shopping_plans/domain/models/shopping_plan_model.dart';
 import 'package:stackfood_multivendor/features/shopping_plans/domain/services/shopping_plan_service_interface.dart';
+import 'package:stackfood_multivendor/features/cart/domain/models/cart_model.dart';
 import 'package:get/get.dart';
 import 'package:stackfood_multivendor/helper/auth_helper.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
@@ -29,11 +30,95 @@ class ShoppingPlanController extends GetxController implements GetxService {
   bool _isAddToCartLoading = false;
   bool get isAddToCartLoading => _isAddToCartLoading;
 
+  // Extra items added from outside the plan
+  final Map<int, List<CartModel>> _extraItemsByVariant = {};
+  List<CartModel> getExtraItems(int variantId) =>
+      _extraItemsByVariant[variantId] ?? [];
+
+  // Active plan context — set when user navigates to shop outside of a plan
+  int? _activePlanId;
+  int? _activeVariantId;
+  int? get activePlanId => _activePlanId;
+  int? get activeVariantId => _activeVariantId;
+
+  void setActivePlanContext(int? planId, int? variantId) {
+    _activePlanId = planId;
+    _activeVariantId = variantId;
+  }
+
+  void clearActivePlanContext() {
+    _activePlanId = null;
+    _activeVariantId = null;
+  }
+
+  void addExtraItem(int variantId, CartModel item) {
+    _extraItemsByVariant[variantId] ??= [];
+    // check if already exists by product id, increment quantity instead
+    final idx = _extraItemsByVariant[variantId]!
+        .indexWhere((e) => e.product?.id == item.product?.id);
+    if (idx >= 0) {
+      _extraItemsByVariant[variantId]![idx].quantity =
+          (_extraItemsByVariant[variantId]![idx].quantity ?? 0) + 1;
+    } else {
+      _extraItemsByVariant[variantId]!.add(item);
+    }
+    update();
+  }
+
+  void removeExtraItem(int variantId, int index) {
+    if (_extraItemsByVariant[variantId] != null &&
+        index < _extraItemsByVariant[variantId]!.length) {
+      _extraItemsByVariant[variantId]!.removeAt(index);
+      update();
+    }
+  }
+
+  void clearExtraItems(int variantId) {
+    _extraItemsByVariant[variantId] = [];
+    update();
+  }
+
+  void incrementExtraItem(int variantId, int index) {
+    if (_extraItemsByVariant[variantId] != null) {
+      _extraItemsByVariant[variantId]![index].quantity =
+          (_extraItemsByVariant[variantId]![index].quantity ?? 0) + 1;
+      update();
+    }
+  }
+
+  void decrementExtraItem(int variantId, int index) {
+    if (_extraItemsByVariant[variantId] != null) {
+      final qty = _extraItemsByVariant[variantId]![index].quantity ?? 0;
+      if (qty > 1) {
+        _extraItemsByVariant[variantId]![index].quantity = qty - 1;
+        update();
+      } else {
+        removeExtraItem(variantId, index);
+      }
+    }
+  }
+
+  void updateExtraItemQuantityByProductId(
+      int variantId, int productId, bool isIncrement) {
+    if (_extraItemsByVariant[variantId] != null) {
+      final idx = _extraItemsByVariant[variantId]!
+          .indexWhere((e) => e.product?.id == productId);
+      if (idx >= 0) {
+        if (isIncrement) {
+          incrementExtraItem(variantId, idx);
+        } else {
+          decrementExtraItem(variantId, idx);
+        }
+      }
+    }
+  }
+
   Future<void> getShoppingPlanList() async {
     _isLoading = true;
     _shoppingPlanList = null;
     update();
-    _shoppingPlanList = await shoppingPlanServiceInterface.getShoppingPlanList();
+    _shoppingPlanList =
+        await shoppingPlanServiceInterface.getShoppingPlanList();
     _isLoading = false;
     update();
   }
@@ -42,7 +127,8 @@ class ShoppingPlanController extends GetxController implements GetxService {
     _isLoading = true;
     _shoppingPlanDetails = null;
     update();
-    _shoppingPlanDetails = await shoppingPlanServiceInterface.getShoppingPlanVariants(planId);
+    _shoppingPlanDetails =
+        await shoppingPlanServiceInterface.getShoppingPlanVariants(planId);
     _isLoading = false;
     update();
   }
@@ -52,41 +138,57 @@ class ShoppingPlanController extends GetxController implements GetxService {
     _variantItemsDetails = null;
     _originalVariantItemsDetails = null;
     update();
-    VariantItemsDetailsModel? details = await shoppingPlanServiceInterface.getVariantItems(variantId);
+    VariantItemsDetailsModel? details =
+        await shoppingPlanServiceInterface.getVariantItems(variantId);
     if (details != null) {
       _variantItemsDetails = details;
       // Store a deep copy for original comparison
-      _originalVariantItemsDetails = VariantItemsDetailsModel.fromJson(details.toJson());
+      _originalVariantItemsDetails =
+          VariantItemsDetailsModel.fromJson(details.toJson());
     }
     _isLoading = false;
     update();
   }
 
   void incrementQuantity(int index) {
-    if (_variantItemsDetails != null && _variantItemsDetails!.items![index].allowUserIncrement!) {
+    if (_variantItemsDetails != null &&
+        _variantItemsDetails!.items![index].allowUserIncrement!) {
       if (_variantItemsDetails!.items![index].isWeightBased!) {
         // Increment weight by 1 (or common step)
-        _variantItemsDetails!.items![index].requestedWeight = (_variantItemsDetails!.items![index].requestedWeight ?? 0) + 1.0;
+        _variantItemsDetails!.items![index].requestedWeight =
+            (_variantItemsDetails!.items![index].requestedWeight ?? 0) + 1.0;
       } else {
-        _variantItemsDetails!.items![index].quantity = (_variantItemsDetails!.items![index].quantity ?? 0) + 1;
+        _variantItemsDetails!.items![index].quantity =
+            (_variantItemsDetails!.items![index].quantity ?? 0) + 1;
       }
       _getPreview();
     }
   }
 
   void decrementQuantity(int index) {
-    if (_variantItemsDetails != null && _variantItemsDetails!.items![index].allowUserIncrement!) {
+    if (_variantItemsDetails != null &&
+        _variantItemsDetails!.items![index].allowUserIncrement!) {
       if (_variantItemsDetails!.items![index].isWeightBased!) {
-        double currentWeight = _variantItemsDetails!.items![index].requestedWeight ?? 0;
-        double originalWeight = _originalVariantItemsDetails!.items!.firstWhere((it) => it.foodId == _variantItemsDetails!.items![index].foodId).requestedWeight ?? 0;
-        
+        double currentWeight =
+            _variantItemsDetails!.items![index].requestedWeight ?? 0;
+        double originalWeight = _originalVariantItemsDetails!.items!
+                .firstWhere((it) =>
+                    it.foodId == _variantItemsDetails!.items![index].foodId)
+                .requestedWeight ??
+            0;
+
         if (currentWeight > originalWeight) {
-          _variantItemsDetails!.items![index].requestedWeight = currentWeight - 1.0;
+          _variantItemsDetails!.items![index].requestedWeight =
+              currentWeight - 1.0;
           _getPreview();
         }
       } else {
         int currentQty = _variantItemsDetails!.items![index].quantity ?? 0;
-        int originalQty = _originalVariantItemsDetails!.items!.firstWhere((it) => it.foodId == _variantItemsDetails!.items![index].foodId).quantity ?? 0;
+        int originalQty = _originalVariantItemsDetails!.items!
+                .firstWhere((it) =>
+                    it.foodId == _variantItemsDetails!.items![index].foodId)
+                .quantity ??
+            0;
 
         if (currentQty > originalQty) {
           _variantItemsDetails!.items![index].quantity = currentQty - 1;
@@ -95,27 +197,31 @@ class ShoppingPlanController extends GetxController implements GetxService {
           removeItem(index);
         }
       }
-    } else if (_variantItemsDetails != null && _variantItemsDetails!.items![index].isOptional!) {
+    } else if (_variantItemsDetails != null &&
+        _variantItemsDetails!.items![index].isOptional!) {
       removeItem(index);
     }
   }
 
   void removeItem(int index) {
-    if (_variantItemsDetails != null && _variantItemsDetails!.items![index].isOptional!) {
+    if (_variantItemsDetails != null &&
+        _variantItemsDetails!.items![index].isOptional!) {
       _variantItemsDetails!.items!.removeAt(index);
       _getPreview();
     }
   }
 
   Future<void> _getPreview() async {
-    if (_variantItemsDetails == null || _originalVariantItemsDetails == null) return;
+    if (_variantItemsDetails == null || _originalVariantItemsDetails == null)
+      return;
 
     _isPreviewLoading = true;
-    update();
+    Future.microtask(() => update());
 
     List<Map<String, dynamic>> customizations = _getCustomizations();
 
-    VariantItemsDetailsModel? previewResponse = await shoppingPlanServiceInterface.getVariantPreview(
+    VariantItemsDetailsModel? previewResponse =
+        await shoppingPlanServiceInterface.getVariantPreview(
       _variantItemsDetails!.variant!.id!,
       {"customizations": customizations},
     );
@@ -123,13 +229,14 @@ class ShoppingPlanController extends GetxController implements GetxService {
     if (previewResponse != null) {
       _variantItemsDetails = previewResponse;
     }
-    
+
     _isPreviewLoading = false;
-    update();
+    Future.microtask(() => update());
   }
 
   void setManualQuantity(int index, double value) {
-    if (_variantItemsDetails != null && _variantItemsDetails!.items![index].allowUserIncrement!) {
+    if (_variantItemsDetails != null &&
+        _variantItemsDetails!.items![index].allowUserIncrement!) {
       if (_variantItemsDetails!.items![index].isWeightBased!) {
         _variantItemsDetails!.items![index].requestedWeight = value;
       } else {
@@ -141,10 +248,11 @@ class ShoppingPlanController extends GetxController implements GetxService {
 
   List<Map<String, dynamic>> _getCustomizations() {
     List<Map<String, dynamic>> customizations = [];
-    
+
     // Check for removed items
     for (var originalItem in _originalVariantItemsDetails!.items!) {
-      bool stillExists = _variantItemsDetails!.items!.any((it) => it.foodId == originalItem.foodId);
+      bool stillExists = _variantItemsDetails!.items!
+          .any((it) => it.foodId == originalItem.foodId);
       if (!stillExists) {
         customizations.add({
           "food_id": originalItem.foodId,
@@ -155,11 +263,14 @@ class ShoppingPlanController extends GetxController implements GetxService {
 
     // Check for weight/quantity increments
     for (var currentItem in _variantItemsDetails!.items!) {
-      var originalItem = _originalVariantItemsDetails!.items!.firstWhereOrNull((it) => it.foodId == currentItem.foodId);
-      if (originalItem == null) continue; // Should not happen if only increments/removals allowed
-      
+      var originalItem = _originalVariantItemsDetails!.items!
+          .firstWhereOrNull((it) => it.foodId == currentItem.foodId);
+      if (originalItem == null)
+        continue; // Should not happen if only increments/removals allowed
+
       if (currentItem.isWeightBased!) {
-        double deltaWeight = (currentItem.requestedWeight ?? 0) - (originalItem.requestedWeight ?? 0);
+        double deltaWeight = (currentItem.requestedWeight ?? 0) -
+            (originalItem.requestedWeight ?? 0);
         if (deltaWeight > 0) {
           customizations.add({
             "food_id": currentItem.foodId,
@@ -167,7 +278,8 @@ class ShoppingPlanController extends GetxController implements GetxService {
           });
         }
       } else {
-        int deltaQty = (currentItem.quantity ?? 0) - (originalItem.quantity ?? 0);
+        int deltaQty =
+            (currentItem.quantity ?? 0) - (originalItem.quantity ?? 0);
         if (deltaQty > 0) {
           customizations.add({
             "food_id": currentItem.foodId,
@@ -180,7 +292,8 @@ class ShoppingPlanController extends GetxController implements GetxService {
   }
 
   Future<void> addToCart() async {
-    if (_variantItemsDetails == null || _variantItemsDetails!.variant == null) return;
+    if (_variantItemsDetails == null || _variantItemsDetails!.variant == null)
+      return;
 
     if (!AuthHelper.isLoggedIn()) {
       showCustomSnackBar('يجب تسجيل الدخول أولاً لإضافة الخطة للسلة'.tr);
@@ -201,9 +314,10 @@ class ShoppingPlanController extends GetxController implements GetxService {
 
     if (response.statusCode == 200) {
       showCustomSnackBar('تمت الإضافة للسلة بنجاح'.tr);
-      Get.offAllNamed(RouteHelper.getMainRoute('cart')); // Properly navigate to Dashboard Cart tab
+      Get.offAllNamed(RouteHelper.getMainRoute(
+          'cart')); // Properly navigate to Dashboard Cart tab
     } else {
-       showCustomSnackBar(response.statusText ?? 'حدث خطأ ما'.tr);
+      showCustomSnackBar(response.statusText ?? 'حدث خطأ ما'.tr);
     }
 
     _isAddToCartLoading = false;
