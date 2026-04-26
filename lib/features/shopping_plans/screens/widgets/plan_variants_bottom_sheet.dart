@@ -147,7 +147,7 @@ class _PlanVariantsBottomSheetState extends State<PlanVariantsBottomSheet> {
   }
 }
 
-class _PlanView extends StatelessWidget {
+class _PlanView extends StatefulWidget {
   final ShoppingPlanModel plan;
   final bool isDark;
   final ScrollController scrollController;
@@ -161,6 +161,26 @@ class _PlanView extends StatelessWidget {
   });
 
   @override
+  State<_PlanView> createState() => _PlanViewState();
+}
+
+class _PlanViewState extends State<_PlanView> {
+  late PageController _pageController;
+  int _currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(viewportFraction: 0.85);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -168,7 +188,7 @@ class _PlanView extends StatelessWidget {
           padding: const EdgeInsets.symmetric(
               horizontal: Dimensions.paddingSizeDefault),
           child: Text(
-            plan.name ?? '',
+            widget.plan.name ?? '',
             style: robotoBold.copyWith(fontSize: Dimensions.fontSizeExtraLarge),
             textAlign: TextAlign.center,
           ),
@@ -179,7 +199,7 @@ class _PlanView extends StatelessWidget {
             builder: (controller) {
               // Simplified check: if not loading and we have details, show them.
               // The controller handles clearing old data via getShoppingPlanVariants.
-              bool isDataReady = isCurrent &&
+              bool isDataReady = widget.isCurrent &&
                   !controller.isLoading &&
                   controller.shoppingPlanDetails != null;
 
@@ -195,28 +215,52 @@ class _PlanView extends StatelessWidget {
               final variants = controller.shoppingPlanDetails?.variants ?? [];
 
               if (variants.isEmpty) {
-                return _buildEmptyState(isDark);
+                return _buildEmptyState(widget.isDark);
               }
 
-              return SizedBox(
-                height: 380, // Fixed height for horizontal cards
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: Dimensions.paddingSizeDefault),
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: variants.length,
-                  itemBuilder: (context, index) {
-                    return SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.85,
-                      child: _VariantCard(
-                        variant: variants[index],
-                        isDark: isDark,
-                        isLast: index == variants.length - 1,
-                      ),
-                    );
-                  },
-                ),
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    height: 200, // Fixed height for horizontal cards
+                    child: PageView.builder(
+                      controller: _pageController,
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: variants.length,
+                      onPageChanged: (index) {
+                        setState(() {
+                          _currentIndex = index;
+                        });
+                      },
+                      itemBuilder: (context, index) {
+                        return _VariantCard(
+                          variant: variants[index],
+                          isDark: widget.isDark,
+                          isLast: index == variants.length - 1,
+                        );
+                      },
+                    ),
+                  ),
+                  const Spacer(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(variants.length, (index) {
+                      return AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        margin: const EdgeInsets.symmetric(horizontal: 4),
+                        height: 8,
+                        width: _currentIndex == index ? 24 : 8,
+                        decoration: BoxDecoration(
+                          color: _currentIndex == index
+                              ? const Color(0xFF55745a)
+                              : Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      );
+                    }),
+                  ),
+                  const SizedBox(height: Dimensions.paddingSizeExtraOverLarge),
+                ],
               );
             },
           ),
@@ -254,19 +298,16 @@ class _VariantCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isLtr = Directionality.of(context) == TextDirection.ltr;
     return Container(
-      margin: EdgeInsets.only(
-        left: isLtr ? 0 : (isLast ? 0 : Dimensions.paddingSizeDefault),
-        right: isLtr ? (isLast ? 0 : Dimensions.paddingSizeDefault) : 0,
-        bottom: Dimensions.paddingSizeSmall,
-        top: Dimensions.paddingSizeSmall,
+      margin: const EdgeInsets.symmetric(
+        horizontal: Dimensions.paddingSizeSmall,
+        vertical: Dimensions.paddingSizeSmall,
       ),
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
         borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
         border:
-            Border.all(color: const Color(0xFF55745a).withValues(alpha: 0.1)),
+            Border.all(color: const Color(0xFF55745a)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -284,6 +325,7 @@ class _VariantCard extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
@@ -381,8 +423,7 @@ class _IconLabel extends StatelessWidget {
         const SizedBox(width: 4),
         Text(
           label,
-          style: robotoRegular.copyWith(
-              fontSize: Dimensions.fontSizeDefault),
+          style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault),
         ),
       ],
     );

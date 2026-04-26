@@ -297,16 +297,16 @@ class _NewsItemWidgetState extends State<NewsItemWidget> {
                       children: [
                         _buildReactionIcon(),
                         const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                        Text(
-                          _getReactionText(),
-                          style:
-                              Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: _getReactionColor(),
-                                    fontWeight: widget.news.myReaction != null
-                                        ? FontWeight.bold
-                                        : FontWeight.normal,
-                                  ),
-                        ),
+                        // Text(
+                        //   _getReactionText(),
+                        //   style:
+                        //       Theme.of(context).textTheme.bodySmall?.copyWith(
+                        //             color: _getReactionColor(),
+                        //             fontWeight: widget.news.myReaction != null
+                        //                 ? FontWeight.bold
+                        //                 : FontWeight.normal,
+                        //           ),
+                        // ),
                       ],
                     ),
                   ),
@@ -404,11 +404,11 @@ class _NewsItemWidgetState extends State<NewsItemWidget> {
                     }),
                   ),
                 ),
-              // if (widget.news.likesCount > 0)
-              //   Text(
-              //     '${widget.news.likesCount}',
-              //     style: TextStyle(color: Colors.grey[600], fontSize: 13),
-              //   ),
+              if (widget.news.likesCount > 0)
+                Text(
+                  '${widget.news.likesCount}',
+                  style: TextStyle(color: Colors.grey[600], fontSize: 13),
+                ),
             ],
           ),
           if (widget.news.commentsCount > 0)
