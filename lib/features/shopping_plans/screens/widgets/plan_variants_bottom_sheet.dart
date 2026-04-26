@@ -9,14 +9,15 @@ import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_image_widget.dart';
 
-
 class PlanVariantsBottomSheet extends StatefulWidget {
   final List<ShoppingPlanModel> plans;
   final int initialIndex;
-  const PlanVariantsBottomSheet({super.key, required this.plans, required this.initialIndex});
+  const PlanVariantsBottomSheet(
+      {super.key, required this.plans, required this.initialIndex});
 
   @override
-  State<PlanVariantsBottomSheet> createState() => _PlanVariantsBottomSheetState();
+  State<PlanVariantsBottomSheet> createState() =>
+      _PlanVariantsBottomSheetState();
 }
 
 class _PlanVariantsBottomSheetState extends State<PlanVariantsBottomSheet> {
@@ -34,11 +35,11 @@ class _PlanVariantsBottomSheetState extends State<PlanVariantsBottomSheet> {
   void _fetchVariants(int index) {
     if (widget.plans[index].id != null) {
       Future.microtask(() {
-        Get.find<ShoppingPlanController>().getShoppingPlanVariants(widget.plans[index].id!);
+        Get.find<ShoppingPlanController>()
+            .getShoppingPlanVariants(widget.plans[index].id!);
       });
     }
   }
-
 
   @override
   void dispose() {
@@ -53,7 +54,7 @@ class _PlanVariantsBottomSheetState extends State<PlanVariantsBottomSheet> {
       builder: (themeController) {
         bool isDark = themeController.darkTheme;
         return DraggableScrollableSheet(
-          initialChildSize: 0.6,
+          initialChildSize: 0.9,
           minChildSize: 0.3,
           maxChildSize: 0.9,
           expand: false,
@@ -70,10 +71,12 @@ class _PlanVariantsBottomSheetState extends State<PlanVariantsBottomSheet> {
                 children: [
                   const SizedBox(height: Dimensions.paddingSizeSmall),
                   Container(
-                    height: 5, width: 50,
+                    height: 5,
+                    width: 50,
                     decoration: BoxDecoration(
                       color: isDark ? Colors.white24 : Colors.grey.shade300,
-                      borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                      borderRadius:
+                          BorderRadius.circular(Dimensions.radiusSmall),
                     ),
                   ),
                   const SizedBox(height: Dimensions.paddingSizeDefault),
@@ -107,8 +110,8 @@ class _PlanVariantsBottomSheetState extends State<PlanVariantsBottomSheet> {
                   //       final controller = Get.find<ShoppingPlanController>();
                   //       Get.toNamed(RouteHelper.getCategoryRoute(
                   //         planId: controller.shoppingPlanDetails?.plan?.id,
-                  //         variantId: controller.shoppingPlanDetails?.variants?.isNotEmpty == true 
-                  //           ? controller.shoppingPlanDetails?.variants![0].id 
+                  //         variantId: controller.shoppingPlanDetails?.variants?.isNotEmpty == true
+                  //           ? controller.shoppingPlanDetails?.variants![0].id
                   //           : null,
                   //       ));
                   //     },
@@ -162,7 +165,8 @@ class _PlanView extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault),
+          padding: const EdgeInsets.symmetric(
+              horizontal: Dimensions.paddingSizeDefault),
           child: Text(
             plan.name ?? '',
             style: robotoBold.copyWith(fontSize: Dimensions.fontSizeExtraLarge),
@@ -170,13 +174,14 @@ class _PlanView extends StatelessWidget {
           ),
         ),
         const SizedBox(height: Dimensions.paddingSizeDefault),
-
         Expanded(
           child: GetBuilder<ShoppingPlanController>(
             builder: (controller) {
               // Simplified check: if not loading and we have details, show them.
               // The controller handles clearing old data via getShoppingPlanVariants.
-              bool isDataReady = isCurrent && !controller.isLoading && controller.shoppingPlanDetails != null;
+              bool isDataReady = isCurrent &&
+                  !controller.isLoading &&
+                  controller.shoppingPlanDetails != null;
 
               if (!isDataReady) {
                 return const Center(
@@ -197,7 +202,8 @@ class _PlanView extends StatelessWidget {
                 height: 380, // Fixed height for horizontal cards
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: Dimensions.paddingSizeDefault),
                   physics: const BouncingScrollPhysics(),
                   itemCount: variants.length,
                   itemBuilder: (context, index) {
@@ -223,7 +229,8 @@ class _PlanView extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(Icons.layers_clear_outlined, size: 60, color: Colors.grey.shade400),
+        Icon(Icons.layers_clear_outlined,
+            size: 60, color: Colors.grey.shade400),
         const SizedBox(height: 16),
         Text(
           'لا توجد باقات متاحة حالياً',
@@ -258,17 +265,20 @@ class _VariantCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
         borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
-        border: Border.all(color: const Color(0xFF55745a).withValues(alpha: 0.1)),
+        border:
+            Border.all(color: const Color(0xFF55745a).withValues(alpha: 0.1)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10, offset: const Offset(0, 5),
+            blurRadius: 10,
+            offset: const Offset(0, 5),
           ),
         ],
       ),
       child: InkWell(
         onTap: () {
-           Get.toNamed(RouteHelper.getVariantItemsRoute(variant.id, variant.title));
+          Get.toNamed(
+              RouteHelper.getVariantItemsRoute(variant.id, variant.title));
         },
         borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
         child: Padding(
@@ -282,7 +292,8 @@ class _VariantCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       variant.title ?? '',
-                      style: robotoBold.copyWith(fontSize: Dimensions.fontSizeLarge),
+                      style: robotoBold.copyWith(
+                          fontSize: Dimensions.fontSizeLarge),
                     ),
                   ),
                   Text(
@@ -310,7 +321,9 @@ class _VariantCard extends StatelessWidget {
                     const SizedBox(width: 16),
                     _IconLabel(
                       icon: Icons.calendar_today_outlined,
-                      label: variant.periodType == 'weekly' ? 'أسبوعي' : variant.periodType!,
+                      label: variant.periodType == 'weekly'
+                          ? 'أسبوعي'
+                          : variant.periodType!,
                     ),
                   ],
                 ],
@@ -320,8 +333,8 @@ class _VariantCard extends StatelessWidget {
                 Text(
                   variant.notes!,
                   style: robotoRegular.copyWith(
-                    fontSize: Dimensions.fontSizeSmall,
-                    color: Colors.grey,
+                    fontSize: Dimensions.fontSizeDefault,
+                    // color: Colors.grey,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -331,18 +344,19 @@ class _VariantCard extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () => Get.toNamed(RouteHelper.getVariantItemsRoute(variant.id, variant.title)),
+                  onPressed: () => Get.toNamed(RouteHelper.getVariantItemsRoute(
+                      variant.id, variant.title)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF55745a),
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                      borderRadius:
+                          BorderRadius.circular(Dimensions.radiusSmall),
                     ),
                     elevation: 0,
                   ),
-                  child: Text('اختيار هذه الباقة', style: robotoMedium.copyWith(
-                    color: Colors.white
-                  )),
+                  child: Text('اختيار هذه الباقة',
+                      style: robotoMedium.copyWith(color: Colors.white)),
                 ),
               ),
             ],
@@ -367,7 +381,8 @@ class _IconLabel extends StatelessWidget {
         const SizedBox(width: 4),
         Text(
           label,
-          style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Colors.grey),
+          style: robotoRegular.copyWith(
+              fontSize: Dimensions.fontSizeDefault),
         ),
       ],
     );

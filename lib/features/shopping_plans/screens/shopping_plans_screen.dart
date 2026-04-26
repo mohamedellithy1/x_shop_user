@@ -14,8 +14,6 @@ import 'package:stackfood_multivendor/theme/light_theme.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_bottom_sheet_widget.dart';
 import 'package:stackfood_multivendor/features/shopping_plans/screens/widgets/plan_variants_bottom_sheet.dart';
 
-
-
 class ShoppingPlansScreen extends StatefulWidget {
   const ShoppingPlansScreen({super.key});
 
@@ -63,15 +61,17 @@ class _ShoppingPlansScreenState extends State<ShoppingPlansScreen> {
           child: Scaffold(
             backgroundColor: isDark ? Colors.black : const Color(0xFFfafef5),
             appBar: CustomAppBarWidget(
-              title: 'خطط تسويقية',
+              title: 'الباكدجات التسويقية',
               isBackButtonExist: true,
-              onBackPressed: () => Get.offAllNamed(RouteHelper.getInitialRoute()),
+              onBackPressed: () =>
+                  Get.offAllNamed(RouteHelper.getInitialRoute()),
             ),
             endDrawer: const MenuDrawerWidget(),
             endDrawerEnableOpenDragGesture: false,
             body: GetBuilder<ShoppingPlanController>(
               builder: (controller) {
-                if (controller.isLoading || controller.shoppingPlanList == null) {
+                if (controller.isLoading ||
+                    controller.shoppingPlanList == null) {
                   return const Center(
                     child: CircularProgressIndicator(
                       color: Color(0xFF55745a),
@@ -87,7 +87,8 @@ class _ShoppingPlansScreenState extends State<ShoppingPlansScreen> {
                   color: const Color(0xFF55745a),
                   onRefresh: () => controller.getShoppingPlanList(),
                   child: ListView.builder(
-                    padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
+                    padding:
+                        const EdgeInsets.all(Dimensions.paddingSizeDefault),
                     itemCount: controller.shoppingPlanList!.length,
                     itemBuilder: (context, index) {
                       return _ShoppingPlanCard(
@@ -128,7 +129,7 @@ class _ShoppingPlansScreenState extends State<ShoppingPlansScreen> {
           ),
           const SizedBox(height: 24),
           Text(
-            'لا توجد خطط تسويقية متاحة',
+            'لا توجد الباكدجات تسويقية متاحة',
             style: robotoBold.copyWith(
               fontSize: Dimensions.fontSizeLarge,
               color: isDark ? Colors.white : const Color(0xFF263238),
@@ -166,12 +167,12 @@ class _ShoppingPlanCard extends StatelessWidget {
         showCustomBottomSheet(
           child: PlanVariantsBottomSheet(
             plans: Get.find<ShoppingPlanController>().shoppingPlanList!,
-            initialIndex: Get.find<ShoppingPlanController>().shoppingPlanList!.indexOf(plan),
+            initialIndex: Get.find<ShoppingPlanController>()
+                .shoppingPlanList!
+                .indexOf(plan),
           ),
         );
       },
-
-
       child: Container(
         margin: const EdgeInsets.only(bottom: Dimensions.paddingSizeDefault),
         decoration: BoxDecoration(
@@ -372,8 +373,8 @@ class _PriceRangeWidget extends StatelessWidget {
         Text(
           'نطاق السعر',
           style: robotoRegular.copyWith(
-            fontSize: 10,
-            color: isDark ? Colors.white38 : Colors.grey.shade400,
+            fontSize: 13,
+            color: const Color(0xFF55745a),
           ),
         ),
         const SizedBox(height: 2),

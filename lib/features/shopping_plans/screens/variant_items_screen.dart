@@ -55,6 +55,20 @@ class _VariantItemsScreenState extends State<VariantItemsScreen> {
               final items = details.items ?? [];
               final summary = details.summary;
 
+              print('----- DEBUG SUMMARY -----');
+              print('estimatedTotal: ${summary?.estimatedTotal}');
+              print('totalBeforeDiscount: ${summary?.totalBeforeDiscount}');
+              print('totalDiscount: ${summary?.totalDiscount}');
+              double calcLineTotal = 0;
+              double calcLineTotalAfter = 0;
+              for (var it in items) {
+                print('Item: ${it.name}, lineTotal: ${it.lineTotal}, lineTotalAfter: ${it.lineTotalAfterDiscount}, before: ${it.lineTotalBeforeDiscount}');
+                calcLineTotal += (it.lineTotal ?? 0);
+                calcLineTotalAfter += (it.lineTotalAfterDiscount ?? 0);
+              }
+              print('Sum of lineTotal: $calcLineTotal, Sum of lineTotalAfter: $calcLineTotalAfter');
+              print('-------------------------');
+
               return Stack(
                 children: [
                   Column(
@@ -205,7 +219,7 @@ class _VariantItemsScreenState extends State<VariantItemsScreen> {
                                                   width: Dimensions
                                                       .paddingSizeSmall),
                                               Text(
-                                                'أضف منتجات خارج الخطط',
+                                                'أضف منتجات خارج الباكدجات',
                                                 style: robotoBold.copyWith(
                                                     fontSize: Dimensions
                                                         .fontSizeDefault,
@@ -240,9 +254,11 @@ class _VariantItemsScreenState extends State<VariantItemsScreen> {
                                 (summary.itemsCount ?? 0) + extraList.length;
                             double totalCost =
                                 (summary.estimatedTotal ?? 0) + extraTotal;
+                            double totalBeforeDiscount =
+                                (summary.totalBeforeDiscount ?? totalCost) + extraTotal;
 
                             return _buildBottomBar(
-                                totalItems, totalCost, isDark);
+                                totalItems, totalCost, totalBeforeDiscount, isDark);
                           },
                         ),
                     ],
@@ -266,7 +282,7 @@ class _VariantItemsScreenState extends State<VariantItemsScreen> {
     );
   }
 
-  Widget _buildBottomBar(int itemsCount, double totalCost, bool isDark) {
+  Widget _buildBottomBar(int itemsCount, double totalCost, double totalBeforeDiscount, bool isDark) {
     return Container(
       padding: const EdgeInsets.all(Dimensions.paddingSizeLarge),
       decoration: BoxDecoration(
@@ -294,12 +310,28 @@ class _VariantItemsScreenState extends State<VariantItemsScreen> {
                 style:
                     robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge),
               ),
-              Text(
-                PriceConverter.convertPrice(totalCost),
-                style: robotoBold.copyWith(
-                  fontSize: Dimensions.fontSizeExtraLarge,
-                  color: const Color(0xFF55745a),
-                ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  if (totalBeforeDiscount > totalCost) ...[
+                    Text(
+                      PriceConverter.convertPrice(totalBeforeDiscount),
+                      style: robotoRegular.copyWith(
+                        fontSize: Dimensions.fontSizeDefault,
+                        color: Colors.redAccent,
+                        decoration: TextDecoration.lineThrough,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                  ],
+                  Text(
+                    PriceConverter.convertPrice(totalCost),
+                    style: robotoBold.copyWith(
+                      fontSize: Dimensions.fontSizeExtraLarge,
+                      color: const Color(0xFF55745a),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -486,9 +518,11 @@ class _ItemCard extends StatelessWidget {
     required this.onManualSet,
   });
 
-  @override
   Widget build(BuildContext context) {
-    double displayPrice = item.lineTotal ?? 0;
+    double displayPrice = item.lineTotalAfterDiscount ?? item.lineTotal ?? 0;
+    double? oldPrice = (item.lineTotalAfterDiscount != null && item.lineTotalAfterDiscount != (item.lineTotalBeforeDiscount ?? item.lineTotal))
+        ? (item.lineTotalBeforeDiscount ?? item.lineTotal)
+        : null;
 
     return Container(
       margin: const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
@@ -559,12 +593,28 @@ class _ItemCard extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  PriceConverter.convertPrice(displayPrice),
-                  style: robotoBold.copyWith(
-                    fontSize: Dimensions.fontSizeDefault,
-                    color: isDark ? Colors.white70 : const Color(0xFF55745a),
-                  ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      PriceConverter.convertPrice(displayPrice),
+                      style: robotoBold.copyWith(
+                        fontSize: Dimensions.fontSizeDefault,
+                        color: isDark ? Colors.white70 : const Color(0xFF55745a),
+                      ),
+                    ),
+                    if (oldPrice != null && oldPrice > displayPrice) ...[
+                      const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                      Text(
+                        PriceConverter.convertPrice(oldPrice),
+                        style: robotoRegular.copyWith(
+                          fontSize: Dimensions.fontSizeExtraSmall,
+                          color: Colors.redAccent,
+                          decoration: TextDecoration.lineThrough,
+                        ),
+                      ),
+                    ],
+                  ],
                 ),
               ],
             ),

@@ -296,7 +296,7 @@ class ShoppingPlanController extends GetxController implements GetxService {
       return;
 
     if (!AuthHelper.isLoggedIn()) {
-      showCustomSnackBar('يجب تسجيل الدخول أولاً لإضافة الخطة للسلة'.tr);
+      showCustomSnackBar('يجب تسجيل الدخول أولاً لإضافة الباكدج للسلة'.tr);
       return;
     }
 

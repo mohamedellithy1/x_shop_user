@@ -54,17 +54,17 @@ class BottomCartWidget extends StatelessWidget {
             ),
             CustomButtonWidget(
               buttonText: Get.parameters['planId'] != null
-                  ? 'عرض الخطط التسويقية'
+                  ? 'عرض الباكدجات التسويقية'
                   : 'view_cart'.tr,
               width: 150,
               height: 45,
               onPressed: () async {
-                  if (Get.parameters['planId'] != null) {
-                    Get.offNamed(RouteHelper.getVariantItemsRoute(
-                      int.tryParse(Get.parameters['variantId']!),
-                      Get.parameters['variantTitle'] ?? 'مراجعة الباقة',
-                    ));
-                  } else {
+                if (Get.parameters['planId'] != null) {
+                  Get.offNamed(RouteHelper.getVariantItemsRoute(
+                    int.tryParse(Get.parameters['variantId']!),
+                    Get.parameters['variantTitle'] ?? 'مراجعة الباقة',
+                  ));
+                } else {
                   await Get.toNamed(
                       RouteHelper.getCartRoute(fromDineIn: fromDineIn));
                   Get.find<RestaurantController>().makeEmptyRestaurant();

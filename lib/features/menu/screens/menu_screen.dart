@@ -391,7 +391,7 @@ class _MenuScreenState extends State<MenuScreen> {
                                       fromCheckout: false)),
                               PortionWidget(
                                   icon: Icons.shopping_cart_checkout_rounded,
-                                  title: 'خطط تسويقية',
+                                  title: 'الباكدجات تسويقية',
                                   route: RouteHelper.getShoppingPlansRoute()),
                               configModel!.loyaltyPointStatus!
                                   ? PortionWidget(

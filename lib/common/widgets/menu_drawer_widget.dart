@@ -55,7 +55,7 @@ class MenuDrawerWidgetState extends State<MenuDrawerWidget>
         }),
     Menu(
         icon: Icons.shopping_cart_checkout_rounded,
-        title: 'خطط تسويقية',
+        title: 'الباكدجات تسويقية',
         onTap: () {
           Get.offNamed(RouteHelper.getShoppingPlansRoute());
         }),

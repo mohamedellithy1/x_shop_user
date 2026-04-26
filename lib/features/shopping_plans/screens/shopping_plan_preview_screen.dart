@@ -310,7 +310,7 @@ class ShoppingPlanPreviewScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('توفير الخطة', style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Colors.red)),
+                              Text('توفير الباكدجات', style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Colors.red)),
                               Text(
                                 '- ${PriceConverter.convertPrice(summary.totalDiscount)}',
                                 style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault, color: Colors.red),

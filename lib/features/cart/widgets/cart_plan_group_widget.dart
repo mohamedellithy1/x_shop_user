@@ -28,10 +28,32 @@ class _CartPlanGroupWidgetState extends State<CartPlanGroupWidget> {
   @override
   Widget build(BuildContext context) {
     double totalPlanDiscount = 0;
+    double totalPlanPrice = 0;
+
     for (var item in widget.planItems) {
       if (item.planDiscountAmount != null) {
         totalPlanDiscount += item.planDiscountAmount!;
       }
+
+      double multiplier = (item.product?.isWeightBased ?? false)
+          ? (((item.requestedWeight != null && item.requestedWeight! > 0) ? item.requestedWeight! : 1.0) * (item.quantity ?? 1).toDouble())
+          : (item.quantity ?? 1).toDouble();
+
+      double? discount = item.product?.restaurantDiscount == 0
+          ? item.product?.discount
+          : item.product?.restaurantDiscount;
+      String? discountType = item.product?.restaurantDiscount == 0
+          ? item.product?.discountType
+          : 'percent';
+
+      double price = (item.product?.price ?? 0) * multiplier;
+      double discountPrice = price - (PriceConverter.convertWithDiscount(item.product?.price ?? 0, discount, discountType) ?? 0) * multiplier;
+      
+      double totalItemDiscount = discountPrice;
+      if (item.isFromPlan == true && item.planDiscountAmount != null) {
+        totalItemDiscount += item.planDiscountAmount!;
+      }
+      totalPlanPrice += (price - totalItemDiscount);
     }
 
     String periodTypeText = widget.planItems.isNotEmpty
@@ -90,11 +112,24 @@ class _CartPlanGroupWidgetState extends State<CartPlanGroupWidget> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'خطة تسويقية $periodTypeText',
-                          style: robotoBold.copyWith(
-                              fontSize: Dimensions.fontSizeDefault,
-                              color: const Color(0xFF55745a)),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'الباكدجات التسويقية $periodTypeText',
+                                style: robotoBold.copyWith(
+                                    fontSize: Dimensions.fontSizeDefault,
+                                    color: const Color(0xFF55745a)),
+                              ),
+                            ),
+                            Text(
+                              PriceConverter.convertPrice(totalPlanPrice),
+                              style: robotoBold.copyWith(
+                                  fontSize: Dimensions.fontSizeDefault,
+                                  color: const Color(0xFF55745a)),
+                            ),
+                          ],
                         ),
                         const SizedBox(height: 2),
                         Row(

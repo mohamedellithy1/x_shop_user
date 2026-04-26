@@ -1742,7 +1742,7 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                             buttonText: widget.isCampaign
                                                 ? 'order_now'.tr
                                                 : (Get.find<ShoppingPlanController>().activeVariantId != null || Get.parameters['planId'] != null || Get.parameters['variantId'] != null)
-                                                    ? 'أضف إلى الخطط التسويقية'
+                                                    ? 'أضف إلى الباكدجات التسويقية'
                                                     : (widget.cart != null ||
                                                             productController
                                                                     .cartIndex !=
