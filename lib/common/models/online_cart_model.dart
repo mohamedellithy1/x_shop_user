@@ -20,6 +20,11 @@ class OnlineCartModel {
   int? shoppingPlanId;
   int? shoppingPlanVariantId;
   double? planDiscountAmount;
+  String? planBundleDiscountType;
+  double? planBundleDiscountValue;
+  double? planBundleDiscountAmount;
+  double? lineTotalBeforeDiscount;
+  double? lineTotalAfterDiscount;
   String? periodType;
   int? peopleCount;
 
@@ -43,7 +48,14 @@ class OnlineCartModel {
         this.isFromPlan,
         this.shoppingPlanId,
         this.shoppingPlanVariantId,
-        this.planDiscountAmount});
+        this.planDiscountAmount,
+        this.planBundleDiscountType,
+        this.planBundleDiscountValue,
+        this.planBundleDiscountAmount,
+        this.lineTotalBeforeDiscount,
+        this.lineTotalAfterDiscount,
+        this.periodType,
+        this.peopleCount});
 
 
   OnlineCartModel.fromJson(Map<String, dynamic> json) {
@@ -66,11 +78,16 @@ class OnlineCartModel {
     updatedAt = json['updated_at'];
     product = json['item'] != null ? Product.fromJson(json['item']) : null;
     requestedWeight = json['requested_weight'] != null ? double.tryParse(json['requested_weight'].toString()) : null;
-    isFromPlan = json['is_from_plan'] == 1 || json['is_from_plan'] == true;
-    shoppingPlanId = json['shopping_plan_id'];
-    shoppingPlanVariantId = json['shopping_plan_variant_id'];
+    isFromPlan = json['is_from_plan'].toString() == '1' || json['is_from_plan'].toString() == 'true';
+    shoppingPlanId = json['shopping_plan_id'] != null ? int.tryParse(json['shopping_plan_id'].toString()) : null;
+    shoppingPlanVariantId = json['shopping_plan_variant_id'] != null ? int.tryParse(json['shopping_plan_variant_id'].toString()) : null;
     planDiscountAmount = json['plan_discount_amount'] != null ? double.tryParse(json['plan_discount_amount'].toString()) : null;
-    periodType = json['period_type'];
+    planBundleDiscountType = json['plan_bundle_discount_type']?.toString();
+    planBundleDiscountValue = json['plan_bundle_discount_value'] != null ? double.tryParse(json['plan_bundle_discount_value'].toString()) : null;
+    planBundleDiscountAmount = json['plan_bundle_discount_amount'] != null ? double.tryParse(json['plan_bundle_discount_amount'].toString()) : null;
+    lineTotalBeforeDiscount = json['line_total_before_discount'] != null ? double.tryParse(json['line_total_before_discount'].toString()) : null;
+    lineTotalAfterDiscount = json['line_total_after_discount'] != null ? double.tryParse(json['line_total_after_discount'].toString()) : null;
+    periodType = json['period_type']?.toString();
     peopleCount = json['people_count'] != null ? int.tryParse(json['people_count'].toString()) : null;
   }
 
@@ -101,6 +118,13 @@ class OnlineCartModel {
     data['shopping_plan_id'] = shoppingPlanId;
     data['shopping_plan_variant_id'] = shoppingPlanVariantId;
     data['plan_discount_amount'] = planDiscountAmount;
+    data['plan_bundle_discount_type'] = planBundleDiscountType;
+    data['plan_bundle_discount_value'] = planBundleDiscountValue;
+    data['plan_bundle_discount_amount'] = planBundleDiscountAmount;
+    data['line_total_before_discount'] = lineTotalBeforeDiscount;
+    data['line_total_after_discount'] = lineTotalAfterDiscount;
+    data['period_type'] = periodType;
+    data['people_count'] = peopleCount;
     return data;
   }
 

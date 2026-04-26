@@ -41,8 +41,7 @@ class _VariantItemsScreenState extends State<VariantItemsScreen> {
         return Scaffold(
           backgroundColor: isDark ? Colors.black : const Color(0xFFfafef5),
           appBar: CustomAppBarWidget(
-              title: widget.variantTitle,
-              isBackButtonExist: true),
+              title: widget.variantTitle, isBackButtonExist: true),
           body: GetBuilder<ShoppingPlanController>(
             builder: (controller) {
               if (controller.isLoading ||
@@ -57,16 +56,22 @@ class _VariantItemsScreenState extends State<VariantItemsScreen> {
 
               print('----- DEBUG SUMMARY -----');
               print('estimatedTotal: ${summary?.estimatedTotal}');
-              print('totalBeforeDiscount: ${summary?.totalBeforeDiscount}');
-              print('totalDiscount: ${summary?.totalDiscount}');
+              print('itemsTotalBeforeDiscount: ${summary?.itemsTotalBeforeDiscount}');
+              print('itemsDiscountAmount: ${summary?.itemsDiscountAmount}');
+              print('bundleDiscountType: ${summary?.bundleDiscountType}');
+              print('bundleDiscountAmount: ${summary?.bundleDiscountAmount}');
+              print('totalDiscountAmount: ${summary?.totalDiscountAmount}');
+              print('finalTotalAfterBundleDiscount: ${summary?.finalTotalAfterBundleDiscount}');
               double calcLineTotal = 0;
               double calcLineTotalAfter = 0;
               for (var it in items) {
-                print('Item: ${it.name}, lineTotal: ${it.lineTotal}, lineTotalAfter: ${it.lineTotalAfterDiscount}, before: ${it.lineTotalBeforeDiscount}');
+                print(
+                    'Item: ${it.name}, lineTotal: ${it.lineTotal}, lineTotalAfter: ${it.lineTotalAfterDiscount}, before: ${it.lineTotalBeforeDiscount}');
                 calcLineTotal += (it.lineTotal ?? 0);
                 calcLineTotalAfter += (it.lineTotalAfterDiscount ?? 0);
               }
-              print('Sum of lineTotal: $calcLineTotal, Sum of lineTotalAfter: $calcLineTotalAfter');
+              print(
+                  'Sum of lineTotal: $calcLineTotal, Sum of lineTotalAfter: $calcLineTotalAfter');
               print('-------------------------');
 
               return Stack(
@@ -176,7 +181,6 @@ class _VariantItemsScreenState extends State<VariantItemsScreen> {
                                               Dimensions.paddingSizeExtraLarge),
                                       child: InkWell(
                                         onTap: () {
-                                          // Store active plan context so ProductBottomSheet can find it
                                           Get.find<ShoppingPlanController>()
                                               .setActivePlanContext(
                                             controller
@@ -238,8 +242,6 @@ class _VariantItemsScreenState extends State<VariantItemsScreen> {
                           },
                         ),
                       ),
-
-                      // Summary Bottom Bar
                       if (summary != null)
                         GetBuilder<ShoppingPlanController>(
                           builder: (planCtrl) {
@@ -254,11 +256,19 @@ class _VariantItemsScreenState extends State<VariantItemsScreen> {
                                 (summary.itemsCount ?? 0) + extraList.length;
                             double totalCost =
                                 (summary.estimatedTotal ?? 0) + extraTotal;
-                            double totalBeforeDiscount =
-                                (summary.totalBeforeDiscount ?? totalCost) + extraTotal;
 
                             return _buildBottomBar(
-                                totalItems, totalCost, totalBeforeDiscount, isDark);
+                                totalItems,
+                                totalCost,
+                                (summary.itemsTotalBeforeDiscount ??
+                                        totalCost) +
+                                    extraTotal,
+                                summary.itemsDiscountAmount ?? 0,
+                                summary.bundleDiscountAmount ?? 0,
+                                summary.bundleDiscountType,
+                                summary.bundleDiscountValue,
+                                extraTotal,
+                                isDark);
                           },
                         ),
                     ],
@@ -282,9 +292,20 @@ class _VariantItemsScreenState extends State<VariantItemsScreen> {
     );
   }
 
-  Widget _buildBottomBar(int itemsCount, double totalCost, double totalBeforeDiscount, bool isDark) {
+  Widget _buildBottomBar(
+      int itemsCount,
+      double totalCost,
+      double totalBeforeDiscount,
+      double itemsDiscount,
+      double bundleDiscount,
+      String? bundleDiscountType,
+      double? bundleDiscountValue,
+      double extraTotal,
+      bool isDark) {
+    double totalSavings = itemsDiscount + bundleDiscount;
+
     return Container(
-      padding: const EdgeInsets.all(Dimensions.paddingSizeLarge),
+      padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
         borderRadius: const BorderRadius.only(
@@ -302,36 +323,51 @@ class _VariantItemsScreenState extends State<VariantItemsScreen> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          _SummaryRow(
+              label: 'خصم المنتجات',
+              value: '- ${PriceConverter.convertPrice(itemsDiscount)}',
+              color: Colors.red),
+
+          _SummaryRow(
+              label: bundleDiscountType == 'percent'
+                  ? 'خصم الباكدج (${bundleDiscountValue?.toStringAsFixed(0)}%)'
+                  : 'خصم الباكدج',
+              value: '- ${PriceConverter.convertPrice(bundleDiscount)}',
+              color: Colors.red),
+
+          if (extraTotal > 0)
+            _SummaryRow(
+                label: 'منتجات إضافية',
+                value: '+ ${PriceConverter.convertPrice(extraTotal)}',
+                color: const Color(0xFF55745a)),
+
+          const Divider(height: 16),
+
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'إجمالي الأصناف ($itemsCount)',
-                style:
-                    robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge),
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (totalBeforeDiscount > totalCost) ...[
-                    Text(
-                      PriceConverter.convertPrice(totalBeforeDiscount),
-                      style: robotoRegular.copyWith(
-                        fontSize: Dimensions.fontSizeDefault,
-                        color: Colors.redAccent,
-                        decoration: TextDecoration.lineThrough,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                  ],
                   Text(
-                    PriceConverter.convertPrice(totalCost),
-                    style: robotoBold.copyWith(
-                      fontSize: Dimensions.fontSizeExtraLarge,
-                      color: const Color(0xFF55745a),
-                    ),
+                    'الإجمالي النهائي',
+                    style:
+                        robotoBold.copyWith(fontSize: Dimensions.fontSizeLarge),
                   ),
+                  if (totalSavings > 0)
+                    Text(
+                      'إجمالي التوفير: ${PriceConverter.convertPrice(totalSavings)}',
+                      style: robotoRegular.copyWith(
+                          fontSize: 10, color: Colors.red),
+                    ),
                 ],
+              ),
+              Text(
+                PriceConverter.convertPrice(totalCost),
+                style: robotoBold.copyWith(
+                  fontSize: Dimensions.fontSizeExtraLarge,
+                  color: const Color(0xFF55745a),
+                ),
               ),
             ],
           ),
@@ -355,6 +391,32 @@ class _VariantItemsScreenState extends State<VariantItemsScreen> {
                   style: robotoBold.copyWith(color: Colors.white)),
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SummaryRow extends StatelessWidget {
+  final String label;
+  final String value;
+  final Color color;
+  const _SummaryRow(
+      {required this.label, required this.value, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label,
+              style: robotoRegular.copyWith(
+                  fontSize: Dimensions.fontSizeSmall, color: Colors.grey)),
+          Text(value,
+              style: robotoMedium.copyWith(
+                  fontSize: Dimensions.fontSizeSmall, color: color)),
         ],
       ),
     );
@@ -389,7 +451,6 @@ class _CartItemCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Remove button (always allowed for added items)
           IconButton(
             icon: const Icon(Icons.remove_circle_outline,
                 color: Colors.redAccent, size: 22),
@@ -400,7 +461,6 @@ class _CartItemCard extends StatelessWidget {
 
           const SizedBox(width: 8),
 
-          // Food Image
           ClipRRect(
             borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
             child: CustomImageWidget(
@@ -461,7 +521,6 @@ class _CartItemCard extends StatelessWidget {
             ),
           ),
 
-          // Increment/Decrement controls
           Container(
             decoration: BoxDecoration(
               color: const Color(0xFF55745a).withValues(alpha: 0.05),
@@ -518,12 +577,8 @@ class _ItemCard extends StatelessWidget {
     required this.onManualSet,
   });
 
+  @override
   Widget build(BuildContext context) {
-    double displayPrice = item.lineTotalAfterDiscount ?? item.lineTotal ?? 0;
-    double? oldPrice = (item.lineTotalAfterDiscount != null && item.lineTotalAfterDiscount != (item.lineTotalBeforeDiscount ?? item.lineTotal))
-        ? (item.lineTotalBeforeDiscount ?? item.lineTotal)
-        : null;
-
     return Container(
       margin: const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
       padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
@@ -536,7 +591,6 @@ class _ItemCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Remove button if optional
           if (item.isOptional == true)
             IconButton(
               icon: const Icon(Icons.remove_circle_outline,
@@ -548,7 +602,6 @@ class _ItemCard extends StatelessWidget {
 
           const SizedBox(width: 8),
 
-          // Food Image
           ClipRRect(
             borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
             child: CustomImageWidget(
@@ -572,48 +625,46 @@ class _ItemCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 4),
-                Row(
-                  children: [
-                    if (item.isWeightBased == true)
-                      Text(
-                        '${item.requestedWeight} ${item.weightUnit}',
-                        style: robotoRegular.copyWith(
-                          fontSize: Dimensions.fontSizeExtraSmall,
-                          color: Colors.grey,
-                        ),
-                      )
-                    else
-                      Text(
-                        'الكمية: ${item.quantity}',
-                        style: robotoRegular.copyWith(
-                          fontSize: Dimensions.fontSizeExtraSmall,
-                          color: Colors.grey,
-                        ),
-                      ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      PriceConverter.convertPrice(displayPrice),
-                      style: robotoBold.copyWith(
-                        fontSize: Dimensions.fontSizeDefault,
-                        color: isDark ? Colors.white70 : const Color(0xFF55745a),
-                      ),
+                if (item.isWeightBased == true)
+                  Text(
+                    '${item.requestedWeight} ${item.weightUnit}',
+                    style: robotoRegular.copyWith(
+                      fontSize: Dimensions.fontSizeExtraSmall,
+                      color: Colors.grey,
                     ),
-                    if (oldPrice != null && oldPrice > displayPrice) ...[
-                      const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                  )
+                else
+                  Text(
+                    'الكمية: ${item.quantity}',
+                    style: robotoRegular.copyWith(
+                      fontSize: Dimensions.fontSizeExtraSmall,
+                      color: Colors.grey,
+                    ),
+                  ),
+                const SizedBox(height: 4),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if ((item.lineTotalBeforeDiscount ?? 0) >
+                        (item.lineTotalAfterDiscount ?? item.lineTotal ?? 0))
                       Text(
-                        PriceConverter.convertPrice(oldPrice),
+                        PriceConverter.convertPrice(
+                            item.lineTotalBeforeDiscount),
                         style: robotoRegular.copyWith(
                           fontSize: Dimensions.fontSizeExtraSmall,
-                          color: Colors.redAccent,
+                          color: Colors.red,
                           decoration: TextDecoration.lineThrough,
                         ),
                       ),
-                    ],
+                    Text(
+                      PriceConverter.convertPrice(
+                          item.lineTotalAfterDiscount ?? item.lineTotal),
+                      style: robotoBold.copyWith(
+                        fontSize: Dimensions.fontSizeDefault,
+                        color:
+                            isDark ? Colors.white70 : const Color(0xFF55745a),
+                      ),
+                    ),
                   ],
                 ),
               ],

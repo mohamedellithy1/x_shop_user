@@ -308,31 +308,56 @@ class PlanItemModel {
 
 class PlanSummaryModel {
   int? itemsCount;
+  double? itemsTotalBeforeDiscount;
+  double? itemsDiscountAmount;
+  double? subtotalAfterItemsDiscount;
+  String? bundleDiscountType;
+  double? bundleDiscountValue;
+  double? bundleDiscountAmount;
+  double? totalDiscountAmount;
+  double? finalTotalAfterBundleDiscount;
   double? estimatedTotal;
-  double? totalBeforeDiscount;
-  double? totalDiscount;
 
-  PlanSummaryModel({this.itemsCount, this.estimatedTotal, this.totalBeforeDiscount, this.totalDiscount});
-
+  PlanSummaryModel({
+    this.itemsCount,
+    this.itemsTotalBeforeDiscount,
+    this.itemsDiscountAmount,
+    this.subtotalAfterItemsDiscount,
+    this.bundleDiscountType,
+    this.bundleDiscountValue,
+    this.bundleDiscountAmount,
+    this.totalDiscountAmount,
+    this.finalTotalAfterBundleDiscount,
+    this.estimatedTotal,
+  });
 
   factory PlanSummaryModel.fromJson(Map<String, dynamic> json) {
     return PlanSummaryModel(
       itemsCount: json['items_count'],
+      itemsTotalBeforeDiscount: json['items_total_before_discount'] != null ? double.tryParse(json['items_total_before_discount'].toString()) : null,
+      itemsDiscountAmount: json['items_discount_amount'] != null ? double.tryParse(json['items_discount_amount'].toString()) : null,
+      subtotalAfterItemsDiscount: json['subtotal_after_items_discount'] != null ? double.tryParse(json['subtotal_after_items_discount'].toString()) : null,
+      bundleDiscountType: json['bundle_discount_type']?.toString(),
+      bundleDiscountValue: json['bundle_discount_value'] != null ? double.tryParse(json['bundle_discount_value'].toString()) : null,
+      bundleDiscountAmount: json['bundle_discount_amount'] != null ? double.tryParse(json['bundle_discount_amount'].toString()) : null,
+      totalDiscountAmount: json['total_discount_amount'] != null ? double.tryParse(json['total_discount_amount'].toString()) : null,
+      finalTotalAfterBundleDiscount: json['final_total_after_bundle_discount'] != null ? double.tryParse(json['final_total_after_bundle_discount'].toString()) : null,
       estimatedTotal: json['estimated_total'] != null ? double.tryParse(json['estimated_total'].toString()) : null,
-      totalBeforeDiscount: json['total_before_discount'] != null ? double.tryParse(json['total_before_discount'].toString()) : null,
-      totalDiscount: json['total_discount'] != null ? double.tryParse(json['total_discount'].toString()) : null,
     );
   }
-
-
 
   Map<String, dynamic> toJson() {
     return {
       'items_count': itemsCount,
+      'items_total_before_discount': itemsTotalBeforeDiscount,
+      'items_discount_amount': itemsDiscountAmount,
+      'subtotal_after_items_discount': subtotalAfterItemsDiscount,
+      'bundle_discount_type': bundleDiscountType,
+      'bundle_discount_value': bundleDiscountValue,
+      'bundle_discount_amount': bundleDiscountAmount,
+      'total_discount_amount': totalDiscountAmount,
+      'final_total_after_bundle_discount': finalTotalAfterBundleDiscount,
       'estimated_total': estimatedTotal,
-      'total_before_discount': totalBeforeDiscount,
-      'total_discount': totalDiscount,
     };
   }
-
 }

@@ -74,7 +74,11 @@ class CartRepository implements CartRepositoryInterface<OnlineCart> {
     Response response = await apiClient.getData('${AppConstants.getCartListUri}${id != null ? '?guest_id=$id' : ''}');
     if(response.statusCode == 200) {
       onlineCartList = [];
-      response.body.forEach((cart) => onlineCartList.add(OnlineCartModel.fromJson(cart)));
+      if (response.body is Map && response.body.containsKey('carts')) {
+        response.body['carts'].forEach((cart) => onlineCartList.add(OnlineCartModel.fromJson(cart)));
+      } else if (response.body is List) {
+        response.body.forEach((cart) => onlineCartList.add(OnlineCartModel.fromJson(cart)));
+      }
     }
     return onlineCartList;
   }

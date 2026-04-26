@@ -21,6 +21,11 @@ class CartModel {
   double? _planDiscountAmount;
   String? _periodType;
   int? _peopleCount;
+  String? _planBundleDiscountType;
+  double? _planBundleDiscountValue;
+  double? _planBundleDiscountAmount;
+  double? _lineTotalBeforeDiscount;
+  double? _lineTotalAfterDiscount;
 
 
 
@@ -42,6 +47,11 @@ class CartModel {
       int? shoppingPlanId,
       int? shoppingPlanVariantId,
       double? planDiscountAmount,
+      String? planBundleDiscountType,
+      double? planBundleDiscountValue,
+      double? planBundleDiscountAmount,
+      double? lineTotalBeforeDiscount,
+      double? lineTotalAfterDiscount,
       String? periodType,
       int? peopleCount}) {
 
@@ -62,6 +72,11 @@ class CartModel {
     _shoppingPlanId = shoppingPlanId;
     _shoppingPlanVariantId = shoppingPlanVariantId;
     _planDiscountAmount = planDiscountAmount;
+    _planBundleDiscountType = planBundleDiscountType;
+    _planBundleDiscountValue = planBundleDiscountValue;
+    _planBundleDiscountAmount = planBundleDiscountAmount;
+    _lineTotalBeforeDiscount = lineTotalBeforeDiscount;
+    _lineTotalAfterDiscount = lineTotalAfterDiscount;
     _periodType = periodType;
     _peopleCount = peopleCount;
   }
@@ -89,6 +104,11 @@ class CartModel {
   int? get shoppingPlanId => _shoppingPlanId;
   int? get shoppingPlanVariantId => _shoppingPlanVariantId;
   double? get planDiscountAmount => _planDiscountAmount;
+  String? get planBundleDiscountType => _planBundleDiscountType;
+  double? get planBundleDiscountValue => _planBundleDiscountValue;
+  double? get planBundleDiscountAmount => _planBundleDiscountAmount;
+  double? get lineTotalBeforeDiscount => _lineTotalBeforeDiscount;
+  double? get lineTotalAfterDiscount => _lineTotalAfterDiscount;
   String? get periodType => _periodType;
   int? get peopleCount => _peopleCount;
 
@@ -144,6 +164,11 @@ class CartModel {
     _shoppingPlanId = json['shopping_plan_id'];
     _shoppingPlanVariantId = json['shopping_plan_variant_id'];
     _planDiscountAmount = json['plan_discount_amount'] != null ? double.tryParse(json['plan_discount_amount'].toString()) : null;
+    _planBundleDiscountType = json['plan_bundle_discount_type'];
+    _planBundleDiscountValue = json['plan_bundle_discount_value'] != null ? double.tryParse(json['plan_bundle_discount_value'].toString()) : null;
+    _planBundleDiscountAmount = json['plan_bundle_discount_amount'] != null ? double.tryParse(json['plan_bundle_discount_amount'].toString()) : null;
+    _lineTotalBeforeDiscount = json['line_total_before_discount'] != null ? double.tryParse(json['line_total_before_discount'].toString()) : null;
+    _lineTotalAfterDiscount = json['line_total_after_discount'] != null ? double.tryParse(json['line_total_after_discount'].toString()) : null;
     _periodType = json['period_type'];
     _peopleCount = json['people_count'] != null ? int.tryParse(json['people_count'].toString()) : null;
   }
@@ -174,6 +199,11 @@ class CartModel {
     data['shopping_plan_id'] = _shoppingPlanId;
     data['shopping_plan_variant_id'] = _shoppingPlanVariantId;
     data['plan_discount_amount'] = _planDiscountAmount;
+    data['plan_bundle_discount_type'] = _planBundleDiscountType;
+    data['plan_bundle_discount_value'] = _planBundleDiscountValue;
+    data['plan_bundle_discount_amount'] = _planBundleDiscountAmount;
+    data['line_total_before_discount'] = _lineTotalBeforeDiscount;
+    data['line_total_after_discount'] = _lineTotalAfterDiscount;
     return data;
   }
 

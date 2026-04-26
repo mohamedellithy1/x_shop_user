@@ -188,10 +188,10 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                                   (widget.cart.product!.isWeightBased ?? false)
                                                       ? (widget.cart.product!.price! * (widget.cart.requestedWeight ?? 1.0) * (widget.cart.quantity ?? 1).toDouble())
                                                       : widget.cart.product!.price,
-                                                  discount: (widget.cart.isFromPlan == true && widget.cart.planDiscountAmount != null && widget.cart.planDiscountAmount! > 0)
+                                                  discount: (widget.cart.isFromPlan == true && widget.cart.planDiscountAmount != null)
                                                       ? widget.cart.planDiscountAmount
                                                       : discount,
-                                                  discountType: (widget.cart.isFromPlan == true && widget.cart.planDiscountAmount != null && widget.cart.planDiscountAmount! > 0)
+                                                  discountType: (widget.cart.isFromPlan == true && widget.cart.planDiscountAmount != null)
                                                       ? 'amount'
                                                       : discountType),
 
@@ -201,11 +201,11 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                               textDirection: TextDirection.ltr,
                                             ),
                                             SizedBox(
-                                                width: (discount! > 0 || (widget.cart.isFromPlan == true && widget.cart.planDiscountAmount! > 0))
+                                                width: (discount! > 0 || (widget.cart.isFromPlan == true && widget.cart.planDiscountAmount != null))
                                                     ? Dimensions
                                                         .paddingSizeExtraSmall
                                                     : 0),
-                                            (discount > 0 || (widget.cart.isFromPlan == true && widget.cart.planDiscountAmount != null && widget.cart.planDiscountAmount! > 0))
+                                            (discount > 0 || (widget.cart.isFromPlan == true && widget.cart.planDiscountAmount != null))
                                                 ? Text(
                                                     PriceConverter.convertPrice(
                                                         (widget.cart.product!.isWeightBased ?? false)

@@ -39,6 +39,12 @@ class ShoppingPlanPreviewScreen extends StatelessWidget {
               }
               final totalCost = (summary?.estimatedTotal ?? 0) + extraTotal;
 
+              debugPrint('--- PREVIEW SUMMARY ---');
+              debugPrint('estimatedTotal: ${summary?.estimatedTotal}');
+              debugPrint('itemsDiscountAmount: ${summary?.itemsDiscountAmount}');
+              debugPrint('bundleDiscountAmount: ${summary?.bundleDiscountAmount}');
+              debugPrint('totalDiscountAmount: ${summary?.totalDiscountAmount}');
+              debugPrint('-----------------------');
               return Column(
                 children: [
                    Expanded(
@@ -118,13 +124,9 @@ class ShoppingPlanPreviewScreen extends StatelessWidget {
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
-                                      if (item.discountAmount != null && item.discountAmount! > 0)
+                                      if ((item.lineTotalBeforeDiscount ?? 0) > (item.lineTotalAfterDiscount ?? item.lineTotal ?? 0))
                                         Text(
-                                          PriceConverter.convertPrice(
-                                            item.lineTotalBeforeDiscount,
-                                            discount: item.discountAmount,
-                                            discountType: 'amount',
-                                          ),
+                                          PriceConverter.convertPrice(item.lineTotalBeforeDiscount),
                                           style: robotoRegular.copyWith(
                                             fontSize: Dimensions.fontSizeExtraSmall,
                                             color: Colors.red,
@@ -132,7 +134,7 @@ class ShoppingPlanPreviewScreen extends StatelessWidget {
                                           ),
                                         ),
                                       Text(
-                                        PriceConverter.convertPrice(item.lineTotal),
+                                        PriceConverter.convertPrice(item.lineTotalAfterDiscount ?? item.lineTotal),
                                         style: robotoMedium.copyWith(color: const Color(0xFF55745a)),
                                       ),
                                     ],
@@ -306,38 +308,35 @@ class ShoppingPlanPreviewScreen extends StatelessWidget {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        if (summary?.totalDiscount != null && summary!.totalDiscount! > 0) ...[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('توفير الباكدجات', style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Colors.red)),
-                              Text(
-                                '- ${PriceConverter.convertPrice(summary.totalDiscount)}',
-                                style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault, color: Colors.red),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                        ],
+                        _SummaryRow(label: 'خصم المنتجات', value: '- ${PriceConverter.convertPrice(summary?.itemsDiscountAmount ?? 0)}', color: Colors.red),
 
-                        if (extraItems.isNotEmpty) ...[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('منتجات إضافية', style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Colors.grey)),
-                              Text(
-                                '+ ${PriceConverter.convertPrice(extraTotal)}',
-                                style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault, color: const Color(0xFF55745a)),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                        ],
+                        _SummaryRow(
+                          label: summary?.bundleDiscountType == 'percent' 
+                              ? 'خصم الباكدج (${summary?.bundleDiscountValue?.toStringAsFixed(0)}%)' 
+                              : 'خصم الباكدج', 
+                          value: '- ${PriceConverter.convertPrice(summary?.bundleDiscountAmount ?? 0)}', 
+                          color: Colors.red
+                        ),
+
+                        if (extraItems.isNotEmpty)
+                          _SummaryRow(label: 'منتجات إضافية', value: '+ ${PriceConverter.convertPrice(extraTotal)}', color: const Color(0xFF55745a)),
+
+                        const Divider(height: 16),
 
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('الإجمالي النهائي', style: robotoBold.copyWith(fontSize: Dimensions.fontSizeLarge)),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('الإجمالي النهائي', style: robotoBold.copyWith(fontSize: Dimensions.fontSizeLarge)),
+                                if ((summary?.totalDiscountAmount ?? 0) > 0)
+                                  Text(
+                                    'إجمالي التوفير: ${PriceConverter.convertPrice(summary?.totalDiscountAmount)}',
+                                    style: robotoRegular.copyWith(fontSize: 10, color: Colors.red),
+                                  ),
+                              ],
+                            ),
                             Text(
                               PriceConverter.convertPrice(totalCost),
                               style: robotoBold.copyWith(fontSize: Dimensions.fontSizeExtraLarge, color: const Color(0xFF55745a)),
@@ -375,3 +374,23 @@ class ShoppingPlanPreviewScreen extends StatelessWidget {
   }
 }
 
+class _SummaryRow extends StatelessWidget {
+  final String label;
+  final String value;
+  final Color color;
+  const _SummaryRow({required this.label, required this.value, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Colors.grey)),
+          Text(value, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: color)),
+        ],
+      ),
+    );
+  }
+}

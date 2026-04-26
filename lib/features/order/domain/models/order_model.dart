@@ -89,6 +89,11 @@ class OrderModel {
   OrderReference? orderReference;
   double? bringChangeAmount;
   int? itemCampaignId;
+  double? planItemDiscountAmount;
+  String? planBundleDiscountType;
+  double? planBundleDiscountValue;
+  double? planBundleDiscountAmount;
+  double? planTotalDiscountAmount;
 
   OrderModel({
     this.id,
@@ -146,6 +151,11 @@ class OrderModel {
     this.orderReference,
     this.bringChangeAmount,
     this.itemCampaignId,
+    this.planItemDiscountAmount,
+    this.planBundleDiscountType,
+    this.planBundleDiscountValue,
+    this.planBundleDiscountAmount,
+    this.planTotalDiscountAmount,
   });
 
   OrderModel.fromJson(Map<String, dynamic> json) {
@@ -218,6 +228,11 @@ class OrderModel {
     orderReference = json['order_reference'] != null ? OrderReference.fromJson(json['order_reference']) : null;
     bringChangeAmount = json['bring_change_amount']?.toDouble();
     itemCampaignId = json['item_campaign_id'];
+    planItemDiscountAmount = json['plan_item_discount_amount']?.toDouble();
+    planBundleDiscountType = json['plan_bundle_discount_type'];
+    planBundleDiscountValue = json['plan_bundle_discount_value']?.toDouble();
+    planBundleDiscountAmount = json['plan_bundle_discount_amount']?.toDouble();
+    planTotalDiscountAmount = json['plan_total_discount_amount']?.toDouble();
   }
 
   Map<String, dynamic> toJson() {
@@ -290,6 +305,11 @@ class OrderModel {
     }
     data['bring_change_amount'] = bringChangeAmount;
     data['item_campaign_id'] = itemCampaignId;
+    data['plan_item_discount_amount'] = planItemDiscountAmount;
+    data['plan_bundle_discount_type'] = planBundleDiscountType;
+    data['plan_bundle_discount_value'] = planBundleDiscountValue;
+    data['plan_bundle_discount_amount'] = planBundleDiscountAmount;
+    data['plan_total_discount_amount'] = planTotalDiscountAmount;
     return data;
   }
 }

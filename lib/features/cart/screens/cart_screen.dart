@@ -704,10 +704,15 @@ class _CartScreenState extends State<CartScreen> {
                                           fromDineIn: widget.fromDineIn),
                                 ],
                               )
-                            : Padding(
-                                padding: const EdgeInsets.only(top: 300),
-                                child: Center(
-                                  child: SingleChildScrollView(
+                            : RefreshIndicator(
+                                onRefresh: () async {
+                                  await Get.find<MarketCartController>().getCartDataOnline();
+                                },
+                                color: const Color(0xFF55745a),
+                                child: SingleChildScrollView(
+                                  physics: const AlwaysScrollableScrollPhysics(),
+                                  child: SizedBox(
+                                    height: MediaQuery.of(context).size.height * 0.7,
                                     child: Center(
                                       child: Text(
                                         'you_have_not_add_to_cart_yet'.tr,
@@ -716,7 +721,7 @@ class _CartScreenState extends State<CartScreen> {
                                                 Theme.of(context).brightness ==
                                                         Brightness.dark
                                                     ? Colors.white
-                                                    : Color(0xFF55745a)),
+                                                    : const Color(0xFF55745a)),
                                       ),
                                     ),
                                   ),
