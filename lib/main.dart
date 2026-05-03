@@ -196,39 +196,48 @@ class _MyAppState extends State<MyApp> {
                               transitionDuration:
                                   const Duration(milliseconds: 500),
                               builder: (BuildContext context, widget) {
-                                return MediaQuery(
-                                  data: MediaQuery.of(context).copyWith(
-                                      textScaler: const TextScaler.linear(1)),
-                                  child: Material(
-                                      child: SafeArea(
-                                    top: false,
-                                    bottom: GetPlatform.isAndroid,
-                                    child: Stack(children: [
-                                      widget!,
-                                      GetBuilder<MarketSplashController>(
-                                          tag: 'xmarket',
-                                          builder: (splashController) {
-                                            if (!splashController
-                                                    .savedCookiesData ||
-                                                !splashController
-                                                    .getAcceptCookiesStatus(
-                                                        splashController
-                                                                .configModel
-                                                                ?.cookiesText ??
-                                                            "")) {
-                                              return ResponsiveHelper.isWeb()
-                                                  ? const Align(
-                                                      alignment: Alignment
-                                                          .bottomCenter,
-                                                      child:
-                                                          CookiesViewWidget())
-                                                  : const SizedBox();
-                                            } else {
-                                              return const SizedBox();
-                                            }
-                                          })
-                                    ]),
-                                  )),
+                                return GestureDetector(
+                                  behavior: HitTestBehavior.translucent,
+                                  onTap: () {
+                                    FocusScopeNode currentFocus = FocusScope.of(context);
+                                    if (!currentFocus.hasPrimaryFocus) {
+                                      currentFocus.unfocus();
+                                    }
+                                  },
+                                  child: MediaQuery(
+                                    data: MediaQuery.of(context).copyWith(
+                                        textScaler: const TextScaler.linear(1)),
+                                    child: Material(
+                                        child: SafeArea(
+                                      top: false,
+                                      bottom: GetPlatform.isAndroid,
+                                      child: Stack(children: [
+                                        widget!,
+                                        GetBuilder<MarketSplashController>(
+                                            tag: 'xmarket',
+                                            builder: (splashController) {
+                                              if (!splashController
+                                                      .savedCookiesData ||
+                                                  !splashController
+                                                      .getAcceptCookiesStatus(
+                                                          splashController
+                                                                  .configModel
+                                                                  ?.cookiesText ??
+                                                              "")) {
+                                                return ResponsiveHelper.isWeb()
+                                                    ? const Align(
+                                                        alignment: Alignment
+                                                            .bottomCenter,
+                                                        child:
+                                                            CookiesViewWidget())
+                                                    : const SizedBox();
+                                              } else {
+                                                return const SizedBox();
+                                              }
+                                            })
+                                      ]),
+                                    )),
+                                  ),
                                 );
                               });
                     });
