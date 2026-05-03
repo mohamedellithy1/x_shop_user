@@ -85,7 +85,7 @@ class HomeController extends GetxController implements GetxService {
         
         if (_bannerImageList!.contains(imageUrl)) {
           _bannerImageList!.add(
-              '${imageUrl}${bannerModel.banners!.indexOf(banner)}');
+              '$imageUrl${bannerModel.banners!.indexOf(banner)}');
         } else {
           _bannerImageList!.add(imageUrl);
         }

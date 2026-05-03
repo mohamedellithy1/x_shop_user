@@ -73,7 +73,7 @@ class HomeCategoryViewWidget extends StatelessWidget {
               crossAxisSpacing: Dimensions.paddingSizeDefault,
               childAspectRatio: 0.9,
             ),
-            itemCount: categories!.length,
+            itemCount: categories.length,
             itemBuilder: (context, index) {
               CategoryModel category = categories[index];
               return InkWell(

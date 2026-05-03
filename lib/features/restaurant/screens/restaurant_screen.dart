@@ -1,10 +1,10 @@
 import 'package:stackfood_multivendor/features/cart/controllers/cart_controller.dart';
+import 'package:stackfood_multivendor/features/category/controllers/category_controller.dart';
 import 'package:stackfood_multivendor/features/coupon/controllers/coupon_controller.dart';
 import 'package:stackfood_multivendor/features/home/widgets/arrow_icon_button_widget.dart';
 import 'package:stackfood_multivendor/features/home/widgets/item_card_widget.dart';
 import 'package:stackfood_multivendor/features/restaurant/controllers/restaurant_controller.dart';
 import 'package:stackfood_multivendor/common/models/restaurant_model.dart';
-import 'package:stackfood_multivendor/features/category/controllers/category_controller.dart';
 import 'package:stackfood_multivendor/features/restaurant/widgets/restaurant_info_section_widget.dart';
 import 'package:stackfood_multivendor/features/restaurant/widgets/restaurant_screen_shimmer_widget.dart';
 import 'package:stackfood_multivendor/helper/date_converter.dart';

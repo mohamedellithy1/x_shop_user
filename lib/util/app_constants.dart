@@ -17,6 +17,8 @@ class AppConstants {
 
   static const String baseUrl = 'https://api.wovenex.online';
   static const String categoryUri = '/api/v1/categories';
+   static const String xMarketCategoryUri =
+      '/api/v1/categories/get-categories/8';
   static const String bannerUri = '/api/v1/banners';
   static const String restaurantProductUri = '/api/v1/products/latest';
   static const String popularProductUri = '/api/v1/products/popular';

@@ -11,7 +11,6 @@ import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.
 import 'package:stackfood_multivendor/features/auth/domain/centralize_login_enum.dart';
 import 'package:stackfood_multivendor/features/auth/widgets/sign_in/manual_login_widget.dart';
 import 'package:stackfood_multivendor/features/auth/widgets/sign_in/otp_login_widget.dart';
-import 'package:stackfood_multivendor/features/auth/widgets/social_login_widget.dart';
 import 'package:stackfood_multivendor/features/favourite/controllers/favourite_controller.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
 import 'package:stackfood_multivendor/features/splash/domain/models/config_model.dart';

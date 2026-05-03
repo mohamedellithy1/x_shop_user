@@ -7,7 +7,6 @@ import 'package:stackfood_multivendor/features/notification/domain/models/notifi
 import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
 import 'package:stackfood_multivendor/features/splash/domain/models/deep_link_body.dart';
 import 'package:stackfood_multivendor/helper/address_helper.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/images.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

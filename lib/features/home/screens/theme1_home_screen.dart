@@ -1,20 +1,6 @@
 import 'package:stackfood_multivendor/features/home/screens/home_screen.dart';
-import 'package:stackfood_multivendor/features/home/widgets/bad_weather_widget.dart';
-import 'package:stackfood_multivendor/features/home/widgets/dine_in_widget.dart';
-import 'package:stackfood_multivendor/features/home/widgets/enjoy_off_banner_view_widget.dart';
-import 'package:stackfood_multivendor/features/home/widgets/filter_view_widget.dart';
-import 'package:stackfood_multivendor/features/home/widgets/highlight_widget_view.dart';
 import 'package:stackfood_multivendor/features/home/widgets/home_category_view_widget.dart';
-import 'package:stackfood_multivendor/features/home/widgets/order_again_view_widget.dart';
-import 'package:stackfood_multivendor/features/home/widgets/refer_banner_view_widget.dart';
 import 'package:stackfood_multivendor/features/home/widgets/theme1/banner_view_widget1.dart';
-import 'package:stackfood_multivendor/features/home/widgets/theme1/best_reviewed_item_widget1.dart';
-import 'package:stackfood_multivendor/features/home/widgets/theme1/category_widget1.dart';
-import 'package:stackfood_multivendor/features/home/widgets/theme1/cuisine_widget1.dart';
-import 'package:stackfood_multivendor/features/home/widgets/theme1/item_campaign_widget1.dart';
-import 'package:stackfood_multivendor/features/home/widgets/theme1/near_by_button_widget1.dart';
-import 'package:stackfood_multivendor/features/home/widgets/theme1/popular_item_widget1.dart';
-import 'package:stackfood_multivendor/features/home/widgets/theme1/popular_store_widget1.dart';
 import 'package:stackfood_multivendor/features/notification/controllers/notification_controller.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
 import 'package:stackfood_multivendor/features/splash/domain/models/config_model.dart';
@@ -23,13 +9,10 @@ import 'package:stackfood_multivendor/features/location/controllers/location_con
 import 'package:stackfood_multivendor/helper/address_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stackfood_multivendor/features/restaurant/controllers/restaurant_controller.dart';
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 import 'package:stackfood_multivendor/helper/route_helper.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
-import 'package:stackfood_multivendor/common/widgets/product_view_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/paginated_list_view_widget.dart';
 
 class Theme1HomeScreen extends StatelessWidget {
   final ScrollController scrollController;

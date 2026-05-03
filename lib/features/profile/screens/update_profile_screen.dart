@@ -9,7 +9,6 @@ import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.
 import 'package:stackfood_multivendor/features/order/controllers/order_controller.dart';
 import 'package:stackfood_multivendor/features/profile/controllers/profile_controller.dart';
 import 'package:stackfood_multivendor/features/profile/domain/models/update_user_model.dart';
-import 'package:stackfood_multivendor/features/profile/widgets/account_deletion_bottom_sheet.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
 import 'package:stackfood_multivendor/helper/custom_validator.dart';
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
