@@ -4,6 +4,7 @@ import 'package:stackfood_multivendor/features/home/widgets/dine_in_widget.dart'
 import 'package:stackfood_multivendor/features/home/widgets/enjoy_off_banner_view_widget.dart';
 import 'package:stackfood_multivendor/features/home/widgets/filter_view_widget.dart';
 import 'package:stackfood_multivendor/features/home/widgets/highlight_widget_view.dart';
+import 'package:stackfood_multivendor/features/home/widgets/home_category_view_widget.dart';
 import 'package:stackfood_multivendor/features/home/widgets/order_again_view_widget.dart';
 import 'package:stackfood_multivendor/features/home/widgets/refer_banner_view_widget.dart';
 import 'package:stackfood_multivendor/features/home/widgets/theme1/banner_view_widget1.dart';
@@ -143,51 +144,52 @@ class Theme1HomeScreen extends StatelessWidget {
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
 
               const BannerViewWidget1(),
-              const BadWeatherWidget(),
-              const CategoryWidget1(),
-              const ItemCampaignWidget1(),
-              const HighlightWidgetView(),
-              isLogin ? const PopularStoreWidget1(isOrderAgainViewed: true, isPopular: false) : const SizedBox(),
-              isLogin ? const OrderAgainViewWidget() : const SizedBox(),
-              configModel.mostReviewedFoods == 1 ? const BestReviewedItemWidget1() : const SizedBox(),
-              configModel.dineInOrderOption! ? DineInWidget() : const SizedBox(),
-              const ReferBannerViewWidget(fromTheme1: true),
-              isLogin ? const PopularStoreWidget1(isPopular: false, isRecentlyViewed: true) : const SizedBox(),
-              const CuisinesWidget1(),
-              configModel.popularRestaurant == 1 ? const PopularStoreWidget1(isPopular: true) : const SizedBox(),
-              const NearByButtonWidget1(),
-              configModel.popularFood == 1 ? const PopularItemWidget1(isPopular: true) : const SizedBox(),
-              configModel.newRestaurant == 1 ? const PopularStoreWidget1(isPopular: false) : const SizedBox(),
+              const HomeCategoryViewWidget(),
+              // const BadWeatherWidget(),
+              // const CategoryWidget1(),
+              // const ItemCampaignWidget1(),
+              // const HighlightWidgetView(),
+              // isLogin ? const PopularStoreWidget1(isOrderAgainViewed: true, isPopular: false) : const SizedBox(),
+              // isLogin ? const OrderAgainViewWidget() : const SizedBox(),
+              // configModel.mostReviewedFoods == 1 ? const BestReviewedItemWidget1() : const SizedBox(),
+              // configModel.dineInOrderOption! ? DineInWidget() : const SizedBox(),
+              // const ReferBannerViewWidget(fromTheme1: true),
+              // isLogin ? const PopularStoreWidget1(isPopular: false, isRecentlyViewed: true) : const SizedBox(),
+              // const CuisinesWidget1(),
+              // configModel.popularRestaurant == 1 ? const PopularStoreWidget1(isPopular: true) : const SizedBox(),
+              // const NearByButtonWidget1(),
+              // configModel.popularFood == 1 ? const PopularItemWidget1(isPopular: true) : const SizedBox(),
+              // configModel.newRestaurant == 1 ? const PopularStoreWidget1(isPopular: false) : const SizedBox(),
 
-              const PromotionalBannerViewWidget(),
+              // const PromotionalBannerViewWidget(),
 
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 15, 0, 5),
-                child: Row(children: [
-                  Expanded(child: Text(
-                    'all_restaurants'.tr,
-                    style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge),
-                  )),
-                  const FilterViewWidget(),
-                ]),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.fromLTRB(10, 15, 0, 5),
+              //   child: Row(children: [
+              //     Expanded(child: Text(
+              //       'all_restaurants'.tr,
+              //       style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge),
+              //     )),
+              //     const FilterViewWidget(),
+              //   ]),
+              // ),
 
-              GetBuilder<RestaurantController>(builder: (restaurantController) {
-                return PaginatedListViewWidget(
-                  scrollController: scrollController,
-                  totalSize: restaurantController.restaurantModel?.totalSize,
-                  offset: restaurantController.restaurantModel?.offset,
-                  onPaginate: (int? offset) async => await restaurantController.getRestaurantList(offset!, false),
-                  productView: ProductViewWidget(
-                    isRestaurant: true, products: null, showTheme1Restaurant: true,
-                    restaurants: restaurantController.restaurantModel?.restaurants,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeExtraSmall : Dimensions.paddingSizeSmall,
-                      vertical: ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeExtraSmall : 0,
-                    ),
-                  ),
-                );
-              }),
+              // GetBuilder<RestaurantController>(builder: (restaurantController) {
+              //   return PaginatedListViewWidget(
+              //     scrollController: scrollController,
+              //     totalSize: restaurantController.restaurantModel?.totalSize,
+              //     offset: restaurantController.restaurantModel?.offset,
+              //     onPaginate: (int? offset) async => await restaurantController.getRestaurantList(offset!, false),
+              //     productView: ProductViewWidget(
+              //       isRestaurant: true, products: null, showTheme1Restaurant: true,
+              //       restaurants: restaurantController.restaurantModel?.restaurants,
+              //       padding: EdgeInsets.symmetric(
+              //         horizontal: ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeExtraSmall : Dimensions.paddingSizeSmall,
+              //         vertical: ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeExtraSmall : 0,
+              //       ),
+              //     ),
+              //   );
+              // }),
 
             ]),
           )),

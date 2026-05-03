@@ -25,8 +25,11 @@ class HomeRepository implements HomeRepositoryInterface {
       case DataSourceEnum.client:
         Response response = await apiClient.getData(AppConstants.bannerUri);
         if(response.statusCode == 200) {
+          print('---👇---RAW BANNER API RESPONSE---👇---');
+          print(response.body);
+          print('-----------------------------------------');
           bannerModel = BannerModel.fromJson(response.body);
-          LocalClient.organize(DataSourceEnum.client, cacheId, jsonEncode(response.body), apiClient.getHeader());
+          // LocalClient.organize(DataSourceEnum.client, cacheId, jsonEncode(response.body), apiClient.getHeader());
         }
 
       case DataSourceEnum.local:
@@ -34,7 +37,7 @@ class HomeRepository implements HomeRepositoryInterface {
         if(cacheResponseData != null) {
           bannerModel = BannerModel.fromJson(jsonDecode(cacheResponseData));
         }
-    }
+          }
 
     return bannerModel;
   }
@@ -57,13 +60,13 @@ class HomeRepository implements HomeRepositoryInterface {
 
       case DataSourceEnum.local:
         String? cacheResponseData = await LocalClient.organize(DataSourceEnum.local, cacheId, null, null);
+        cashBackModelList = [];
         if(cacheResponseData != null) {
-          cashBackModelList = [];
           jsonDecode(cacheResponseData).forEach((data) {
             cashBackModelList!.add(CashBackModel.fromJson(data));
           });
         }
-    }
+          }
     return cashBackModelList;
   }
 
